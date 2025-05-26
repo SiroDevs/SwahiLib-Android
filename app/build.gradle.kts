@@ -128,6 +128,11 @@ dependencies {
     implementation(libs.squareup.retrofit.gson)
     implementation(libs.squareup.okhttp3.logging)
 
+    implementation(libs.jan.tennert.supabase.gotrue)
+    implementation(libs.jan.tennert.supabase.postgrest)
+    implementation(libs.jan.tennert.supabase.realtime)
+    implementation(libs.jan.tennert.supabase.storage)
+
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
