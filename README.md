@@ -1,23 +1,20 @@
-# Welcome to SwahiLib
+# SwahiLib - Kamusi ya Kiswahili
+The Kamusi ya Kiswahili app has been rebranded to SwahiLib. If you are looking for the old app you can find it in the [old-app branch](https://github.com/oyonde/SwahiLib/tree/old-app)
 
-<a href='https://songlib.siro.co.ke'>
-  <img alt='Get it on your Device' src='screenshots/main_banner.png'/>
+
+<a href='https://play.google.com/store/apps/details?id=com.swahilib'>
+  <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width='200'/>
 </a>
 
- Your songbook for Android, iOS, Windows, Linux, MacOS
+<a href="https://apps.apple.com/us/app/id6446771678">
+  <img alt='Get it on AppStore' src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-example-preferred_2x.png' width='200'>
+</a>
 
-## Overview
+Swahilib - Kamusi ya Kiswahili for Android, iOS
 
-SwahiLib is a robust mobile solution tailored for our users who need to sing hymns, designed to streamline their operations and enhance productivity. This Flutter-based application facilitates their access to your church songbook/hymns seamlessly that you don't have to worry about even being online once you have set up the app on your device.
-<table>
-<tr>
-<td><img src="screenshots/Droid/image1.png" width="200px" /></td>
-<td><img src="screenshots/Droid/image2.png" width="200px" /></td>
-<td><img src="screenshots/Droid/image3.png" width="200px" /></td>
-<td><img src="screenshots/Droid/image4.png" width="200px" /></td>
-<td><img src="screenshots/Droid/image5.png" width="200px" /></td>
-</tr>
-</table>
+## Getting Started
+
+Follow this guide to set up and run the SwahiLib App:
 
 ## Getting Started
 
@@ -30,7 +27,7 @@ Follow this guide to set up and run SwahiLib:
 2. **Clone the Repository:** Clone SwahiLib repository from GitHub using Git:
 
     ```bash
-    git clone git@github.com:SiroDaves/SongLibApp.git
+    git clone git@github.com:SiroDaves/SwahiLibApp.git
     ```
 
 3. **Install Packages:** Navigate to the project directory and run:
@@ -66,92 +63,30 @@ Follow this guide to set up and run SwahiLib:
     ```
 5. **Running SwahiLib:**
     ```bash
-    flutter run --flavor develop -t lib/main_dev.dart --no-tree-shake-icons
+    flutter run --flavor develop -t lib/main_dev.dart --dart-define-from-file keys-dev.json
     ```
 
 ### Building SwahiLib
 
 1. **Android:**
 
-    - **Staging: AppTester (Firebase Distribution):**
+   - **Production (For Play Store):**
 
-        ```bash
-        flutter build apk --flavor staging -t lib/main.dart --no-tree-shake-icons
-        ```
+       ```bash
+       flutter build appbundle --flavor production -t lib/main.dart --dart-define-from-file keys-prod.json --no-tree-shake-icons
+       ```
 
-    - **Production (For Play Store):**
-
-        ```bash
-        flutter build appbundle --flavor production -t lib/main.dart --no-tree-shake-icons
-        ```
-    
 2. **iOS:**
 
-    - **Production (For Play Store):**
+   - **Production (For Play Store):**
 
-        ```bash
-        flutter build ipa -t lib/main.dart --no-tree-shake-icons
-        ```
-    To upload to the App Store either:
-    - Drag and drop the "build/ios/ipa/*.ipa" bundle into the Apple Transporter macOS app https://apps.apple.com/us/app/transporter/id1450874784
-    - Run "xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey your_api_key --apiIssuer your_issuer_id".
-       See "man altool" for details about how to authenticate with the App Store Connect API key.
-        
-3. **Windows:**
-
-    ```
-    flutter build windows --target=lib/main.dart --no-tree-shake-icons
-    ```
-          
-4. **MacOS:**
-
-    ```
-    flutter build macos -t lib/main.dart --no-tree-shake-icons
-    ```
-
-    Install create-dmg
-    ```
-    brew install create-dmg
-    ```
-
-    Generate DMG
-    ```
-    create-dmg \
-    --volname "SwahiLib" \
-    --window-pos 200 120 \
-    --window-size 800 400 \
-    --icon-size 100 \
-    --icon "SwahiLib.app" 200 190 \
-    --hide-extension "SwahiLib.app" \
-    --app-drop-link 600 185 \
-    "dist/macos/songlib_1.0.799.dmg" \
-    "build/macos/Build/Products/Release/SwahiLib.app"
-    ```
-         
-5. **Linux:**
-
-    Generate the build
-    ```
-    flutter build linux -t lib/main.dart --no-tree-shake-icons
-    ```
-
-    Create a deb package
-    ```
-    flutter_distributor package --platform linux --targets deb
-    ```
-    Or an rpm package 
-    ```
-    flutter_distributor package --platform linux --targets rpm
-    ```
-        
-6. **All the builds:**
-
-    ```
-    flutter build appbundle --flavor production -t lib/main.dart --no-tree-shake-icons
-    flutter build apk --flavor production -t lib/main.dart --no-tree-shake-icons
-    flutter build ipa -t lib/main.dart --no-tree-shake-icons
-    flutter build macos -t lib/main.dart --no-tree-shake-icons
-    ```
+       ```bash
+       flutter build ipa -t lib/main.dart --dart-define-from-file keys-prod.json --no-tree-shake-icons
+       ```
+   To upload to the App Store either:
+   - Drag and drop the "build/ios/ipa/*.ipa" bundle into the Apple Transporter macOS app https://apps.apple.com/us/app/transporter/id1450874784
+   - Run "xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey your_api_key --apiIssuer your_issuer_id".
+     See "man altool" for details about how to authenticate with the App Store Connect API key.
 
 ---
 
