@@ -6,8 +6,7 @@ import com.swahilib.data.models.*
 
 @Database(entities = [Word::class, Song::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun booksDao(): BookDao
-    abstract fun songsDao(): SongDao
+    abstract fun wordsDao(): WordDao
 
     companion object {
         @Volatile

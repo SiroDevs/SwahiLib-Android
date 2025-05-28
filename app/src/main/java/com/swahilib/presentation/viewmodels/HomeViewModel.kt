@@ -15,7 +15,7 @@ import kotlin.collections.firstOrNull
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val bookRepo: BookRepository,
+    private val bookRepo: WordRepository,
     private val songRepo: SongRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)

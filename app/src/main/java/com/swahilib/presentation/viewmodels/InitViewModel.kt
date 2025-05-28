@@ -10,11 +10,10 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 import javax.inject.Inject
-import kotlin.collections.forEach
 
 @HiltViewModel
 class InitViewModel @Inject constructor(
-    private val bookRepo: BookRepository,
+    private val bookRepo: WordRepository,
     private val songRepo: SongRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)

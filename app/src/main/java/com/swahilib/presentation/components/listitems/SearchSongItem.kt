@@ -13,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.swahilib.core.utils.*
-import com.swahilib.data.models.Song
 import com.swahilib.data.sample.SampleSongs
 import com.swahilib.presentation.theme.ThemeColors
 

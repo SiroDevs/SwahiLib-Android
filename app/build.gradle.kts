@@ -37,6 +37,11 @@ android {
         versionName = configProperties["versionName"] as String
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "SUPABASE_URL", properties.getProperty("SUPABASE_URL"))
+        buildConfigField("String", "SUPABASE_ANON_KEY", properties.getProperty("SUPABASE_ANON_KEY"))
     }
 
     signingConfigs {
@@ -128,10 +133,9 @@ dependencies {
     implementation(libs.squareup.retrofit.gson)
     implementation(libs.squareup.okhttp3.logging)
 
-    implementation(libs.jan.tennert.supabase.gotrue)
+    implementation(platform(libs.jan.tennert.supabase.bom))
     implementation(libs.jan.tennert.supabase.postgrest)
-    implementation(libs.jan.tennert.supabase.realtime)
-    implementation(libs.jan.tennert.supabase.storage)
+    implementation(libs.ktor.client.android)
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)

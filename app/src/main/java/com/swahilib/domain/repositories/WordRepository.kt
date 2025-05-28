@@ -12,40 +12,39 @@ import javax.inject.*
 import androidx.core.content.edit
 
 @Singleton
-class BookRepository @Inject constructor(
+class WordRepository @Inject constructor(
     context: Context,
     private val apiService: ApiService
 )  {
     private val prefs = context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
 
-    private var booksDao: BookDao?
+    private var wordsDao: WordDao?
 
     init {
         val db = AppDatabase.getDatabase(context)
-        booksDao = db?.booksDao()
+        wordsDao = db?.wordsDao()
     }
 
-    fun getBooks(): Flow<List<Word>> = flow {
-        val books = apiService.getBooks()
-        emit(books)
+    fun getWords(): Flow<List<Word>> = flow {
+        val words = apiService.getWords()
+        emit(words)
     }
 
-    suspend fun saveBook(book: Word) {
+    suspend fun saveWord(word: Word) {
         withContext(Dispatchers.IO) {
-            booksDao?.insert(book)
+            wordsDao?.insert(word)
         }
     }
 
-    suspend fun getAllBooks(): List<Word> {
-        var allBooks: List<Word>
+    suspend fun getAllWords(): List<Word> {
+        var allWords: List<Word>
         withContext(Dispatchers.IO) {
-            allBooks = booksDao?.getAll() ?: emptyList()
+            allWords = wordsDao?.getAll() ?: emptyList()
         }
-        return allBooks
+        return allWords
     }
 
-    fun savePrefs(selectedBooks: String) {
-        prefs.edit { putString(PrefConstants.SELECTED_BOOKS, selectedBooks) }
+    fun savePrefs() {
         prefs.edit { putBoolean(PrefConstants.DATA_SELECTED, true) }
     }
 }

@@ -14,16 +14,9 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideBookRepository(
+    fun provideWordRepository(
         @ApplicationContext context: Context,
         apiService: ApiService
-    ): BookRepository = BookRepository(context, apiService)
-
-    @Provides
-    @Singleton
-    fun provideSongRepository(
-        @ApplicationContext context: Context,
-        apiService: ApiService
-    ): SongRepository = SongRepository(context, apiService)
+    ): WordRepository = WordRepository(context, apiService)
 
 }
