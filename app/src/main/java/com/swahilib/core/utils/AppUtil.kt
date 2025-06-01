@@ -47,7 +47,7 @@ fun songViewerTitle(number: Int, title: String, alias: String): String {
 }
 
 fun songShareString(title: String, content: String): String {
-    return "$title\n\n$content\n\nvia #SwahiLib https://songlib.vercel.app"
+    return "$title\n\n$content\n\nvia #SwahiLib https://swahilib.vercel.app"
 }
 
 fun verseOfString(number: String, count: Int): String {

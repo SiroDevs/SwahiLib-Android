@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.swahilib.core.utils.*
 import com.swahilib.data.models.Word
-import com.swahilib.data.sample.SampleBooks
 import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
@@ -24,8 +23,8 @@ fun SearchWordItem(
     isSearching: Boolean,
     onClick: (Word) -> Unit,
 ) {
-    val verses = remember(word.content) { word.content.split("##") }
-    val hasChorus = "CHORUS" in word.content
+    val verses = remember(word.meaning) { word.meaning.split("##") }
+    val hasChorus = "CHORUS" in word.meaning
     val chorusText = if (hasChorus) "Chorus" else ""
     val verseCount = verses.size - if (hasChorus) 1 else 0
     val versesText = if (verses.size == 1) "$verseCount V" else "${verseCount} Vs"

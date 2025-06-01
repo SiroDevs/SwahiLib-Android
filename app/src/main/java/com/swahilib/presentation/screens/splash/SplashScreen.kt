@@ -33,8 +33,7 @@ fun SplashScreen(navController: NavHostController) {
 
         val nextRoute = when {
             isDataLoaded -> Routes.HOME
-            isDataSelected -> Routes.STEP_2
-            else -> Routes.STEP_1
+            else -> Routes.INIT
         }
 
         navController.navigate(nextRoute) {

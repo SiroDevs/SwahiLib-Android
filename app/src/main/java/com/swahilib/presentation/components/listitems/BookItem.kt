@@ -55,7 +55,7 @@ fun BookItem(
                     color = contentColor
                 )
                 Text(
-                    text = "${item.data.songs} ${item.data.subTitle} songs",
+                    text = "${item.data.songs} ${item.data.meaning}",
                     fontSize = 18.sp,
                     color = contentColor
                 )
@@ -63,26 +63,26 @@ fun BookItem(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewBookItem() {
-    val sampleBook = Word(
-        bookId = 1,
-        bookNo = 1,
-        created = "2023-01-01",
-        enabled = true,
-        position = 1,
-        songs = 12,
-        subTitle = "worship",
-        title = "Songs of Worship",
-        user = 42
-    )
-
-    val selectableBook = Selectable(data = sampleBook, isSelected = true)
-
-    BookItem(
-        item = selectableBook,
-        onClick = {}
-    )
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewBookItem() {
+//    val sampleBook = Word(
+//        bookId = 1,
+//        bookNo = 1,
+//        created = "2023-01-01",
+//        enabled = true,
+//        position = 1,
+//        songs = 12,
+//        subTitle = "worship",
+//        title = "Songs of Worship",
+//        user = 42
+//    )
+//
+//    val selectableBook = Selectable(data = sampleBook, isSelected = true)
+//
+//    BookItem(
+//        item = selectableBook,
+//        onClick = {}
+//    )
+//}

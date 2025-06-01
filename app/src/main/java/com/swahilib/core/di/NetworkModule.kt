@@ -20,15 +20,17 @@ object NetworkModule {
     @Provides
     @Reusable
     @JvmStatic
-    fun provideApiService(@Named("songlibApi") retrofit: Retrofit): ApiService {
+    fun provideApiService(@Named("swahilibApi") retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
 
     @Provides
-    @Named("songlibApi")
+    @Named("swahilibApi")
     @Reusable
     @JvmStatic
-    fun provideSonglibApi(okHttpClient: OkHttpClient.Builder): Retrofit {
+    fun provideSwahilibApi(
+        okHttpClient: OkHttpClient.Builder,
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(ApiConstants.BASE)
             .addConverterFactory(GsonConverterFactory.create())

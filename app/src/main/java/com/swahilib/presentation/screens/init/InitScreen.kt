@@ -21,7 +21,7 @@ fun InitScreen(
     var fetchData by rememberSaveable { mutableStateOf(0) }
 
     if (fetchData == 0) {
-        viewModel.fetchSongs()
+        viewModel.fetchWords()
         fetchData++
     }
 
@@ -44,14 +44,14 @@ fun InitScreen(
                 when (uiState) {
                     is UiState.Error -> ErrorState(
                         errorMessage = (uiState as UiState.Error).errorMessage,
-                        onRetry = { viewModel.fetchSongs() }
+                        onRetry = { viewModel.fetchWords() }
                     )
 
-                    is UiState.Loading -> LoadingState("Loading songs ...")
-                    is UiState.Saving -> LoadingState("Saving songs ...")
+                    is UiState.Loading -> LoadingState("Loading data ...")
+                    is UiState.Saving -> LoadingState("Saving data ...")
 
                     is UiState.Loaded -> {
-                        viewModel.saveSongs()
+                        viewModel.fetchWords()
                     }
 
                     else -> EmptyState()

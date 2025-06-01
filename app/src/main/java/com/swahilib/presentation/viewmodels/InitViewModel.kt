@@ -57,7 +57,6 @@ class InitViewModel @Inject constructor(
                 for (book in books) {
                     wordRepo.saveWord(book)
                 }
-                val selectedWords = books.joinToString(",") { it.bookId.toString() }
                 //wordRepo.savePrefs(selectedWords)
 
                 _uiState.emit(UiState.Saved)

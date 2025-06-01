@@ -6,6 +6,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.*
+import com.swahilib.data.models.Word
 import com.swahilib.presentation.screens.home.HomeScreen
 import com.swahilib.presentation.screens.init.InitScreen
 import com.swahilib.presentation.screens.presenter.PresenterScreen
@@ -43,16 +44,16 @@ fun AppNavHost(
         }
 
         composable(route = Routes.PRESENTER) {
-            val song = navController.previousBackStackEntry
+            val word = navController.previousBackStackEntry
                 ?.savedStateHandle
-                ?.get<Song>("song")
+                ?.get<Word>("word")
 
             val viewModel: PresenterViewModel = hiltViewModel()
 
             PresenterScreen(
                 viewModel = viewModel,
                 navController = navController,
-                song = song,
+                word = word,
                 onBackPressed = { navController.popBackStack() },
             )
         }

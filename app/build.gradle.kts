@@ -40,8 +40,8 @@ android {
 
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "SUPABASE_URL", properties.getProperty("SUPABASE_URL"))
-        buildConfigField("String", "SUPABASE_ANON_KEY", properties.getProperty("SUPABASE_ANON_KEY"))
+        buildConfigField("String", "SupabaseUrl", "\"${properties.getProperty("supabase.url")}\"")
+        buildConfigField("String", "SupabaseKey", "\"${properties.getProperty("supabase.key")}\"")
     }
 
     signingConfigs {
