@@ -95,52 +95,60 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    // Core AndroidX
+    implementation(libs.androidx.core.ktx)     //  Kotlin extensions for core Android APIs
+    implementation(libs.androidx.core.splashscreen)     //  Splash screen API
+    implementation(libs.androidx.lifecycle.runtime.ktx)     //  Lifecycle-aware components
 
-    implementation(libs.androidx.ui.tooling.preview)
-    debugImplementation(libs.androidx.ui.tooling)
+    // Jetpack Compose - BOM
+    implementation(platform(libs.androidx.compose.bom))     //  Compose Bill of Materials (BOM)
 
-    implementation(libs.androidx.compose.livedata)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.icons.extended)
+    // Jetpack Compose - Core UI
+    implementation(libs.androidx.activity.compose)     //  Activity support for Compose
+    implementation(libs.androidx.ui)     //  Core Compose UI elements
+    implementation(libs.androidx.ui.graphics)     //  Compose graphics primitives
 
-    implementation(libs.hilt.android)
+    // Jetpack Compose - Material Design
+    implementation(libs.androidx.material3)     //  Material 3 UI components
+    implementation(libs.androidx.compose.material)     //  Material 2 UI components (legacy)
+    implementation(libs.androidx.icons.extended)     //  Extended material icons
 
-    implementation(libs.compose.hilt.navigation)
-    implementation(libs.compose.navigation)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.navigation)
+    // Jetpack Compose - Navigation & State
+    implementation(libs.compose.navigation)     //  Navigation support in Compose
+    implementation(libs.compose.hilt.navigation)     //  Hilt + Compose Navigation integration
+    implementation(libs.androidx.compose.livedata)     //  LiveData support in Compose
 
-    implementation(libs.androidx.core.splashscreen)
+    // Jetpack Compose - Tooling & Preview
+    implementation(libs.androidx.ui.tooling.preview)     //  Compose UI preview support
+    debugImplementation(libs.androidx.ui.tooling)     //  Compose UI tools (debug only)
+    debugImplementation(libs.androidx.ui.test.manifest)     //  Compose test manifest (debug only)
 
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.gson)
-    implementation(libs.squareup.okhttp3.logging)
+    // Room Database
+    implementation(libs.androidx.room.runtime)     //  Room runtime
+    ksp(libs.androidx.room.compiler)     //  Room annotation processor (KSP)
+    annotationProcessor(libs.androidx.room.compiler)     //  Room annotation processor (fallback/tests)
 
-    implementation(platform(libs.jan.tennert.supabase.bom))
-    implementation(libs.jan.tennert.supabase.postgrest)
-    implementation(libs.ktor.client.android)
+    // Hilt for Dependency Injection
+    implementation(libs.hilt.android)     //  Hilt core
+    ksp(libs.hilt.compiler)     //  Hilt code generation
+    kspAndroidTest(libs.hilt.android.compiler)     //  Hilt compiler for instrumentation tests
 
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    ksp(libs.hilt.compiler)
-    kspAndroidTest(libs.hilt.android.compiler)
+    // Networking - Retrofit & OkHttp
+    implementation(libs.squareup.retrofit)     //  Retrofit for networking
+    implementation(libs.squareup.retrofit.gson)     //  Gson converter for Retrofit
+    implementation(libs.squareup.okhttp3.logging)     //  OkHttp logging interceptor
 
-    annotationProcessor(libs.androidx.room.compiler)
+    // Networking - Supabase & Ktor
+    implementation(platform(libs.jan.tennert.supabase.bom))     //  Supabase BOM
+    implementation(libs.jan.tennert.supabase.postgrest)     //  Supabase PostgREST support
+    implementation(libs.ktor.client.android)     //  Ktor HTTP client for Android
+
+    // Testing - Unit Tests
+    testImplementation(libs.junit)     //  JUnit for unit testing
+
+    // Testing - Android Instrumentation Tests
+    androidTestImplementation(libs.androidx.junit)     //  AndroidX JUnit extensions
+    androidTestImplementation(libs.androidx.espresso.core)     //  Espresso for UI testing
+    androidTestImplementation(platform(libs.androidx.compose.bom))     //  Compose BOM for tests
+    androidTestImplementation(libs.androidx.ui.test.junit4)     //  Compose JUnit4 test support
 }
