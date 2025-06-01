@@ -3,11 +3,13 @@ package com.swahilib.data.models
 import android.os.Parcelable
 import androidx.annotation.Keep
 import androidx.room.*
+import com.swahilib.core.helpers.Supabase
+import com.swahilib.core.utils.DbConstants
 import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-@Entity(tableName = "words", indices = [Index(value = ["id"], unique = true)])
+@Entity(tableName = DbConstants.WORDS, indices = [Index(value = ["id"], unique = true)])
 data class Word(
     @PrimaryKey() val id: Int,
     @ColumnInfo(name = "rid") val rid: Int,

@@ -1,6 +1,7 @@
 package com.swahilib.core.di
 
 import com.swahilib.BuildConfig
+import com.swahilib.core.helpers.Supabase
 import com.swahilib.core.utils.ApiConstants
 import com.swahilib.data.sources.remote.ApiService
 import dagger.*
@@ -30,6 +31,7 @@ object NetworkModule {
     @JvmStatic
     fun provideSwahilibApi(
         okHttpClient: OkHttpClient.Builder,
+        supabase: Supabase,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(ApiConstants.BASE)

@@ -12,67 +12,7 @@ import io.github.jan.supabase.serializer.KotlinXSerializer
 import kotlinx.serialization.json.Json
 import java.net.UnknownHostException
 
-internal object Supabase {
-    object Tables {
-        const val IDIOMS = "idioms"
-        const val PROVERBS = "proverbs"
-        const val SAYINGS = "sayings"
-        const val WORDS = "words"
-    }
-
-    object Functions {
-        const val GETACCOUNTWITHPOINTS = "get_account_with_points_and_level"
-
-        object Notifications {
-            const val CREATE = "insert_notification"
-        }
-
-        object Teams {
-            const val CREATE = "create_team"
-            const val UPDATE = "update_team"
-            const val GETMEMBERSWITHACCOUNT = "get_team_with_members_and_account"
-            const val GETACCOUNTTEAMS = "get_teams_for_account"
-            const val JOIN = "join_team_with_invite_code"
-            const val LEAVE = "leave_team"
-            const val DELETE = "archive_team"
-            const val GETTEAMANDMEMBERS = "get_teams_with_member_count_and_members"
-
-            object MemberRequests {
-                const val GETTEAMREQUESTS = "get_team_join_requests"
-                const val GETMYREQUESTS = "get_my_member_requests"
-                const val PROCESSMYREQUEST = "process_single_member_request"
-                const val PROCESSSINGLEREQUEST = "process_member_request"
-                const val PROCESSMULTIPLTREQUEST = "process_member_requests"
-                const val REQUESTTOJOINTEAM = "request_to_join_team"
-            }
-
-            object CodeInvitations {
-                const val GET = "get_team_invitations"
-                const val DELETE = "delete_team_invitation"
-                const val CREATE = "create_team_invite_code"
-            }
-
-            object MemberInvitations {
-                const val GETACCOUNTSNOTINTEAM = "get_accounts_not_in_team"
-                const val SEARCHACCOUNTSNOTINTEAM = "search_accounts_not_in_team"
-                const val SENDMEMBERINVITE = "send_member_team_invite"
-                const val SENDMULTIPLEMEMBERINVITE = "send_multiple_account_team_invites"
-                const val DELETEINVITE = "delete_member_team_invite"
-                const val UPDATEINVITESTATUS = "update_invite_status"
-                const val UPDATEMULTIPLEINVITESTATUS = "update_multiple_invite_status"
-                const val GETACCOUNTINVITES = "get_all_invites_for_account"
-                const val GETTEAMACCOUNTINVITES = "get_team_account_invites"
-            }
-        }
-
-        object Leaderboard {
-            const val DAILY = "get_daily_leaderboard_with_account"
-            const val WEEKLY = "get_weekly_leaderboard_with_account"
-            const val MONTHLY = "get_monthly_leaderboard_with_account"
-            const val ULTIMATE = "get_all_time_leaderboard_with_account"
-        }
-    }
-
+object Supabase {
     object ErrorMessages {
         const val BAD_REQUEST_EXCEPTION =
             "You have entered an invalid code, please double check or " +
