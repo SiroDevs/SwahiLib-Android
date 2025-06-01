@@ -7,7 +7,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.EmptyState
-import com.swahilib.presentation.components.listitems.SearchSongItem
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
 @Composable

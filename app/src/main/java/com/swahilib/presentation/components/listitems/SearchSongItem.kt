@@ -45,7 +45,7 @@ fun SearchWordItem(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = wordItemTitle(word.wordNo, word.title),
+                    text = word.title,
                     maxLines = 1,
                     modifier = Modifier.weight(1f),
                     style = TextStyle(

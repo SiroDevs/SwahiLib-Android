@@ -7,14 +7,12 @@ import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-@Entity(tableName = "words", indices = [Index(value = ["id"], unique = true)])
-data class Word(
+@Entity(tableName = "sayings", indices = [Index(value = ["id"], unique = true)])
+data class Saying(
     @PrimaryKey() val id: Int,
     @ColumnInfo(name = "rid") val rid: Int,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "synonyms") val synonyms: String,
     @ColumnInfo(name = "meaning") val meaning: String,
-    @ColumnInfo(name = "conjugation") val conjugation: String,
     @ColumnInfo(name = "views") val views: Int,
     @ColumnInfo(name = "liked") val liked: Boolean,
     @ColumnInfo(name = "likes") val likes: Int,
