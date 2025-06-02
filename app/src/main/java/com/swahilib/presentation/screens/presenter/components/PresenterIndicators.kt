@@ -62,7 +62,7 @@ fun PresenterIndicators(
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun PresenterIndicatorsPreview() {
     val pagerState = rememberPagerState { SampleVerses.size }
@@ -75,4 +75,4 @@ fun PresenterIndicatorsPreview() {
         indicators = SampleIndicators,
         modifier = Modifier.padding(16.dp)
     )
-}
+}*/

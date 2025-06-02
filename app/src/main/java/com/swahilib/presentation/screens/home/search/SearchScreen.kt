@@ -28,17 +28,18 @@ fun SearchScreen(
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (uiState) {
             is UiState.Filtered ->
-                SearchList(
+                EmptyState()
+                /*SearchList(
                     viewModel = viewModel,
                     navController = navController,
-                )
+                )*/
 
             else -> EmptyState()
         }
     }
 }
 
-@Composable
+/*@Composable
 fun SearchList(
     viewModel: HomeViewModel,
     navController: NavHostController,
@@ -104,4 +105,4 @@ fun BooksList(
             )
         }
     }
-}
+}*/

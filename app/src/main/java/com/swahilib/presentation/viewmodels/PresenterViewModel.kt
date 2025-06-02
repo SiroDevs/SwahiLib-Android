@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PresenterViewModel @Inject constructor(
-    private val songRepo: SongRepository,
+    private val wordRepo: WordRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -20,7 +20,7 @@ class PresenterViewModel @Inject constructor(
     private val _isLiked = MutableStateFlow(false)
     val isLiked: StateFlow<Boolean> get() = _isLiked
 
-    private val _title = MutableStateFlow("Song Presenter")
+    private val _title = MutableStateFlow("Word Presenter")
     val title: StateFlow<String> get() = _title
 
     private val _indicators = MutableStateFlow<List<String>>(emptyList())
@@ -29,52 +29,52 @@ class PresenterViewModel @Inject constructor(
     private val _verses = MutableStateFlow<List<String>>(emptyList())
     val verses: StateFlow<List<String>> get() = _verses
 
-    fun loadSong(song: Song) {
+    fun loadWord(word: Word) {
         _uiState.value = UiState.Loading
-        _isLiked.value = song.liked
-        val content = song.content
+        /*_isLiked.value = word.liked
+        val content = word.content
         val hasChorus = content.contains("CHORUS")
 
-        _title.value = songItemTitle(song.songNo, song.title)
+        _title.value = wordItemTitle(word.wordNo, word.title)
 
-        val songVerses = getSongVerses(content)
-        val verseCount = songVerses.size
+        val wordVerses = getWordVerses(content)
+        val verseCount = wordVerses.size
 
         val tempIndicators = mutableListOf<String>()
         val tempVerses = mutableListOf<String>()
 
         if (hasChorus && verseCount > 1) {
-            val chorus = songVerses[1].replace("CHORUS#", "")
+            val chorus = wordVerses[1].replace("CHORUS#", "")
 
             tempIndicators.add("1")
             tempIndicators.add("C")
-            tempVerses.add(songVerses[0])
+            tempVerses.add(wordVerses[0])
             tempVerses.add(chorus)
 
             for (i in 2 until verseCount) {
                 tempIndicators.add(i.toString())
                 tempIndicators.add("C")
-                tempVerses.add(songVerses[i])
+                tempVerses.add(wordVerses[i])
                 tempVerses.add(chorus)
             }
         } else {
             for (i in 0 until verseCount) {
                 tempIndicators.add((i + 1).toString())
-                tempVerses.add(songVerses[i])
+                tempVerses.add(wordVerses[i])
             }
         }
 
         _indicators.value = tempIndicators
-        _verses.value = tempVerses
+        _verses.value = tempVerses*/
 
         _uiState.value = UiState.Loaded
     }
 
-    fun likeSong(song: Song) {
+    fun likeWord(word: Word) {
         viewModelScope.launch {
-            val updatedSong = song.copy(liked = !song.liked)
-            songRepo.updateSong(updatedSong)
-            _isLiked.value = updatedSong.liked
+            /*val updatedWord = word.copy(liked = !word.liked)
+            wordRepo.updateWord(updatedWord)
+            _isLiked.value = updatedWord.liked*/
         }
     }
 

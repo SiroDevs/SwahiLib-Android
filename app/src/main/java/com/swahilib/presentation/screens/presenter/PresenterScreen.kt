@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.data.models.Word
 import com.swahilib.data.sample.*
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.*
@@ -28,7 +29,7 @@ fun PresenterScreen(
     viewModel: PresenterViewModel,
     navController: NavHostController,
     onBackPressed: () -> Unit,
-    song: Song?,
+    word: Word?,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -37,8 +38,8 @@ fun PresenterScreen(
     val verses by viewModel.verses.collectAsState()
     val indicators by viewModel.indicators.collectAsState()
 
-    LaunchedEffect(song) {
-        song?.let { viewModel.loadSong(it) }
+    LaunchedEffect(word) {
+        word?.let { viewModel.loadWord(it) }
     }
 
     Scaffold(topBar = {
@@ -47,20 +48,20 @@ fun PresenterScreen(
                 title = title,
                 actions = {
                     IconButton(onClick = {
-                        song?.let {
-                            viewModel.likeSong(it)
+                        word?.let {
+                            viewModel.likeWord(it)
 
                             val text = if (isLiked) {
-                                "${song.title} added to your likes"
+                                "${word.title} added to your likes"
                             } else {
-                                "${song.title} removed from your likes"
+                                "${word.title} removed from your likes"
                             }
                             Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                         }
                     }) {
                         Icon(
                             imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Like Song"
+                            contentDescription = "Like Word"
                         )
                     }
                 },
@@ -89,7 +90,7 @@ fun PresenterScreen(
                     verses = verses, indicators = indicators
                 )
 
-                UiState.Loading -> LoadingState("Loading song ...")
+                UiState.Loading -> LoadingState("Loading word ...")
 
                 else -> EmptyState()
             }
@@ -120,10 +121,11 @@ fun PresenterContent(
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun PreviewPresenterContent() {
     PresenterContent(
         verses = SampleVerses, indicators = SampleIndicators
     )
 }
+*/

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.*
 import com.swahilib.data.models.*
 
-@Database(entities = [Word::class, Song::class], version = 1, exportSchema = false)
+@Database(entities = [Word::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun wordsDao(): WordDao
 

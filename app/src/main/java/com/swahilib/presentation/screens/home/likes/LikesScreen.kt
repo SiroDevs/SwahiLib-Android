@@ -15,7 +15,7 @@ fun LikesScreen(
     viewModel: HomeViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val likes by viewModel.likes.collectAsState(initial = emptyList())
+    val likes by viewModel.books.collectAsState(initial = emptyList())
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
@@ -27,12 +27,13 @@ fun LikesScreen(
                     contentPadding = PaddingValues(horizontal = 10.dp)
                 ) {
                     items(likes) { song ->
-                        SearchSongItem(
+                        EmptyState()
+                        /*SearchSongItem(
                             song = song,
                             onClick = { },
                             isSelected = false,
                             isSearching = false,
-                        )
+                        )*/
                     }
                 }
 

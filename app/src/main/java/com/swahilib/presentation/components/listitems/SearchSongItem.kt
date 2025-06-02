@@ -13,18 +13,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.swahilib.core.utils.*
-import com.swahilib.data.sample.SampleSongs
+import com.swahilib.data.models.Word
+import com.swahilib.data.sample.SampleBooks
 import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
-fun SearchSongItem(
-    song: Song,
+fun SearchWordItem(
+    word: Word,
     isSelected: Boolean,
     isSearching: Boolean,
-    onClick: (Song) -> Unit,
+    onClick: (Word) -> Unit,
 ) {
-    val verses = remember(song.content) { song.content.split("##") }
-    val hasChorus = "CHORUS" in song.content
+    val verses = remember(word.content) { word.content.split("##") }
+    val hasChorus = "CHORUS" in word.content
     val chorusText = if (hasChorus) "Chorus" else ""
     val verseCount = verses.size - if (hasChorus) 1 else 0
     val versesText = if (verses.size == 1) "$verseCount V" else "${verseCount} Vs"
@@ -37,14 +38,14 @@ fun SearchSongItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(if (isSelected) ThemeColors.primary else Color.Transparent)
-                .clickable(onClick = { onClick(song) })
+                .clickable(onClick = { onClick(word) })
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = songItemTitle(song.songNo, song.title),
+                    text = wordItemTitle(word.wordNo, word.title),
                     maxLines = 1,
                     modifier = Modifier.weight(1f),
                     style = TextStyle(
@@ -59,7 +60,7 @@ fun SearchSongItem(
                 }
                 Spacer(modifier = Modifier.width(3.dp))
                 Icon(
-                    imageVector = if (song.liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    imageVector = if (word.liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = null,
                     //tint = ThemeColors.foreColorBW()
                 )
@@ -77,20 +78,21 @@ fun SearchSongItem(
             }
 //        if (isSearching) {
 //            Spacer(modifier = Modifier.height(4.dp))
-//            TagItem(tagText = refineTitle(song.book), height = height)
+//            TagItem(tagText = refineTitle(word.book), height = height)
 //        }
             Spacer(modifier = Modifier.height(3.dp))
         }
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
-fun PreviewSearchSongItem() {
-    SearchSongItem(
-        song = SampleSongs[3],
+fun PreviewSearchWordItem() {
+    SearchWordItem(
+        word = SampleWords[3],
         onClick = {},
         isSelected = false,
         isSearching = false,
     )
 }
+*/

@@ -37,7 +37,7 @@ fun HomeScreen(
     val isRefreshing = uiState is UiState.Loading
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
-        onRefresh = { viewModel.refreshData() }
+        onRefresh = { }
     )
 
     Scaffold(
@@ -47,12 +47,12 @@ fun HomeScreen(
                     query = searchQuery,
                     onQueryChange = {
                         searchQuery = it
-                        viewModel.searchSongs(it)
+                        //viewModel.searchWords(it)
                     },
                     onClose = {
                         isSearching = false
                         searchQuery = ""
-                        viewModel.searchSongs("")
+                        //viewModel.searchSongs("")
                     }
                 )
             } else {

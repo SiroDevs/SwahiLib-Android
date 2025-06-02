@@ -50,7 +50,7 @@ fun PresenterTabs(
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun PresenterTabsPreview() {
     val pagerState = rememberPagerState { SampleVerses.size }
@@ -64,4 +64,4 @@ fun PresenterTabsPreview() {
             .fillMaxWidth()
             .height(200.dp)
     )
-}
+}*/
