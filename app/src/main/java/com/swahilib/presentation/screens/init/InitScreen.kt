@@ -51,7 +51,7 @@ fun InitScreen(
                     is UiState.Saving -> LoadingState("Saving data ...")
 
                     is UiState.Loaded -> {
-                        viewModel.fetchWords()
+                        viewModel.saveWords()
                     }
 
                     else -> EmptyState()

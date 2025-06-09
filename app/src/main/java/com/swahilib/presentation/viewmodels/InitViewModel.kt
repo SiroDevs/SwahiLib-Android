@@ -18,9 +18,6 @@ class InitViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _books = MutableStateFlow<List<Selectable<Word>>>(emptyList())
-    val books: StateFlow<List<Selectable<Word>>> get() = _books
-
     private val _words = MutableStateFlow<List<Word>>(emptyList())
     val words: StateFlow<List<Word>> get() = _words
 
@@ -29,7 +26,7 @@ class InitViewModel @Inject constructor(
 
         viewModelScope.launch {
             wordRepo.getWords().catch { exception ->
-                Log.d("TAG", "fetching books")
+                Log.d("TAG", "fetching data")
                 val errorMessage = when (exception) {
                     is HttpException -> "HTTP Error: ${exception.code()}"
                     else -> "Network error: ${exception.message}"
@@ -37,37 +34,26 @@ class InitViewModel @Inject constructor(
                 Log.d("TAG", errorMessage)
                 _uiState.tryEmit(UiState.Error(errorMessage))
             }.collect { respData ->
-                val selectableWords = respData.map { Selectable(it) }
-                _books.emit(selectableWords)
+                _words.emit(respData)
                 _uiState.tryEmit(UiState.Loaded)
             }
         }
     }
 
-    fun saveSelectedWords() {
-        val selected = getSelectedWords()
-        saveWords(selected)
-    }
-
-    private fun saveWords(books: List<Word>) {
+    fun saveSongs() {
         _uiState.tryEmit(UiState.Saving)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                for (book in books) {
-                    wordRepo.saveWord(book)
+                _words.value.forEach {
+                    wordRepo.saveWord(it)
                 }
-                //wordRepo.savePrefs(selectedWords)
-
+                wordRepo.savePrefs()
                 _uiState.emit(UiState.Saved)
             } catch (e: Exception) {
-                Log.e("SaveWords", "Failed to save books", e)
-                _uiState.emit(UiState.Error("Failed to save books: ${e.message}"))
+                Log.e("SaveSongs", "Failed to save words", e)
+                _uiState.emit(UiState.Error("Failed to save words: ${e.message}"))
             }
         }
-    }
-
-    fun getSelectedWords(): List<Word> {
-        return _books.value.filter { it.isSelected }.map { it.data }
     }
 }

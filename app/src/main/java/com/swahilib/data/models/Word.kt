@@ -3,7 +3,6 @@ package com.swahilib.data.models
 import android.os.Parcelable
 import androidx.annotation.Keep
 import androidx.room.*
-import com.swahilib.core.helpers.Supabase
 import com.swahilib.core.utils.DbConstants
 import kotlinx.parcelize.Parcelize
 
