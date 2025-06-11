@@ -1,10 +1,6 @@
 package com.swahilib.data.sources.local.daos
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.swahilib.core.utils.Collections
 import com.swahilib.data.models.Search
 import kotlinx.coroutines.flow.Flow
@@ -12,13 +8,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SearchDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insert(word: Search)
+    suspend fun insert(search: Search)
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insertAll(products: List<Search>)
+    suspend fun insertAll(searches: List<Search>)
 
     @Update
-    fun update(word: Search)
+    fun update(search: Search)
 
     @Query("SELECT * FROM ${Collections.WORDS} WHERE rid = :id")
     fun getById(id: String): Flow<Search>

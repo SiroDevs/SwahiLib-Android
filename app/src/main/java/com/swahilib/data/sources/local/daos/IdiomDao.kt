@@ -1,34 +1,30 @@
 package com.swahilib.data.sources.local.daos
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.swahilib.core.utils.Collections
-import com.swahilib.data.models.Word
+import com.swahilib.data.models.Idiom
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IdiomDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insert(word: Word)
+    suspend fun insert(idiom: Idiom)
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insertAll(products: List<Word>)
+    suspend fun insertAll(idioms: List<Idiom>)
 
     @Update
-    fun update(word: Word)
+    fun update(idiom: Idiom)
 
-    @Query("SELECT * FROM ${Collections.WORDS} WHERE rid = :id")
-    fun getById(id: String): Flow<Word>
+    @Query("SELECT * FROM ${Collections.IDIOMS} WHERE rid = :id")
+    fun getById(id: String): Flow<Idiom>
 
-    @Query("DELETE FROM ${Collections.WORDS}")
+    @Query("DELETE FROM ${Collections.IDIOMS}")
     fun delete()
 
-    @Query("SELECT * FROM ${Collections.WORDS} WHERE title LIKE '%' || :title || '%'")
-    fun searchWordByTitle(title: String?): Flow<List<Word>>
+    @Query("SELECT * FROM ${Collections.IDIOMS} WHERE title LIKE '%' || :title || '%'")
+    fun searchIdiomByTitle(title: String?): Flow<List<Idiom>>
 
-    @Query("SELECT * FROM ${Collections.WORDS}")
-    fun getAll(): Flow<List<Word>>
+    @Query("SELECT * FROM ${Collections.IDIOMS}")
+    fun getAll(): Flow<List<Idiom>>
 }

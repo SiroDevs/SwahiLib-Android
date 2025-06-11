@@ -12,7 +12,7 @@ import io.github.jan.supabase.postgrest.Postgrest
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
-@Module(includes = [SupabaseModule::class])
+@Module(includes = [DatabaseModule::class, SupabaseModule::class])
 class AppModule {
     @Provides
     @Singleton

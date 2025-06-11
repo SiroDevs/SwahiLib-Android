@@ -1,34 +1,30 @@
 package com.swahilib.data.sources.local.daos
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.swahilib.core.utils.Collections
-import com.swahilib.data.models.Word
+import com.swahilib.data.models.Proverb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProverbDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insert(word: Word)
+    suspend fun insert(proverb: Proverb)
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insertAll(products: List<Word>)
+    suspend fun insertAll(proverbs: List<Proverb>)
 
     @Update
-    fun update(word: Word)
+    fun update(proverb: Proverb)
 
     @Query("SELECT * FROM ${Collections.WORDS} WHERE rid = :id")
-    fun getById(id: String): Flow<Word>
+    fun getById(id: String): Flow<Proverb>
 
     @Query("DELETE FROM ${Collections.WORDS}")
     fun delete()
 
     @Query("SELECT * FROM ${Collections.WORDS} WHERE title LIKE '%' || :title || '%'")
-    fun searchWordByTitle(title: String?): Flow<List<Word>>
+    fun searchProverbByTitle(title: String?): Flow<List<Proverb>>
 
     @Query("SELECT * FROM ${Collections.WORDS}")
-    fun getAll(): Flow<List<Word>>
+    fun getAll(): Flow<List<Proverb>>
 }
