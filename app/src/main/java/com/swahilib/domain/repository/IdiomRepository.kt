@@ -1,0 +1,65 @@
+package com.swahilib.domain.repository
+
+import android.content.*
+import android.util.Log
+import com.swahilib.core.di.DatabaseModule
+import com.swahilib.data.models.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import javax.inject.*
+import com.swahilib.core.utils.Collections
+import com.swahilib.data.sources.local.daos.IdiomDao
+import io.github.jan.supabase.postgrest.Postgrest
+
+@Singleton
+class IdiomRepository @Inject constructor(
+    context: Context,
+    private val supabase: Postgrest,
+)  {
+    private var idiomsDao: IdiomDao?
+
+    init {
+        val db = DatabaseModule.provideDatabase(context)
+        idiomsDao = db.idiomsDao()
+    }
+
+    fun fetchRemoteData(): Flow<List<Idiom>> = flow {
+        try {
+            val idioms = supabase[Collections.WORDS]
+                .select().decodeList<Idiom>()
+            emit(idioms)
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
+        }
+    }
+
+    suspend fun fetchLocalData(): List<Idiom> {
+        return withContext(Dispatchers.IO) {
+            idiomsDao?.getAll()?.first() ?: emptyList()
+        }
+    }
+
+    suspend fun saveIdiom(idiom: Idiom) {
+        withContext(Dispatchers.IO) {
+            idiomsDao?.insert(idiom)
+        }
+    }
+
+    suspend fun searchIdiomsByTitle(title: String?) {
+//        idiomsDao?.searchIdiomByTitle(title)?.map { it.asDomainModel() }
+    }
+
+    suspend fun getIdiomById(idiomId: String): Flow<Idiom> {
+        try {
+//            val idiomFlow = idiomsDao?.getById(idiomId)
+//            return idiomFlow.map {
+//                it.asDomainModel()
+//            }
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
+        }
+        return flow {}
+    }
+
+}
+

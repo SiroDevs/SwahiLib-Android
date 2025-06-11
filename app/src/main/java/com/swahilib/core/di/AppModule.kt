@@ -24,7 +24,7 @@ class AppModule {
     @Singleton
     fun provideWordRepository(
         @ApplicationContext context: Context,
-        supabase: Postgrest
+        supabase: Postgrest,
     ): WordRepository = WordRepository(context, supabase)
 
 }

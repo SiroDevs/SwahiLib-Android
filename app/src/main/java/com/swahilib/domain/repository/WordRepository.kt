@@ -2,6 +2,7 @@ package com.swahilib.domain.repository
 
 import android.content.*
 import android.util.Log
+import com.swahilib.core.di.DatabaseModule
 import com.swahilib.data.models.*
 import com.swahilib.data.sources.local.*
 import kotlinx.coroutines.Dispatchers
@@ -10,19 +11,18 @@ import kotlinx.coroutines.withContext
 import javax.inject.*
 import com.swahilib.core.utils.Collections
 import com.swahilib.data.sources.local.daos.WordDao
-import com.swahilib.domain.models.WordModel
 import io.github.jan.supabase.postgrest.Postgrest
 
 @Singleton
 class WordRepository @Inject constructor(
     context: Context,
-    private val supabase: Postgrest
+    private val supabase: Postgrest,
 )  {
     private var wordsDao: WordDao?
 
     init {
-        val db = AppDatabase.getDatabase(context)
-        wordsDao = db?.wordsDao()
+        val db = DatabaseModule.provideDatabase(context)
+        wordsDao = db.wordsDao()
     }
 
     fun fetchRemoteData(): Flow<List<Word>> = flow {
@@ -51,7 +51,7 @@ class WordRepository @Inject constructor(
         wordsDao?.searchWordByTitle(title)?.map { it.asDomainModel() }
     }
 
-    suspend fun getWordById(wordId: String): Flow<WordModel> {
+    suspend fun getWordById(wordId: String): Flow<Word> {
         try {
 //            val wordFlow = wordsDao?.getById(wordId)
 //            return wordFlow.map {
