@@ -1,57 +1,67 @@
 package com.swahilib.domain.repository
 
 import android.content.*
-import com.swahilib.core.utils.PrefConstants
+import android.util.Log
 import com.swahilib.data.models.*
 import com.swahilib.data.sources.local.*
-import com.swahilib.data.sources.remote.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import javax.inject.*
-import androidx.core.content.edit
+import com.swahilib.core.utils.Collections
+import com.swahilib.data.sources.local.daos.WordDao
 import com.swahilib.domain.models.WordModel
+import io.github.jan.supabase.postgrest.Postgrest
 
-//@Singleton
-//class WordRepository @Inject constructor(
-//    context: Context,
-//    private val apiService: ApiService
-//)  {
-//    private val prefs = context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
-//
-//    private var wordsDao: WordDao?
-//
-//    init {
-//        val db = AppDatabase.getDatabase(context)
-//        wordsDao = db?.wordsDao()
-//    }
-//
-//    fun getWords(): Flow<List<Word>> = flow {
-//        //emit(words)
-//    }
-//
-//    suspend fun saveWord(word: Word) {
-//        withContext(Dispatchers.IO) {
-//            wordsDao?.insert(word)
-//        }
-//    }
-//
-//    suspend fun getAllWords(): List<Word> {
-//        var allWords: List<Word>
-//        withContext(Dispatchers.IO) {
-//            allWords = wordsDao?.getAll() ?: emptyList()
-//        }
-//        return allWords
-//    }
-//
-//    fun savePrefs() {
-//        prefs.edit { putBoolean(PrefConstants.DATA_LOADED, true) }
-//    }
-//}
+@Singleton
+class WordRepository @Inject constructor(
+    context: Context,
+    private val supabase: Postgrest
+)  {
+    private var wordsDao: WordDao?
 
-interface WordRepository {
-    val words: Flow<List<WordModel>>
-    fun getWordById(wordId: String): Flow<WordModel>
-    suspend fun fetchRemoteData()
-    fun searchWordsByTitle(title: String?): Flow<List<WordModel>>
+    init {
+        val db = AppDatabase.getDatabase(context)
+        wordsDao = db?.wordsDao()
+    }
+
+    fun fetchRemoteData(): Flow<List<Word>> = flow {
+        try {
+            val words = supabase[Collections.WORDS]
+                .select().decodeList<Word>()
+            emit(words)
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
+        }
+    }
+
+    suspend fun fetchLocalData(): List<Word> {
+        return withContext(Dispatchers.IO) {
+            wordsDao?.getAll()?.first() ?: emptyList()
+        }
+    }
+
+    suspend fun saveWord(word: Word) {
+        withContext(Dispatchers.IO) {
+            wordsDao?.insert(word)
+        }
+    }
+
+    suspend fun searchWordsByTitle(title: String?) {
+        wordsDao?.searchWordByTitle(title)?.map { it.asDomainModel() }
+    }
+
+    suspend fun getWordById(wordId: String): Flow<WordModel> {
+        try {
+//            val wordFlow = wordsDao?.getById(wordId)
+//            return wordFlow.map {
+//                it.asDomainModel()
+//            }
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
+        }
+        return flow {}
+    }
+
 }
+
