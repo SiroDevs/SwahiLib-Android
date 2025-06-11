@@ -5,10 +5,15 @@ import androidx.annotation.Keep
 import androidx.room.*
 import com.swahilib.core.utils.Collections
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Keep
 @Parcelize
-@Entity(tableName = Collections.IDIOMS, indices = [Index(value = ["id"], unique = true)])
+@Serializable
+@Entity(
+    tableName = Collections.IDIOMS,
+    indices = [Index(value = ["id"], unique = true)]
+)
 data class Idiom(
     @PrimaryKey() val id: Int,
     @ColumnInfo(name = "rid") val rid: Int,

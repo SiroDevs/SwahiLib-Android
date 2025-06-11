@@ -1,7 +1,9 @@
 package com.swahilib.presentation.viewmodels
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
+import com.swahilib.core.utils.Preferences
 import com.swahilib.data.models.*
 import com.swahilib.domain.entities.*
 import com.swahilib.domain.repository.*
@@ -10,10 +12,12 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 import javax.inject.Inject
+import androidx.core.content.edit
 
 @HiltViewModel
 class InitViewModel @Inject constructor(
     private val wordRepo: WordRepository,
+    private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -47,7 +51,10 @@ class InitViewModel @Inject constructor(
                 _words.value.forEach {
                     wordRepo.saveWord(it)
                 }
-//                wordRepo.savePrefs()
+
+                sharedPreferences.edit(commit = true) {
+                    putBoolean(Preferences.DATA_LOADED, true)
+                }
                 _uiState.emit(UiState.Saved)
             } catch (e: Exception) {
                 Log.e("SaveData", "Failed to save words", e)

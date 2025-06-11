@@ -8,3 +8,8 @@ object Collections {
     const val SEARCH = "search"
     const val WORDS = "words"
 }
+
+object Preferences {
+    const val PREFERENCE_FILE = "app_pref"
+    const val DATA_LOADED = "dataLoaded"
+}

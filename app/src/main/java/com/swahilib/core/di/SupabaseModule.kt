@@ -6,8 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.jan.supabase.*
 import io.github.jan.supabase.postgrest.*
-import io.github.jan.supabase.serializer.KotlinXSerializer
-import kotlinx.serialization.json.Json
 import javax.inject.*
 
 @InstallIn(SingletonComponent::class)
@@ -22,13 +20,13 @@ object SupabaseModule {
             supabaseKey = BuildConfig.SupabaseKey,
         ) {
             install(Postgrest)
-            defaultSerializer = KotlinXSerializer(
-                Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                }
-            )
+//            defaultSerializer = KotlinXSerializer(
+//                Json {
+//                    prettyPrint = true
+//                    isLenient = true
+//                    ignoreUnknownKeys = true
+//                }
+//            )
         }
     }
 

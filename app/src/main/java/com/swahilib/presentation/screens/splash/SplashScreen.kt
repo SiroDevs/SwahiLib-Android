@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import com.swahilib.R
-import com.swahilib.core.utils.PrefConstants
+import com.swahilib.core.utils.Preferences
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.theme.*
 import kotlinx.coroutines.delay
@@ -27,8 +27,8 @@ fun SplashScreen(navController: NavHostController) {
         delay(3000)
 
         val prefs =
-            context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
-       val isDataLoaded = prefs.getBoolean(PrefConstants.DATA_LOADED, false)
+            context.getSharedPreferences(Preferences.PREFERENCE_FILE, Context.MODE_PRIVATE)
+       val isDataLoaded = prefs.getBoolean(Preferences.DATA_LOADED, false)
 
         val nextRoute = when {
             isDataLoaded -> Routes.HOME

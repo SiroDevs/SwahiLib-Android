@@ -2,7 +2,7 @@ package com.swahilib.core.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.swahilib.core.utils.PrefConstants
+import com.swahilib.core.utils.Preferences
 import com.swahilib.domain.repository.*
 import dagger.*
 import dagger.hilt.InstallIn
@@ -17,7 +17,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideSharePreferences(@ApplicationContext context: Context): SharedPreferences {
-        return context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
+        return context.getSharedPreferences(Preferences.PREFERENCE_FILE, Context.MODE_PRIVATE)
     }
 
     @Provides

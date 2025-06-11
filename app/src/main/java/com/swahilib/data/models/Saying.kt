@@ -8,7 +8,10 @@ import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-@Entity(tableName = Collections.SAYINGS, indices = [Index(value = ["id"], unique = true)])
+@Entity(
+    tableName = Collections.SAYINGS,
+    indices = [Index(value = ["id"], unique = true)]
+)
 data class Saying(
     @PrimaryKey() val id: Int,
     @ColumnInfo(name = "rid") val rid: Int,
