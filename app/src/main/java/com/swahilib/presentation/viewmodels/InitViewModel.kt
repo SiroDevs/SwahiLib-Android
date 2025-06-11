@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.swahilib.data.models.*
 import com.swahilib.domain.entities.*
-import com.swahilib.domain.repositories.*
+import com.swahilib.domain.repository.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.*
@@ -19,14 +19,13 @@ class InitViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _words = MutableStateFlow<List<Word>>(emptyList())
-    val words: StateFlow<List<Word>> get() = _words
 
     fun fetchWords() {
         _uiState.tryEmit(UiState.Loading)
 
         viewModelScope.launch {
             wordRepo.getWords().catch { exception ->
-                Log.d("TAG", "fetching data")
+                Log.d("TAG", "fetching words")
                 val errorMessage = when (exception) {
                     is HttpException -> "HTTP Error: ${exception.code()}"
                     else -> "Network error: ${exception.message}"
@@ -40,7 +39,7 @@ class InitViewModel @Inject constructor(
         }
     }
 
-    fun saveSongs() {
+    fun saveData() {
         _uiState.tryEmit(UiState.Saving)
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -51,7 +50,7 @@ class InitViewModel @Inject constructor(
                 wordRepo.savePrefs()
                 _uiState.emit(UiState.Saved)
             } catch (e: Exception) {
-                Log.e("SaveSongs", "Failed to save words", e)
+                Log.e("SaveData", "Failed to save words", e)
                 _uiState.emit(UiState.Error("Failed to save words: ${e.message}"))
             }
         }

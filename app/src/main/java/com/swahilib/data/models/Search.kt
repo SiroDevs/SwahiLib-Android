@@ -3,12 +3,12 @@ package com.swahilib.data.models
 import android.os.Parcelable
 import androidx.annotation.Keep
 import androidx.room.*
-import com.swahilib.core.utils.DbConstants
+import com.swahilib.core.utils.AppConstants
 import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-@Entity(tableName = DbConstants.SEARCH, indices = [Index(value = ["id"], unique = true)])
+@Entity(tableName = AppConstants.SEARCH, indices = [Index(value = ["id"], unique = true)])
 data class Search(
     @PrimaryKey() val id: Int,
     @ColumnInfo(name = "rid") val rid: Int,

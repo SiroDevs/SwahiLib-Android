@@ -1,6 +1,6 @@
 package com.swahilib.core.utils
 
-object DbConstants {
+object Collections {
     const val HISTORY = "history"
     const val IDIOMS = "idioms"
     const val PROVERBS = "proverbs"

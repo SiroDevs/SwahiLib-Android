@@ -3,6 +3,7 @@ package com.swahilib.data.sources.local
 import android.content.Context
 import androidx.room.*
 import com.swahilib.data.models.*
+import com.swahilib.data.sources.local.daos.WordDao
 
 @Database(entities = [Word::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {

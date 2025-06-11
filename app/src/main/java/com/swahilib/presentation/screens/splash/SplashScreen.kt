@@ -28,8 +28,7 @@ fun SplashScreen(navController: NavHostController) {
 
         val prefs =
             context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
-        val isDataSelected = prefs.getBoolean(PrefConstants.DATA_SELECTED, false)
-        val isDataLoaded = prefs.getBoolean(PrefConstants.DATA_LOADED, false)
+       val isDataLoaded = prefs.getBoolean(PrefConstants.DATA_LOADED, false)
 
         val nextRoute = when {
             isDataLoaded -> Routes.HOME
@@ -84,11 +83,29 @@ fun SplashContent() {
                             .padding(horizontal = 10.dp)
                             .height(1.dp)
                     )
-                    WithLoveFromRow()
-                    AppDevelopersRow()
+                    KiswahiliKitukuzwe()
                     Spacer(Modifier.height(20.dp))
                 }
             }
         },
     )
+}
+
+
+@Composable
+fun KiswahiliKitukuzwe() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Kiswahili Kitukuzwe",
+            style = TextStyle(
+                fontSize = 30.sp,
+                letterSpacing = 5.sp,
+                fontWeight = FontWeight.Bold,
+                color = ThemeColors.primary
+            )
+        )
+    }
 }

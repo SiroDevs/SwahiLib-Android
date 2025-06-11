@@ -20,6 +20,7 @@ squareupOk = "4.12.0"
 splashScreen = "1.0.1"
 supabase = "3.1.4"
 ktor = "3.1.3"
+chucker = "4.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

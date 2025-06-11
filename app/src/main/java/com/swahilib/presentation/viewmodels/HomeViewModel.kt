@@ -1,17 +1,13 @@
 package com.swahilib.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.swahilib.data.models.*
 import com.swahilib.domain.entities.UiState
-import com.swahilib.domain.repositories.*
+import com.swahilib.domain.repository.*
 import com.swahilib.presentation.screens.home.widgets.HomeNavItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.collections.filter
-import kotlin.collections.firstOrNull
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(

@@ -1,10 +1,9 @@
 package com.swahilib.presentation.viewmodels
 
 import androidx.lifecycle.*
-import com.swahilib.core.utils.*
 import com.swahilib.data.models.*
 import com.swahilib.domain.entities.*
-import com.swahilib.domain.repositories.*
+import com.swahilib.domain.repository.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
