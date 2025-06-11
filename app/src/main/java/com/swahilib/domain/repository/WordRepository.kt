@@ -4,14 +4,16 @@ import android.content.*
 import android.util.Log
 import com.swahilib.core.di.DatabaseModule
 import com.swahilib.data.models.*
-import com.swahilib.data.sources.local.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import javax.inject.*
 import com.swahilib.core.utils.Collections
 import com.swahilib.data.sources.local.daos.WordDao
+import com.swahilib.data.sources.remote.EntityMapper
+import com.swahilib.data.sources.remote.dtos.WordDto
 import io.github.jan.supabase.postgrest.Postgrest
+import kotlin.collections.map
 
 @Singleton
 class WordRepository @Inject constructor(
@@ -27,8 +29,9 @@ class WordRepository @Inject constructor(
 
     fun fetchRemoteData(): Flow<List<Word>> = flow {
         try {
-            val words = supabase[Collections.WORDS]
-                .select().decodeList<Word>()
+            val result = supabase[Collections.WORDS]
+                .select().decodeList<WordDto>()
+            val words = result.map { EntityMapper.mapToEntity(it) }
             emit(words)
         } catch (e: Exception) {
             Log.d("TAG", e.message.toString())

@@ -23,16 +23,6 @@ class SearchRepository @Inject constructor(
         searchesDao = db.searchesDao()
     }
 
-    fun fetchRemoteData(): Flow<List<Search>> = flow {
-        try {
-            val searchs = supabase[Collections.WORDS]
-                .select().decodeList<Search>()
-            emit(searchs)
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
-    }
-
     suspend fun fetchLocalData(): List<Search> {
         return withContext(Dispatchers.IO) {
             searchesDao?.getAll()?.first() ?: emptyList()

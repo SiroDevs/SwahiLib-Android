@@ -9,7 +9,10 @@ import kotlinx.coroutines.flow.*
 import javax.inject.*
 import com.swahilib.core.utils.Collections
 import com.swahilib.data.sources.local.daos.IdiomDao
+import com.swahilib.data.sources.remote.EntityMapper
+import com.swahilib.data.sources.remote.dtos.IdiomDto
 import io.github.jan.supabase.postgrest.Postgrest
+import kotlin.collections.map
 
 @Singleton
 class IdiomRepository @Inject constructor(
@@ -25,8 +28,9 @@ class IdiomRepository @Inject constructor(
 
     fun fetchRemoteData(): Flow<List<Idiom>> = flow {
         try {
-            val idioms = supabase[Collections.WORDS]
-                .select().decodeList<Idiom>()
+            val result = supabase[Collections.WORDS]
+                .select().decodeList<IdiomDto>()
+            val idioms = result.map { EntityMapper.mapToEntity(it) }
             emit(idioms)
         } catch (e: Exception) {
             Log.d("TAG", e.message.toString())
