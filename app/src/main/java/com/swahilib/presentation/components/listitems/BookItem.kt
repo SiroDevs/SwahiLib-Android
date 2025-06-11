@@ -55,7 +55,7 @@ fun BookItem(
                     color = contentColor
                 )
                 Text(
-                    text = "${item.data.songs} ${item.data.meaning}",
+                    text = "${item.data.meaning} ${item.data.meaning}",
                     fontSize = 18.sp,
                     color = contentColor
                 )

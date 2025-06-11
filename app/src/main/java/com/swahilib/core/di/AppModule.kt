@@ -3,7 +3,7 @@ package com.swahilib.core.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.swahilib.core.utils.PrefConstants
-import com.swahilib.domain.repository.WordRepository
+import com.swahilib.domain.repository.*
 import dagger.*
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -19,6 +19,41 @@ class AppModule {
     fun provideSharePreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
     }
+
+    @Provides
+    @Singleton
+    fun provideHistoryRepository(
+        @ApplicationContext context: Context,
+        supabase: Postgrest,
+    ): HistoryRepository = HistoryRepository(context, supabase)
+
+    @Provides
+    @Singleton
+    fun provideIdiomRepository(
+        @ApplicationContext context: Context,
+        supabase: Postgrest,
+    ): IdiomRepository = IdiomRepository(context, supabase)
+
+    @Provides
+    @Singleton
+    fun provideProverbRepository(
+        @ApplicationContext context: Context,
+        supabase: Postgrest,
+    ): ProverbRepository = ProverbRepository(context, supabase)
+
+    @Provides
+    @Singleton
+    fun provideSayingRepository(
+        @ApplicationContext context: Context,
+        supabase: Postgrest,
+    ): SayingRepository = SayingRepository(context, supabase)
+
+    @Provides
+    @Singleton
+    fun provideSearchRepository(
+        @ApplicationContext context: Context,
+        supabase: Postgrest,
+    ): SearchRepository = SearchRepository(context, supabase)
 
     @Provides
     @Singleton

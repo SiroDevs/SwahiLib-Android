@@ -58,11 +58,11 @@ fun SearchWordItem(
                     TagItem(tagText = chorusText)
                 }
                 Spacer(modifier = Modifier.width(3.dp))
-                Icon(
-                    imageVector = if (word.liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = null,
-                    //tint = ThemeColors.foreColorBW()
-                )
+//                Icon(
+//                    imageVector = if (word.liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+//                    contentDescription = null,
+//                    //tint = ThemeColors.foreColorBW()
+//                )
             }
 
             Spacer(modifier = Modifier.height(3.dp))

@@ -24,7 +24,7 @@ class InitViewModel @Inject constructor(
         _uiState.tryEmit(UiState.Loading)
 
         viewModelScope.launch {
-            wordRepo.getWords().catch { exception ->
+            wordRepo.fetchRemoteData().catch { exception ->
                 Log.d("TAG", "fetching words")
                 val errorMessage = when (exception) {
                     is HttpException -> "HTTP Error: ${exception.code()}"
@@ -47,7 +47,7 @@ class InitViewModel @Inject constructor(
                 _words.value.forEach {
                     wordRepo.saveWord(it)
                 }
-                wordRepo.savePrefs()
+//                wordRepo.savePrefs()
                 _uiState.emit(UiState.Saved)
             } catch (e: Exception) {
                 Log.e("SaveData", "Failed to save words", e)

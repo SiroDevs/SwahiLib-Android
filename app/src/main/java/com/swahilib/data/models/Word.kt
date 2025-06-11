@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import androidx.room.*
 import com.swahilib.core.utils.Collections
-import com.swahilib.domain.models.WordModel
 import kotlinx.parcelize.Parcelize
 
 @Keep
@@ -22,22 +21,3 @@ data class Word(
     @ColumnInfo(name = "createdAt") val createdAt: String,
     @ColumnInfo(name = "updatedAt") val updatedAt: String,
 ) : Parcelable
-
-
-fun List<Word>.asDomainModel(): List<WordModel> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun Word.asDomainModel(): WordModel {
-    return WordModel(
-        id = this.id,
-        rid = this.rid,
-        title = this.title,
-        synonyms = this.synonyms,
-        meaning = this.meaning,
-        conjugation = this.conjugation,
-        createdAt = this.createdAt
-    )
-}

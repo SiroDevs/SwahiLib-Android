@@ -48,7 +48,7 @@ class WordRepository @Inject constructor(
     }
 
     suspend fun searchWordsByTitle(title: String?) {
-        wordsDao?.searchWordByTitle(title)?.map { it.asDomainModel() }
+//        wordsDao?.searchWordByTitle(title)?.map { it.asDomainModel() }
     }
 
     suspend fun getWordById(wordId: String): Flow<Word> {
