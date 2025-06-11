@@ -17,6 +17,8 @@ data class Word(
     @ColumnInfo(name = "synonyms") val synonyms: String,
     @ColumnInfo(name = "meaning") val meaning: String,
     @ColumnInfo(name = "conjugation") val conjugation: String,
+    @ColumnInfo(name = "views") val views: Int,
+    @ColumnInfo(name = "likes") val likes: Int,
     @ColumnInfo(name = "createdAt") val createdAt: String,
     @ColumnInfo(name = "updatedAt") val updatedAt: String,
 ) : Parcelable
