@@ -5,7 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.devtools.ksp)
+    kotlin("plugin.serialization") version "2.1.21"
     id("kotlin-parcelize")
 }
 
@@ -142,6 +143,7 @@ dependencies {
     implementation(platform(libs.jan.tennert.supabase.bom))     //  Supabase BOM
     implementation(libs.jan.tennert.supabase.postgrest)     //  Supabase PostgREST support
     implementation(libs.ktor.client.android)     //  Ktor HTTP client for Android
+    implementation(libs.kotlinx.serialization.json)     //  Kotlin Serialization for Android
 
     // Testing - Unit Tests
     testImplementation(libs.junit)     //  JUnit for unit testing
