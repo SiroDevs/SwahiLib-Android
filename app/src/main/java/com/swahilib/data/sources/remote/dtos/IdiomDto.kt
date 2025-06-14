@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class IdiomDto(
-    val rid: Int,
-    val title: String,
-    val meaning: String,
-    val views: Int,
-    val likes: Int,
-    val createdAt: String,
-    val updatedAt: String,
+    val rid: Int = 0,
+    val title: String? = null,
+    val meaning: String? = null,
+    val views: Int = 0,
+    val likes: Int = 0,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
 )

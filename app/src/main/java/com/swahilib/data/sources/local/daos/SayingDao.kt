@@ -16,7 +16,7 @@ interface SayingDao {
     @Update
     fun update(saying: Saying)
 
-    @Query("SELECT * FROM ${Collections.SAYINGS} WHERE rid = :id")
+    @Query("SELECT * FROM ${Collections.SAYINGS} WHERE id = :id")
     fun getById(id: String): Flow<Saying>
 
     @Query("DELETE FROM ${Collections.SAYINGS}")

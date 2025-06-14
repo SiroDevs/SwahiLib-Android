@@ -49,7 +49,7 @@ fun BookItem(
             )
             Column {
                 Text(
-                    text = refineTitle(item.data.title),
+                    text = refineTitle(item.data.title.toString()),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = contentColor

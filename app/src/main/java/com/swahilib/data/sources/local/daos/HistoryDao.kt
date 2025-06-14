@@ -16,7 +16,7 @@ interface HistoryDao {
     @Update
     fun update(history: History)
 
-    @Query("SELECT * FROM ${Collections.HISTORY} WHERE rid = :id")
+    @Query("SELECT * FROM ${Collections.HISTORY} WHERE id = :id")
     fun getById(id: String): Flow<History>
 
     @Query("DELETE FROM ${Collections.HISTORY}")

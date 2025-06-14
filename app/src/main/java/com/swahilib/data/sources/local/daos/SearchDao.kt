@@ -16,7 +16,7 @@ interface SearchDao {
     @Update
     fun update(search: Search)
 
-    @Query("SELECT * FROM ${Collections.WORDS} WHERE rid = :id")
+    @Query("SELECT * FROM ${Collections.WORDS} WHERE id = :id")
     fun getById(id: String): Flow<Search>
 
     @Query("DELETE FROM ${Collections.WORDS}")

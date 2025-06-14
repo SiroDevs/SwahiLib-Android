@@ -16,7 +16,7 @@ interface IdiomDao {
     @Update
     fun update(idiom: Idiom)
 
-    @Query("SELECT * FROM ${Collections.IDIOMS} WHERE rid = :id")
+    @Query("SELECT * FROM ${Collections.IDIOMS} WHERE id = :id")
     fun getById(id: String): Flow<Idiom>
 
     @Query("DELETE FROM ${Collections.IDIOMS}")

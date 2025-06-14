@@ -5,24 +5,23 @@ import androidx.annotation.Keep
 import androidx.room.*
 import com.swahilib.core.utils.Collections
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 
 @Keep
 @Parcelize
-@Serializable
 @Entity(
     tableName = Collections.WORDS,
     indices = [Index(value = ["id"], unique = true)]
 )
 data class Word(
-    @PrimaryKey val id: Int,
-    @ColumnInfo(name = "rid") val rid: Int,
-    @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "synonyms") val synonyms: String,
-    @ColumnInfo(name = "meaning") val meaning: String,
-    @ColumnInfo(name = "conjugation") val conjugation: String,
-    @ColumnInfo(name = "views") val views: Int,
-    @ColumnInfo(name = "likes") val likes: Int,
-    @ColumnInfo(name = "createdAt") val createdAt: String,
-    @ColumnInfo(name = "updatedAt") val updatedAt: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "rid") val rid: Int = 0,
+    @ColumnInfo(name = "title") val title: String? = null,
+    @ColumnInfo(name = "synonyms") val synonyms: String? = null,
+    @ColumnInfo(name = "meaning") val meaning: String? = null,
+    @ColumnInfo(name = "conjugation") val conjugation: String? = null,
+    @ColumnInfo(name = "views") val views: Int = 0,
+    @ColumnInfo(name = "likes") val likes: Int = 0,
+    @ColumnInfo(name = "liked") val liked: Boolean = false,
+    @ColumnInfo(name = "createdAt") val createdAt: String? = null,
+    @ColumnInfo(name = "updatedAt") val updatedAt: String? = null,
 ) : Parcelable

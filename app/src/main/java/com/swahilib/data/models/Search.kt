@@ -13,8 +13,7 @@ import kotlinx.parcelize.Parcelize
     indices = [Index(value = ["id"], unique = true)]
 )
 data class Search(
-    @PrimaryKey() val id: Int,
-    @ColumnInfo(name = "rid") val rid: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "createdAt") val createdAt: String,
 ) : Parcelable

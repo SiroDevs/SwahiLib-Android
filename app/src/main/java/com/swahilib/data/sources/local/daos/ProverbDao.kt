@@ -16,7 +16,7 @@ interface ProverbDao {
     @Update
     fun update(proverb: Proverb)
 
-    @Query("SELECT * FROM ${Collections.WORDS} WHERE rid = :id")
+    @Query("SELECT * FROM ${Collections.WORDS} WHERE id = :id")
     fun getById(id: String): Flow<Proverb>
 
     @Query("DELETE FROM ${Collections.WORDS}")

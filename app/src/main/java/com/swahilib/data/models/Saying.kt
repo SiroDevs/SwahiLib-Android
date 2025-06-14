@@ -13,12 +13,13 @@ import kotlinx.parcelize.Parcelize
     indices = [Index(value = ["id"], unique = true)]
 )
 data class Saying(
-    @PrimaryKey() val id: Int,
-    @ColumnInfo(name = "rid") val rid: Int,
-    @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "meaning") val meaning: String,
-    @ColumnInfo(name = "views") val views: Int,
-    @ColumnInfo(name = "likes") val likes: Int,
-    @ColumnInfo(name = "createdAt") val createdAt: String,
-    @ColumnInfo(name = "updatedAt") val updatedAt: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "rid") val rid: Int = 0,
+    @ColumnInfo(name = "title") val title: String? = null,
+    @ColumnInfo(name = "meaning") val meaning: String? = null,
+    @ColumnInfo(name = "views") val views: Int = 0,
+    @ColumnInfo(name = "likes") val likes: Int = 0,
+    @ColumnInfo(name = "liked") val liked: Boolean = false,
+    @ColumnInfo(name = "createdAt") val createdAt: String? = null,
+    @ColumnInfo(name = "updatedAt") val updatedAt: String? = null,
 ) : Parcelable

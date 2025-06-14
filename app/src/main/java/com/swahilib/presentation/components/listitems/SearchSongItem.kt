@@ -23,11 +23,11 @@ fun SearchWordItem(
     isSearching: Boolean,
     onClick: (Word) -> Unit,
 ) {
-    val verses = remember(word.meaning) { word.meaning.split("##") }
-    val hasChorus = "CHORUS" in word.meaning
+    val verses = remember(word.meaning) { word.meaning?.split("##") }
+    val hasChorus = word.meaning?.contains("CHORUS") == true
     val chorusText = if (hasChorus) "Chorus" else ""
-    val verseCount = verses.size - if (hasChorus) 1 else 0
-    val versesText = if (verses.size == 1) "$verseCount V" else "${verseCount} Vs"
+    val verseCount = verses?.size
+    val versesText = if (verses?.size == 1) "$verseCount V" else "${verseCount} Vs"
 
     Box(
         modifier = Modifier.padding(horizontal = 10.dp)
@@ -44,7 +44,7 @@ fun SearchWordItem(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = word.title,
+                    text = word.title.toString(),
                     maxLines = 1,
                     modifier = Modifier.weight(1f),
                     style = TextStyle(
@@ -69,7 +69,7 @@ fun SearchWordItem(
 
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = refineContent(verses.firstOrNull().orEmpty()),
+                    text = refineContent(verses?.firstOrNull().orEmpty()),
                     style = TextStyle(fontSize = 16.sp),
                     maxLines = 2,
                     modifier = Modifier.weight(1f)

@@ -28,8 +28,8 @@ class InitViewModel @Inject constructor(
         _uiState.tryEmit(UiState.Loading)
 
         viewModelScope.launch {
+            Log.d("TAG", "Fetching words")
             wordRepo.fetchRemoteData().catch { exception ->
-                Log.d("TAG", "fetching words")
                 val errorMessage = when (exception) {
                     is HttpException -> "HTTP Error: ${exception.code()}"
                     else -> "Network error: ${exception.message}"
@@ -37,6 +37,7 @@ class InitViewModel @Inject constructor(
                 Log.d("TAG", errorMessage)
                 _uiState.tryEmit(UiState.Error(errorMessage))
             }.collect { respData ->
+                Log.d("TAG", "Fetched ${respData.size} words")
                 _words.emit(respData)
                 _uiState.tryEmit(UiState.Loaded)
             }
@@ -47,6 +48,7 @@ class InitViewModel @Inject constructor(
         _uiState.tryEmit(UiState.Saving)
 
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d("TAG", "Saving data")
             try {
                 _words.value.forEach {
                     wordRepo.saveWord(it)

@@ -16,7 +16,7 @@ interface WordDao {
     @Update
     fun update(word: Word)
 
-    @Query("SELECT * FROM ${Collections.WORDS} WHERE rid = :id")
+    @Query("SELECT * FROM ${Collections.WORDS} WHERE id = :id")
     fun getById(id: String): Flow<Word>
 
     @Query("DELETE FROM ${Collections.WORDS}")

@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SayingDto(
-    val rid: Int,
+    val rid: Int = 0,
     val title: String,
-    val meaning: String,
-    val views: Int,
-    val likes: Int,
-    val createdAt: String,
-    val updatedAt: String,
+    val meaning: String? = null,
+    val views: Int = 0,
+    val likes: Int = 0,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
 )

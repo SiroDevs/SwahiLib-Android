@@ -13,8 +13,7 @@ import kotlinx.parcelize.Parcelize
     indices = [Index(value = ["id"], unique = true)]
 )
 data class History(
-    @PrimaryKey() val id: Int,
-    @ColumnInfo(name = "rid") val rid: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "item") val item: Int,
     @ColumnInfo(name = "type") val type: String,
     @ColumnInfo(name = "createdAt") val createdAt: String,

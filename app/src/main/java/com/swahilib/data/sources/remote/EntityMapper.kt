@@ -6,7 +6,6 @@ import com.swahilib.data.sources.remote.dtos.*
 object EntityMapper {
     fun mapToEntity(entity: IdiomDto): Idiom {
         return Idiom(
-            id = entity.rid,
             rid = entity.rid,
             title = entity.title,
             meaning = entity.meaning,
@@ -19,7 +18,6 @@ object EntityMapper {
 
     fun mapToEntity(entity: ProverbDto): Proverb {
         return Proverb(
-            id = entity.rid,
             rid = entity.rid,
             title = entity.title,
             synonyms = entity.synonyms,
@@ -34,7 +32,6 @@ object EntityMapper {
 
     fun mapToEntity(entity: SayingDto): Saying {
         return Saying(
-            id = entity.rid,
             rid = entity.rid,
             title = entity.title,
             meaning = entity.meaning,
@@ -47,7 +44,6 @@ object EntityMapper {
 
     fun mapToEntity(entity: WordDto): Word {
         return Word(
-            id = entity.rid,
             rid = entity.rid,
             title = entity.title,
             synonyms = entity.synonyms,

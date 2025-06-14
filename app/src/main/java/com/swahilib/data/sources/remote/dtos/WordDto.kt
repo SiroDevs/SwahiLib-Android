@@ -4,13 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WordDto(
-    val rid: Int,
-    val title: String,
-    val synonyms: String,
-    val meaning: String,
-    val conjugation: String,
-    val views: Int,
-    val likes: Int,
-    val createdAt: String,
-    val updatedAt: String,
+    val rid: Int = 0,
+    val title: String? = null,
+    val synonyms: String? = null,
+    val meaning: String? = null,
+    val conjugation: String? = null,
+    val views: Int = 0,
+    val likes: Int = 0,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
 )
