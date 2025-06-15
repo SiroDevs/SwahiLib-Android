@@ -24,6 +24,9 @@ class InitViewModel @Inject constructor(
 
     private val _words = MutableStateFlow<List<Word>>(emptyList())
 
+    private val _progress = MutableStateFlow(0)
+    val progress: StateFlow<Int> = _progress.asStateFlow()
+
     fun fetchWords() {
         _uiState.tryEmit(UiState.Loading)
 
@@ -46,12 +49,20 @@ class InitViewModel @Inject constructor(
 
     fun saveData() {
         _uiState.tryEmit(UiState.Saving)
+        saveWords()
+    }
 
+    fun saveWords() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("TAG", "Saving data")
             try {
-                _words.value.forEach {
-                    wordRepo.saveWord(it)
+                val words = _words.value
+                val total = words.size
+
+                words.forEachIndexed { index, word ->
+                    wordRepo.saveWord(word)
+                    val percent = ((index + 1).toFloat() / total * 100).toInt()
+                    _progress.emit(percent)
                 }
 
                 sharedPreferences.edit(commit = true) {

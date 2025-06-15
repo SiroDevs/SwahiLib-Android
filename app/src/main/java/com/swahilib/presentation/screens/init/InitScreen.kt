@@ -4,12 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.*
 import com.swahilib.presentation.navigation.Routes
+import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.InitViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -19,6 +21,7 @@ fun InitScreen(
     navController: NavHostController,
 ) {
     var fetchData by rememberSaveable { mutableStateOf(0) }
+    val progress by viewModel.progress.collectAsState(initial = 0)
 
     if (fetchData == 0) {
         viewModel.fetchWords()
@@ -39,7 +42,7 @@ fun InitScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(color = MaterialTheme.colorScheme.surface)
+                    .background(color = ThemeColors.accent1)
             ) {
                 when (uiState) {
                     is UiState.Error -> ErrorState(
@@ -47,8 +50,18 @@ fun InitScreen(
                         onRetry = { viewModel.fetchWords() }
                     )
 
-                    is UiState.Loading -> LoadingState("Loading data ...")
-                    is UiState.Saving -> LoadingState("Saving data ...")
+                    is UiState.Loading -> LoadingState(
+                        title = "Loading data",
+                        fileName = "bar-loader",
+                    )
+
+                    is UiState.Saving ->
+                        LoadingState(
+                            title = "Saving data ... ",
+                            fileName = "opener-loading",
+                            showProgress = true,
+                            progressValue = progress
+                        )
 
                     is UiState.Loaded -> {
                         viewModel.saveData()

@@ -22,7 +22,7 @@ supabase = "3.1.4"
 ktor = "3.1.3"
 chucker = "4.1.0"
 kotlinx-serialization = "1.8.1"
-kotlin-serialization = "2.1.21"
+lottie-compose = "6.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,6 +60,7 @@ jan-tennert-supabase-bom = { module = "io.github.jan-tennert.supabase:bom", vers
 jan-tennert-supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie-compose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -123,6 +123,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)     //  Compose UI preview support
     debugImplementation(libs.androidx.ui.tooling)     //  Compose UI tools (debug only)
     debugImplementation(libs.androidx.ui.test.manifest)     //  Compose test manifest (debug only)
+    implementation(libs.lottie.compose)     //  Lottie loader
 
     // Room Database
     implementation(libs.androidx.room.runtime)     //  Room runtime

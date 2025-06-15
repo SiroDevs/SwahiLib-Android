@@ -15,9 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.data.models.Word
-import com.swahilib.data.sample.*
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.*
+import com.swahilib.presentation.components.LoadingState
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.screens.presenter.components.*
 import com.swahilib.presentation.theme.ThemeColors
@@ -90,7 +90,10 @@ fun PresenterScreen(
                     verses = verses, indicators = indicators
                 )
 
-                UiState.Loading -> LoadingState("Loading word ...")
+                UiState.Loading -> LoadingState(
+                    title = "Loading word ...",
+                    fileName = "opener-loading",
+                )
 
                 else -> EmptyState()
             }

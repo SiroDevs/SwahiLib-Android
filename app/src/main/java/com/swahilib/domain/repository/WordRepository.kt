@@ -13,13 +13,12 @@ import com.swahilib.data.sources.local.daos.WordDao
 import com.swahilib.data.sources.remote.EntityMapper
 import com.swahilib.data.sources.remote.dtos.WordDto
 import io.github.jan.supabase.postgrest.Postgrest
-import java.util.stream.IntStream.range
 
 @Singleton
 class WordRepository @Inject constructor(
     context: Context,
     private val supabase: Postgrest,
-) {
+)  {
     private var wordsDao: WordDao?
 
     init {
@@ -28,24 +27,14 @@ class WordRepository @Inject constructor(
     }
 
     fun fetchRemoteData(): Flow<List<Word>> = flow {
-        val pageSize = 1000
-        val allWords = mutableListOf<WordDto>()
-        var offset = 0
-
-        while (true) {
-            val batch = supabase[Collections.WORDS]
-                .select {
-                    range(offset, pageSize)
-                }
-                .decodeList<WordDto>()
-
-            if (batch.isEmpty()) break
-
-            allWords += batch
-            offset += pageSize
+        try {
+            val result = supabase[Collections.WORDS]
+                .select().decodeList<WordDto>()
+            val words = result.map { EntityMapper.mapToEntity(it) }
+            emit(words)
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
         }
-
-        emit(allWords.map { EntityMapper.mapToEntity(it) })
     }
 
     suspend fun fetchLocalData(): List<Word> {

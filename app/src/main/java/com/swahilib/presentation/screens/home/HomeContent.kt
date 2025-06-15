@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.pullrefresh.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.ErrorState
@@ -32,7 +33,10 @@ fun HomeContent(
             onRetry = { viewModel.fetchData() }
         )
 
-        UiState.Loading -> LoadingState("Loading data ...")
+        UiState.Loading -> LoadingState(
+            title = "Loading data ",
+            fileName = "opener-loading",
+        )
 
         else -> {
             Box(
