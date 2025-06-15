@@ -16,20 +16,89 @@ import androidx.core.content.edit
 
 @HiltViewModel
 class InitViewModel @Inject constructor(
+    private val idiomRepo: IdiomRepository,
+    private val proverbRepo: ProverbRepository,
+    private val sayingRepo: SayingRepository,
     private val wordRepo: WordRepository,
     private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    private val _idioms = MutableStateFlow<List<Idiom>>(emptyList())
+    private val _proverbs = MutableStateFlow<List<Proverb>>(emptyList())
+    private val _sayings = MutableStateFlow<List<Saying>>(emptyList())
     private val _words = MutableStateFlow<List<Word>>(emptyList())
 
     private val _progress = MutableStateFlow(0)
     val progress: StateFlow<Int> = _progress.asStateFlow()
 
-    fun fetchWords() {
-        _uiState.tryEmit(UiState.Loading)
+    private val _status = MutableStateFlow("Saving data ...")
+    val status: StateFlow<String> = _status.asStateFlow()
 
+    fun fetchData() {
+        _uiState.tryEmit(UiState.Loading)
+        fetchIdioms()
+        fetchSayings()
+        fetchProverbs()
+        fetchWords()
+    }
+
+    fun fetchIdioms() {
+        viewModelScope.launch {
+            Log.d("TAG", "Fetching idioms")
+            idiomRepo.fetchRemoteData().catch { exception ->
+                val errorMessage = when (exception) {
+                    is HttpException -> "HTTP Error: ${exception.code()}"
+                    else -> "Network error: ${exception.message}"
+                }
+                Log.d("TAG", errorMessage)
+                _uiState.tryEmit(UiState.Error(errorMessage))
+            }.collect { respData ->
+                Log.d("TAG", "Fetched ${respData.size} idioms")
+                _idioms.emit(respData)
+                _uiState.tryEmit(UiState.Loaded)
+            }
+        }
+    }
+
+    fun fetchProverbs() {
+        viewModelScope.launch {
+            Log.d("TAG", "Fetching proverbs")
+            proverbRepo.fetchRemoteData().catch { exception ->
+                val errorMessage = when (exception) {
+                    is HttpException -> "HTTP Error: ${exception.code()}"
+                    else -> "Network error: ${exception.message}"
+                }
+                Log.d("TAG", errorMessage)
+                _uiState.tryEmit(UiState.Error(errorMessage))
+            }.collect { respData ->
+                Log.d("TAG", "Fetched ${respData.size} proverbs")
+                _proverbs.emit(respData)
+                _uiState.tryEmit(UiState.Loaded)
+            }
+        }
+    }
+
+    fun fetchSayings() {
+        viewModelScope.launch {
+            Log.d("TAG", "Fetching sayings")
+            sayingRepo.fetchRemoteData().catch { exception ->
+                val errorMessage = when (exception) {
+                    is HttpException -> "HTTP Error: ${exception.code()}"
+                    else -> "Network error: ${exception.message}"
+                }
+                Log.d("TAG", errorMessage)
+                _uiState.tryEmit(UiState.Error(errorMessage))
+            }.collect { respData ->
+                Log.d("TAG", "Fetched ${respData.size} sayings")
+                _sayings.emit(respData)
+                _uiState.tryEmit(UiState.Loaded)
+            }
+        }
+    }
+
+    fun fetchWords() {
         viewModelScope.launch {
             Log.d("TAG", "Fetching words")
             wordRepo.fetchRemoteData().catch { exception ->
