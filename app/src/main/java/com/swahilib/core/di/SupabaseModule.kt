@@ -20,13 +20,6 @@ object SupabaseModule {
             supabaseKey = BuildConfig.SupabaseKey,
         ) {
             install(Postgrest)
-//            defaultSerializer = KotlinXSerializer(
-//                Json {
-//                    prettyPrint = true
-//                    isLenient = true
-//                    ignoreUnknownKeys = true
-//                }
-//            )
         }
     }
 

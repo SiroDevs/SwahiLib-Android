@@ -62,7 +62,7 @@ fun LoadingState(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(15.dp),
+                        .height(30.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     LinearProgressIndicator(
@@ -70,13 +70,13 @@ fun LoadingState(
                         color = ThemeColors.primary,
                         trackColor = Color.White,
                         modifier = Modifier
-                            .weight(1f)
+                            .weight(2f)
                             .fillMaxHeight()
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "$progressValue %",
-                        fontSize = 18.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = ThemeColors.primaryDark2,
                         modifier = Modifier

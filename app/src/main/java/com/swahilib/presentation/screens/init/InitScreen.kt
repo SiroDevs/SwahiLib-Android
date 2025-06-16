@@ -22,9 +22,10 @@ fun InitScreen(
 ) {
     var fetchData by rememberSaveable { mutableStateOf(0) }
     val progress by viewModel.progress.collectAsState(initial = 0)
+    val status by viewModel.status.collectAsState(initial = "Inahifadhi data")
 
     if (fetchData == 0) {
-        viewModel.fetchWords()
+        viewModel.fetchData()
         fetchData++
     }
 
@@ -47,17 +48,17 @@ fun InitScreen(
                 when (uiState) {
                     is UiState.Error -> ErrorState(
                         errorMessage = (uiState as UiState.Error).errorMessage,
-                        onRetry = { viewModel.fetchWords() }
+                        onRetry = { viewModel.fetchData() }
                     )
 
                     is UiState.Loading -> LoadingState(
-                        title = "Loading data",
+                        title = "Inapakia data ...",
                         fileName = "bar-loader",
                     )
 
                     is UiState.Saving ->
                         LoadingState(
-                            title = "Saving data ... ",
+                            title = status,
                             fileName = "opener-loading",
                             showProgress = true,
                             progressValue = progress

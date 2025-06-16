@@ -37,111 +37,116 @@ class InitViewModel @Inject constructor(
     val status: StateFlow<String> = _status.asStateFlow()
 
     fun fetchData() {
-        _uiState.tryEmit(UiState.Loading)
-        fetchIdioms()
-        fetchSayings()
-        fetchProverbs()
-        fetchWords()
-    }
-
-    fun fetchIdioms() {
         viewModelScope.launch {
-            Log.d("TAG", "Fetching idioms")
-            idiomRepo.fetchRemoteData().catch { exception ->
-                val errorMessage = when (exception) {
-                    is HttpException -> "HTTP Error: ${exception.code()}"
-                    else -> "Network error: ${exception.message}"
+            _uiState.emit(UiState.Loading)
+            try {
+                val idioms = async {
+                    idiomRepo.fetchRemoteData()
+                        .firstOrNull() ?: emptyList()
                 }
-                Log.d("TAG", errorMessage)
-                _uiState.tryEmit(UiState.Error(errorMessage))
-            }.collect { respData ->
-                Log.d("TAG", "Fetched ${respData.size} idioms")
-                _idioms.emit(respData)
-                _uiState.tryEmit(UiState.Loaded)
-            }
-        }
-    }
 
-    fun fetchProverbs() {
-        viewModelScope.launch {
-            Log.d("TAG", "Fetching proverbs")
-            proverbRepo.fetchRemoteData().catch { exception ->
-                val errorMessage = when (exception) {
-                    is HttpException -> "HTTP Error: ${exception.code()}"
-                    else -> "Network error: ${exception.message}"
+                val proverbs = async {
+                    proverbRepo.fetchRemoteData()
+                        .firstOrNull() ?: emptyList()
                 }
-                Log.d("TAG", errorMessage)
-                _uiState.tryEmit(UiState.Error(errorMessage))
-            }.collect { respData ->
-                Log.d("TAG", "Fetched ${respData.size} proverbs")
-                _proverbs.emit(respData)
-                _uiState.tryEmit(UiState.Loaded)
-            }
-        }
-    }
 
-    fun fetchSayings() {
-        viewModelScope.launch {
-            Log.d("TAG", "Fetching sayings")
-            sayingRepo.fetchRemoteData().catch { exception ->
-                val errorMessage = when (exception) {
-                    is HttpException -> "HTTP Error: ${exception.code()}"
-                    else -> "Network error: ${exception.message}"
+                val sayings = async {
+                    sayingRepo.fetchRemoteData()
+                        .firstOrNull() ?: emptyList()
                 }
-                Log.d("TAG", errorMessage)
-                _uiState.tryEmit(UiState.Error(errorMessage))
-            }.collect { respData ->
-                Log.d("TAG", "Fetched ${respData.size} sayings")
-                _sayings.emit(respData)
-                _uiState.tryEmit(UiState.Loaded)
-            }
-        }
-    }
 
-    fun fetchWords() {
-        viewModelScope.launch {
-            Log.d("TAG", "Fetching words")
-            wordRepo.fetchRemoteData().catch { exception ->
-                val errorMessage = when (exception) {
-                    is HttpException -> "HTTP Error: ${exception.code()}"
-                    else -> "Network error: ${exception.message}"
+                val words = async {
+                    wordRepo.fetchRemoteData()
+                        .firstOrNull() ?: emptyList()
                 }
-                Log.d("TAG", errorMessage)
-                _uiState.tryEmit(UiState.Error(errorMessage))
-            }.collect { respData ->
-                Log.d("TAG", "Fetched ${respData.size} words")
-                _words.emit(respData)
-                _uiState.tryEmit(UiState.Loaded)
+
+                _idioms.emit(idioms.await())
+                _proverbs.emit(proverbs.await())
+                _sayings.emit(sayings.await())
+                _words.emit(words.await())
+
+                _uiState.emit(UiState.Loaded)
+            } catch (e: Exception) {
+                val errorMessage = when (e) {
+                    is HttpException -> "HTTP Error: ${e.code()}"
+                    else -> "Network error: ${e.message}"
+                }
+                Log.e("TAG", errorMessage, e)
+                _uiState.emit(UiState.Error(errorMessage))
             }
         }
     }
 
     fun saveData() {
-        _uiState.tryEmit(UiState.Saving)
-        saveWords()
+        viewModelScope.launch {
+            _uiState.emit(UiState.Saving)
+
+            val idiomsJob = async { saveIdioms() }
+            val proverbsJob = async { saveProverbs() }
+            val sayingsJob = async { saveSayings() }
+            val wordsJob = async { saveWords() }
+
+            idiomsJob.await()
+            proverbsJob.await()
+            sayingsJob.await()
+            wordsJob.await()
+
+            sharedPreferences.edit(commit = true) {
+                putBoolean(Preferences.DATA_LOADED, true)
+            }
+
+            _uiState.emit(UiState.Saved)
+        }
     }
 
-    fun saveWords() {
-        viewModelScope.launch(Dispatchers.IO) {
-            Log.d("TAG", "Saving data")
-            try {
-                val words = _words.value
-                val total = words.size
+    suspend fun saveIdioms() = withContext(Dispatchers.IO) {
+        Log.d("TAG", "Saving idioms")
+        _status.emit("Inapakia nahau 527 ...")
+        val idioms = _idioms.value
 
-                words.forEachIndexed { index, word ->
-                    wordRepo.saveWord(word)
-                    val percent = ((index + 1).toFloat() / total * 100).toInt()
-                    _progress.emit(percent)
-                }
+        idioms.forEachIndexed { index, idiom ->
+            idiomRepo.saveIdiom(idiom)
+            val percent = ((index + 1).toFloat() / idioms.size * 100).toInt()
+            _progress.emit(percent)
+        }
+    }
 
-                sharedPreferences.edit(commit = true) {
-                    putBoolean(Preferences.DATA_LOADED, true)
-                }
-                _uiState.emit(UiState.Saved)
-            } catch (e: Exception) {
-                Log.e("SaveData", "Failed to save words", e)
-                _uiState.emit(UiState.Error("Failed to save words: ${e.message}"))
-            }
+    suspend fun saveProverbs() = withContext(Dispatchers.IO) {
+        Log.d("TAG", "Saving proverbs")
+        val proverbs = _proverbs.value
+        val total = proverbs.size
+        _status.emit("Inapakia methali $total ...")
+
+        proverbs.forEachIndexed { index, proverb ->
+            proverbRepo.saveProverb(proverb)
+            val percent = ((index + 1).toFloat() / total * 100).toInt()
+            _progress.emit(percent)
+        }
+    }
+
+    suspend fun saveSayings() = withContext(Dispatchers.IO) {
+        Log.d("TAG", "Saving sayings")
+        val sayings = _sayings.value
+        val total = sayings.size
+        _status.emit("Inapakia misemo $total ...")
+
+        sayings.forEachIndexed { index, saying ->
+            sayingRepo.saveSaying(saying)
+            val percent = ((index + 1).toFloat() / total * 100).toInt()
+            _progress.emit(percent)
+        }
+    }
+
+    suspend fun saveWords() = withContext(Dispatchers.IO) {
+        Log.d("TAG", "Saving words")
+        val words = _words.value
+        val total = words.size
+        _status.emit("Inapakia maneno $total ...")
+
+        words.forEachIndexed { index, word ->
+            wordRepo.saveWord(word)
+            val percent = ((index + 1).toFloat() / total * 100).toInt()
+            _progress.emit(percent)
         }
     }
 }

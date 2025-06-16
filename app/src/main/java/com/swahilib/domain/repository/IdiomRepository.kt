@@ -28,9 +28,11 @@ class IdiomRepository @Inject constructor(
 
     fun fetchRemoteData(): Flow<List<Idiom>> = flow {
         try {
-            val result = supabase[Collections.WORDS]
+            Log.d("TAG", "Now fetching idioms")
+            val result = supabase[Collections.IDIOMS]
                 .select().decodeList<IdiomDto>()
             val idioms = result.map { EntityMapper.mapToEntity(it) }
+            Log.d("TAG", "Fetched ${idioms.size} idioms")
             emit(idioms)
         } catch (e: Exception) {
             Log.d("TAG", e.message.toString())
