@@ -2,12 +2,9 @@ package com.swahilib.presentation.components.listitems
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,10 +14,8 @@ import com.swahilib.data.models.Word
 import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
-fun SearchWordItem(
+fun WordItem(
     word: Word,
-    isSelected: Boolean,
-    isSearching: Boolean,
     onClick: (Word) -> Unit,
 ) {
     val verses = remember(word.meaning) { word.meaning?.split("##") }
@@ -36,7 +31,7 @@ fun SearchWordItem(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(if (isSelected) ThemeColors.primary else Color.Transparent)
+                .background(ThemeColors.primary)
                 .clickable(onClick = { onClick(word) })
         ) {
             Row(
@@ -84,14 +79,11 @@ fun SearchWordItem(
     }
 }
 
-/*@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun PreviewSearchWordItem() {
-    SearchWordItem(
-        word = SampleWords[3],
+    WordItem(
+        word = SampleWords[0],
         onClick = {},
-        isSelected = false,
-        isSearching = false,
     )
 }
-*/

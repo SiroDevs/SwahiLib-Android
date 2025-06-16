@@ -1,11 +1,12 @@
 package com.swahilib.presentation.components.action
 
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
@@ -22,15 +23,20 @@ fun CustomTabTitles() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 5.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(modifier = Modifier.width(4.dp))
+
         tabs.forEach { tab ->
             TabItem(
                 text = tab,
                 isSelected = selectedTab == tab,
                 onClick = { selectedTab = tab }
             )
+            Spacer(modifier = Modifier.width(8.dp))
         }
     }
 }
@@ -41,7 +47,7 @@ fun TabItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (isSelected) ThemeColors.primary else ThemeColors.accent
+    val backgroundColor = if (isSelected) ThemeColors.primary else Color.Transparent
     val contentColor = if (isSelected) Color.White else ThemeColors.primary
 
     Surface(
@@ -53,7 +59,11 @@ fun TabItem(
                 role = Role.Tab
             ),
         color = backgroundColor,
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(
+            width = if (isSelected) 0.dp else 1.dp,
+            color = ThemeColors.primary
+        )
     ) {
         Text(
             text = text,

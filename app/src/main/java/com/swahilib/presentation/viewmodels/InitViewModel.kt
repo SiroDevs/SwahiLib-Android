@@ -33,7 +33,7 @@ class InitViewModel @Inject constructor(
     private val _progress = MutableStateFlow(0)
     val progress: StateFlow<Int> = _progress.asStateFlow()
 
-    private val _status = MutableStateFlow("Saving data ...")
+    private val _status = MutableStateFlow("Inapakia data ...")
     val status: StateFlow<String> = _status.asStateFlow()
 
     fun fetchData() {
