@@ -3,23 +3,19 @@ package com.swahilib.presentation.screens.home
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.data.sample.SampleWords
-import com.swahilib.domain.entities.HomeTab
-import com.swahilib.domain.entities.homeTabs
+import com.swahilib.domain.entities.*
 import com.swahilib.presentation.components.action.*
 import com.swahilib.presentation.screens.home.widgets.HomeSurface
 import com.swahilib.presentation.components.listitems.WordItem
 import com.swahilib.presentation.screens.home.lists.WordsList
-import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -27,29 +23,32 @@ import com.swahilib.presentation.viewmodels.HomeViewModel
 fun HomeContent(
     viewModel: HomeViewModel,
     navController: NavHostController,
-    isRefreshing: Boolean,
-    pullRefreshState: PullRefreshState
 ) {
     var selectedTab by remember { mutableStateOf(homeTabs[0]) }
-
-    fun setSelectedTab(tab: HomeTab) {
-        selectedTab = tab
-    }
+    var selectedLetter by remember { mutableStateOf("A") }
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         CustomTabTitles(
             selectedTab = selectedTab,
-            onTabSelected = { }
+            onTabSelected = { tab ->
+                selectedTab = tab
+            }
         )
         Row(
             modifier = Modifier.fillMaxSize()
         ) {
             Box(
-                modifier = Modifier.width(60.dp)
+                modifier = Modifier.width(75.dp)
             ) {
-                VerticalLetters()
+                VerticalLetters(
+                    selectedLetter = selectedLetter,
+                    onLetterSelected = { letter ->
+                        selectedLetter = letter
+                    }
+                )
+
             }
 
             HomeSurface() {
@@ -59,13 +58,6 @@ fun HomeContent(
                     HomeTab.Proverbs -> WordsList(viewModel, navController)
                     HomeTab.Sayings -> WordsList(viewModel, navController)
                 }
-
-                PullRefreshIndicator(
-                    refreshing = isRefreshing,
-                    state = pullRefreshState,
-                    modifier = Modifier.align(Alignment.TopCenter),
-                    contentColor = ThemeColors.primary
-                )
             }
         }
     }
@@ -86,7 +78,10 @@ fun HomeScreenPreview() {
             modifier = Modifier.fillMaxSize()
         ) {
             Box( modifier = Modifier.width(60.dp) ) {
-                VerticalLetters()
+                VerticalLetters(
+                    selectedLetter = "A",
+                    onLetterSelected = {}
+                )
             }
 
             HomeSurface() {

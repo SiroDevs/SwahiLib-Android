@@ -7,11 +7,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.indicators.EmptyState
+import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.components.listitems.WordItem
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
@@ -23,23 +22,34 @@ fun WordsList(
     val uiState by viewModel.uiState.collectAsState()
     val words by viewModel.filteredWords.collectAsState(initial = emptyList())
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
         when (uiState) {
             is UiState.Filtered ->
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    contentPadding = PaddingValues(horizontal = 10.dp)
-                ) {
-                    items(words) { word ->
-                        WordItem(
-                            word = word,
-                            onTap = { },
-                        )
+                if (words.isNotEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 5.dp)
+                    ) {
+                        itemsIndexed(words) { index, word ->
+                            WordItem(
+                                word = word,
+                                onTap = { },
+                                modifier = if (index == 0) Modifier.padding(top = 5.dp) else Modifier
+                            )
+                        }
                     }
+                } else {
+                    EmptyState()
                 }
 
-            else -> EmptyState()
+
+            else -> LoadingState(
+                title = "",
+                fileName = "circle-loader",
+            )
         }
     }
 }

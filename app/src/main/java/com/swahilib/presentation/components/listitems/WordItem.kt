@@ -18,6 +18,7 @@ import com.swahilib.data.sample.SampleWords
 fun WordItem(
     word: Word,
     onTap: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     val titleTxtStyle = MaterialTheme.typography.titleLarge.copy(
         fontWeight = FontWeight.Bold,
@@ -50,17 +51,15 @@ fun WordItem(
     }
 
     ElevatedCard(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(5.dp)
             .clickable { onTap?.invoke() },
-//        colors = CardDefaults.cardColors(
-//            containerColor = Color.White,
-//        ),
         elevation = CardDefaults.cardElevation(5.dp),
-    ){
+    ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
             Text(

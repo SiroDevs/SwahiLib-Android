@@ -13,7 +13,7 @@ sealed class HomeTab(var title: String) {
     object Words : HomeTab("maneno")
     object Idioms : HomeTab("nahau")
     object Sayings : HomeTab("misemo")
-    object Proverbs : HomeTab("proverbs")
+    object Proverbs : HomeTab("methali")
 }
 
 

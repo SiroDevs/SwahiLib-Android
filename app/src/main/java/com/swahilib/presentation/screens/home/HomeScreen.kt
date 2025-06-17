@@ -1,12 +1,9 @@
 package com.swahilib.presentation.screens.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.pullrefresh.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,12 +29,6 @@ fun HomeScreen(
     var searchQuery by rememberSaveable { mutableStateOf("") }
 
     val uiState by viewModel.uiState.collectAsState()
-
-    val isRefreshing = uiState is UiState.Loading
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
-        onRefresh = { }
-    )
 
     Scaffold(
         topBar = {
@@ -69,15 +60,11 @@ fun HomeScreen(
         },
     ) { padding ->
         Box(
-            modifier = Modifier
-                .padding(padding)
-                .pullRefresh(pullRefreshState)
+            modifier = Modifier.padding(padding)
         ) {
             HomeContent(
                 viewModel = viewModel,
                 navController = navController,
-                isRefreshing = isRefreshing,
-                pullRefreshState = pullRefreshState
             )
         }
     }

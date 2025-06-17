@@ -31,20 +31,18 @@ fun LoadingState(
     )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(24.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             LottieAnimation(
                 composition = composition,
                 progress = { progress },
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier.size(250.dp)
             )
 
             Spacer(modifier = Modifier.height(24.dp))

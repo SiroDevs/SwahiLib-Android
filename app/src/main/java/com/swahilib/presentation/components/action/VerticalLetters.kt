@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,8 +22,8 @@ import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
 fun VerticalLetters(
-    onLetterSelected: (String) -> Unit = {},
-    onLongPress: (String) -> Unit = {}
+    selectedLetter: String,
+    onLetterSelected: (String) -> Unit
 ) {
     val letters = remember {
         ('A'..'Z')
@@ -32,7 +32,6 @@ fun VerticalLetters(
     }
 
     val scrollState = rememberLazyListState()
-    var selectedLetter by remember { mutableStateOf(letters.firstOrNull() ?: "A") }
 
     LazyColumn(
         state = scrollState,
@@ -46,11 +45,7 @@ fun VerticalLetters(
             LetterItem(
                 text = letter,
                 isSelected = selectedLetter == letter,
-                onClick = {
-                    selectedLetter = letter
-                    onLetterSelected(letter)
-                },
-                onLongClick = { onLongPress(letter) }
+                onClick = { onLetterSelected(letter) }
             )
         }
     }
@@ -62,19 +57,15 @@ fun LetterItem(
     text: String,
     isSelected: Boolean,
     onClick: () -> Unit,
-    onLongClick: () -> Unit = {}
 ) {
     val backgroundColor = if (isSelected) ThemeColors.primary else Color.White
     val contentColor = if (isSelected) Color.White else ThemeColors.primary
 
     Surface(
         modifier = Modifier
-            .size(40.dp)
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick
-            ),
-        shape = CircleShape,
+            .size(60.dp)
+            .combinedClickable(onClick = onClick),
+        shape = RoundedCornerShape(15.dp),
         color = backgroundColor,
         border = BorderStroke(
             width = if (isSelected) 0.dp else 1.dp,
@@ -89,7 +80,7 @@ fun LetterItem(
             Text(
                 text = text,
                 color = contentColor,
-                fontSize = 25.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
@@ -100,5 +91,8 @@ fun LetterItem(
 @Preview(showBackground = true)
 @Composable
 fun VerticalLettersPreview() {
-    VerticalLetters()
+    VerticalLetters(
+        selectedLetter = "A",
+        onLetterSelected = {}
+    )
 }
