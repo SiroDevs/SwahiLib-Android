@@ -25,7 +25,7 @@ fun HomeContent(
     navController: NavHostController,
 ) {
     var selectedTab by remember { mutableStateOf(homeTabs[0]) }
-    var selectedLetter by remember { mutableStateOf("A") }
+    var selectedLetter by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -46,6 +46,7 @@ fun HomeContent(
                     selectedLetter = selectedLetter,
                     onLetterSelected = { letter ->
                         selectedLetter = letter
+                        viewModel.filterByLetter(selectedTab, letter)
                     }
                 )
 
@@ -53,10 +54,10 @@ fun HomeContent(
 
             HomeSurface() {
                 when (selectedTab) {
-                    HomeTab.Words -> WordsList(viewModel, navController)
                     HomeTab.Idioms -> WordsList(viewModel, navController)
                     HomeTab.Proverbs -> WordsList(viewModel, navController)
                     HomeTab.Sayings -> WordsList(viewModel, navController)
+                    HomeTab.Words -> WordsList(viewModel, navController)
                 }
             }
         }

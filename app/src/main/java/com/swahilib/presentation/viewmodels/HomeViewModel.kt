@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.swahilib.data.models.*
 import com.swahilib.domain.entities.*
 import com.swahilib.domain.repository.*
+import com.swahilib.presentation.screens.home.lists.WordsList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -61,5 +62,38 @@ class HomeViewModel @Inject constructor(
 
             _uiState.tryEmit(UiState.Filtered)
         }
+    }
+
+    fun filterByLetter(selectedTab: HomeTab, selectedLetter: String) {
+        _uiState.tryEmit(UiState.Loading)
+        val letter = selectedLetter.lowercase()
+
+        when (selectedTab) {
+            HomeTab.Idioms -> {
+                _filteredIdioms.value = _idioms.value.filter {
+                    it.title?.startsWith(letter) == true
+                }
+            }
+
+            HomeTab.Proverbs -> {
+                _filteredProverbs.value = _proverbs.value.filter {
+                    it.title?.startsWith(letter) == true
+                }
+            }
+
+            HomeTab.Sayings -> {
+                _filteredSayings.value = _sayings.value.filter {
+                    it.title?.startsWith(letter) == true
+                }
+            }
+
+            HomeTab.Words -> {
+                _filteredWords.value = _words.value.filter {
+                    it.title?.startsWith(letter) == true
+                }
+            }
+        }
+
+        _uiState.tryEmit(UiState.Filtered)
     }
 }

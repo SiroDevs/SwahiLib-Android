@@ -9,16 +9,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.indicators.*
-import com.swahilib.presentation.components.listitems.WordItem
+import com.swahilib.presentation.components.listitems.ProverbItem
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
 @Composable
-fun WordsList(
+fun ProverbsList(
     viewModel: HomeViewModel,
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val words by viewModel.filteredWords.collectAsState(initial = emptyList())
+    val words by viewModel.filteredProverbs.collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -32,7 +32,7 @@ fun WordsList(
                         contentPadding = PaddingValues(horizontal = 5.dp)
                     ) {
                         itemsIndexed(words) { index, word ->
-                            WordItem(
+                            ProverbItem(
                                 word = word,
                                 onTap = { },
                                 modifier = if (index == 0) Modifier.padding(top = 5.dp) else Modifier

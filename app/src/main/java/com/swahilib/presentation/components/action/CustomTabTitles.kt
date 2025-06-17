@@ -22,23 +22,32 @@ fun CustomTabTitles(
     selectedTab: HomeTab,
     onTabSelected: (HomeTab) -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 5.dp)
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
+    Surface(
+        color = Color.LightGray,
     ) {
-        Spacer(modifier = Modifier.width(4.dp))
+        Surface(
+            color = Color.White,
+            shape = RoundedCornerShape(bottomEnd = 15.dp),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 5.dp)
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = Modifier.width(4.dp))
 
-        homeTabs.forEach { tab ->
-            TabItem(
-                text = tab.title.uppercase(),
-                isSelected = selectedTab == tab,
-                onClick = { onTabSelected(tab) }
-            )
-            Spacer(modifier = Modifier.width(8.dp))
+                homeTabs.forEach { tab ->
+                    TabItem(
+                        text = tab.title.uppercase(),
+                        isSelected = selectedTab == tab,
+                        onClick = { onTabSelected(tab) }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+            }
         }
     }
 }
@@ -54,7 +63,6 @@ fun TabItem(
 
     Surface(
         modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
             .selectable(
                 selected = isSelected,
                 onClick = onClick,
@@ -70,7 +78,7 @@ fun TabItem(
         Text(
             text = text,
             color = contentColor,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .padding(horizontal = 15.dp, vertical = 8.dp)

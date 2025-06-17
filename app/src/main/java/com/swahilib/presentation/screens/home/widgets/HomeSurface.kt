@@ -22,7 +22,7 @@ fun HomeSurface(
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(topStart = 25.dp)),
+            .clip(RoundedCornerShape(topStart = 20.dp)),
         tonalElevation = 4.dp
     ) {
         Box(
