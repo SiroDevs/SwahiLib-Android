@@ -13,9 +13,9 @@ import androidx.navigation.NavHostController
 import com.swahilib.data.sample.SampleWords
 import com.swahilib.domain.entities.*
 import com.swahilib.presentation.components.action.*
-import com.swahilib.presentation.screens.home.widgets.HomeSurface
-import com.swahilib.presentation.components.listitems.WordItem
-import com.swahilib.presentation.screens.home.lists.WordsList
+import com.swahilib.presentation.screens.home.widgets.*
+import com.swahilib.presentation.components.listitems.*
+import com.swahilib.presentation.screens.home.lists.*
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -54,9 +54,9 @@ fun HomeContent(
 
             HomeSurface() {
                 when (selectedTab) {
-                    HomeTab.Idioms -> WordsList(viewModel, navController)
-                    HomeTab.Proverbs -> WordsList(viewModel, navController)
-                    HomeTab.Sayings -> WordsList(viewModel, navController)
+                    HomeTab.Idioms -> IdiomsList(viewModel, navController)
+                    HomeTab.Proverbs -> ProverbsList(viewModel, navController)
+                    HomeTab.Sayings -> SayingsList(viewModel, navController)
                     HomeTab.Words -> WordsList(viewModel, navController)
                 }
             }

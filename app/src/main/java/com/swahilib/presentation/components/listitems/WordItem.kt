@@ -16,9 +16,9 @@ import com.swahilib.data.sample.SampleWords
 
 @Composable
 fun WordItem(
+    modifier: Modifier = Modifier,
     word: Word,
     onTap: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
 ) {
     val titleTxtStyle = MaterialTheme.typography.titleLarge.copy(
         fontWeight = FontWeight.Bold,

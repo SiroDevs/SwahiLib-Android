@@ -16,9 +16,9 @@ import com.swahilib.data.sample.SampleSayings
 
 @Composable
 fun SayingItem(
+    modifier: Modifier = Modifier,
     saying: Saying,
     onTap: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
 ) {
     val titleTxtStyle = MaterialTheme.typography.titleLarge.copy(
         fontWeight = FontWeight.Bold,
@@ -41,13 +41,6 @@ fun SayingItem(
             result = "$result\n ~ ${extra2.getOrNull(0)?.trim()}."
         }
         result
-    }
-
-    val synonyms = remember(saying.synonyms) {
-        saying.synonyms?.split(',')
-            ?.map { it.trim() }
-            ?.filter { it.isNotEmpty() }
-            ?: emptyList()
     }
 
     ElevatedCard(
@@ -74,34 +67,7 @@ fun SayingItem(
                     style = bodyTxtStyle,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = if (synonyms.isNotEmpty()) 8.dp else 0.dp)
                 )
-            }
-
-            if (synonyms.isNotEmpty()) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = if (synonyms.size == 1) "KISAWE:" else "VISAWE ${synonyms.size}:",
-                        style = bodyTxtStyle.copy(fontWeight = FontWeight.Bold)
-                    )
-
-                    Spacer(Modifier.width(5.dp))
-
-                    LazyRow(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(35.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        items(synonyms) { synonym ->
-                            TagView(tagText = synonym.toString())
-                            Spacer(Modifier.width(8.dp))
-                        }
-                    }
-                }
             }
         }
     }
@@ -111,7 +77,7 @@ fun SayingItem(
 @Composable
 fun PreviewSayingItem() {
     SayingItem(
-        saying = SampleSayings[3],
+        saying = SampleSayings[1],
         onTap = {},
     )
 }

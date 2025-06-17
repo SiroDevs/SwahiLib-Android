@@ -16,9 +16,9 @@ import com.swahilib.data.sample.SampleProverbs
 
 @Composable
 fun ProverbItem(
+    modifier: Modifier = Modifier,
     proverb: Proverb,
     onTap: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
 ) {
     val titleTxtStyle = MaterialTheme.typography.titleLarge.copy(
         fontWeight = FontWeight.Bold,
@@ -111,7 +111,7 @@ fun ProverbItem(
 @Composable
 fun PreviewProverbItem() {
     ProverbItem(
-        proverb = SampleProverbs[3],
+        proverb = SampleProverbs[1],
         onTap = {},
     )
 }
