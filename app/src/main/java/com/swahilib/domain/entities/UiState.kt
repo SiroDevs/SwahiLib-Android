@@ -8,3 +8,18 @@ sealed class UiState {
     object Saved : UiState()
     class Error(val errorMessage: String) : UiState()
 }
+
+sealed class HomeTab(var title: String) {
+    object Words : HomeTab("maneno")
+    object Idioms : HomeTab("nahau")
+    object Sayings : HomeTab("misemo")
+    object Proverbs : HomeTab("proverbs")
+}
+
+
+val homeTabs = listOf(
+    HomeTab.Words,
+    HomeTab.Idioms,
+    HomeTab.Sayings,
+    HomeTab.Proverbs,
+)

@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entities.UiState
-import com.swahilib.presentation.components.EmptyState
+import com.swahilib.presentation.components.indicators.EmptyState
 import com.swahilib.presentation.components.listitems.WordItem
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
@@ -34,7 +34,7 @@ fun WordsList(
                     items(words) { word ->
                         WordItem(
                             word = word,
-                            onClick = { },
+                            onTap = { },
                         )
                     }
                 }

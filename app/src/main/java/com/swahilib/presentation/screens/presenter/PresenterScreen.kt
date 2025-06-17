@@ -11,14 +11,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.data.models.Word
 import com.swahilib.domain.entities.UiState
-import com.swahilib.presentation.components.*
-import com.swahilib.presentation.components.LoadingState
+import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.components.action.AppTopBar
+import com.swahilib.presentation.components.indicators.EmptyState
+import com.swahilib.presentation.components.indicators.ErrorState
 import com.swahilib.presentation.screens.presenter.components.*
 import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.PresenterViewModel

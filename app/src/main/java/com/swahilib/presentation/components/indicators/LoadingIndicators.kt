@@ -1,4 +1,4 @@
-package com.swahilib.presentation.components
+package com.swahilib.presentation.components.indicators
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

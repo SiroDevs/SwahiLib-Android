@@ -32,7 +32,6 @@ fun HomeScreen(
     var searchQuery by rememberSaveable { mutableStateOf("") }
 
     val uiState by viewModel.uiState.collectAsState()
-    val selectedTab by viewModel.selectedTab.collectAsState()
 
     val isRefreshing = uiState is UiState.Loading
     val pullRefreshState = rememberPullRefreshState(
@@ -77,7 +76,6 @@ fun HomeScreen(
             HomeContent(
                 viewModel = viewModel,
                 navController = navController,
-                selectedTab = selectedTab,
                 isRefreshing = isRefreshing,
                 pullRefreshState = pullRefreshState
             )

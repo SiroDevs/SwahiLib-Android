@@ -9,7 +9,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entities.UiState
-import com.swahilib.presentation.components.*
+import com.swahilib.presentation.components.indicators.EmptyState
+import com.swahilib.presentation.components.indicators.ErrorState
+import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.InitViewModel

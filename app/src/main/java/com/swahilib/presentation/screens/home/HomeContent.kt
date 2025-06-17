@@ -1,21 +1,24 @@
 package com.swahilib.presentation.screens.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.*
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.data.sample.SampleWords
+import com.swahilib.domain.entities.HomeTab
+import com.swahilib.domain.entities.homeTabs
 import com.swahilib.presentation.components.action.*
+import com.swahilib.presentation.screens.home.widgets.HomeSurface
+import com.swahilib.presentation.components.listitems.WordItem
 import com.swahilib.presentation.screens.home.lists.WordsList
-import com.swahilib.presentation.screens.home.widgets.*
 import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
@@ -24,15 +27,22 @@ import com.swahilib.presentation.viewmodels.HomeViewModel
 fun HomeContent(
     viewModel: HomeViewModel,
     navController: NavHostController,
-    selectedTab: HomeNavItem,
     isRefreshing: Boolean,
     pullRefreshState: PullRefreshState
 ) {
+    var selectedTab by remember { mutableStateOf(homeTabs[0]) }
+
+    fun setSelectedTab(tab: HomeTab) {
+        selectedTab = tab
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
-        CustomTabTitles()
+        CustomTabTitles(
+            selectedTab = selectedTab,
+            onTabSelected = { }
+        )
         Row(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -42,31 +52,20 @@ fun HomeContent(
                 VerticalLetters()
             }
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(topStart = 10.dp))
-                    .background(ThemeColors.accent2),
-                color = ThemeColors.accent3,
-                tonalElevation = 4.dp
-            ) {
-                Box(
-                    modifier = Modifier
-                        .pullRefresh(pullRefreshState)
-                ) {
-//                        when (selectedTab) {
-//                            HomeNavItem.Search -> SearchScreen(viewModel, navController)
-//                            HomeNavItem.Likes -> LikesScreen(viewModel)
-//                        }
-                    WordsList(viewModel, navController)
-
-                    PullRefreshIndicator(
-                        refreshing = isRefreshing,
-                        state = pullRefreshState,
-                        modifier = Modifier.align(Alignment.TopCenter),
-                        contentColor = ThemeColors.primary
-                    )
+            HomeSurface() {
+                when (selectedTab) {
+                    HomeTab.Words -> WordsList(viewModel, navController)
+                    HomeTab.Idioms -> WordsList(viewModel, navController)
+                    HomeTab.Proverbs -> WordsList(viewModel, navController)
+                    HomeTab.Sayings -> WordsList(viewModel, navController)
                 }
+
+                PullRefreshIndicator(
+                    refreshing = isRefreshing,
+                    state = pullRefreshState,
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    contentColor = ThemeColors.primary
+                )
             }
         }
     }
@@ -76,41 +75,35 @@ fun HomeContent(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    Scaffold() { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        CustomTabTitles(
+            selectedTab = HomeTab.Words,
+            onTabSelected = {},
+        )
+        Row(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Text(
-                text = "SwahiLib - Kamusi ya Kiswahili",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = ThemeColors.primary,
-                modifier = Modifier.padding(5.dp)
-            )
-            CustomTabTitles()
-            Row(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Box(
-                    modifier = Modifier.width(60.dp)
-                ) {
-                    VerticalLetters()
-                }
-
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(topStart = 24.dp))
-                        .background(ThemeColors.accent2),
-                    color = ThemeColors.accent3,
-                    tonalElevation = 4.dp
-                ) {
-
-                }
+            Box( modifier = Modifier.width(60.dp) ) {
+                VerticalLetters()
             }
 
+            HomeSurface() {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 5.dp),
+                    contentPadding = PaddingValues(horizontal = 5.dp)
+                ) {
+                    items(SampleWords) { word ->
+                        WordItem(
+                            word = word,
+                            onTap = { },
+                        )
+                    }
+                }
+            }
         }
     }
 }

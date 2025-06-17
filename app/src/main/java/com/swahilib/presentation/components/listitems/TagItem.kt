@@ -3,7 +3,7 @@ package com.swahilib.presentation.components.listitems
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.*
 import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
-fun TagItem(tagText: String) {
+fun TagView(tagText: String) {
     if (tagText.isNotEmpty()) {
         Box(
             modifier = Modifier
@@ -36,9 +36,8 @@ fun TagItem(tagText: String) {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun PreviewTagItem() {
-    TagItem(tagText = "Chorus")
+fun PreviewTagView() {
+    TagView(tagText = "Chorus")
 }

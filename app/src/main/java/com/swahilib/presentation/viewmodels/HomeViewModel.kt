@@ -2,9 +2,8 @@ package com.swahilib.presentation.viewmodels
 
 import androidx.lifecycle.*
 import com.swahilib.data.models.*
-import com.swahilib.domain.entities.UiState
+import com.swahilib.domain.entities.*
 import com.swahilib.domain.repository.*
-import com.swahilib.presentation.screens.home.widgets.HomeNavItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,9 +18,6 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    private val _selectedTab: MutableStateFlow<HomeNavItem> = MutableStateFlow(HomeNavItem.Search)
-    val selectedTab: StateFlow<HomeNavItem> = _selectedTab.asStateFlow()
 
     private val _idioms = MutableStateFlow<List<Idiom>>(emptyList())
     val idioms: StateFlow<List<Idiom>> get() = _idioms
@@ -46,10 +42,6 @@ class HomeViewModel @Inject constructor(
 
     private val _filteredWords = MutableStateFlow<List<Word>>(emptyList())
     val filteredWords: StateFlow<List<Word>> get() = _filteredWords
-
-    fun setSelectedTab(tab: HomeNavItem) {
-        _selectedTab.value = tab
-    }
 
     fun fetchData() {
         _uiState.tryEmit(UiState.Loading)

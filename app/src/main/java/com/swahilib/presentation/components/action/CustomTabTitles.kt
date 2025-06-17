@@ -13,13 +13,15 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.swahilib.domain.entities.HomeTab
+import com.swahilib.domain.entities.homeTabs
 import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
-fun CustomTabTitles() {
-    val tabs = listOf("MANENO", "NAHAU", "MISEMO", "METHALI")
-    var selectedTab by remember { mutableStateOf(tabs[0]) }
-
+fun CustomTabTitles(
+    selectedTab: HomeTab,
+    onTabSelected: (HomeTab) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -30,11 +32,11 @@ fun CustomTabTitles() {
     ) {
         Spacer(modifier = Modifier.width(4.dp))
 
-        tabs.forEach { tab ->
+        homeTabs.forEach { tab ->
             TabItem(
-                text = tab,
+                text = tab.title.uppercase(),
                 isSelected = selectedTab == tab,
-                onClick = { selectedTab = tab }
+                onClick = { onTabSelected(tab) }
             )
             Spacer(modifier = Modifier.width(8.dp))
         }
@@ -79,5 +81,8 @@ fun TabItem(
 @Preview(showBackground = true)
 @Composable
 fun CustomTabTitlesPreview() {
-    CustomTabTitles()
+    CustomTabTitles(
+        selectedTab = HomeTab.Words,
+        onTabSelected = { }
+    )
 }
