@@ -1,6 +1,5 @@
 package com.swahilib.presentation.screens.home.lists
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.*
@@ -19,35 +18,38 @@ fun IdiomsList(
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val words by viewModel.filteredIdioms.collectAsState(initial = emptyList())
+    val idioms by viewModel.filteredIdioms.collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         when (uiState) {
-            is UiState.Filtered ->
-                if (words.isNotEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 5.dp)
-                    ) {
-                        itemsIndexed(words) { index, word ->
-                            IdiomItem(
-                                word = word,
-                                onTap = { },
-                                modifier = if (index == 0) Modifier.padding(top = 5.dp) else Modifier
-                            )
+            is UiState.Filtered -> {
+                when {
+                    idioms.isNotEmpty() -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(horizontal = 5.dp)
+                        ) {
+                            itemsIndexed(idioms) { index, idiom ->
+                                IdiomItem(
+                                    idiom = idiom,
+                                    onTap = { },
+                                    modifier = Modifier
+                                        .then(if (index == 0) Modifier.padding(top = 5.dp) else Modifier)
+                                )
+                            }
                         }
                     }
-                } else {
-                    EmptyState()
-                }
 
+                    else -> EmptyState()
+                }
+            }
 
             else -> LoadingState(
                 title = "",
-                fileName = "circle-loader",
+                fileName = "circle-loader"
             )
         }
     }

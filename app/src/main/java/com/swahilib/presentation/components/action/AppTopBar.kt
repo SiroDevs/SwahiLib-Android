@@ -1,6 +1,11 @@
 package com.swahilib.presentation.components.action
 
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.TextField
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.swahilib.presentation.theme.ThemeColors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,46 +60,61 @@ fun SearchTopBar(
     onQueryChange: (String) -> Unit,
     onClose: () -> Unit
 ) {
-    Surface(shadowElevation = 3.dp) {
-        TopAppBar(
-            title = {
-                Box(
+    TopAppBar(
+        title = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                TextField(
+                    value = query,
+                    onValueChange = onQueryChange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 15.dp, vertical = 5.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    TextField(
-                        value = query,
-                        onValueChange = onQueryChange,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .clip(RoundedCornerShape(25.dp))
-                            .background(MaterialTheme.colorScheme.surface),
-                        placeholder = { Text("Search for songs") },
-                        singleLine = true,
-                        trailingIcon = {
-                            IconButton(onClick = onClose) {
-                                Icon(Icons.Filled.Close, contentDescription = "Close")
-                            }
-                        },
-//                        colors = TextFieldDefaults.TextFieldColors(
-//                            containerColor = Color.White,
-//                            unfocusedIndicatorColor = Color.Transparent,
-//                            focusedIndicatorColor = Color.Transparent,
-//                            disabledIndicatorColor = Color.Transparent
-//                        ),
-                        shape = RoundedCornerShape(24.dp)
-                    )
-                }
-            },
-            navigationIcon = {},
-            actions = {},
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = ThemeColors.primary,
-                titleContentColor = Color.White
-            )
+                        .height(55.dp)
+                        .clip(RoundedCornerShape(30.dp))
+                        .border(1.dp, Color.White, RoundedCornerShape(30.dp))
+                        .background(Color.Transparent),
+                    textStyle = LocalTextStyle.current.copy(
+                        color = Color.White,
+                        fontSize = 18.sp,
+                    ),
+                    placeholder = {
+                        Text(
+                            text = "Tafuta kwenye kamusi",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    },
+                    singleLine = true,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        textColor = Color.White,
+                        cursorColor = Color.White,
+                        placeholderColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    trailingIcon = {
+                        IconButton(onClick = onClose) {
+                            Icon(
+                                Icons.Filled.Close,
+                                contentDescription = "Close",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                )
+            }
+        },
+        navigationIcon = {},
+        actions = {},
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = ThemeColors.primary,
+            titleContentColor = Color.White
         )
-    }
+    )
 }

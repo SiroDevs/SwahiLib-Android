@@ -25,28 +25,31 @@ fun WordsList(
         contentAlignment = Alignment.Center,
     ) {
         when (uiState) {
-            is UiState.Filtered ->
-                if (words.isNotEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 5.dp)
-                    ) {
-                        itemsIndexed(words) { index, word ->
-                            WordItem(
-                                word = word,
-                                onTap = { },
-                                modifier = if (index == 0) Modifier.padding(top = 5.dp) else Modifier
-                            )
+            is UiState.Filtered -> {
+                when {
+                    words.isNotEmpty() -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(horizontal = 5.dp)
+                        ) {
+                            itemsIndexed(words) { index, word ->
+                                WordItem(
+                                    word = word,
+                                    onTap = { },
+                                    modifier = Modifier
+                                        .then(if (index == 0) Modifier.padding(top = 5.dp) else Modifier)
+                                )
+                            }
                         }
                     }
-                } else {
-                    EmptyState()
-                }
 
+                    else -> EmptyState()
+                }
+            }
 
             else -> LoadingState(
                 title = "",
-                fileName = "circle-loader",
+                fileName = "circle-loader"
             )
         }
     }

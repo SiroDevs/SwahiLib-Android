@@ -18,35 +18,38 @@ fun SayingsList(
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val words by viewModel.filteredSayings.collectAsState(initial = emptyList())
+    val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         when (uiState) {
-            is UiState.Filtered ->
-                if (words.isNotEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 5.dp)
-                    ) {
-                        itemsIndexed(words) { index, word ->
-                            SayingItem(
-                                word = word,
-                                onTap = { },
-                                modifier = if (index == 0) Modifier.padding(top = 5.dp) else Modifier
-                            )
+            is UiState.Filtered -> {
+                when {
+                    sayings.isNotEmpty() -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(horizontal = 5.dp)
+                        ) {
+                            itemsIndexed(sayings) { index, saying ->
+                                SayingItem(
+                                    saying = saying,
+                                    onTap = { },
+                                    modifier = Modifier
+                                        .then(if (index == 0) Modifier.padding(top = 5.dp) else Modifier)
+                                )
+                            }
                         }
                     }
-                } else {
-                    EmptyState()
-                }
 
+                    else -> EmptyState()
+                }
+            }
 
             else -> LoadingState(
                 title = "",
-                fileName = "circle-loader",
+                fileName = "circle-loader"
             )
         }
     }

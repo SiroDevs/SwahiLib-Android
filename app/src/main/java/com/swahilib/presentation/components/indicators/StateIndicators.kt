@@ -37,6 +37,6 @@ fun EmptyState() {
             .padding(all = 20.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text = "No data available.", modifier = Modifier.padding(16.dp))
+        Text(text = "Hamna chochote hapa.", modifier = Modifier.padding(16.dp))
     }
 }

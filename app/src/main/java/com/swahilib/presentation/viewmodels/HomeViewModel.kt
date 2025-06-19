@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.filter
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -64,36 +65,37 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun filterByLetter(selectedTab: HomeTab, selectedLetter: String) {
+    fun filterData(tab: HomeTab, qry: String) {
         _uiState.tryEmit(UiState.Loading)
-        val letter = selectedLetter.lowercase()
+        val query = qry.lowercase()
 
-        when (selectedTab) {
+        when (tab) {
             HomeTab.Idioms -> {
                 _filteredIdioms.value = _idioms.value.filter {
-                    it.title?.startsWith(letter) == true
+                    it.title?.startsWith(query) == true
                 }
             }
 
             HomeTab.Proverbs -> {
                 _filteredProverbs.value = _proverbs.value.filter {
-                    it.title?.startsWith(letter) == true
+                    it.title?.startsWith(query) == true
                 }
             }
 
             HomeTab.Sayings -> {
                 _filteredSayings.value = _sayings.value.filter {
-                    it.title?.startsWith(letter) == true
+                    it.title?.startsWith(query) == true
                 }
             }
 
             HomeTab.Words -> {
                 _filteredWords.value = _words.value.filter {
-                    it.title?.startsWith(letter) == true
+                    it.title?.startsWith(query) == true
                 }
             }
         }
 
         _uiState.tryEmit(UiState.Filtered)
     }
+
 }
