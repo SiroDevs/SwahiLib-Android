@@ -22,7 +22,7 @@ class InitViewModel @Inject constructor(
     private val wordRepo: WordRepository,
     private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _idioms = MutableStateFlow<List<Idiom>>(emptyList())
@@ -101,7 +101,7 @@ class InitViewModel @Inject constructor(
 
     suspend fun saveIdioms() = withContext(Dispatchers.IO) {
         Log.d("TAG", "Saving idioms")
-        _status.emit("Inapakia nahau 527 ...")
+        _status.emit("Inahifadhi nahau 527 ...")
         val idioms = _idioms.value
 
         idioms.forEachIndexed { index, idiom ->
@@ -115,7 +115,7 @@ class InitViewModel @Inject constructor(
         Log.d("TAG", "Saving proverbs")
         val proverbs = _proverbs.value
         val total = proverbs.size
-        _status.emit("Inapakia methali $total ...")
+        _status.emit("Inahifadhi methali $total ...")
 
         proverbs.forEachIndexed { index, proverb ->
             proverbRepo.saveProverb(proverb)
@@ -128,7 +128,7 @@ class InitViewModel @Inject constructor(
         Log.d("TAG", "Saving sayings")
         val sayings = _sayings.value
         val total = sayings.size
-        _status.emit("Inapakia misemo $total ...")
+        _status.emit("Inahifadhi misemo $total ...")
 
         sayings.forEachIndexed { index, saying ->
             sayingRepo.saveSaying(saying)
@@ -141,7 +141,7 @@ class InitViewModel @Inject constructor(
         Log.d("TAG", "Saving words")
         val words = _words.value
         val total = words.size
-        _status.emit("Inapakia maneno $total ...")
+        _status.emit("Inahifadhi maneno $total ...")
 
         words.forEachIndexed { index, word ->
             wordRepo.saveWord(word)

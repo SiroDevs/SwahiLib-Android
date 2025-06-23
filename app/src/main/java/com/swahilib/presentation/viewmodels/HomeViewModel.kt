@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import com.swahilib.data.models.*
 import com.swahilib.domain.entities.*
 import com.swahilib.domain.repository.*
-import com.swahilib.presentation.screens.home.lists.WordsList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,27 +20,19 @@ class HomeViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _idioms = MutableStateFlow<List<Idiom>>(emptyList())
-    val idioms: StateFlow<List<Idiom>> get() = _idioms
-
+    private val _allIdioms = MutableStateFlow<List<Idiom>>(emptyList())
     private val _filteredIdioms = MutableStateFlow<List<Idiom>>(emptyList())
     val filteredIdioms: StateFlow<List<Idiom>> get() = _filteredIdioms
 
+    private val _allProverbs = MutableStateFlow<List<Proverb>>(emptyList())
     private val _filteredProverbs = MutableStateFlow<List<Proverb>>(emptyList())
     val filteredProverbs: StateFlow<List<Proverb>> get() = _filteredProverbs
 
-    private val _proverbs = MutableStateFlow<List<Proverb>>(emptyList())
-    val proverbs: StateFlow<List<Proverb>> get() = _proverbs
-
-    private val _sayings = MutableStateFlow<List<Saying>>(emptyList())
-    val sayings: StateFlow<List<Saying>> get() = _sayings
-
+    private val _allSayings = MutableStateFlow<List<Saying>>(emptyList())
     private val _filteredSayings = MutableStateFlow<List<Saying>>(emptyList())
     val filteredSayings: StateFlow<List<Saying>> get() = _filteredSayings
 
-    private val _words = MutableStateFlow<List<Word>>(emptyList())
-    val words: StateFlow<List<Word>> get() = _words
-
+    private val _allWords = MutableStateFlow<List<Word>>(emptyList())
     private val _filteredWords = MutableStateFlow<List<Word>>(emptyList())
     val filteredWords: StateFlow<List<Word>> get() = _filteredWords
 
@@ -49,17 +40,17 @@ class HomeViewModel @Inject constructor(
         _uiState.tryEmit(UiState.Loading)
 
         viewModelScope.launch {
-            _idioms.value = idiomRepo.fetchLocalData()
-            _filteredIdioms.value = _idioms.value
+            _allIdioms.value = idiomRepo.fetchLocalData()
+            _filteredIdioms.value = _allIdioms.value
 
-            _proverbs.value = proverbRepo.fetchLocalData()
-            _filteredProverbs.value = _proverbs.value
+            _allProverbs.value = proverbRepo.fetchLocalData()
+            _filteredProverbs.value = _allProverbs.value
 
-            _sayings.value = sayingRepo.fetchLocalData()
-            _filteredSayings.value = _sayings.value
+            _allSayings.value = sayingRepo.fetchLocalData()
+            _filteredSayings.value = _allSayings.value
 
-            _words.value = wordRepo.fetchLocalData()
-            _filteredWords.value = _words.value
+            _allWords.value = wordRepo.fetchLocalData()
+            _filteredWords.value = _allWords.value
 
             _uiState.tryEmit(UiState.Filtered)
         }
@@ -71,25 +62,25 @@ class HomeViewModel @Inject constructor(
 
         when (tab) {
             HomeTab.Idioms -> {
-                _filteredIdioms.value = _idioms.value.filter {
+                _filteredIdioms.value = _allIdioms.value.filter {
                     it.title?.startsWith(query) == true
                 }
             }
 
             HomeTab.Proverbs -> {
-                _filteredProverbs.value = _proverbs.value.filter {
+                _filteredProverbs.value = _allProverbs.value.filter {
                     it.title?.startsWith(query) == true
                 }
             }
 
             HomeTab.Sayings -> {
-                _filteredSayings.value = _sayings.value.filter {
+                _filteredSayings.value = _allSayings.value.filter {
                     it.title?.startsWith(query) == true
                 }
             }
 
             HomeTab.Words -> {
-                _filteredWords.value = _words.value.filter {
+                _filteredWords.value = _allWords.value.filter {
                     it.title?.startsWith(query) == true
                 }
             }
@@ -97,5 +88,4 @@ class HomeViewModel @Inject constructor(
 
         _uiState.tryEmit(UiState.Filtered)
     }
-
 }
