@@ -18,7 +18,7 @@ fun TagView(tagText: String) {
         Box(
             modifier = Modifier
                 .background(
-                    color = if (isSystemInDarkTheme()) ThemeColors.primary2 else ThemeColors.primary,
+                    color = if (isSystemInDarkTheme()) ThemeColors.primary3 else ThemeColors.primary1,
                     shape = RoundedCornerShape(5.dp)
                 )
                 .padding(horizontal = 10.dp, vertical = 3.dp)

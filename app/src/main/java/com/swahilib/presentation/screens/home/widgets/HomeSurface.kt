@@ -32,8 +32,8 @@ fun HomeSurface(
                     brush = Brush.verticalGradient(
                         listOf(
                             Color.LightGray,
-                            ThemeColors.accent,
-                            ThemeColors.primaryDark1,
+                            ThemeColors.accent1,
+                            ThemeColors.primaryDark2,
                         )
                     ),
                 )

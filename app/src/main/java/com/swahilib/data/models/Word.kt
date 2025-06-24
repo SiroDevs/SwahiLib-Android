@@ -10,11 +10,10 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(
     tableName = Collections.WORDS,
-    indices = [Index(value = ["id"], unique = true)]
+    indices = [Index(value = ["rid"], unique = true)]
 )
 data class Word(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "rid") val rid: Int = 0,
+    @PrimaryKey val rid: Int = 0,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "synonyms") val synonyms: String? = null,
     @ColumnInfo(name = "meaning") val meaning: String? = null,

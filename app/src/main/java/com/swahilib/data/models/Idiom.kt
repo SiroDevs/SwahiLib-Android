@@ -10,11 +10,10 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(
     tableName = Collections.IDIOMS,
-    indices = [Index(value = ["id"], unique = true)]
+    indices = [Index(value = ["rid"], unique = true)]
 )
 data class Idiom(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "rid") val rid: Int = 0,
+    @PrimaryKey val rid: Int = 0,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "meaning") val meaning: String? = null,
     @ColumnInfo(name = "views") val views: Int = 0,

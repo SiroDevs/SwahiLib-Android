@@ -52,8 +52,8 @@ fun LetterItem(
     isSelected: Boolean,
     onClick: () -> Unit,
 ) {
-    val backgroundColor = if (isSelected) ThemeColors.primary else Color.White
-    val contentColor = if (isSelected) Color.White else ThemeColors.primary
+    val backgroundColor = if (isSelected) ThemeColors.primary1 else Color.White
+    val contentColor = if (isSelected) Color.White else ThemeColors.primary1
 
     Surface(
         modifier = Modifier
@@ -63,7 +63,7 @@ fun LetterItem(
         color = backgroundColor,
         border = BorderStroke(
             width = if (isSelected) 0.dp else 1.dp,
-            color = ThemeColors.primary.copy(alpha = 0.5f)
+            color = ThemeColors.primary1.copy(alpha = 0.5f)
         ),
         shadowElevation = 5.dp
     ) {

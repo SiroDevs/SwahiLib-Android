@@ -45,7 +45,7 @@ fun InitScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(color = ThemeColors.accent1)
+                    .background(color = ThemeColors.accent2)
             ) {
                 when (uiState) {
                     is UiState.Error -> ErrorState(

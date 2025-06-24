@@ -52,7 +52,7 @@ fun SplashContent() {
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
-                    //.background(color = ThemeColors.accent1)
+                    //.background(color = ThemeColors.accent2)
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -72,12 +72,12 @@ fun SplashContent() {
                             fontSize = 50.sp,
                             letterSpacing = 5.sp,
                             fontWeight = FontWeight.Bold,
-                            color = ThemeColors.primary
+                            color = ThemeColors.primary1
                         )
                     )
                     Spacer(Modifier.weight(1f))
                     Divider(
-                        color = ThemeColors.primaryDark,
+                        color = ThemeColors.primaryDark1,
                         thickness = 2.dp,
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
@@ -101,10 +101,10 @@ fun KiswahiliKitukuzwe() {
         Text(
             text = "Kiswahili Kitukuzwe",
             style = TextStyle(
-                fontSize = 30.sp,
+                fontSize = 25.sp,
                 letterSpacing = 5.sp,
                 fontWeight = FontWeight.Bold,
-                color = ThemeColors.primary
+                color = ThemeColors.primary1
             )
         )
     }

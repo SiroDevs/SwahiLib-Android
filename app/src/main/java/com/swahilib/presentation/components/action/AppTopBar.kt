@@ -43,7 +43,7 @@ fun AppTopBar(
             },
             actions = actions,
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = ThemeColors.primary,
+                containerColor = ThemeColors.primary1,
                 titleContentColor = Color.White,
                 actionIconContentColor = Color.White,
                 navigationIconContentColor = Color.White
@@ -113,7 +113,7 @@ fun SearchTopBar(
         navigationIcon = {},
         actions = {},
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = ThemeColors.primary,
+            containerColor = ThemeColors.primary1,
             titleContentColor = Color.White
         )
     )

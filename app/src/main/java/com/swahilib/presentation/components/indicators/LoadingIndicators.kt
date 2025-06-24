@@ -65,7 +65,7 @@ fun LoadingState(
                 ) {
                     LinearProgressIndicator(
                         progress = { (progressValue / 100f).coerceIn(0f, 1f) },
-                        color = ThemeColors.primary,
+                        color = ThemeColors.primary1,
                         trackColor = Color.White,
                         modifier = Modifier
                             .weight(2f)
@@ -76,7 +76,7 @@ fun LoadingState(
                         text = "$progressValue %",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = ThemeColors.primaryDark2,
+                        color = ThemeColors.primaryDark3,
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                     )

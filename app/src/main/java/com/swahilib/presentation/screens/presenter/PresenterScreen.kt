@@ -80,7 +80,7 @@ fun PresenterScreen(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
-                .background(ThemeColors.accent1)
+                .background(ThemeColors.accent2)
         ) {
             when (uiState) {
                 is UiState.Error -> ErrorState(
