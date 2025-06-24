@@ -16,15 +16,15 @@ interface SearchDao {
     @Update
     fun update(search: Search)
 
-    @Query("SELECT * FROM ${Collections.WORDS} WHERE id = :id")
+    @Query("SELECT * FROM ${Collections.SEARCH} WHERE id = :id")
     fun getById(id: String): Flow<Search>
 
-    @Query("DELETE FROM ${Collections.WORDS}")
+    @Query("DELETE FROM ${Collections.SEARCH}")
     fun delete()
 
-    @Query("SELECT * FROM ${Collections.WORDS} WHERE title LIKE '%' || :title || '%'")
+    @Query("SELECT * FROM ${Collections.SEARCH} WHERE title LIKE '%' || :title || '%'")
     fun searchSearchByTitle(title: String?): Flow<List<Search>>
 
-    @Query("SELECT * FROM ${Collections.WORDS}")
+    @Query("SELECT * FROM ${Collections.SEARCH}")
     fun getAll(): Flow<List<Search>>
 }
