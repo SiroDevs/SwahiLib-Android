@@ -3,7 +3,7 @@ package com.swahilib.data.sources.remote
 import com.swahilib.data.models.*
 import com.swahilib.data.sources.remote.dtos.*
 
-object DtoMapper {
+object MapEntityToDto {
     fun mapToDto(dto: IdiomDto): IdiomDto {
         return IdiomDto(
             rid = dto.rid,
