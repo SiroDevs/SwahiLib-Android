@@ -1,4 +1,4 @@
-package com.swahilib.presentation.screens.presenter.components
+package com.swahilib.presentation.screens.viewer.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -8,8 +8,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.pager.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import com.swahilib.data.sample.*
 import com.swahilib.presentation.theme.ThemeColors
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.lazy.grid.*

@@ -1,4 +1,4 @@
-package com.swahilib.presentation.screens.presenter
+package com.swahilib.presentation.screens.word
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -19,14 +19,14 @@ import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.components.indicators.EmptyState
 import com.swahilib.presentation.components.indicators.ErrorState
-import com.swahilib.presentation.screens.presenter.components.*
+import com.swahilib.presentation.screens.viewer.components.*
 import com.swahilib.presentation.theme.ThemeColors
-import com.swahilib.presentation.viewmodels.PresenterViewModel
+import com.swahilib.presentation.viewmodels.WordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PresenterScreen(
-    viewModel: PresenterViewModel,
+fun WordViewer(
+    viewModel: WordViewModel,
     navController: NavHostController,
     onBackPressed: () -> Unit,
     word: Word?,

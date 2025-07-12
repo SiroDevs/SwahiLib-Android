@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.indicators.*
 import com.swahilib.presentation.components.listitems.WordItem
+import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
 @Composable
@@ -35,14 +36,18 @@ fun WordsList(
                             itemsIndexed(words) { index, word ->
                                 WordItem(
                                     word = word,
-                                    onTap = { },
+                                    onTap = {
+                                        navController.currentBackStackEntry
+                                            ?.savedStateHandle
+                                            ?.set("word", word)
+                                        navController.navigate(Routes.WORD)
+                                    },
                                     modifier = Modifier
                                         .then(if (index == 0) Modifier.padding(top = 5.dp) else Modifier)
                                 )
                             }
                         }
                     }
-
                     else -> EmptyState()
                 }
             }

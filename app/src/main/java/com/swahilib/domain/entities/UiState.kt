@@ -17,7 +17,6 @@ sealed class HomeTab(var title: String) {
     object Proverbs : HomeTab("methali")
 }
 
-
 val homeTabs = listOf(
     HomeTab.Words,
     HomeTab.Idioms,

@@ -9,8 +9,8 @@ import androidx.navigation.compose.*
 import com.swahilib.data.models.Word
 import com.swahilib.presentation.screens.home.HomeScreen
 import com.swahilib.presentation.screens.init.InitScreen
-import com.swahilib.presentation.screens.presenter.PresenterScreen
 import com.swahilib.presentation.screens.splash.SplashScreen
+import com.swahilib.presentation.screens.word.WordViewer
 import com.swahilib.presentation.viewmodels.*
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
@@ -43,14 +43,14 @@ fun AppNavHost(
             )
         }
 
-        composable(route = Routes.PRESENTER) {
+        composable(route = Routes.WORD) {
             val word = navController.previousBackStackEntry
                 ?.savedStateHandle
                 ?.get<Word>("word")
 
-            val viewModel: PresenterViewModel = hiltViewModel()
+            val viewModel: WordViewModel = hiltViewModel()
 
-            PresenterScreen(
+            WordViewer(
                 viewModel = viewModel,
                 navController = navController,
                 word = word,

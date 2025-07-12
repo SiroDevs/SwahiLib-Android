@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.*
 import com.swahilib.core.utils.Collections
 import com.swahilib.data.sources.local.daos.SayingDao
-import com.swahilib.data.sources.remote.EntityMapper
+import com.swahilib.data.sources.remote.MapDtoToEntity
 import com.swahilib.data.sources.remote.dtos.SayingDto
 import io.github.jan.supabase.postgrest.Postgrest
 import kotlin.collections.map
@@ -31,7 +31,7 @@ class SayingRepository @Inject constructor(
             Log.d("TAG", "Now fetching sayings")
             val result = supabase[Collections.SAYINGS]
                 .select().decodeList<SayingDto>()
-            val sayings = result.map { EntityMapper.mapToEntity(it) }
+            val sayings = result.map { MapDtoToEntity.mapToEntity(it) }
             Log.d("TAG", "Fetched ${sayings.size} sayings")
             emit(sayings)
         } catch (e: Exception) {

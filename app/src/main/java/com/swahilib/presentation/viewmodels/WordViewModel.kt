@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class PresenterViewModel @Inject constructor(
+class WordViewModel @Inject constructor(
     private val wordRepo: WordRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
@@ -19,7 +19,7 @@ class PresenterViewModel @Inject constructor(
     private val _isLiked = MutableStateFlow(false)
     val isLiked: StateFlow<Boolean> get() = _isLiked
 
-    private val _title = MutableStateFlow("Word Presenter")
+    private val _title = MutableStateFlow("Kamusi ya Kiswahili")
     val title: StateFlow<String> get() = _title
 
     private val _indicators = MutableStateFlow<List<String>>(emptyList())

@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.*
 import com.swahilib.core.utils.Collections
 import com.swahilib.data.sources.local.daos.WordDao
-import com.swahilib.data.sources.remote.EntityMapper
+import com.swahilib.data.sources.remote.MapDtoToEntity
 import com.swahilib.data.sources.remote.dtos.WordDto
 import io.github.jan.supabase.postgrest.Postgrest
 
@@ -31,7 +31,7 @@ class WordRepository @Inject constructor(
             Log.d("TAG", "Now fetching words")
             val result = supabase[Collections.WORDS]
                 .select().decodeList<WordDto>()
-            val words = result.map { EntityMapper.mapToEntity(it) }
+            val words = result.map { MapDtoToEntity.mapToEntity(it) }
             Log.d("TAG", "Fetched ${words.size} words")
             emit(words)
         } catch (e: Exception) {
