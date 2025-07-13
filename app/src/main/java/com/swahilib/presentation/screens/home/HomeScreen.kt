@@ -24,23 +24,23 @@ fun HomeScreen(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
-    var fetchData by rememberSaveable { mutableStateOf(0) }
-
-    if (fetchData == 0) {
-        viewModel.fetchData()
-        fetchData++
+    val prefs = remember {
+        context.getSharedPreferences(Preferences.PREFERENCE_FILE, Context.MODE_PRIVATE)
     }
 
-    val prefs =
-        context.getSharedPreferences(Preferences.PREFERENCE_FILE, Context.MODE_PRIVATE)
-    val lastTab = prefs.getInt(Preferences.LAST_HOME_TAB, 0)
+    var fetchData by rememberSaveable { mutableStateOf(false) }
+    if (!fetchData) {
+        viewModel.fetchData()
+        fetchData = true
+    }
 
+    val lastTabIndex = prefs.getInt(Preferences.LAST_HOME_TAB, 0)
     val uiState by viewModel.uiState.collectAsState()
 
     var isSearching by rememberSaveable { mutableStateOf(false) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
-    var selectedTab by remember { mutableStateOf(homeTabs[lastTab]) }
-    var selectedLetter by remember { mutableStateOf("") }
+    var selectedTab by rememberSaveable { mutableStateOf(homeTabs[lastTabIndex]) }
+    var selectedLetter by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -72,17 +72,20 @@ fun HomeScreen(
             }
         },
     ) { padding ->
-        Box(
-            modifier = Modifier.padding(padding)
-        ) {
+        Box(modifier = Modifier.padding(padding)) {
             HomeContent(
                 viewModel = viewModel,
                 navController = navController,
                 selectedTab = selectedTab,
                 selectedLetter = selectedLetter,
                 onTabSelected = { tab ->
+                    // ✅ Save the tab index correctly
+                    val tabIndex = homeTabs.indexOf(tab)
+                    prefs.edit().putInt(Preferences.LAST_HOME_TAB, tabIndex).apply()
+
                     selectedTab = tab
                     selectedLetter = ""
+                    viewModel.filterData(tab, "")
                 },
                 onLetterSelected = { letter ->
                     selectedLetter = letter
