@@ -7,10 +7,12 @@ import androidx.compose.ui.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.airbnb.lottie.compose.*
 import com.swahilib.presentation.theme.ThemeColors
@@ -51,34 +53,33 @@ fun LoadingState(
                 text = title,
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
-                color = ThemeColors.primaryDark1
+                color = ThemeColors.primaryDark1,
+                textAlign = TextAlign.Center
             )
 
             if (showProgress) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(30.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxWidth(0.8f)
                 ) {
                     LinearProgressIndicator(
-                        progress = { (progressValue / 100f).coerceIn(0f, 1f) },
+                        progress = (progressValue / 100f).coerceIn(0f, 1f),
                         color = ThemeColors.primary1,
-                        trackColor = Color.White,
+                        trackColor = Color.LightGray.copy(alpha = 0.3f),
                         modifier = Modifier
-                            .weight(2f)
-                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .clip(RoundedCornerShape(4.dp))
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "$progressValue %",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "$progressValue%",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium,
                         color = ThemeColors.primaryDark3,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
+                        modifier = Modifier.align(Alignment.End)
                     )
                 }
 

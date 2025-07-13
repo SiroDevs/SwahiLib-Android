@@ -6,7 +6,7 @@ import com.swahilib.data.sources.local.daos.*
 
 @Database(
     entities = [History::class, Idiom::class, Proverb::class, Saying::class, Search::class, Word::class,],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
