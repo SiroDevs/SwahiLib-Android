@@ -16,6 +16,7 @@ import com.swahilib.domain.entities.UiState
 import com.swahilib.domain.entities.homeTabs
 import com.swahilib.presentation.components.action.*
 import com.swahilib.presentation.viewmodels.HomeViewModel
+import androidx.core.content.edit
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -79,9 +80,8 @@ fun HomeScreen(
                 selectedTab = selectedTab,
                 selectedLetter = selectedLetter,
                 onTabSelected = { tab ->
-                    // ✅ Save the tab index correctly
                     val tabIndex = homeTabs.indexOf(tab)
-                    prefs.edit().putInt(Preferences.LAST_HOME_TAB, tabIndex).apply()
+                    prefs.edit { putInt(Preferences.LAST_HOME_TAB, tabIndex) }
 
                     selectedTab = tab
                     selectedLetter = ""
