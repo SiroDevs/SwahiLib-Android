@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.indicators.*
 import com.swahilib.presentation.components.listitems.IdiomItem
+import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.viewmodels.HomeViewModel
 
 @Composable
@@ -35,7 +36,12 @@ fun IdiomsList(
                             itemsIndexed(idioms) { index, idiom ->
                                 IdiomItem(
                                     idiom = idiom,
-                                    onTap = { },
+                                    onTap = {
+                                        navController.currentBackStackEntry
+                                            ?.savedStateHandle
+                                            ?.set("idiom", idiom)
+                                        navController.navigate(Routes.IDIOM)
+                                    },
                                     modifier = Modifier
                                         .then(if (index == 0) Modifier.padding(top = 5.dp) else Modifier)
                                 )

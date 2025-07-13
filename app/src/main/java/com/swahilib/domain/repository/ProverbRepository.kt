@@ -51,6 +51,16 @@ class ProverbRepository @Inject constructor(
         }
     }
 
+    suspend fun updateProverb(proverb: Proverb) {
+        try {
+            withContext(Dispatchers.IO) {
+                proverbsDao?.update(proverb)
+            }
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
+        }
+    }
+
     suspend fun searchProverbsByTitle(title: String?) {
 //        proverbsDao?.searchProverbByTitle(title)?.map { it.asDomainModel() }
     }

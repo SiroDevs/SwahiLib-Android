@@ -51,6 +51,16 @@ class SayingRepository @Inject constructor(
         }
     }
 
+    suspend fun updateSaying(saying: Saying) {
+        try {
+            withContext(Dispatchers.IO) {
+                sayingsDao?.update(saying)
+            }
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
+        }
+    }
+
     suspend fun searchSayingsByTitle(title: String?) {
 //        sayingsDao?.searchSayingByTitle(title)?.map { it.asDomainModel() }
     }

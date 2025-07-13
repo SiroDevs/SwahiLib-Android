@@ -51,6 +51,16 @@ class IdiomRepository @Inject constructor(
         }
     }
 
+    suspend fun updateIdiom(idiom: Idiom) {
+        try {
+            withContext(Dispatchers.IO) {
+                idiomsDao?.update(idiom)
+            }
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
+        }
+    }
+
     suspend fun searchIdiomsByTitle(title: String?) {
 //        idiomsDao?.searchIdiomByTitle(title)?.map { it.asDomainModel() }
     }

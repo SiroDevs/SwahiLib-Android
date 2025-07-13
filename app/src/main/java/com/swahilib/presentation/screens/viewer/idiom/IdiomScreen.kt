@@ -25,9 +25,7 @@ fun IdiomScreen(
 ) {
     val viewerState by viewModel.uiState.collectAsState()
     val title by viewModel.title.collectAsState()
-    val conjugation by viewModel.conjugation.collectAsState()
     val meanings by viewModel.meanings.collectAsState()
-    val synonyms by viewModel.synonyms.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
 
     LaunchedEffect(idiom) {
@@ -81,11 +79,8 @@ fun IdiomScreen(
 
                 ViewerState.Loaded -> {
                     IdiomView(
-                        viewModel = viewModel,
                         title = title,
-                        conjugation = conjugation,
                         meanings = meanings,
-                        synonyms = synonyms
                     )
                 }
 
