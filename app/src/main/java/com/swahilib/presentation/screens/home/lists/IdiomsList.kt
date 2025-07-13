@@ -43,7 +43,10 @@ fun IdiomsList(
                         }
                     }
 
-                    else -> EmptyState()
+                    else -> LoadingState(
+                        title = "",
+                        fileName = "circle-loader"
+                    )
                 }
             }
 

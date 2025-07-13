@@ -43,7 +43,10 @@ fun SayingsList(
                         }
                     }
 
-                    else -> EmptyState()
+                    else -> LoadingState(
+                        title = "",
+                        fileName = "circle-loader"
+                    )
                 }
             }
 

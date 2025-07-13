@@ -51,10 +51,9 @@ fun AppNavHost(
             val viewModel: WordViewModel = hiltViewModel()
 
             WordViewer(
-                viewModel = viewModel,
-                navController = navController,
-                word = word,
                 onBackPressed = { navController.popBackStack() },
+                viewModel = viewModel,
+                word = word,
             )
         }
     }

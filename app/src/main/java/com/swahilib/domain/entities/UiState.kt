@@ -10,16 +10,9 @@ sealed class UiState {
     class Error(val errorMessage: String) : UiState()
 }
 
-sealed class HomeTab(var title: String) {
-    object Words : HomeTab("maneno")
-    object Idioms : HomeTab("nahau")
-    object Sayings : HomeTab("misemo")
-    object Proverbs : HomeTab("methali")
+sealed interface ViewerState {
+    object Loading : ViewerState
+    data class Loaded(val meanings: List<String>, val synonyms: List<String>) : ViewerState
+    data class Liked(val liked: Boolean) : ViewerState
+    data class Error(val message: String) : ViewerState
 }
-
-val homeTabs = listOf(
-    HomeTab.Words,
-    HomeTab.Idioms,
-    HomeTab.Sayings,
-    HomeTab.Proverbs,
-)

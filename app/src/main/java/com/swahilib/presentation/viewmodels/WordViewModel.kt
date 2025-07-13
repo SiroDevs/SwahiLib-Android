@@ -19,52 +19,9 @@ class WordViewModel @Inject constructor(
     private val _isLiked = MutableStateFlow(false)
     val isLiked: StateFlow<Boolean> get() = _isLiked
 
-    private val _title = MutableStateFlow("Kamusi ya Kiswahili")
-    val title: StateFlow<String> get() = _title
-
-    private val _indicators = MutableStateFlow<List<String>>(emptyList())
-    val indicators: StateFlow<List<String>> get() = _indicators
-
-    private val _verses = MutableStateFlow<List<String>>(emptyList())
-    val verses: StateFlow<List<String>> get() = _verses
-
     fun loadWord(word: Word) {
         _uiState.value = UiState.Loading
-        /*_isLiked.value = word.liked
-        val content = word.content
-        val hasChorus = content.contains("CHORUS")
-
-        _title.value = wordItemTitle(word.wordNo, word.title)
-
-        val wordVerses = getWordVerses(content)
-        val verseCount = wordVerses.size
-
-        val tempIndicators = mutableListOf<String>()
-        val tempVerses = mutableListOf<String>()
-
-        if (hasChorus && verseCount > 1) {
-            val chorus = wordVerses[1].replace("CHORUS#", "")
-
-            tempIndicators.add("1")
-            tempIndicators.add("C")
-            tempVerses.add(wordVerses[0])
-            tempVerses.add(chorus)
-
-            for (i in 2 until verseCount) {
-                tempIndicators.add(i.toString())
-                tempIndicators.add("C")
-                tempVerses.add(wordVerses[i])
-                tempVerses.add(chorus)
-            }
-        } else {
-            for (i in 0 until verseCount) {
-                tempIndicators.add((i + 1).toString())
-                tempVerses.add(wordVerses[i])
-            }
-        }
-
-        _indicators.value = tempIndicators
-        _verses.value = tempVerses*/
+        _isLiked.value = word.liked
 
         _uiState.value = UiState.Loaded
     }

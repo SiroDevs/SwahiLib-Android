@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.swahilib.data.models.Word
 import com.swahilib.domain.entities.UiState
 import com.swahilib.presentation.components.indicators.LoadingState
@@ -26,17 +25,13 @@ import com.swahilib.presentation.viewmodels.WordViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WordViewer(
-    viewModel: WordViewModel,
-    navController: NavHostController,
     onBackPressed: () -> Unit,
+    viewModel: WordViewModel,
     word: Word?,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
-    val title by viewModel.title.collectAsState()
-    val verses by viewModel.verses.collectAsState()
-    val indicators by viewModel.indicators.collectAsState()
 
     LaunchedEffect(word) {
         word?.let { viewModel.loadWord(it) }
@@ -45,23 +40,23 @@ fun WordViewer(
     Scaffold(topBar = {
         Surface(shadowElevation = 3.dp) {
             AppTopBar(
-                title = title,
+                title = word?.title.toString(),
                 actions = {
                     IconButton(onClick = {
                         word?.let {
                             viewModel.likeWord(it)
 
                             val text = if (isLiked) {
-                                "${word.title} added to your likes"
+                                "Neno: ${word.title} limeongezwa kwa vipendwa"
                             } else {
-                                "${word.title} removed from your likes"
+                                "Neno: ${word.title} limeondolewa kwa vipendwa"
                             }
                             Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                         }
                     }) {
                         Icon(
                             imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Like Word"
+                            contentDescription = "Penda"
                         )
                     }
                 },
@@ -91,7 +86,7 @@ fun WordViewer(
                 )
 
                 UiState.Loading -> LoadingState(
-                    title = "Loading word ...",
+                    title = "Subiri kidogo ...",
                     fileName = "opener-loading",
                 )
 

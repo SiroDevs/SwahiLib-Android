@@ -43,7 +43,10 @@ fun ProverbsList(
                         }
                     }
 
-                    else -> EmptyState()
+                    else -> LoadingState(
+                        title = "",
+                        fileName = "circle-loader"
+                    )
                 }
             }
 
