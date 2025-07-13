@@ -69,6 +69,10 @@ class WordRepository @Inject constructor(
 //        wordsDao?.searchWordByTitle(title)?.map { it.asDomainModel() }
     }
 
+    fun getWordsByTitles(titles: List<String>): Flow<List<Word>> {
+        return wordsDao?.getWordsByTitles(titles) ?: flowOf(emptyList())
+    }
+
     suspend fun getWordById(wordId: String): Flow<Word> {
         try {
 //            val wordFlow = wordsDao?.getById(wordId)
@@ -82,4 +86,3 @@ class WordRepository @Inject constructor(
     }
 
 }
-

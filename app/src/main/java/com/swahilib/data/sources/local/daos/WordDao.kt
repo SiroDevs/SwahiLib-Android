@@ -25,6 +25,9 @@ interface WordDao {
     @Query("SELECT * FROM ${Collections.WORDS} WHERE title LIKE '%' || :title || '%'")
     fun searchWordByTitle(title: String?): Flow<List<Word>>
 
+    @Query("SELECT * FROM ${Collections.WORDS} WHERE title IN (:titles)")
+    fun getWordsByTitles(titles: List<String>): Flow<List<Word>>
+
     @Query("SELECT * FROM ${Collections.WORDS}")
     fun getAll(): Flow<List<Word>>
 }

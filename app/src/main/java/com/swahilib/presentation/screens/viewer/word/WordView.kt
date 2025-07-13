@@ -1,6 +1,6 @@
 package com.swahilib.presentation.screens.viewer.word
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.Icons
@@ -8,23 +8,23 @@ import androidx.compose.material.icons.filled.ArrowCircleRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import com.swahilib.data.models.Word
 import com.swahilib.presentation.components.action.CollapsingHeader
 import com.swahilib.presentation.components.general.MeaningsView
 import com.swahilib.presentation.theme.ThemeColors
+import com.swahilib.presentation.viewmodels.WordViewModel
 
 @Composable
 fun WordView(
     modifier: Modifier = Modifier,
+    viewModel: WordViewModel,
     title: String,
     conjugation: String,
     meanings: List<String>,
-    synonyms: List<String>
+    synonyms: List<Word>
 ) {
     val scrollState = rememberLazyListState()
 
@@ -68,7 +68,12 @@ fun WordView(
                             color = ThemeColors.primary1,
                             modifier = Modifier.padding(start = 10.dp)
                         )
-                        WordSynonyms(synonyms = synonyms)
+                        WordSynonyms(
+                            synonyms = synonyms,
+                            onSynonymClicked = { synonym ->
+                                viewModel.loadWord(synonym)
+                            }
+                        )
                     }
                 }
             }
@@ -77,9 +82,10 @@ fun WordView(
 }
 
 @Composable
-fun WordSynonyms(synonyms: List<String>) {
-    val sortedSynonyms = remember(synonyms) { synonyms.sortedBy { it.lowercase() } }
-
+fun WordSynonyms(
+    synonyms: List<Word>,
+    onSynonymClicked: (Word) -> Unit
+) {
     Column(modifier = Modifier.padding(10.dp)) {
 
         Divider(
@@ -87,10 +93,12 @@ fun WordSynonyms(synonyms: List<String>) {
             thickness = 1.dp
         )
 
-        sortedSynonyms.forEachIndexed { index, synonym ->
+        synonyms.forEachIndexed { index, synonym ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable { onSynonymClicked(synonym) }
             ) {
                 Icon(
                     Icons.Default.ArrowCircleRight,
@@ -99,7 +107,7 @@ fun WordSynonyms(synonyms: List<String>) {
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = synonym,
+                    text = synonym.title.toString(),
                     fontSize = 20.sp,
                     color = ThemeColors.primary1
                 )
@@ -118,15 +126,4 @@ fun WordSynonyms(synonyms: List<String>) {
             thickness = 1.dp
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WordViewPreview() {
-    WordView(
-        title = "fuata",
-        conjugation = "fuatana,  fuatia, fuatika, fuatisha, fuatiwa, fuatwa",
-        meanings = listOf("andama mtu kwa nyuma, -wa pamoja na: Mtoto anamfuata baba yake kila aendapo.", "kwenda kule anakokwenda au alikokwenda mtu: John alimfuata mkewe Uingereza.", "iga matendo au tabia za mtu: Bwana huyu anafuata tabia za baba yake.","kuwa mwumini wa imani fulani"),
-        synonyms = listOf("ambatana", "andama chanjari")
-    )
 }

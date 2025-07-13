@@ -1,15 +1,12 @@
 package com.swahilib.presentation.screens.viewer.word
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.swahilib.data.models.Word
 import com.swahilib.domain.entities.ViewerState
@@ -26,7 +23,6 @@ fun WordScreen(
     viewModel: WordViewModel,
     word: Word?,
 ) {
-    val context = LocalContext.current
     val viewerState by viewModel.uiState.collectAsState()
     val meanings by viewModel.meanings.collectAsState()
     val synonyms by viewModel.synonyms.collectAsState()
@@ -83,6 +79,7 @@ fun WordScreen(
 
                 ViewerState.Loaded -> {
                     WordView(
+                        viewModel = viewModel,
                         title = word?.title ?: "",
                         conjugation = word?.conjugation ?: "",
                         meanings = meanings,

@@ -23,19 +23,32 @@ class WordViewModel @Inject constructor(
     private val _meanings = MutableStateFlow<List<String>>(emptyList())
     val meanings: StateFlow<List<String>> get() = _meanings
 
-    private val _synonyms = MutableStateFlow<List<String>>(emptyList())
-    val synonyms: StateFlow<List<String>> get() = _synonyms
+    private val _synonyms = MutableStateFlow<List<Word>>(emptyList())
+    val synonyms: StateFlow<List<Word>> get() = _synonyms
 
     fun loadWord(word: Word) {
         _uiState.value = ViewerState.Loading
         _isLiked.value = word.liked
 
-        _synonyms.value = word.synonyms
+        _meanings.value = cleanMeaning(word.meaning).split("|")
+
+        // Fetch synonyms as Word objects
+        val synonymTitles = word.synonyms
             ?.takeIf { it.isNotEmpty() }
             ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
             ?: emptyList()
 
-        _meanings.value = cleanMeaning(word.meaning).split("|")
+        if (synonymTitles.isNotEmpty()) {
+            viewModelScope.launch {
+                wordRepo.getWordsByTitles(synonymTitles).collect { words ->
+                    _synonyms.value = words.sortedBy { it.title?.lowercase() }
+                }
+            }
+        } else {
+            _synonyms.value = emptyList()
+        }
 
         _uiState.value = ViewerState.Loaded
     }
@@ -47,5 +60,4 @@ class WordViewModel @Inject constructor(
             _isLiked.value = updatedWord.liked
         }
     }
-
 }
