@@ -55,6 +55,10 @@ class SayingRepository @Inject constructor(
 //        sayingsDao?.searchSayingByTitle(title)?.map { it.asDomainModel() }
     }
 
+    fun getSayingsByTitles(titles: List<String>): Flow<List<Saying>> {
+        return sayingsDao?.getSayingsByTitles(titles) ?: flowOf(emptyList())
+    }
+
     suspend fun getSayingById(sayingId: String): Flow<Saying> {
         try {
 //            val sayingFlow = sayingsDao?.getById(sayingId)

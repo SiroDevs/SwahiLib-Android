@@ -3,6 +3,7 @@ package com.swahilib.data.sources.local.daos
 import androidx.room.*
 import com.swahilib.core.utils.Collections
 import com.swahilib.data.models.Idiom
+import com.swahilib.data.models.Proverb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,6 +25,9 @@ interface IdiomDao {
 
     @Query("SELECT * FROM ${Collections.IDIOMS} WHERE title LIKE '%' || :title || '%'")
     fun searchIdiomByTitle(title: String?): Flow<List<Idiom>>
+
+    @Query("SELECT * FROM ${Collections.IDIOMS} WHERE title IN (:titles)")
+    fun getIdiomsByTitles(titles: List<String>): Flow<List<Idiom>>
 
     @Query("SELECT * FROM ${Collections.IDIOMS}")
     fun getAll(): Flow<List<Idiom>>

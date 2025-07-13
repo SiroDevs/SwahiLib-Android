@@ -55,6 +55,10 @@ class IdiomRepository @Inject constructor(
 //        idiomsDao?.searchIdiomByTitle(title)?.map { it.asDomainModel() }
     }
 
+    fun getIdiomsByTitles(titles: List<String>): Flow<List<Idiom>> {
+        return idiomsDao?.getIdiomsByTitles(titles) ?: flowOf(emptyList())
+    }
+
     suspend fun getIdiomById(idiomId: String): Flow<Idiom> {
         try {
 //            val idiomFlow = idiomsDao?.getById(idiomId)

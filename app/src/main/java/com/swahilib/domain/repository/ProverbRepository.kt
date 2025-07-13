@@ -55,6 +55,10 @@ class ProverbRepository @Inject constructor(
 //        proverbsDao?.searchProverbByTitle(title)?.map { it.asDomainModel() }
     }
 
+    fun getProverbsByTitles(titles: List<String>): Flow<List<Proverb>> {
+        return proverbsDao?.getProverbsByTitles(titles) ?: flowOf(emptyList())
+    }
+
     suspend fun getProverbById(proverbId: String): Flow<Proverb> {
         try {
 //            val proverbFlow = proverbsDao?.getById(proverbId)
