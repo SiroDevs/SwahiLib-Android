@@ -10,7 +10,7 @@ import com.swahilib.data.models.Word
 import com.swahilib.presentation.screens.home.HomeScreen
 import com.swahilib.presentation.screens.init.InitScreen
 import com.swahilib.presentation.screens.splash.SplashScreen
-import com.swahilib.presentation.screens.word.WordViewer
+import com.swahilib.presentation.screens.viewer.word.WordScreen
 import com.swahilib.presentation.viewmodels.*
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
@@ -50,7 +50,7 @@ fun AppNavHost(
 
             val viewModel: WordViewModel = hiltViewModel()
 
-            WordViewer(
+            WordScreen(
                 onBackPressed = { navController.popBackStack() },
                 viewModel = viewModel,
                 word = word,

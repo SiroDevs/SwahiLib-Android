@@ -13,17 +13,23 @@ import javax.inject.Inject
 class WordViewModel @Inject constructor(
     private val wordRepo: WordRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<ViewerState> = MutableStateFlow(ViewerState.Loading)
+    val uiState: StateFlow<ViewerState> = _uiState.asStateFlow()
 
     private val _isLiked = MutableStateFlow(false)
     val isLiked: StateFlow<Boolean> get() = _isLiked
 
+    private val _meanings = MutableStateFlow<List<String>>(emptyList())
+    val meanings: StateFlow<List<String>> get() = _meanings
+
+    private val _synonyms = MutableStateFlow<List<String>>(emptyList())
+    val synonyms: StateFlow<List<String>> get() = _synonyms
+
     fun loadWord(word: Word) {
-        _uiState.value = UiState.Loading
+        _uiState.value = ViewerState.Loading
         _isLiked.value = word.liked
 
-        _uiState.value = UiState.Loaded
+        _uiState.value = ViewerState.Loaded
     }
 
     fun likeWord(word: Word) {

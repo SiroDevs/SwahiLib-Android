@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ErrorState(errorMessage: String, onRetry: () -> Unit) {
+fun ErrorState(message: String, onRetry: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -18,7 +18,7 @@ fun ErrorState(errorMessage: String, onRetry: () -> Unit) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = errorMessage,
+                text = message,
                 color = Color.Red,
                 modifier = Modifier.padding(bottom = 8.dp)
             )

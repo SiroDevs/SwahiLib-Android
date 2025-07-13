@@ -49,7 +49,7 @@ fun InitScreen(
             ) {
                 when (uiState) {
                     is UiState.Error -> ErrorState(
-                        errorMessage = (uiState as UiState.Error).errorMessage,
+                        message = (uiState as UiState.Error).message,
                         onRetry = { viewModel.fetchData() }
                     )
 

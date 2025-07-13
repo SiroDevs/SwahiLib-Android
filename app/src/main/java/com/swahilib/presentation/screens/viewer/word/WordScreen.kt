@@ -1,9 +1,8 @@
-package com.swahilib.presentation.screens.viewer
+package com.swahilib.presentation.screens.viewer.word
 
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
@@ -12,31 +11,26 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.swahilib.data.models.Word
-import com.swahilib.domain.entities.UiState
+import com.swahilib.domain.entities.ViewerState
 import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.components.action.AppTopBar
-import com.swahilib.presentation.components.indicators.EmptyState
-import com.swahilib.presentation.components.indicators.ErrorState
-import com.swahilib.presentation.screens.viewer.components.*
+import com.swahilib.presentation.components.indicators.*
 import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.WordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WordViewer(
-    viewModel: WordViewModel,
-    navController: NavHostController,
+fun WordScreen(
     onBackPressed: () -> Unit,
+    viewModel: WordViewModel,
     word: Word?,
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsState()
+    val viewerState by viewModel.uiState.collectAsState()
+    val meanings by viewModel.meanings.collectAsState()
+    val synonyms by viewModel.synonyms.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
-    val title by viewModel.title.collectAsState()
-    val verses by viewModel.verses.collectAsState()
-    val indicators by viewModel.indicators.collectAsState()
 
     LaunchedEffect(word) {
         word?.let { viewModel.loadWord(it) }
@@ -45,23 +39,23 @@ fun WordViewer(
     Scaffold(topBar = {
         Surface(shadowElevation = 3.dp) {
             AppTopBar(
-                title = title,
+                title = word?.title.toString(),
                 actions = {
                     IconButton(onClick = {
                         word?.let {
                             viewModel.likeWord(it)
 
                             val text = if (isLiked) {
-                                "${word.title} added to your likes"
+                                "Neno: ${word.title} limeongezwa kwa vipendwa"
                             } else {
-                                "${word.title} removed from your likes"
+                                "Neno: ${word.title} limeondolewa kwa vipendwa"
                             }
                             Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                         }
                     }) {
                         Icon(
                             imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Like Word"
+                            contentDescription = "Penda"
                         )
                     }
                 },
@@ -82,16 +76,20 @@ fun WordViewer(
                 .fillMaxSize()
                 .background(ThemeColors.accent2)
         ) {
-            when (uiState) {
-                is UiState.Error -> ErrorState(
-                    errorMessage = (uiState as UiState.Error).errorMessage, onRetry = { })
+            when (viewerState) {
+                is ViewerState.Error -> ErrorState(
+                    message = (viewerState as ViewerState.Error).message, onRetry = { })
 
-                UiState.Loaded -> PresenterContent(
-                    verses = verses, indicators = indicators
-                )
+                ViewerState.Loaded -> word?.let { it1 ->
+                    WordView(
+                        word = it1,
+                        meanings = meanings,
+                        synonyms = synonyms
+                    )
+                }
 
-                UiState.Loading -> LoadingState(
-                    title = "Loading word ...",
+                ViewerState.Loading -> LoadingState(
+                    title = "Subiri kidogo ...",
                     fileName = "opener-loading",
                 )
 
@@ -100,35 +98,3 @@ fun WordViewer(
         }
     })
 }
-
-@Composable
-fun PresenterContent(
-    verses: List<String>, indicators: List<String>
-) {
-    val pagerState = rememberPagerState { verses.size }
-
-    Column(
-        modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        PresenterTabs(
-            pagerState = pagerState, verses = verses, modifier = Modifier.weight(1f)
-        )
-
-        PresenterIndicators(
-            pagerState = pagerState,
-            indicators = indicators,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp)
-        )
-    }
-}
-
-/*@Preview(showBackground = true)
-@Composable
-fun PreviewPresenterContent() {
-    PresenterContent(
-        verses = SampleVerses, indicators = SampleIndicators
-    )
-}
-*/

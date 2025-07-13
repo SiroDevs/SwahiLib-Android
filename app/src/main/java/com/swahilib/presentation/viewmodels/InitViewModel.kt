@@ -67,12 +67,12 @@ class InitViewModel @Inject constructor(
 
                 _uiState.emit(UiState.Loaded)
             } catch (e: Exception) {
-                val errorMessage = when (e) {
+                val message = when (e) {
                     is HttpException -> "HTTP Error: ${e.code()}"
                     else -> "Network error: ${e.message}"
                 }
-                Log.e("TAG", errorMessage, e)
-                _uiState.emit(UiState.Error(errorMessage))
+                Log.e("TAG", message, e)
+                _uiState.emit(UiState.Error(message))
             }
         }
     }
