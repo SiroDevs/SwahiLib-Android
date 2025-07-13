@@ -17,6 +17,12 @@ class WordViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<ViewerState> = MutableStateFlow(ViewerState.Loading)
     val uiState: StateFlow<ViewerState> = _uiState.asStateFlow()
 
+    private val _title = MutableStateFlow("")
+    val title: StateFlow<String> get() = _title
+
+    private val _conjugation = MutableStateFlow("")
+    val conjugation: StateFlow<String> get() = _conjugation
+
     private val _isLiked = MutableStateFlow(false)
     val isLiked: StateFlow<Boolean> get() = _isLiked
 
@@ -29,6 +35,9 @@ class WordViewModel @Inject constructor(
     fun loadWord(word: Word) {
         _uiState.value = ViewerState.Loading
         _isLiked.value = word.liked
+
+        _title.value = word.title.toString()
+        _conjugation.value = word.conjugation.toString()
 
         _meanings.value = cleanMeaning(word.meaning).split("|")
 

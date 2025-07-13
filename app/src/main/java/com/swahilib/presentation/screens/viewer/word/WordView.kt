@@ -3,8 +3,6 @@ package com.swahilib.presentation.screens.viewer.word
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowCircleRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -14,6 +12,7 @@ import androidx.compose.ui.unit.*
 import com.swahilib.data.models.Word
 import com.swahilib.presentation.components.action.CollapsingHeader
 import com.swahilib.presentation.components.general.MeaningsView
+import com.swahilib.presentation.components.listitems.SynonymItem
 import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.WordViewModel
 
@@ -86,44 +85,12 @@ fun WordSynonyms(
     synonyms: List<Word>,
     onSynonymClicked: (Word) -> Unit
 ) {
-    Column(modifier = Modifier.padding(10.dp)) {
-
-        Divider(
-            color = ThemeColors.primary1.copy(alpha = 0.3f),
-            thickness = 1.dp
-        )
-
-        synonyms.forEachIndexed { index, synonym ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .clickable { onSynonymClicked(synonym) }
-            ) {
-                Icon(
-                    Icons.Default.ArrowCircleRight,
-                    contentDescription = null,
-                    tint = ThemeColors.primary1
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = synonym.title.toString(),
-                    fontSize = 20.sp,
-                    color = ThemeColors.primary1
-                )
-            }
-
-            if (index < synonyms.lastIndex) {
-                Divider(
-                    color = ThemeColors.primary1.copy(alpha = 0.3f),
-                    thickness = 1.dp
-                )
-            }
+    Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+        synonyms.forEach { synonym ->
+            SynonymItem(
+                title = synonym.title ?: "",
+                onClick = { onSynonymClicked(synonym) }
+            )
         }
-
-        Divider(
-            color = ThemeColors.primary1.copy(alpha = 0.3f),
-            thickness = 1.dp
-        )
     }
 }

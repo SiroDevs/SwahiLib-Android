@@ -24,6 +24,8 @@ fun WordScreen(
     word: Word?,
 ) {
     val viewerState by viewModel.uiState.collectAsState()
+    val title by viewModel.title.collectAsState()
+    val conjugation by viewModel.conjugation.collectAsState()
     val meanings by viewModel.meanings.collectAsState()
     val synonyms by viewModel.synonyms.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
@@ -80,8 +82,8 @@ fun WordScreen(
                 ViewerState.Loaded -> {
                     WordView(
                         viewModel = viewModel,
-                        title = word?.title ?: "",
-                        conjugation = word?.conjugation ?: "",
+                        title = title,
+                        conjugation = conjugation,
                         meanings = meanings,
                         synonyms = synonyms
                     )
