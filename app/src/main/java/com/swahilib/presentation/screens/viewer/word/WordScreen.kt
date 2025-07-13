@@ -67,6 +67,7 @@ fun WordScreen(
                         )
                     }
                 },
+                shadowElevation = 0.dp,
             )
         }
     }, content = {
@@ -80,9 +81,10 @@ fun WordScreen(
                 is ViewerState.Error -> ErrorState(
                     message = (viewerState as ViewerState.Error).message, onRetry = { })
 
-                ViewerState.Loaded -> word?.let { it1 ->
+                ViewerState.Loaded -> {
                     WordView(
-                        word = it1,
+                        title = word?.title ?: "",
+                        conjugation = word?.conjugation ?: "",
                         meanings = meanings,
                         synonyms = synonyms
                     )

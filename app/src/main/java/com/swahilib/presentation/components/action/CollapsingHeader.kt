@@ -17,13 +17,13 @@ fun CollapsingHeader(title: String) {
             .fillMaxWidth()
             .height(100.dp)
             .background(ThemeColors.primary1)
-            .padding(16.dp),
+            .padding(15.dp),
         contentAlignment = Alignment.BottomStart
     ) {
         Text(
             text = title,
             color = Color.White,
-            fontSize = 25.sp,
+            fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
     }

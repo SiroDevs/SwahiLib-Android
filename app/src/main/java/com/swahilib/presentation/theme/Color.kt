@@ -3,6 +3,7 @@ package com.swahilib.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 object ThemeColors {
+    val accent0 = Color(0xFFEEEEEE);
     val accent1 = Color(0xFFBBDEFB);
     val accent2 = Color(0xFF64B5F6)
     val accent3 = Color(0xFF1E88E5)

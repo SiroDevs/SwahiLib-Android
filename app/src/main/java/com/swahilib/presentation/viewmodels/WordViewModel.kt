@@ -42,9 +42,9 @@ class WordViewModel @Inject constructor(
 
     fun likeWord(word: Word) {
         viewModelScope.launch {
-            /*val updatedWord = word.copy(liked = !word.liked)
+            val updatedWord = word.copy(liked = !word.liked)
             wordRepo.updateWord(updatedWord)
-            _isLiked.value = updatedWord.liked*/
+            _isLiked.value = updatedWord.liked
         }
     }
 

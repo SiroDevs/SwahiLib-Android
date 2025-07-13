@@ -55,6 +55,16 @@ class WordRepository @Inject constructor(
         }
     }
 
+    suspend fun updateWord(word: Word) {
+        try {
+            withContext(Dispatchers.IO) {
+                wordsDao?.update(word)
+            }
+        } catch (e: Exception) {
+            Log.d("TAG", e.message.toString())
+        }
+    }
+
     suspend fun searchWordsByTitle(title: String?) {
 //        wordsDao?.searchWordByTitle(title)?.map { it.asDomainModel() }
     }

@@ -7,13 +7,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.*
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import com.swahilib.data.models.Word
 import com.swahilib.presentation.components.action.CollapsingHeader
 import com.swahilib.presentation.components.general.MeaningsView
 import com.swahilib.presentation.theme.ThemeColors
@@ -21,7 +21,8 @@ import com.swahilib.presentation.theme.ThemeColors
 @Composable
 fun WordView(
     modifier: Modifier = Modifier,
-    word: Word,
+    title: String,
+    conjugation: String,
     meanings: List<String>,
     synonyms: List<String>
 ) {
@@ -30,39 +31,44 @@ fun WordView(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(Color.White, ThemeColors.accent1, ThemeColors.primary1)
-                )
-            )
+            .background(ThemeColors.accent0)
     ) {
         LazyColumn(state = scrollState) {
             item {
-                CollapsingHeader(title = word.title ?: "")
+                CollapsingHeader(title = title)
             }
             item {
-                if (meanings.isNotEmpty()) {
-                    MeaningsView(meanings = meanings)
-                }
-                if (!word.conjugation.isNullOrEmpty()) {
-                    Text(
-                        text = "Mnyambuliko: ${word.conjugation}",
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                }
+                Column(modifier = Modifier.padding(10.dp)) {
+                    if (meanings.isNotEmpty()) {
+                        MeaningsView(meanings = meanings)
+                    }
 
-                if (synonyms.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Text(
-                        text = "Visawe",
-                        fontSize = 25.sp,
-                        fontStyle = FontStyle.Italic,
-                        fontWeight = FontWeight.Bold,
-                        color = ThemeColors.primary1
-                    )
-                    synonyms.forEach { synonym ->
-                        WordSynonym(synonym = synonym)
+                    if (conjugation.isNotEmpty()) {
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("Mnyambuliko: ")
+                                }
+                                withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
+                                    append(conjugation)
+                                }
+                            },
+                            fontSize = 20.sp,
+                            color = ThemeColors.primary1,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+
+                    if (synonyms.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = if (synonyms.size == 1) "KISAWE" else "VISAWE ${synonyms.size}",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = ThemeColors.primary1,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                        WordSynonyms(synonyms = synonyms)
                     }
                 }
             }
@@ -71,22 +77,56 @@ fun WordView(
 }
 
 @Composable
-fun WordSynonym(synonym: String) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        Row(modifier = Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.ArrowCircleRight, contentDescription = null, tint = ThemeColors.primary1)
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(
-                text = synonym,
-                fontSize = 20.sp,
-                color = ThemeColors.primary1
-            )
+fun WordSynonyms(synonyms: List<String>) {
+    val sortedSynonyms = remember(synonyms) { synonyms.sortedBy { it.lowercase() } }
+
+    Column(modifier = Modifier.padding(10.dp)) {
+
+        Divider(
+            color = ThemeColors.primary1.copy(alpha = 0.3f),
+            thickness = 1.dp
+        )
+
+        sortedSynonyms.forEachIndexed { index, synonym ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Icon(
+                    Icons.Default.ArrowCircleRight,
+                    contentDescription = null,
+                    tint = ThemeColors.primary1
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = synonym,
+                    fontSize = 20.sp,
+                    color = ThemeColors.primary1
+                )
+            }
+
+            if (index < synonyms.lastIndex) {
+                Divider(
+                    color = ThemeColors.primary1.copy(alpha = 0.3f),
+                    thickness = 1.dp
+                )
+            }
         }
+
+        Divider(
+            color = ThemeColors.primary1.copy(alpha = 0.3f),
+            thickness = 1.dp
+        )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WordViewPreview() {
+    WordView(
+        title = "fuata",
+        conjugation = "fuatana,  fuatia, fuatika, fuatisha, fuatiwa, fuatwa",
+        meanings = listOf("andama mtu kwa nyuma, -wa pamoja na: Mtoto anamfuata baba yake kila aendapo.", "kwenda kule anakokwenda au alikokwenda mtu: John alimfuata mkewe Uingereza.", "iga matendo au tabia za mtu: Bwana huyu anafuata tabia za baba yake.","kuwa mwumini wa imani fulani"),
+        synonyms = listOf("ambatana", "andama chanjari")
+    )
 }
