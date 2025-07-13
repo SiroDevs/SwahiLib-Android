@@ -10,6 +10,7 @@ object Collections {
 }
 
 object Preferences {
-    const val PREFERENCE_FILE = "app_pref"
-    const val DATA_LOADED = "dataLoaded"
+    const val PREFERENCE_FILE = "app_preferences"
+    const val IS_DATA_LOADED = "is_data_loaded"
+    const val LAST_HOME_TAB = "last_home_tab"
 }

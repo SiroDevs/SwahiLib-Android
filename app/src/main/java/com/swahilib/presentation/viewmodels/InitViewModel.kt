@@ -92,7 +92,7 @@ class InitViewModel @Inject constructor(
             wordsJob.await()
 
             sharedPreferences.edit(commit = true) {
-                putBoolean(Preferences.DATA_LOADED, true)
+                putBoolean(Preferences.IS_DATA_LOADED, true)
             }
 
             _uiState.emit(UiState.Saved)

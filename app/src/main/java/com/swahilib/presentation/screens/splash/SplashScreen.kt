@@ -28,7 +28,7 @@ fun SplashScreen(navController: NavHostController) {
 
         val prefs =
             context.getSharedPreferences(Preferences.PREFERENCE_FILE, Context.MODE_PRIVATE)
-       val isDataLoaded = prefs.getBoolean(Preferences.DATA_LOADED, false)
+        val isDataLoaded = prefs.getBoolean(Preferences.IS_DATA_LOADED, false)
 
         val nextRoute = when {
             isDataLoaded -> Routes.HOME

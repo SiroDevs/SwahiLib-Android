@@ -25,7 +25,7 @@ object DatabaseModule {
         return Room.databaseBuilder(
             appContext,
             AppDatabase::class.java,
-            "SwahiLib"
+            "SwahiliLibrary"
         ).fallbackToDestructiveMigration().build()
     }
 
