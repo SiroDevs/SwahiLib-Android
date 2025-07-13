@@ -1,6 +1,7 @@
 package com.swahilib.presentation.viewmodels
 
 import androidx.lifecycle.*
+import com.swahilib.core.utils.cleanMeaning
 import com.swahilib.data.models.*
 import com.swahilib.domain.entities.*
 import com.swahilib.domain.repository.*
@@ -28,6 +29,13 @@ class WordViewModel @Inject constructor(
     fun loadWord(word: Word) {
         _uiState.value = ViewerState.Loading
         _isLiked.value = word.liked
+
+        _synonyms.value = word.synonyms
+            ?.takeIf { it.isNotEmpty() }
+            ?.split(",")
+            ?: emptyList()
+
+        _meanings.value = cleanMeaning(word.meaning).split("|")
 
         _uiState.value = ViewerState.Loaded
     }

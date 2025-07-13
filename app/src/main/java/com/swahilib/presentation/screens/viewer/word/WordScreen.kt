@@ -39,25 +39,25 @@ fun WordScreen(
     Scaffold(topBar = {
         Surface(shadowElevation = 3.dp) {
             AppTopBar(
-                title = word?.title.toString(),
+                title = "Kamusi ya Kiswahili",
                 actions = {
-                    IconButton(onClick = {
-                        word?.let {
-                            viewModel.likeWord(it)
-
-                            val text = if (isLiked) {
-                                "Neno: ${word.title} limeongezwa kwa vipendwa"
-                            } else {
-                                "Neno: ${word.title} limeondolewa kwa vipendwa"
-                            }
-                            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-                        }
-                    }) {
-                        Icon(
-                            imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Penda"
-                        )
-                    }
+//                    IconButton(onClick = {
+//                        word?.let {
+//                            viewModel.likeWord(it)
+//
+//                            val text = if (isLiked) {
+//                                "Neno: ${word.title} limeongezwa kwa vipendwa"
+//                            } else {
+//                                "Neno: ${word.title} limeondolewa kwa vipendwa"
+//                            }
+//                            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+//                        }
+//                    }) {
+//                        Icon(
+//                            imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
+//                            contentDescription = "Penda"
+//                        )
+//                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
