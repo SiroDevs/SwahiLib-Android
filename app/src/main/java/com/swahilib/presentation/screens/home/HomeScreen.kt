@@ -12,8 +12,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.core.utils.Preferences
-import com.swahilib.domain.entities.UiState
-import com.swahilib.domain.entities.homeTabs
+import com.swahilib.domain.entity.UiState
+import com.swahilib.domain.entity.homeTabs
 import com.swahilib.presentation.components.action.*
 import com.swahilib.presentation.viewmodels.HomeViewModel
 import androidx.core.content.edit
@@ -36,11 +36,13 @@ fun HomeScreen(
     }
 
     val lastTabIndex = prefs.getInt(Preferences.LAST_HOME_TAB, 0)
+    var selectedTabIndex by rememberSaveable { mutableStateOf(lastTabIndex) }
+    val selectedTab = homeTabs[selectedTabIndex]
+
     val uiState by viewModel.uiState.collectAsState()
 
     var isSearching by rememberSaveable { mutableStateOf(false) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
-    var selectedTab by rememberSaveable { mutableStateOf(homeTabs[lastTabIndex]) }
     var selectedLetter by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
@@ -82,10 +84,9 @@ fun HomeScreen(
                 onTabSelected = { tab ->
                     val tabIndex = homeTabs.indexOf(tab)
                     prefs.edit { putInt(Preferences.LAST_HOME_TAB, tabIndex) }
-
-                    selectedTab = tab
+                    selectedTabIndex = tabIndex
                     selectedLetter = ""
-                    viewModel.filterData(tab, "")
+                    viewModel.filterData(homeTabs[tabIndex], "")
                 },
                 onLetterSelected = { letter ->
                     selectedLetter = letter

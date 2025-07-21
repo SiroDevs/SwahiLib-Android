@@ -7,7 +7,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.navigation.NavHostController
-import com.swahilib.domain.entities.UiState
+import com.swahilib.domain.entity.UiState
 import com.swahilib.presentation.components.indicators.*
 import com.swahilib.presentation.components.listitems.WordItem
 import com.swahilib.presentation.navigation.Routes

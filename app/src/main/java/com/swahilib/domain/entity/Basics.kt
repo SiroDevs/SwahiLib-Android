@@ -1,4 +1,4 @@
-package com.swahilib.domain.entities
+package com.swahilib.domain.entity
 
 data class Selectable<T>(
     val data: T,

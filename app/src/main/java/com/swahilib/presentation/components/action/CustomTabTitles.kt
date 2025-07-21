@@ -12,8 +12,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.swahilib.domain.entities.HomeTab
-import com.swahilib.domain.entities.homeTabs
+import com.swahilib.domain.entity.HomeTab
+import com.swahilib.domain.entity.homeTabs
 import com.swahilib.presentation.theme.ThemeColors
 
 @Composable

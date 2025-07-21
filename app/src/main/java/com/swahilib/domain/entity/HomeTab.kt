@@ -1,4 +1,4 @@
-package com.swahilib.domain.entities
+package com.swahilib.domain.entity
 
 sealed class HomeTab(var title: String) {
     object Words : HomeTab("maneno")

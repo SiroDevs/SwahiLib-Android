@@ -1,4 +1,4 @@
-package com.swahilib.domain.entities
+package com.swahilib.domain.entity
 
 sealed class UiState {
     object Idle : UiState()

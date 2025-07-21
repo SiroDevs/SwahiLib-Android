@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.swahilib.core.utils.Preferences
 import com.swahilib.data.models.*
-import com.swahilib.domain.entities.*
+import com.swahilib.domain.entity.*
 import com.swahilib.domain.repository.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

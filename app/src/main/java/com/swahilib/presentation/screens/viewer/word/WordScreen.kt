@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.swahilib.data.models.Word
-import com.swahilib.domain.entities.ViewerState
+import com.swahilib.domain.entity.ViewerState
 import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.components.indicators.*

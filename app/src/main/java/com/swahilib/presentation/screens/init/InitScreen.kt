@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.swahilib.domain.entities.UiState
+import com.swahilib.domain.entity.UiState
 import com.swahilib.presentation.components.indicators.EmptyState
 import com.swahilib.presentation.components.indicators.ErrorState
 import com.swahilib.presentation.components.indicators.LoadingState
