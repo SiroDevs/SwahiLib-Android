@@ -18,7 +18,7 @@ import io.github.jan.supabase.postgrest.Postgrest
 class WordRepository @Inject constructor(
     context: Context,
     private val supabase: Postgrest,
-)  {
+) {
     private var wordsDao: WordDao?
 
     init {
@@ -27,13 +27,27 @@ class WordRepository @Inject constructor(
     }
 
     fun fetchRemoteData(): Flow<List<Word>> = flow {
+        var offset = 0L
+        val pageSize = 2000
+        val allWords = mutableListOf<Word>()
+
         try {
-            Log.d("TAG", "Now fetching words")
-            val result = supabase[Collections.WORDS]
-                .select().decodeList<WordDto>()
-            val words = result.map { MapDtoToEntity.mapToEntity(it) }
-            Log.d("TAG", "Fetched ${words.size} words")
-            emit(words)
+            while (true) {
+                Log.d("TAG", "Now fetching words")
+                val batch = supabase[Collections.WORDS]
+                    .select {
+                        range(offset, offset + pageSize - 1)
+                    }.decodeList<WordDto>()
+                if (batch.isEmpty()) break
+
+                val mapped = batch.map(MapDtoToEntity::mapToEntity)
+                allWords += mapped
+
+                if (batch.size < pageSize) break // last batch
+                offset += pageSize
+            }
+            Log.d("TAG", "Fetched ${allWords.size} words")
+            emit(allWords)
         } catch (e: Exception) {
             Log.d("TAG", e.message.toString())
         }
@@ -65,24 +79,7 @@ class WordRepository @Inject constructor(
         }
     }
 
-    suspend fun searchWordsByTitle(title: String?) {
-//        wordsDao?.searchWordByTitle(title)?.map { it.asDomainModel() }
-    }
-
     fun getWordsByTitles(titles: List<String>): Flow<List<Word>> {
         return wordsDao?.getWordsByTitles(titles) ?: flowOf(emptyList())
     }
-
-    suspend fun getWordById(wordId: String): Flow<Word> {
-        try {
-//            val wordFlow = wordsDao?.getById(wordId)
-//            return wordFlow.map {
-//                it.asDomainModel()
-//            }
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
-        return flow {}
-    }
-
 }
