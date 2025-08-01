@@ -41,7 +41,6 @@ class ProverbViewModel @Inject constructor(
 
         _meanings.value = cleanMeaning(proverb.meaning).split("|")
 
-        // Fetch synonyms as Proverb objects
         val synonymTitles = proverb.synonyms
             ?.takeIf { it.isNotEmpty() }
             ?.split(",")

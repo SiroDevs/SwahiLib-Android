@@ -41,7 +41,6 @@ class WordViewModel @Inject constructor(
 
         _meanings.value = cleanMeaning(word.meaning).split("|")
 
-        // Fetch synonyms as Word objects
         val synonymTitles = word.synonyms
             ?.takeIf { it.isNotEmpty() }
             ?.split(",")
