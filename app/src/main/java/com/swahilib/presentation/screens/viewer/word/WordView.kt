@@ -10,7 +10,7 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import com.swahilib.data.models.Word
-import com.swahilib.presentation.components.action.CollapsingHeader
+import com.swahilib.presentation.components.general.CollapsingHeader
 import com.swahilib.presentation.components.general.MeaningsView
 import com.swahilib.presentation.components.listitems.SynonymItem
 import com.swahilib.presentation.theme.ThemeColors
