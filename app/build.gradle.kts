@@ -23,15 +23,14 @@ if (configFile.exists()) {
 }
 
 android {
-    namespace = configProperties["applicationId"] as String
-    compileSdk = 35
+    namespace = "com.swahilib"
+    compileSdk = (configProperties["targetSdk"] as String).toInt()
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.8.1"
     }
 
     defaultConfig {
-        applicationId = configProperties["applicationId"] as String
         minSdk = (configProperties["minSdk"] as String).toInt()
         targetSdk = (configProperties["targetSdk"] as String).toInt()
         versionCode = (configProperties["versionCode"] as String).toInt()
@@ -56,9 +55,6 @@ android {
 
     buildTypes {
         getByName("debug") {
-            isMinifyEnabled = false
-            isDebuggable = true
-            applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
         getByName("release") {
@@ -69,16 +65,21 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+
+    flavorDimensions += "env"
+
+    productFlavors {
+        create("prod") {
+            dimension = "env"
+            applicationId = "com.swahilib"
+        }
         create("staging") {
-            initWith(getByName("debug"))
-            manifestPlaceholders["hostName"] = "Stg SwahiLib"
-            applicationIdSuffix = ".stg"
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            dimension = "env"
+            applicationId = "com.swahilib.stg"
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
