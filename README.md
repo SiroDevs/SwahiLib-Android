@@ -1,93 +1,107 @@
 # SwahiLib - Kamusi ya Kiswahili
-The Kamusi ya Kiswahili app has been rebranded to SwahiLib. If you are looking for the old app you can find it in the [old-app branch](https://github.com/oyonde/SwahiLib/tree/old-app)
 
+**SwahiLib** is a beautifully crafted Android app that lets users explore and search through a rich collection of **Swahili words, idioms, sayings, and proverbs**, with support for offline access, clean UI, and real-time updates.
+
+This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed by **Supabase** for remote data.
+
+> 🔗 iOS Version Repo: [@SiroDaves/SongLib-iOS](https://github.com/SiroDaves/SongLib-iOS)
 
 <a href='https://play.google.com/store/apps/details?id=com.swahilib'>
   <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width='200'/>
 </a>
 
-<a href="https://apps.apple.com/us/app/id6446771678">
-  <img alt='Get it on AppStore' src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-example-preferred_2x.png' width='200'>
-</a>
+## ✨ Screenshots
+<table>
+    <tr>
+        <td><img src="screenshots/image1.png" width="200px" /></td>
+        <td><img src="screenshots/image2.png" width="200px" /></td>
+        <td><img src="screenshots/image3.png" width="200px" /></td>
+    </tr>
+</table>
 
-Swahilib - Kamusi ya Kiswahili for Android, iOS
+## ✨ Features
 
-## Getting Started
+* 🔍 **Search** for Swahili **words**, **idioms**, **sayings**, and **proverbs**
+* 📘 **View details** by tapping on any result
 
-Follow this guide to set up and run the SwahiLib App:
+    * See **synonyms** for words and proverbs where available
+* 💾 **Offline-first** support using **Room Database**
+* 💉 **Dependency injection** powered by **Hilt**
+* 💫 **Smooth animations** with **Lottie**
+* ⚡ Uses **Supabase** + **Ktor** for fast backend communication
 
-## Getting Started
+## 🧰 Tech Stack
 
-Follow this guide to set up and run SwahiLib:
+### UI & Architecture
 
-### Setting Up SwahiLib:
+* Jetpack Compose (Material 3, Navigation, LiveData, Previews)
+* Hilt for Dependency Injection
+* Room for local database
+* Kotlinx Serialization
+* Jan Tennert’s [Supabase Kotlin Client](https://github.com/jaumard/supabase-kt)
+* Retrofit & Ktor for HTTP networking
+* Lottie Compose for animations
 
-1. **Install Flutter and Dependencies:** Ensure Flutter is installed on your system. Download the Flutter SDK from the official website and set up your preferred IDE (e.g., Android Studio or Visual Studio Code) with the Flutter plugin.
+## 🚀 Getting Started
 
-2. **Clone the Repository:** Clone SwahiLib repository from GitHub using Git:
+### 1. Clone the Repository
 
-    ```bash
-    git clone git@github.com:SiroDaves/SwahiLibApp.git
-    ```
+```bash
+git clone https://github.com/SiroDaves/SongLib-Android.git
+cd SongLib-Android
+```
 
-3. **Install Packages:** Navigate to the project directory and run:
+### 2. Set up Supabase Configuration
 
-    ```bash
-    flutter pub get
-    ```
+Create a `.env` file at the root of the project by copying the template:
 
-### Running SwahiLib:
+```bash
+cp .env.example .env
+```
 
-1. **Device Setup:** Connect an emulator or physical device to your development environment. Check connected devices:
+Update the `.env` file with your actual Supabase credentials (URL, API key, etc.)
 
-    ```bash
-    flutter devices
-    ```
+### 3. Open in Android Studio
 
-2. **Update Dependencies:**
+Open the project in the latest version of **Android Studio** (Giraffe or later recommended for best Jetpack Compose support).
 
-    ```bash
-    flutter pub get
-    ```
 
-3. **Update Code Generated Files:**
+### 4. Build the Project
 
-    ```bash
-    dart run build_runner build --delete-conflicting-outputs
-    ```
+The app uses Gradle version catalogs for dependencies. Android Studio should sync and resolve everything automatically. If not, run:
 
-4. **Update Localization Strings:**
+```bash
+./gradlew clean build
+```
 
-    ```bash
-    flutter gen-l10n
-    ```
-5. **Running SwahiLib:**
-    ```bash
-    flutter run --flavor develop -t lib/main_dev.dart --dart-define-from-file keys-dev.json
-    ```
+Or use **Sync Project with Gradle Files** in the IDE.
 
-### Building SwahiLib
+### 5. Run the App
 
-1. **Android:**
+Connect a physical Android device or use an emulator, then click **Run** or press:
 
-   - **Production (For Play Store):**
+```
+Shift + F10
+```
 
-       ```bash
-       flutter build appbundle --flavor production -t lib/main.dart --dart-define-from-file keys-prod.json --no-tree-shake-icons
-       ```
+## 📄 Notes
 
-2. **iOS:**
+* The app syncs content from Supabase and stores it in Room for offline usage.
+* Data updates are triggered automatically via ViewModel logic.
+* All dependencies are managed using **libs.versions.toml** for cleaner and centralized version control.
 
-   - **Production (For Play Store):**
+## 📦 Main Libraries Used
 
-       ```bash
-       flutter build ipa -t lib/main.dart --dart-define-from-file keys-prod.json --no-tree-shake-icons
-       ```
-   To upload to the App Store either:
-   - Drag and drop the "build/ios/ipa/*.ipa" bundle into the Apple Transporter macOS app https://apps.apple.com/us/app/transporter/id1450874784
-   - Run "xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey your_api_key --apiIssuer your_issuer_id".
-     See "man altool" for details about how to authenticate with the App Store Connect API key.
+| Category             | Library                                 |
+| -------------------- | --------------------------------------- |
+| UI                   | Jetpack Compose (Material2 & Material3) |
+| DI                   | Hilt                                    |
+| Database             | Room                                    |
+| Animations           | Lottie Compose                          |
+| Supabase Integration | Supabase Kotlin (PostgREST)             |
+| Networking           | Ktor, Retrofit, OkHttp                  |
+| Serialization        | kotlinx.serialization.json              |
 
----
+## 🛠 License
 
-Congratulations! You've successfully set up and run or built SwahiLib. Explore the codebase, make modifications, and contribute to creating a seamless experience for the users. Happy coding!
+This project is open-source and available under the MIT License.
