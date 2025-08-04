@@ -13,9 +13,9 @@ This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed 
 ## ✨ Screenshots
 <table>
     <tr>
-        <td><img src="screenshots/image1.png" width="200px" /></td>
-        <td><img src="screenshots/image2.png" width="200px" /></td>
-        <td><img src="screenshots/image3.png" width="200px" /></td>
+        <td><img src="screenshots/image1.jpg" width="200px" /></td>
+        <td><img src="screenshots/image2.jpg" width="200px" /></td>
+        <td><img src="screenshots/image3.jpg" width="200px" /></td>
     </tr>
 </table>
 
