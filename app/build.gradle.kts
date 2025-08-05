@@ -23,7 +23,7 @@ if (configFile.exists()) {
 }
 
 android {
-    namespace = "com.swahilib"
+    namespace = configProperties["applicationId"] as String
     compileSdk = (configProperties["targetSdk"] as String).toInt()
 
     composeOptions {
@@ -31,6 +31,7 @@ android {
     }
 
     defaultConfig {
+        applicationId = configProperties["applicationId"] as String
         minSdk = (configProperties["minSdk"] as String).toInt()
         targetSdk = (configProperties["targetSdk"] as String).toInt()
         versionCode = (configProperties["versionCode"] as String).toInt()
@@ -54,9 +55,6 @@ android {
     }
 
     buildTypes {
-        getByName("debug") {
-            signingConfig = signingConfigs.getByName("debug")
-        }
         getByName("release") {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("release")
@@ -65,21 +63,16 @@ android {
                 "proguard-rules.pro"
             )
         }
-    }
-
-    flavorDimensions += "env"
-
-    productFlavors {
-        create("prod") {
-            dimension = "env"
-            applicationId = "com.swahilib"
-        }
         create("staging") {
-            dimension = "env"
-            applicationId = "com.swahilib.stg"
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
+            applicationIdSuffix = ".stg"
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
