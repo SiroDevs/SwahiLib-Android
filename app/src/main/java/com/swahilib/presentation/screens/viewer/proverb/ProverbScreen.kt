@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.swahilib.data.models.Proverb
 import com.swahilib.domain.entity.ViewerState
 import com.swahilib.presentation.components.indicators.LoadingState
@@ -19,7 +20,7 @@ import com.swahilib.presentation.viewmodels.ProverbViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProverbScreen(
-    onBackPressed: () -> Unit,
+    navController: NavHostController,
     viewModel: ProverbViewModel,
     proverb: Proverb?,
 ) {
@@ -57,15 +58,8 @@ fun ProverbScreen(
 //                        )
 //                    }
                 },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                shadowElevation = 0.dp,
+                showGoBack = true,
+                onNavIconClick = { navController.popBackStack() },
             )
         }
     }, content = {

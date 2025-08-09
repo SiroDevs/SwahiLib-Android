@@ -17,6 +17,7 @@ import com.swahilib.domain.entity.homeTabs
 import com.swahilib.presentation.components.action.*
 import com.swahilib.presentation.viewmodels.HomeViewModel
 import androidx.core.content.edit
+import com.swahilib.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -69,6 +70,9 @@ fun HomeScreen(
                             IconButton(onClick = { isSearching = true }) {
                                 Icon(Icons.Filled.Search, contentDescription = "Search")
                             }
+                        }
+                        IconButton(onClick = { navController.navigate(Routes.SETTINGS) }) {
+                            Icon(Icons.Filled.Settings, contentDescription = "Settings")
                         }
                     }
                 )

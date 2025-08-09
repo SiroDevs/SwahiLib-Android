@@ -16,7 +16,6 @@ import androidx.navigation.NavHostController
 import com.swahilib.R
 import com.swahilib.core.utils.Preferences
 import com.swahilib.presentation.navigation.Routes
-import com.swahilib.presentation.theme.*
 import kotlinx.coroutines.delay
 
 @Composable
@@ -52,7 +51,7 @@ fun SplashContent() {
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
-                    //.background(color = ThemeColors.accent2)
+                    .background(color = MaterialTheme.colorScheme.onPrimary)
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -72,12 +71,12 @@ fun SplashContent() {
                             fontSize = 50.sp,
                             letterSpacing = 5.sp,
                             fontWeight = FontWeight.Bold,
-                            color = ThemeColors.primary1
+                            color = MaterialTheme.colorScheme.primary
                         )
                     )
                     Spacer(Modifier.weight(1f))
                     Divider(
-                        color = ThemeColors.primaryDark1,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         thickness = 2.dp,
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
@@ -104,7 +103,7 @@ fun KiswahiliKitukuzwe() {
                 fontSize = 25.sp,
                 letterSpacing = 5.sp,
                 fontWeight = FontWeight.Bold,
-                color = ThemeColors.primary1
+                color = MaterialTheme.colorScheme.primary
             )
         )
     }
