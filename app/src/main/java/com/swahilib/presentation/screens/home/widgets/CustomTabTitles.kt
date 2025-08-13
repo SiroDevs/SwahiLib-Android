@@ -1,4 +1,4 @@
-package com.swahilib.presentation.components.action
+package com.swahilib.presentation.screens.home.widgets
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
