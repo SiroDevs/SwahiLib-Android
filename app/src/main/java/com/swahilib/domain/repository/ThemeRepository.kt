@@ -64,12 +64,12 @@ fun ThemeSelectorDialog(
                     onDismiss()
                 }
             ) {
-                Text("OKAY")
+                Text("SAWA")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text("Kataa")
             }
         }
     )
@@ -77,8 +77,8 @@ fun ThemeSelectorDialog(
 
 fun appThemeName(mode: ThemeMode):String {
     return when (mode){
-        ThemeMode.SYSTEM -> "System Default"
-        ThemeMode.LIGHT -> "Light Theme"
-        ThemeMode.DARK -> "Dark Theme"
+        ThemeMode.SYSTEM -> "Chaguo la Mfumo"
+        ThemeMode.LIGHT -> "Mandhari ya Nuru"
+        ThemeMode.DARK -> "Mandhari ya Giza"
     }
 }

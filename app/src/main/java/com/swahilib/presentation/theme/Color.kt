@@ -18,12 +18,12 @@ object ThemeColors {
 
 object LightColors {
     val primary = Color(0xFF003297)
-    val onPrimary = Color(0xFFEEEEEE)
-    val primaryContainer = Color(0xFF00287A)
-    val onPrimaryContainer = Color(0xFFEEEEEE)
+    val onPrimary = Color(0xFFBBDEFB)
+    val primaryContainer = Color(0xFF1E88E5)
+    val onPrimaryContainer = Color(0xFF000F40)
     val secondary = Color(0xFF1E88E5)
     val onSecondary = Color.White
-    val secondaryContainer = Color(0xFF64B5F6)
+    val secondaryContainer = Color(0xFF001A33)
     val onSecondaryContainer = Color.White
     val tertiary = Color(0xFF1E88E5)
     val onTertiary = Color.White
@@ -52,7 +52,7 @@ object LightColors {
 object DarkColors {
     val primary = Color(0xFF64B5F6)
     val onPrimary = Color(0xFF000F40)
-    val primaryContainer = Color(0xFF001A33)
+    val primaryContainer = Color(0xFFBBDEFB)
     val onPrimaryContainer = Color(0xFFEEEEEE)
     val secondary = Color(0xFF1E88E5)
     val onSecondary = Color(0xFF000F40)

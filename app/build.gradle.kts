@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.devtools.ksp)
     kotlin("plugin.serialization") version "2.1.21"
     id("kotlin-parcelize")
+    alias(libs.plugins.io.sentry)
 }
 
 val keystoreProperties = Properties()
@@ -21,6 +22,9 @@ val configFile = rootProject.file("gradle/config/config.properties")
 if (configFile.exists()) {
     configProperties.load(configFile.inputStream())
 }
+
+val localProperties = Properties()
+localProperties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = configProperties["applicationId"] as String
@@ -39,10 +43,10 @@ android {
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val properties = Properties()
-        properties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "SupabaseUrl", "\"${properties.getProperty("SUPABASE_URL")}\"")
-        buildConfigField("String", "SupabaseKey", "\"${properties.getProperty("SUPABASE_ANON_KEY")}\"")
+        buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
+        buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
+        buildConfigField("String", "RevenueCatId", "\"${localProperties.getProperty("REVENUE_CAT_ID")}\"")
+        buildConfigField("String", "SentryDsn", "\"${localProperties.getProperty("SENTRY_DSN")}\"")
     }
 
     signingConfigs {
@@ -87,6 +91,15 @@ android {
     lint {
         disable += "NullSafeMutableLiveData"
     }
+}
+
+sentry {
+    debug.set(true)
+    includeSourceContext.set(true)
+    org.set("futuristicken")
+    projectName.set("swahilib-android")
+    additionalSourceDirsForSourceContext.set(setOf("detail/src/main/java", "core/src/main/java"))
+    authToken.set(localProperties.getProperty("SENTRY_AUTH_TOKEN"))
 }
 
 dependencies {
