@@ -2,6 +2,7 @@ package com.swahilib.presentation.theme
 
 import android.app.Activity
 import android.os.Build
+import android.view.WindowInsets
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.material3.MaterialTheme.shapes
@@ -10,7 +11,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.*
 import androidx.core.view.WindowCompat
-import kotlin.text.Typography
 
 private val LightTheme = lightColorScheme(
     primary = LightColors.primary, // Main brand color
@@ -112,14 +112,31 @@ fun AppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.onPrimary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !useDarkTheme
+
+            when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+                    window.setDecorFitsSystemWindows(false)
+                    window.decorView.setOnApplyWindowInsetsListener { v, insets ->
+                        val statusBarInsets = insets.getInsets(WindowInsets.Type.statusBars())
+                        v.setBackgroundColor(colorScheme.onPrimary.toArgb())
+                        v.setPadding(0, statusBarInsets.top, 0, 0)
+                        insets
+                    }
+                }
+                else -> {
+                    @Suppress("DEPRECATION")
+                    window.statusBarColor = colorScheme.onPrimary.toArgb()
+                }
+            }
+
+            WindowCompat.getInsetsController(window, view)
+                .isAppearanceLightStatusBars = !useDarkTheme
         }
     }
 
     MaterialTheme(
         colorScheme = colorScheme,
-//        typography = Typography,
+        typography = Typography,
         content = content,
         shapes = shapes,
     )
