@@ -9,17 +9,20 @@ import androidx.navigation.compose.*
 import com.swahilib.data.models.*
 import com.swahilib.presentation.screens.home.HomeScreen
 import com.swahilib.presentation.screens.init.InitScreen
+import com.swahilib.presentation.screens.settings.SettingsScreen
 import com.swahilib.presentation.screens.splash.SplashScreen
 import com.swahilib.presentation.screens.viewer.idiom.IdiomScreen
 import com.swahilib.presentation.screens.viewer.proverb.ProverbScreen
 import com.swahilib.presentation.screens.viewer.saying.SayingScreen
 import com.swahilib.presentation.screens.viewer.word.WordScreen
+import com.swahilib.domain.repository.ThemeRepository
 import com.swahilib.presentation.viewmodels.*
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
+    themeRepo: ThemeRepository
 ) {
     NavHost(
         navController = navController,
@@ -54,7 +57,7 @@ fun AppNavHost(
             val viewModel: IdiomViewModel = hiltViewModel()
 
             IdiomScreen(
-                onBackPressed = { navController.popBackStack() },
+                navController = navController,
                 viewModel = viewModel,
                 idiom = idiom,
             )
@@ -68,7 +71,7 @@ fun AppNavHost(
             val viewModel: ProverbViewModel = hiltViewModel()
 
             ProverbScreen(
-                onBackPressed = { navController.popBackStack() },
+                navController = navController,
                 viewModel = viewModel,
                 proverb = proverb,
             )
@@ -82,7 +85,7 @@ fun AppNavHost(
             val viewModel: SayingViewModel = hiltViewModel()
 
             SayingScreen(
-                onBackPressed = { navController.popBackStack() },
+                navController = navController,
                 viewModel = viewModel,
                 saying = saying,
             )
@@ -96,10 +99,20 @@ fun AppNavHost(
             val viewModel: WordViewModel = hiltViewModel()
 
             WordScreen(
-                onBackPressed = { navController.popBackStack() },
+                navController = navController,
                 viewModel = viewModel,
                 word = word,
             )
         }
+
+        composable(Routes.SETTINGS) {
+            val viewModel: SettingsViewModel = hiltViewModel()
+            SettingsScreen(
+                navController = navController,
+                viewModel = viewModel,
+                themeRepo = themeRepo,
+            )
+        }
+
     }
 }

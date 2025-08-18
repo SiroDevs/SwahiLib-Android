@@ -1,8 +1,6 @@
 package com.swahilib.core.di
 
-import android.content.Context
-import android.content.SharedPreferences
-import com.swahilib.core.utils.Preferences
+import android.content.*
 import com.swahilib.domain.repository.*
 import dagger.*
 import dagger.hilt.InstallIn
@@ -16,9 +14,9 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideSharePreferences(@ApplicationContext context: Context): SharedPreferences {
-        return context.getSharedPreferences(Preferences.PREFERENCE_FILE, Context.MODE_PRIVATE)
-    }
+    fun providePrefsRepository(
+        @ApplicationContext context: Context,
+    ): PrefsRepository = PrefsRepository(context)
 
     @Provides
     @Singleton

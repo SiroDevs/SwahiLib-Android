@@ -30,7 +30,7 @@ fun ProverbView(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(ThemeColors.accent0)
+            .background(MaterialTheme.colorScheme.onPrimary)
     ) {
         LazyColumn(state = scrollState) {
             item {

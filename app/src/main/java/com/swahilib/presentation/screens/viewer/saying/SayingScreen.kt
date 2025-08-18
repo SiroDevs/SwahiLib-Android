@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.swahilib.data.models.Saying
 import com.swahilib.domain.entity.ViewerState
 import com.swahilib.presentation.components.indicators.LoadingState
@@ -19,7 +20,7 @@ import com.swahilib.presentation.viewmodels.SayingViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SayingScreen(
-    onBackPressed: () -> Unit,
+    navController: NavHostController,
     viewModel: SayingViewModel,
     saying: Saying?,
 ) {
@@ -55,15 +56,8 @@ fun SayingScreen(
 //                        )
 //                    }
                 },
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                shadowElevation = 0.dp,
+                showGoBack = true,
+                onNavIconClick = { navController.popBackStack() },
             )
         }
     }, content = {

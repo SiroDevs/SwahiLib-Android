@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -22,28 +23,32 @@ import com.swahilib.presentation.theme.ThemeColors
 @Composable
 fun AppTopBar(
     title: String,
-    actions: @Composable RowScope.() -> Unit = {},
-    navigationIcon: @Composable () -> Unit = {},
-    shadowElevation: Dp = 4.dp
+    showGoBack: Boolean = false,
+    onNavIconClick: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     Surface(
-        shadowElevation = shadowElevation
+        shadowElevation = 4.dp
     ) {
         TopAppBar(
-            title = {
-                Text(
-                    text = title,
-                    color = Color.White
-                )
-            },
+            title = { Text(text = title) },
             actions = actions,
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = ThemeColors.primary1,
-                titleContentColor = Color.White,
-                actionIconContentColor = Color.White,
-                navigationIconContentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ),
-            navigationIcon = navigationIcon
+            navigationIcon = {
+                if (showGoBack) {
+                    IconButton(onClick = { onNavIconClick?.invoke() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                        )
+                    }
+                }
+            }
         )
     }
 }

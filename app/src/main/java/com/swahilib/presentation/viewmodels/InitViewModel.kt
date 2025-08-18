@@ -1,9 +1,7 @@
 package com.swahilib.presentation.viewmodels
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
-import com.swahilib.core.utils.Preferences
 import com.swahilib.data.models.*
 import com.swahilib.domain.entity.*
 import com.swahilib.domain.repository.*
@@ -12,7 +10,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 import javax.inject.Inject
-import androidx.core.content.edit
 
 @HiltViewModel
 class InitViewModel @Inject constructor(
@@ -20,7 +17,7 @@ class InitViewModel @Inject constructor(
     private val proverbRepo: ProverbRepository,
     private val sayingRepo: SayingRepository,
     private val wordRepo: WordRepository,
-    private val sharedPreferences: SharedPreferences,
+    private val prefsRepo: PrefsRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -80,22 +77,24 @@ class InitViewModel @Inject constructor(
     fun saveData() {
         viewModelScope.launch {
             _uiState.emit(UiState.Saving)
+            try {
+                val idiomsJob = async { saveIdioms() }
+                val proverbsJob = async { saveProverbs() }
+                val sayingsJob = async { saveSayings() }
+                val wordsJob = async { saveWords() }
 
-            val idiomsJob = async { saveIdioms() }
-            val proverbsJob = async { saveProverbs() }
-            val sayingsJob = async { saveSayings() }
-            val wordsJob = async { saveWords() }
+                idiomsJob.await()
+                proverbsJob.await()
+                sayingsJob.await()
+                wordsJob.await()
 
-            idiomsJob.await()
-            proverbsJob.await()
-            sayingsJob.await()
-            wordsJob.await()
-
-            sharedPreferences.edit(commit = true) {
-                putBoolean(Preferences.IS_DATA_LOADED, true)
+                prefsRepo.isDataLoaded = true
+                _uiState.emit(UiState.Saved)
+            } catch (e: Exception) {
+                prefsRepo.isDataLoaded = false
+                Log.e("SaveSongs", "Failed to save data", e)
+                _uiState.emit(UiState.Error("Failed to save data: ${e.message}"))
             }
-
-            _uiState.emit(UiState.Saved)
         }
     }
 

@@ -11,12 +11,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import com.swahilib.core.utils.Preferences
 import com.swahilib.domain.entity.UiState
 import com.swahilib.domain.entity.homeTabs
 import com.swahilib.presentation.components.action.*
 import com.swahilib.presentation.viewmodels.HomeViewModel
 import androidx.core.content.edit
+import com.swahilib.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -25,9 +25,6 @@ fun HomeScreen(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
-    val prefs = remember {
-        context.getSharedPreferences(Preferences.PREFERENCE_FILE, Context.MODE_PRIVATE)
-    }
 
     var fetchData by rememberSaveable { mutableStateOf(false) }
     if (!fetchData) {
@@ -35,7 +32,7 @@ fun HomeScreen(
         fetchData = true
     }
 
-    val lastTabIndex = prefs.getInt(Preferences.LAST_HOME_TAB, 0)
+    val lastTabIndex = viewModel.lastHomeTab
     var selectedTabIndex by rememberSaveable { mutableStateOf(lastTabIndex) }
     val selectedTab = homeTabs[selectedTabIndex]
 
@@ -63,12 +60,15 @@ fun HomeScreen(
                 )
             } else {
                 AppTopBar(
-                    title = "SwahiLib - Kamusi ya Kiswahili",
+                    title = "SwahiLib",
                     actions = {
                         if (uiState != UiState.Loading) {
                             IconButton(onClick = { isSearching = true }) {
-                                Icon(Icons.Filled.Search, contentDescription = "Search")
+                                Icon(Icons.Filled.Search, contentDescription = "")
                             }
+                        }
+                        IconButton(onClick = { navController.navigate(Routes.SETTINGS) }) {
+                            Icon(Icons.Filled.Settings, contentDescription = "")
                         }
                     }
                 )
@@ -83,7 +83,7 @@ fun HomeScreen(
                 selectedLetter = selectedLetter,
                 onTabSelected = { tab ->
                     val tabIndex = homeTabs.indexOf(tab)
-                    prefs.edit { putInt(Preferences.LAST_HOME_TAB, tabIndex) }
+//                    prefs.edit { putInt(Preferences.LAST_HOME_TAB, tabIndex) }
                     selectedTabIndex = tabIndex
                     selectedLetter = ""
                     viewModel.filterData(homeTabs[tabIndex], "")

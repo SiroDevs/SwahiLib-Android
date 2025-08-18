@@ -3,6 +3,7 @@ package com.swahilib.presentation.screens.viewer.saying
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
@@ -21,7 +22,7 @@ fun SayingView(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(ThemeColors.accent0)
+            .background(MaterialTheme.colorScheme.onPrimary)
     ) {
         LazyColumn(state = scrollState) {
             item {

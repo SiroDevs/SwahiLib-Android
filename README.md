@@ -4,7 +4,7 @@
 
 This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed by **Supabase** for remote data.
 
-> 🔗 iOS Version Repo: [@SiroDaves/SongLib-iOS](https://github.com/SiroDaves/SongLib-iOS)
+> 🔗 iOS Version Repo: [@SiroDaves/SwahiLib-iOS](https://github.com/SiroDaves/SwahiLib-iOS)
 
 <a href='https://play.google.com/store/apps/details?id=com.swahilib'>
   <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width='200'/>
@@ -47,8 +47,8 @@ This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/SiroDaves/SongLib-Android.git
-cd SongLib-Android
+git clone https://github.com/SiroDaves/SwahiLib-Android.git
+cd SwahiLibLib-Android
 ```
 
 ### 2. Set up Supabase Configuration
