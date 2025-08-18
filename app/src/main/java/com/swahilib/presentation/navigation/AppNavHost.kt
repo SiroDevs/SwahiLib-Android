@@ -15,14 +15,14 @@ import com.swahilib.presentation.screens.viewer.idiom.IdiomScreen
 import com.swahilib.presentation.screens.viewer.proverb.ProverbScreen
 import com.swahilib.presentation.screens.viewer.saying.SayingScreen
 import com.swahilib.presentation.screens.viewer.word.WordScreen
-import com.swahilib.presentation.theme.ThemeManager
+import com.swahilib.domain.repository.ThemeRepository
 import com.swahilib.presentation.viewmodels.*
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
-    themeManager: ThemeManager
+    themeRepo: ThemeRepository
 ) {
     NavHost(
         navController = navController,
@@ -108,7 +108,7 @@ fun AppNavHost(
         composable(Routes.SETTINGS) {
             SettingsScreen(
                 navController = navController,
-                themeManager = themeManager,
+                themeRepo = themeRepo,
             )
         }
 

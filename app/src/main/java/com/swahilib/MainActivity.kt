@@ -1,12 +1,13 @@
 package com.swahilib
 
-import android.os.Bundle
+import android.os.*
 import androidx.activity.*
 import androidx.activity.compose.setContent
-import androidx.annotation.Keep
+import androidx.annotation.*
 import androidx.compose.foundation.*
 import androidx.compose.ui.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.swahilib.domain.repository.*
 import com.swahilib.presentation.navigation.*
 import com.swahilib.presentation.theme.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,13 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @Keep
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
         setContent {
-            val themeManager: ThemeManager = hiltViewModel()
-            val themeMode = themeManager.selectedTheme
+            val themeRepo: ThemeRepository = hiltViewModel()
+            val themeMode = themeRepo.selectedTheme
             val isDarkTheme = when (themeMode) {
                 ThemeMode.DARK -> true
                 ThemeMode.LIGHT -> false
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
             }
 
             AppTheme(useDarkTheme = isDarkTheme) {
-                AppNavHost(themeManager = themeManager)
+                AppNavHost(themeRepo = themeRepo)
             }
         }
     }
