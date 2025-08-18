@@ -67,26 +67,6 @@ fun SettingsScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            SettingsSectionTitle("Slides")
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Default.Swipe, contentDescription = "slides"
-                    )
-                },
-                headlineContent = { Text("Song Slides") },
-                supportingContent = { Text("Swipe verses horizontally") },
-                trailingContent = {
-                    Switch(
-                        checked = viewModel.horizontalSlides,
-                        onCheckedChange = {
-                            viewModel.updateHorizontalSlides(it)
-                        }
-                    )
-                }
-            )
-            HorizontalDivider()
-
             SettingsSectionTitle("Mwonekano")
             ListItem(
                 leadingContent = {

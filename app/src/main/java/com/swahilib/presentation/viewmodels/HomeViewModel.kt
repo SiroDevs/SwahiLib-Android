@@ -16,6 +16,7 @@ class HomeViewModel @Inject constructor(
     private val proverbRepo: ProverbRepository,
     private val sayingRepo: SayingRepository,
     private val wordRepo: WordRepository,
+    private val prefsRepo: PrefsRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -35,6 +36,8 @@ class HomeViewModel @Inject constructor(
     private val _allWords = MutableStateFlow<List<Word>>(emptyList())
     private val _filteredWords = MutableStateFlow<List<Word>>(emptyList())
     val filteredWords: StateFlow<List<Word>> get() = _filteredWords
+
+    val lastHomeTab = prefsRepo.lastHomeTab
 
     fun fetchData() {
         _uiState.tryEmit(UiState.Loading)

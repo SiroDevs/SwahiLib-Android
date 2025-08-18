@@ -106,8 +106,10 @@ fun AppNavHost(
         }
 
         composable(Routes.SETTINGS) {
+            val viewModel: SettingsViewModel = hiltViewModel()
             SettingsScreen(
                 navController = navController,
+                viewModel = viewModel,
                 themeRepo = themeRepo,
             )
         }

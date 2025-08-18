@@ -14,27 +14,11 @@ class SettingsViewModel @Inject constructor(
 //    private val bookRepo: BookRepository,
 //    private val songRepo: SongRepository,
 ) : ViewModel() {
-
-    var horizontalSlides by mutableStateOf(prefsRepo.horizontalSlides)
-        private set
-
-    fun updateHorizontalSlides(enabled: Boolean) {
-        horizontalSlides = enabled
-        prefsRepo.horizontalSlides = enabled
-    }
-
-    fun updateSelection(enabled: Boolean) {
-        prefsRepo.initialBooks = prefsRepo.selectedBooks
-        prefsRepo.selectAfresh = enabled
-    }
-
     fun clearData() {
         viewModelScope.launch {
 //            bookRepo.deleteAllBooks()
 //            songRepo.deleteAllSongs()
             prefsRepo.isDataLoaded = false
-            prefsRepo.isDataSelected = false
-            prefsRepo.selectedBooks = ""
         }
     }
 }
