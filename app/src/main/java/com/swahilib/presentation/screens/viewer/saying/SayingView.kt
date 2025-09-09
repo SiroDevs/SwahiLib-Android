@@ -7,9 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import com.swahilib.presentation.components.general.CollapsingHeader
-import com.swahilib.presentation.components.general.MeaningsView
-import com.swahilib.presentation.theme.ThemeColors
+import com.swahilib.presentation.components.general.*
 
 @Composable
 fun SayingView(

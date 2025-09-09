@@ -13,7 +13,6 @@ import com.swahilib.data.models.Proverb
 import com.swahilib.presentation.components.general.CollapsingHeader
 import com.swahilib.presentation.components.general.MeaningsView
 import com.swahilib.presentation.components.listitems.SynonymItem
-import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.ProverbViewModel
 
 @Composable
@@ -53,7 +52,7 @@ fun ProverbView(
                                 }
                             },
                             fontSize = 20.sp,
-                            color = ThemeColors.primary1,
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 10.dp)
                         )
                     }
@@ -64,7 +63,7 @@ fun ProverbView(
                             text = if (synonyms.size == 1) "KISAWE" else "VISAWE ${synonyms.size}",
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold,
-                            color = ThemeColors.primary1,
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 10.dp)
                         )
                         ProverbSynonyms(

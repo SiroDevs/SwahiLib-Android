@@ -12,9 +12,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.swahilib.domain.entity.HomeTab
-import com.swahilib.domain.entity.homeTabs
-import com.swahilib.presentation.theme.ThemeColors
+import com.swahilib.domain.entity.*
 
 @Composable
 fun CustomTabTitles(
@@ -57,8 +55,8 @@ fun TabItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (isSelected) ThemeColors.primary1 else Color.Transparent
-    val contentColor = if (isSelected) Color.White else ThemeColors.primary1
+    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
+    val contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.primary
 
     Surface(
         modifier = Modifier
@@ -71,7 +69,7 @@ fun TabItem(
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(
             width = if (isSelected) 0.dp else 1.dp,
-            color = ThemeColors.primary1
+            color = MaterialTheme.colorScheme.primary
         )
     ) {
         Text(
