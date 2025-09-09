@@ -2,20 +2,6 @@ package com.swahilib.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-object ThemeColors {
-    val accent0 = Color(0xFFEEEEEE)
-    val accent1 = Color(0xFFBBDEFB)
-    val accent2 = Color(0xFF64B5F6)
-    val accent3 = Color(0xFF1E88E5)
-    val accent4 = Color(0xFF1E88E5)
-    val primary1 = Color(0xFF003297)
-    val primary2 = Color(0xFF00287A)
-    val primary3 = Color(0xFF001F5C)
-    val primaryDark1 = Color(0xFF002548)
-    val primaryDark2 = Color(0xFF001A33)
-    val primaryDark3 = Color(0xFF000F40)
-}
-
 object LightColors {
     val primary = Color(0xFF003297)
     val onPrimary = Color(0xFFBBDEFB)
@@ -39,7 +25,7 @@ object LightColors {
     val onSurface = Color(0xFF002548)
     val surfaceVariant = Color(0xFFBBDEFB)
     val onSurfaceVariant = Color(0xFF001A33)
-    val outline = Color(0xFF1E88E5).copy(alpha = 0.6f)
+    val outline = Color(0xFF1E88E5)
     val inverseOnSurface = Color(0xFFEEEEEE)
     val inverseSurface = Color(0xFF002548)
     val inversePrimary = Color(0xFFEEEEEE)
@@ -72,7 +58,7 @@ object DarkColors {
     val onSurface = Color(0xFFEEEEEE)
     val surfaceVariant = Color(0xFF001A33)
     val onSurfaceVariant = Color(0xFFBBDEFB)
-    val outline = Color(0xFFBBDEFB).copy(alpha = 0.6f)
+    val outline = Color(0xFFBBDEFB)
     val inverseOnSurface = Color(0xFF000F40)
     val inverseSurface = Color(0xFFEEEEEE)
     val inversePrimary = Color(0xFF003297)

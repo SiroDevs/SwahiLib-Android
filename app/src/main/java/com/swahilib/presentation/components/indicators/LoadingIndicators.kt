@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.airbnb.lottie.compose.*
-import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
 fun LoadingState(
@@ -53,7 +52,7 @@ fun LoadingState(
                 text = title,
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
-                color = ThemeColors.primaryDark1,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 textAlign = TextAlign.Center
             )
 
@@ -66,7 +65,7 @@ fun LoadingState(
                 ) {
                     LinearProgressIndicator(
                         progress = (progressValue / 100f).coerceIn(0f, 1f),
-                        color = ThemeColors.primary1,
+                        color = MaterialTheme.colorScheme.primary,
                         trackColor = Color.LightGray.copy(alpha = 0.3f),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -78,7 +77,7 @@ fun LoadingState(
                         text = "$progressValue%",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
-                        color = ThemeColors.primaryDark3,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier.align(Alignment.End)
                     )
                 }

@@ -14,7 +14,6 @@ import com.swahilib.domain.entity.ViewerState
 import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.components.indicators.*
-import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.SayingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +64,7 @@ fun SayingScreen(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
-                .background(ThemeColors.accent2)
+                .background(MaterialTheme.colorScheme.onPrimary)
         ) {
             when (viewerState) {
                 is ViewerState.Error -> ErrorState(

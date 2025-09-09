@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.*
-import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
 fun SynonymItem(
@@ -34,19 +33,19 @@ fun SynonymItem(
             Icon(
                 Icons.Default.ArrowCircleRight,
                 contentDescription = null,
-                tint = ThemeColors.primary1
+                tint = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = title,
                 fontSize = 18.sp,
-                color = ThemeColors.primary1,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.weight(1f)
             )
             Icon(
                 Icons.Default.ArrowForward,
                 contentDescription = null,
-                tint = ThemeColors.primary1
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }

@@ -17,7 +17,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.*
-import com.swahilib.presentation.theme.ThemeColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,7 +112,7 @@ fun SearchTopBar(
         navigationIcon = {},
         actions = {},
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = ThemeColors.primary1,
+            containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = Color.White
         )
     )

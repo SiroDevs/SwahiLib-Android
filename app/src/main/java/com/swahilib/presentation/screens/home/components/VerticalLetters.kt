@@ -12,7 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
 fun VerticalLetters(
@@ -52,8 +51,8 @@ fun LetterItem(
     isSelected: Boolean,
     onClick: () -> Unit,
 ) {
-    val backgroundColor = if (isSelected) ThemeColors.primary1 else Color.White
-    val contentColor = if (isSelected) Color.White else ThemeColors.primary1
+    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.White
+    val contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.primary
 
     Surface(
         modifier = Modifier
@@ -63,7 +62,7 @@ fun LetterItem(
         color = backgroundColor,
         border = BorderStroke(
             width = if (isSelected) 0.dp else 1.dp,
-            color = ThemeColors.primary1.copy(alpha = 0.5f)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
         ),
         shadowElevation = 5.dp
     ) {

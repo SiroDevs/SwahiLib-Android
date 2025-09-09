@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.text.*
-import com.swahilib.presentation.theme.ThemeColors
 
 @Composable
 fun MeaningsView(meanings: List<String>) {
@@ -34,13 +33,13 @@ fun MeaningsView(meanings: List<String>) {
                             append(maana)
                         },
                         fontSize = 22.sp,
-                        color = ThemeColors.primary1,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(start = 5.dp, bottom = if (mfano != null) 8.dp else 0.dp)
                     )
 
                     if (!mfano.isNullOrEmpty()) {
                         Divider(
-                            color = ThemeColors.primary1.copy(alpha = 0.3f),
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                             thickness = 1.dp,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
@@ -55,7 +54,7 @@ fun MeaningsView(meanings: List<String>) {
                                 }
                             },
                             fontSize = 18.sp,
-                            color = ThemeColors.primary1,
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 15.dp)
                         )
                     }

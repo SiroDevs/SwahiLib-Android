@@ -13,7 +13,6 @@ import com.swahilib.presentation.components.indicators.EmptyState
 import com.swahilib.presentation.components.indicators.ErrorState
 import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.navigation.Routes
-import com.swahilib.presentation.theme.ThemeColors
 import com.swahilib.presentation.viewmodels.InitViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +44,7 @@ fun InitScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(color = ThemeColors.accent2)
+                    .background(color = MaterialTheme.colorScheme.onPrimary)
             ) {
                 when (uiState) {
                     is UiState.Error -> ErrorState(
