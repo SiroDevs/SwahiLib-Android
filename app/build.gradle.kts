@@ -152,6 +152,10 @@ dependencies {
     implementation(libs.ktor.client.android)     //  Ktor HTTP client for Android
     implementation(libs.kotlinx.serialization.json)     //  Kotlin Serialization for Android
 
+    // Subscriptions
+    implementation(libs.android.billing)     //  Play Billing Library
+    implementation(libs.revenuecat.purchases)     //  Revenue Cat Purchases
+
     // Testing - Unit Tests
     testImplementation(libs.junit)     //  JUnit for unit testing
 
