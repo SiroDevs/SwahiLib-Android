@@ -46,6 +46,7 @@ android {
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
         buildConfigField("String", "RevenueCatId", "\"${localProperties.getProperty("REVENUE_CAT_ID")}\"")
+        buildConfigField("String", "RcPublicApiKey", "\"${localProperties.getProperty("RC_PUBLIC_API_KEY")}\"")
         buildConfigField("String", "SentryDsn", "\"${localProperties.getProperty("SENTRY_DSN")}\"")
     }
 
