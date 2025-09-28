@@ -13,7 +13,7 @@ class SwahiLibApp : Application() {
         super.onCreate()
 
         Purchases.configure(
-            PurchasesConfiguration.Builder(this, "your_public_sdk_key")
+            PurchasesConfiguration.Builder(this, BuildConfig.RcApiKey)
                 .build()
         )
 

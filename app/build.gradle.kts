@@ -45,8 +45,8 @@ android {
 
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
-        buildConfigField("String", "RevenueCatId", "\"${localProperties.getProperty("REVENUE_CAT_ID")}\"")
-        buildConfigField("String", "RcPublicApiKey", "\"${localProperties.getProperty("RC_PUBLIC_API_KEY")}\"")
+        buildConfigField("String", "RcCatId", "\"${localProperties.getProperty("REVENUECAT_ID")}\"")
+        buildConfigField("String", "RcApiKey", "\"${localProperties.getProperty("REVENUECAT_API_KEY")}\"")
         buildConfigField("String", "SentryDsn", "\"${localProperties.getProperty("SENTRY_DSN")}\"")
     }
 
@@ -127,7 +127,8 @@ dependencies {
     implementation(libs.androidx.compose.livedata)     //  LiveData support in Compose
 
     // Jetpack Compose - Tooling & Preview
-    implementation(libs.androidx.ui.tooling.preview)     //  Compose UI preview support
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.compiler)     //  Compose UI preview support
     debugImplementation(libs.androidx.ui.tooling)     //  Compose UI tools (debug only)
     debugImplementation(libs.androidx.ui.test.manifest)     //  Compose test manifest (debug only)
     implementation(libs.lottie.compose)     //  Lottie loader
