@@ -45,7 +45,8 @@ android {
 
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
-        buildConfigField("String", "RevenueCatId", "\"${localProperties.getProperty("REVENUE_CAT_ID")}\"")
+        buildConfigField("String", "RcCatId", "\"${localProperties.getProperty("REVENUECAT_ID")}\"")
+        buildConfigField("String", "RcApiKey", "\"${localProperties.getProperty("REVENUECAT_API_KEY")}\"")
         buildConfigField("String", "SentryDsn", "\"${localProperties.getProperty("SENTRY_DSN")}\"")
     }
 
@@ -126,7 +127,8 @@ dependencies {
     implementation(libs.androidx.compose.livedata)     //  LiveData support in Compose
 
     // Jetpack Compose - Tooling & Preview
-    implementation(libs.androidx.ui.tooling.preview)     //  Compose UI preview support
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.compiler)     //  Compose UI preview support
     debugImplementation(libs.androidx.ui.tooling)     //  Compose UI tools (debug only)
     debugImplementation(libs.androidx.ui.test.manifest)     //  Compose test manifest (debug only)
     implementation(libs.lottie.compose)     //  Lottie loader
@@ -151,6 +153,10 @@ dependencies {
     implementation(libs.jan.tennert.supabase.postgrest)     //  Supabase PostgREST support
     implementation(libs.ktor.client.android)     //  Ktor HTTP client for Android
     implementation(libs.kotlinx.serialization.json)     //  Kotlin Serialization for Android
+
+    // Subscriptions
+    implementation(libs.android.billing)     //  Play Billing Library
+    implementation(libs.revenuecat.purchases)     //  Revenue Cat Purchases
 
     // Testing - Unit Tests
     testImplementation(libs.junit)     //  JUnit for unit testing
