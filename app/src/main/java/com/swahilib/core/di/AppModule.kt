@@ -55,6 +55,11 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideSubscriptionRepository(
+    ): SubscriptionsRepository = SubscriptionsRepository()
+
+    @Provides
+    @Singleton
     fun provideWordRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,

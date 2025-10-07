@@ -24,6 +24,14 @@ class PrefsRepository @Inject constructor(
         )
         set(value) = prefs.edit { putString(PrefConstants.THEME_MODE, value.name) }
 
+    var isReviewDone: Boolean
+        get() = prefs.getBoolean(PrefConstants.IS_REVIEW_DONE, false)
+        set(value) = prefs.edit { putBoolean(PrefConstants.IS_REVIEW_DONE, value) }
+
+    var installDate: Long
+        get() = prefs.getLong(PrefConstants.INSTALL_DATE, 0L)
+        set(value) = prefs.edit { putLong(PrefConstants.INSTALL_DATE, value) }
+
     var lastHomeTab: Int
         get() = prefs.getInt(PrefConstants.LAST_HOME_TAB, 0)
         set(value) = prefs.edit { putInt(PrefConstants.LAST_HOME_TAB, value) }

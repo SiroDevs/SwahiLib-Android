@@ -1,6 +1,8 @@
 package com.swahilib.presentation.viewmodels
 
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
+import com.swahilib.core.helpers.NetworkUtils
 import com.swahilib.data.models.*
 import com.swahilib.domain.entity.*
 import com.swahilib.domain.repository.*
@@ -16,6 +18,7 @@ class HomeViewModel @Inject constructor(
     private val proverbRepo: ProverbRepository,
     private val sayingRepo: SayingRepository,
     private val wordRepo: WordRepository,
+    private val subsRepo: SubscriptionsRepository,
     private val prefsRepo: PrefsRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
@@ -38,6 +41,11 @@ class HomeViewModel @Inject constructor(
     val filteredWords: StateFlow<List<Word>> get() = _filteredWords
 
     val lastHomeTab = prefsRepo.lastHomeTab
+    private val _isProUser = MutableStateFlow(false)
+    val isProUser: StateFlow<Boolean> = _isProUser.asStateFlow()
+
+    private val _isOnline = MutableStateFlow(true)
+    val isOnline: StateFlow<Boolean> = _isOnline.asStateFlow()
 
     fun fetchData() {
         _uiState.tryEmit(UiState.Loading)
@@ -56,6 +64,17 @@ class HomeViewModel @Inject constructor(
             _filteredWords.value = _allWords.value
 
             _uiState.tryEmit(UiState.Filtered)
+        }
+    }
+
+    fun checkSubscription() {
+        _uiState.tryEmit(UiState.RcChecking)
+        viewModelScope.launch {
+            subsRepo.isProUser() { isActive ->
+                _isProUser.value = isActive
+            }
+
+            _uiState.tryEmit(UiState.RcChecked)
         }
     }
 

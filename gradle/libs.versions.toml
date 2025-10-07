@@ -61,7 +61,8 @@ ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "k
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie-compose" }
 android-billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
-revenuecat-purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "revenuecat" }
+revenuecat = { module = "com.revenuecat.purchases:purchases", version.ref = "revenuecat" }
+revenuecat-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "revenuecat" }
 androidx-compiler = { group = "androidx.databinding", name = "compiler", version.ref = "compiler" }
 
 [plugins]

@@ -33,13 +33,13 @@ fun SplashContent() {
                     Image(
                         painter = painterResource(id = R.drawable.app_icon),
                         contentDescription = "",
-                        modifier = Modifier.size(200.dp)
+                        modifier = Modifier.size(150.dp)
                     )
                     Spacer(Modifier.height(10.dp))
                     Text(
                         text = AppConstants.APP_TITLE,
                         style = TextStyle(
-                            fontSize = 50.sp,
+                            fontSize = 35.sp,
                             letterSpacing = 5.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
@@ -48,8 +48,8 @@ fun SplashContent() {
                     Text(
                         text = AppConstants.APP_TITLE2,
                         style = TextStyle(
-                            fontSize = 35.sp,
-                            letterSpacing = 5.sp,
+                            fontSize = 22.sp,
+                            letterSpacing = 3.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -80,7 +80,7 @@ fun KiswahiliKitukuzwe() {
         Text(
             text = AppConstants.APP_TAGLINE,
             style = TextStyle(
-                fontSize = 22.sp,
+                fontSize = 16.sp,
                 letterSpacing = 4.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -98,7 +98,7 @@ fun AppCredits() {
         Text(
             text = AppConstants.APP_CREDITS,
             style = TextStyle(
-                fontSize = 18.sp,
+                fontSize = 12.sp,
                 letterSpacing = 3.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
