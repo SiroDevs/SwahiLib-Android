@@ -3,6 +3,8 @@ package com.swahilib.domain.entity
 sealed class UiState {
     object Idle : UiState()
     object Loading : UiState()
+    object RcChecking : UiState()
+    object RcChecked : UiState()
     object Loaded : UiState()
     object Filtered : UiState()
     object Saving : UiState()

@@ -1,6 +1,5 @@
 package com.swahilib.presentation.screens.home
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -10,12 +9,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entity.UiState
 import com.swahilib.domain.entity.homeTabs
 import com.swahilib.presentation.components.action.*
 import com.swahilib.presentation.viewmodels.HomeViewModel
-import androidx.core.content.edit
+import com.swahilib.core.helpers.NetworkUtils
 import com.swahilib.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -26,12 +27,6 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
 
-    var fetchData by rememberSaveable { mutableStateOf(false) }
-    if (!fetchData) {
-        viewModel.fetchData()
-        fetchData = true
-    }
-
     val lastTabIndex = viewModel.lastHomeTab
     var selectedTabIndex by rememberSaveable { mutableStateOf(lastTabIndex) }
     val selectedTab = homeTabs[selectedTabIndex]
@@ -41,6 +36,31 @@ fun HomeScreen(
     var isSearching by rememberSaveable { mutableStateOf(false) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedLetter by rememberSaveable { mutableStateOf("") }
+
+    val isProUser by viewModel.isProUser.collectAsState()
+    var showPaywall by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchData()
+        if (NetworkUtils.isNetworkAvailable(context)) {
+            viewModel.checkSubscription()
+            showPaywall = !isProUser
+        }
+    }
+
+    if (showPaywall) {
+        Dialog(
+            onDismissRequest = { showPaywall = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            PaywallSheet(
+                isProUser = isProUser,
+                onDismissRequest = {
+                    showPaywall = false
+                }
+            )
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -83,7 +103,6 @@ fun HomeScreen(
                 selectedLetter = selectedLetter,
                 onTabSelected = { tab ->
                     val tabIndex = homeTabs.indexOf(tab)
-//                    prefs.edit { putInt(Preferences.LAST_HOME_TAB, tabIndex) }
                     selectedTabIndex = tabIndex
                     selectedLetter = ""
                     viewModel.filterData(homeTabs[tabIndex], "")

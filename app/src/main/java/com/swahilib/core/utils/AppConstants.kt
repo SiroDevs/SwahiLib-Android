@@ -16,9 +16,8 @@ object PrefConstants {
     const val THEME_MODE = "theme_mode"
     const val IS_DATA_LOADED = "is_data_loaded"
     const val INSTALL_DATE = "install_date"
-    const val REVIEW_REQUESTED = "review_requested"
-    const val IS_USER_A_KID = "is_user_a_kid"
     const val USAGE_TIME = "usage_time"
+    const val IS_REVIEW_DONE = "is_review_done"
     const val LAST_HOME_TAB = "last_home_tab"
 }
 

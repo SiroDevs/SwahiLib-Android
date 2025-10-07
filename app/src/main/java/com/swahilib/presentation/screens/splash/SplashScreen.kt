@@ -10,13 +10,17 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(navController: NavHostController) {
     val context = LocalContext.current
-    val prefs = remember { PrefsRepository(context) }
+    val prefsRepo = remember { PrefsRepository(context) }
 
     LaunchedEffect(Unit) {
         delay(3000)
+        val installTime = prefsRepo.installDate
+        if (installTime < 0) {
+            prefsRepo.installDate = System.currentTimeMillis()
+        }
 
         val nextRoute = when {
-            prefs.isDataLoaded -> Routes.HOME
+            prefsRepo.isDataLoaded -> Routes.HOME
             else -> Routes.INIT
         }
 

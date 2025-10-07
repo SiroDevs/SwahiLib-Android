@@ -103,6 +103,10 @@ sentry {
     authToken.set(localProperties.getProperty("SENTRY_AUTH_TOKEN"))
 }
 
+configurations.all {
+    exclude(group = "com.google.guava", module = "listenablefuture")
+}
+
 dependencies {
     // Core AndroidX
     implementation(libs.androidx.core.ktx)     //  Kotlin extensions for core Android APIs
@@ -156,7 +160,8 @@ dependencies {
 
     // Subscriptions
     implementation(libs.android.billing)     //  Play Billing Library
-    implementation(libs.revenuecat.purchases)     //  Revenue Cat Purchases
+    implementation(libs.revenuecat)     //  Revenue Cat Purchases
+    implementation(libs.revenuecat.ui)     //  Revenue Cat UI
 
     // Testing - Unit Tests
     testImplementation(libs.junit)     //  JUnit for unit testing
