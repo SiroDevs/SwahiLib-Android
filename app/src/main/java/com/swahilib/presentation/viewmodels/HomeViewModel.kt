@@ -1,8 +1,6 @@
 package com.swahilib.presentation.viewmodels
 
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
-import com.swahilib.core.helpers.NetworkUtils
 import com.swahilib.data.models.*
 import com.swahilib.domain.entity.*
 import com.swahilib.domain.repository.*
@@ -18,8 +16,7 @@ class HomeViewModel @Inject constructor(
     private val proverbRepo: ProverbRepository,
     private val sayingRepo: SayingRepository,
     private val wordRepo: WordRepository,
-    private val subsRepo: SubscriptionsRepository,
-    private val prefsRepo: PrefsRepository,
+    private val prefsRepo: PreferencesRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -40,17 +37,16 @@ class HomeViewModel @Inject constructor(
     private val _filteredWords = MutableStateFlow<List<Word>>(emptyList())
     val filteredWords: StateFlow<List<Word>> get() = _filteredWords
 
-    val lastHomeTab = prefsRepo.lastHomeTab
-    private val _isProUser = MutableStateFlow(false)
-    val isProUser: StateFlow<Boolean> = _isProUser.asStateFlow()
+    private val _canShowPaywall = MutableStateFlow(false)
+    val canShowPaywall: StateFlow<Boolean> = _canShowPaywall.asStateFlow()
 
-    private val _isOnline = MutableStateFlow(true)
-    val isOnline: StateFlow<Boolean> = _isOnline.asStateFlow()
+    val lastHomeTab = prefsRepo.lastHomeTab
 
     fun fetchData() {
         _uiState.tryEmit(UiState.Loading)
 
         viewModelScope.launch {
+            _canShowPaywall.value = prefsRepo.canShowPaywall
             _allIdioms.value = idiomRepo.fetchLocalData()
             _filteredIdioms.value = _allIdioms.value
 
@@ -64,17 +60,6 @@ class HomeViewModel @Inject constructor(
             _filteredWords.value = _allWords.value
 
             _uiState.tryEmit(UiState.Filtered)
-        }
-    }
-
-    fun checkSubscription() {
-        _uiState.tryEmit(UiState.RcChecking)
-        viewModelScope.launch {
-            subsRepo.isProUser() { isActive ->
-                _isProUser.value = isActive
-            }
-
-            _uiState.tryEmit(UiState.RcChecked)
         }
     }
 

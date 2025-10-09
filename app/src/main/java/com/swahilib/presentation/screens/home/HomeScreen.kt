@@ -9,11 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.*
 import androidx.navigation.NavHostController
-import com.swahilib.domain.entity.UiState
-import com.swahilib.domain.entity.homeTabs
+import com.revenuecat.purchases.ui.revenuecatui.*
+import com.revenuecat.purchases.ui.revenuecatui.customercenter.CustomerCenter
+import com.swahilib.domain.entity.*
 import com.swahilib.presentation.components.action.*
 import com.swahilib.presentation.viewmodels.HomeViewModel
 import com.swahilib.core.helpers.NetworkUtils
@@ -25,8 +25,6 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navController: NavHostController,
 ) {
-    val context = LocalContext.current
-
     val lastTabIndex = viewModel.lastHomeTab
     var selectedTabIndex by rememberSaveable { mutableStateOf(lastTabIndex) }
     val selectedTab = homeTabs[selectedTabIndex]
@@ -37,15 +35,12 @@ fun HomeScreen(
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedLetter by rememberSaveable { mutableStateOf("") }
 
-    val isProUser by viewModel.isProUser.collectAsState()
+    val canShowPaywall by viewModel.canShowPaywall.collectAsState()
     var showPaywall by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.fetchData()
-        if (NetworkUtils.isNetworkAvailable(context)) {
-            viewModel.checkSubscription()
-            showPaywall = !isProUser
-        }
+        showPaywall = canShowPaywall
     }
 
     if (showPaywall) {
@@ -53,12 +48,18 @@ fun HomeScreen(
             onDismissRequest = { showPaywall = false },
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
-            PaywallSheet(
-                isProUser = isProUser,
-                onDismissRequest = {
-                    showPaywall = false
+            val paywallOptions = remember {
+                PaywallOptions.Builder(dismissRequest = { showPaywall = false })
+                    .setShouldDisplayDismissButton(true)
+                    .build()
+            }
+            Box() {
+                if (canShowPaywall) {
+                    Paywall(paywallOptions)
+                } else {
+                    CustomerCenter(onDismiss = { showPaywall = false })
                 }
-            )
+            }
         }
     }
 

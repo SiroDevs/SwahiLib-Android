@@ -19,6 +19,9 @@ object PrefConstants {
     const val USAGE_TIME = "usage_time"
     const val IS_REVIEW_DONE = "is_review_done"
     const val LAST_HOME_TAB = "last_home_tab"
+    const val IS_PRO_USER = "isProUser"
+    const val CAN_SHOW_PAYWALL = "canShowPaywall"
+    const val LAST_APP_OPEN_TIME = "lastAppOpenTime"
 }
 
 object Collections {

@@ -17,7 +17,7 @@ class InitViewModel @Inject constructor(
     private val proverbRepo: ProverbRepository,
     private val sayingRepo: SayingRepository,
     private val wordRepo: WordRepository,
-    private val prefsRepo: PrefsRepository,
+    private val prefsRepo: PreferencesRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()

@@ -14,7 +14,7 @@ enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
 @HiltViewModel
 class ThemeRepository @Inject constructor(
-    private val prefs: PrefsRepository
+    private val prefs: PreferencesRepository
 ) : ViewModel() {
     var selectedTheme by mutableStateOf(prefs.appThemeMode)
         private set
