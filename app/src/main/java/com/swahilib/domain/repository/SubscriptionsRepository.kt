@@ -6,14 +6,20 @@ import javax.inject.*
 
 @Singleton
 class SubscriptionsRepository @Inject constructor() {
-    fun isProUser(completion: (Boolean) -> Unit) {
+    suspend fun isProUser(isOnline: Boolean, completion: (Boolean) -> Unit) {
+        val fetchPolicy = if (isOnline) {
+            CacheFetchPolicy.FETCH_CURRENT
+        } else {
+            CacheFetchPolicy.CACHE_ONLY
+        }
         Purchases.sharedInstance.getCustomerInfoWith(
-            fetchPolicy = CacheFetchPolicy.FETCH_CURRENT,
+            fetchPolicy = fetchPolicy,
             onError = { error ->
                 completion(false)
             },
             onSuccess = { customerInfo ->
-                val isActive = customerInfo.entitlements[AppConstants.ENTITLEMENTS]?.isActive == true
+                val isActive =
+                    customerInfo.entitlements[AppConstants.ENTITLEMENTS]?.isActive == true
                 completion(isActive)
             }
         )
