@@ -33,9 +33,8 @@ class SplashViewModel @Inject constructor(
                 } else {
                     checkSubscriptionAndTime(false)
                 }
-                determineNextRoute()
             } catch (e: Exception) {
-                determineNextRoute()
+                _isLoading.value = false
             } finally {
                 _isLoading.value = false
             }
@@ -50,12 +49,5 @@ class SplashViewModel @Inject constructor(
             }
         }
         prefsRepo.updateAppOpenTime()
-    }
-
-    private fun determineNextRoute() {
-        _nextRoute.value = when {
-            prefsRepo.isDataLoaded -> Routes.HOME
-            else -> Routes.INIT
-        }
     }
 }

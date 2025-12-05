@@ -14,8 +14,10 @@ import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import com.swahilib.R
 import com.swahilib.core.utils.AppConstants
+import com.swahilib.domain.repository.PreferencesRepository
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.viewmodels.SplashViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
@@ -23,15 +25,22 @@ fun SplashScreen(
     viewModel: SplashViewModel,
 ) {
     val context = LocalContext.current
-    val nextRoute by viewModel.nextRoute.collectAsState()
+    val prefs = remember { PreferencesRepository(context) }
     val isLoading by viewModel.isLoading.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.initializeApp(context)
     }
 
-    LaunchedEffect(isLoading, nextRoute) {
-        if (!isLoading && nextRoute != Routes.SPLASH) {
+    LaunchedEffect(Unit) {
+        delay(3000)
+
+        val nextRoute = when {
+            prefs.isDataLoaded -> Routes.HOME
+            else -> Routes.INIT
+        }
+
+        if (!isLoading) {
             navController.navigate(nextRoute) {
                 popUpTo(Routes.SPLASH) { inclusive = true }
             }
