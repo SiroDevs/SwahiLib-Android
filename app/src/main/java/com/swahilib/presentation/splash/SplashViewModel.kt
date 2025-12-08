@@ -1,13 +1,17 @@
-package com.swahilib.presentation.viewmodels
+package com.swahilib.presentation.splash
 
 import android.content.Context
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.swahilib.core.helpers.NetworkUtils
-import com.swahilib.domain.repository.*
+import com.swahilib.domain.repository.PreferencesRepository
+import com.swahilib.domain.repository.SubscriptionsRepository
 import com.swahilib.presentation.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

@@ -16,6 +16,14 @@ import com.swahilib.presentation.screens.viewer.proverb.ProverbScreen
 import com.swahilib.presentation.screens.viewer.saying.SayingScreen
 import com.swahilib.presentation.screens.viewer.word.WordScreen
 import com.swahilib.domain.repository.ThemeRepository
+import com.swahilib.presentation.home.HomeViewModel
+import com.swahilib.presentation.init.InitViewModel
+import com.swahilib.presentation.settings.SettingsViewModel
+import com.swahilib.presentation.splash.SplashViewModel
+import com.swahilib.presentation.viewer.idiom.IdiomViewModel
+import com.swahilib.presentation.viewer.proverb.ProverbViewModel
+import com.swahilib.presentation.viewer.saying.SayingViewModel
+import com.swahilib.presentation.viewer.word.WordViewModel
 import com.swahilib.presentation.viewmodels.*
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)

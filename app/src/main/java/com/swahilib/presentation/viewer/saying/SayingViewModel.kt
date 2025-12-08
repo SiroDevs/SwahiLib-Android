@@ -1,13 +1,16 @@
-package com.swahilib.presentation.viewmodels
+package com.swahilib.presentation.viewer.saying
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.swahilib.core.utils.cleanMeaning
-import com.swahilib.data.models.*
-import com.swahilib.domain.entity.*
-import com.swahilib.domain.repository.*
+import com.swahilib.data.models.Saying
+import com.swahilib.domain.entity.ViewerState
+import com.swahilib.domain.repository.SayingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

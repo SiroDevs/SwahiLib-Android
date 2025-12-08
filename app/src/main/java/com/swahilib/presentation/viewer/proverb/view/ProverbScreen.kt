@@ -1,27 +1,25 @@
-package com.swahilib.presentation.viewer.word
+package com.swahilib.presentation.viewer.proverb.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.swahilib.data.models.Word
+import com.swahilib.data.models.Proverb
 import com.swahilib.domain.entity.ViewerState
 import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.components.indicators.*
-import com.swahilib.presentation.viewmodels.WordViewModel
+import com.swahilib.presentation.viewer.proverb.ProverbViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WordScreen(
+fun ProverbScreen(
     navController: NavHostController,
-    viewModel: WordViewModel,
-    word: Word?,
+    viewModel: ProverbViewModel,
+    proverb: Proverb?,
 ) {
     val viewerState by viewModel.uiState.collectAsState()
     val title by viewModel.title.collectAsState()
@@ -30,8 +28,8 @@ fun WordScreen(
     val synonyms by viewModel.synonyms.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
 
-    LaunchedEffect(word) {
-        word?.let { viewModel.loadWord(it) }
+    LaunchedEffect(proverb) {
+        proverb?.let { viewModel.loadProverb(it) }
     }
 
     Scaffold(topBar = {
@@ -40,13 +38,13 @@ fun WordScreen(
                 title = "Kamusi ya Kiswahili",
                 actions = {
 //                    IconButton(onClick = {
-//                        word?.let {
-//                            viewModel.likeWord(it)
+//                        proverb?.let {
+//                            viewModel.likeProverb(it)
 //
 //                            val text = if (isLiked) {
-//                                "Neno: ${word.title} limeongezwa kwa vipendwa"
+//                                "Neno: ${proverb.title} limeongezwa kwa vipendwa"
 //                            } else {
-//                                "Neno: ${word.title} limeondolewa kwa vipendwa"
+//                                "Neno: ${proverb.title} limeondolewa kwa vipendwa"
 //                            }
 //                            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
 //                        }
@@ -73,7 +71,7 @@ fun WordScreen(
                     message = (viewerState as ViewerState.Error).message, onRetry = { })
 
                 ViewerState.Loaded -> {
-                    WordView(
+                    ProverbView(
                         viewModel = viewModel,
                         title = title,
                         conjugation = conjugation,

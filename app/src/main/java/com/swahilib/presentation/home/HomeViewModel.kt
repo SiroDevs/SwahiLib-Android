@@ -1,14 +1,24 @@
-package com.swahilib.presentation.viewmodels
+package com.swahilib.presentation.home
 
-import androidx.lifecycle.*
-import com.swahilib.data.models.*
-import com.swahilib.domain.entity.*
-import com.swahilib.domain.repository.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.swahilib.data.models.Idiom
+import com.swahilib.data.models.Proverb
+import com.swahilib.data.models.Saying
+import com.swahilib.data.models.Word
+import com.swahilib.domain.entity.HomeTab
+import com.swahilib.domain.entity.UiState
+import com.swahilib.domain.repository.IdiomRepository
+import com.swahilib.domain.repository.PreferencesRepository
+import com.swahilib.domain.repository.ProverbRepository
+import com.swahilib.domain.repository.SayingRepository
+import com.swahilib.domain.repository.WordRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.collections.filter
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(

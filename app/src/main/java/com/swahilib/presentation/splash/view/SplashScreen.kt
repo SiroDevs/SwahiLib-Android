@@ -1,4 +1,4 @@
-package com.swahilib.presentation.splash
+package com.swahilib.presentation.splash.view
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -16,7 +16,7 @@ import com.swahilib.R
 import com.swahilib.core.utils.AppConstants
 import com.swahilib.domain.repository.PreferencesRepository
 import com.swahilib.presentation.navigation.Routes
-import com.swahilib.presentation.viewmodels.SplashViewModel
+import com.swahilib.presentation.splash.SplashViewModel
 import kotlinx.coroutines.delay
 
 @Composable

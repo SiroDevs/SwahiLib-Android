@@ -1,4 +1,4 @@
-package com.swahilib.presentation.viewer.word
+package com.swahilib.presentation.viewer.proverb.view
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -9,19 +9,20 @@ import androidx.compose.ui.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
-import com.swahilib.data.models.Word
-import com.swahilib.presentation.components.general.*
+import com.swahilib.data.models.Proverb
+import com.swahilib.presentation.components.general.CollapsingHeader
+import com.swahilib.presentation.components.general.MeaningsView
 import com.swahilib.presentation.components.listitems.SynonymItem
-import com.swahilib.presentation.viewmodels.WordViewModel
+import com.swahilib.presentation.viewer.proverb.ProverbViewModel
 
 @Composable
-fun WordView(
+fun ProverbView(
     modifier: Modifier = Modifier,
-    viewModel: WordViewModel,
+    viewModel: ProverbViewModel,
     title: String,
     conjugation: String,
     meanings: List<String>,
-    synonyms: List<Word>
+    synonyms: List<Proverb>
 ) {
     val scrollState = rememberLazyListState()
 
@@ -65,10 +66,10 @@ fun WordView(
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 10.dp)
                         )
-                        WordSynonyms(
+                        ProverbSynonyms(
                             synonyms = synonyms,
                             onSynonymClicked = { synonym ->
-                                viewModel.loadWord(synonym)
+                                viewModel.loadProverb(synonym)
                             }
                         )
                     }
@@ -79,9 +80,9 @@ fun WordView(
 }
 
 @Composable
-fun WordSynonyms(
-    synonyms: List<Word>,
-    onSynonymClicked: (Word) -> Unit
+fun ProverbSynonyms(
+    synonyms: List<Proverb>,
+    onSynonymClicked: (Proverb) -> Unit
 ) {
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
         synonyms.forEach { synonym ->

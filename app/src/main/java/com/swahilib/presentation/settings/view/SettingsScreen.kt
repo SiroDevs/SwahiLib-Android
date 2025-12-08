@@ -1,4 +1,4 @@
-package com.swahilib.presentation.settings
+package com.swahilib.presentation.settings.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,7 +12,7 @@ import com.swahilib.domain.repository.*
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.screens.settings.components.*
-import com.swahilib.presentation.viewmodels.SettingsViewModel
+import com.swahilib.presentation.settings.SettingsViewModel
 
 @Composable
 fun SettingsScreen(

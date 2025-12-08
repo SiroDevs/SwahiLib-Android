@@ -1,4 +1,4 @@
-package com.swahilib.presentation.home
+package com.swahilib.presentation.home.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -14,7 +14,7 @@ import com.swahilib.domain.entity.*
 import com.swahilib.presentation.screens.home.components.*
 import com.swahilib.presentation.components.listitems.*
 import com.swahilib.presentation.screens.home.lists.*
-import com.swahilib.presentation.viewmodels.HomeViewModel
+import com.swahilib.presentation.home.HomeViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

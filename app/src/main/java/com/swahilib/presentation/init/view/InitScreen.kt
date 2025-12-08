@@ -1,4 +1,4 @@
-package com.swahilib.presentation.init
+package com.swahilib.presentation.init.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,7 +13,7 @@ import com.swahilib.presentation.components.indicators.EmptyState
 import com.swahilib.presentation.components.indicators.ErrorState
 import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.navigation.Routes
-import com.swahilib.presentation.viewmodels.InitViewModel
+import com.swahilib.presentation.init.InitViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

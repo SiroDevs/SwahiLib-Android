@@ -1,4 +1,4 @@
-package com.swahilib.presentation.home.lists
+package com.swahilib.presentation.home.view.lists
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -11,7 +11,7 @@ import com.swahilib.domain.entity.UiState
 import com.swahilib.presentation.components.indicators.*
 import com.swahilib.presentation.components.listitems.WordItem
 import com.swahilib.presentation.navigation.Routes
-import com.swahilib.presentation.viewmodels.HomeViewModel
+import com.swahilib.presentation.home.HomeViewModel
 
 @Composable
 fun WordsList(

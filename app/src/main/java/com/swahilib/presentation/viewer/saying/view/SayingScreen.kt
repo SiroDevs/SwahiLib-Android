@@ -1,9 +1,7 @@
-package com.swahilib.presentation.viewer.saying
+package com.swahilib.presentation.viewer.saying.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -14,7 +12,7 @@ import com.swahilib.domain.entity.ViewerState
 import com.swahilib.presentation.components.indicators.LoadingState
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.components.indicators.*
-import com.swahilib.presentation.viewmodels.SayingViewModel
+import com.swahilib.presentation.viewer.saying.SayingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

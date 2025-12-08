@@ -1,4 +1,4 @@
-package com.swahilib.presentation.viewmodels
+package com.swahilib.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

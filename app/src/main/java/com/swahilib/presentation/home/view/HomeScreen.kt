@@ -1,4 +1,4 @@
-package com.swahilib.presentation.home
+package com.swahilib.presentation.home.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -8,15 +8,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.*
 import androidx.navigation.NavHostController
 import com.revenuecat.purchases.ui.revenuecatui.*
 import com.revenuecat.purchases.ui.revenuecatui.customercenter.CustomerCenter
 import com.swahilib.domain.entity.*
 import com.swahilib.presentation.components.action.*
-import com.swahilib.presentation.viewmodels.HomeViewModel
-import com.swahilib.core.helpers.NetworkUtils
+import com.swahilib.presentation.home.HomeViewModel
 import com.swahilib.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterialApi::class)

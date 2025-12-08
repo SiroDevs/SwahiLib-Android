@@ -1,4 +1,4 @@
-package com.swahilib.presentation.home.lists
+package com.swahilib.presentation.home.view.lists
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -9,17 +9,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entity.UiState
 import com.swahilib.presentation.components.indicators.*
-import com.swahilib.presentation.components.listitems.SayingItem
+import com.swahilib.presentation.components.listitems.ProverbItem
 import com.swahilib.presentation.navigation.Routes
-import com.swahilib.presentation.viewmodels.HomeViewModel
+import com.swahilib.presentation.home.HomeViewModel
 
 @Composable
-fun SayingsList(
+fun ProverbsList(
     viewModel: HomeViewModel,
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
+    val proverbs by viewModel.filteredProverbs.collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -28,19 +28,19 @@ fun SayingsList(
         when (uiState) {
             is UiState.Filtered -> {
                 when {
-                    sayings.isNotEmpty() -> {
+                    proverbs.isNotEmpty() -> {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(horizontal = 5.dp)
                         ) {
-                            itemsIndexed(sayings) { index, saying ->
-                                SayingItem(
-                                    saying = saying,
+                            itemsIndexed(proverbs) { index, proverb ->
+                                ProverbItem(
+                                    proverb = proverb,
                                     onTap = {
                                         navController.currentBackStackEntry
                                             ?.savedStateHandle
-                                            ?.set("saying", saying)
-                                        navController.navigate(Routes.SAYING)
+                                            ?.set("proverb", proverb)
+                                        navController.navigate(Routes.PROVERB)
                                     },
                                     modifier = Modifier
                                         .then(if (index == 0) Modifier.padding(top = 5.dp) else Modifier)

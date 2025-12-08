@@ -1,4 +1,4 @@
-package com.swahilib.presentation.viewer.saying
+package com.swahilib.presentation.viewer.idiom.view
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.*
 import com.swahilib.presentation.components.general.*
 
 @Composable
-fun SayingView(
+fun IdiomView(
     modifier: Modifier = Modifier,
     title: String,
     meanings: List<String>,

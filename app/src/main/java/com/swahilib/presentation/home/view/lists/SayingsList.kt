@@ -1,4 +1,4 @@
-package com.swahilib.presentation.home.lists
+package com.swahilib.presentation.home.view.lists
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -9,17 +9,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entity.UiState
 import com.swahilib.presentation.components.indicators.*
-import com.swahilib.presentation.components.listitems.IdiomItem
+import com.swahilib.presentation.components.listitems.SayingItem
 import com.swahilib.presentation.navigation.Routes
-import com.swahilib.presentation.viewmodels.HomeViewModel
+import com.swahilib.presentation.home.HomeViewModel
 
 @Composable
-fun IdiomsList(
+fun SayingsList(
     viewModel: HomeViewModel,
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val idioms by viewModel.filteredIdioms.collectAsState(initial = emptyList())
+    val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -28,19 +28,19 @@ fun IdiomsList(
         when (uiState) {
             is UiState.Filtered -> {
                 when {
-                    idioms.isNotEmpty() -> {
+                    sayings.isNotEmpty() -> {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(horizontal = 5.dp)
                         ) {
-                            itemsIndexed(idioms) { index, idiom ->
-                                IdiomItem(
-                                    idiom = idiom,
+                            itemsIndexed(sayings) { index, saying ->
+                                SayingItem(
+                                    saying = saying,
                                     onTap = {
                                         navController.currentBackStackEntry
                                             ?.savedStateHandle
-                                            ?.set("idiom", idiom)
-                                        navController.navigate(Routes.IDIOM)
+                                            ?.set("saying", saying)
+                                        navController.navigate(Routes.SAYING)
                                     },
                                     modifier = Modifier
                                         .then(if (index == 0) Modifier.padding(top = 5.dp) else Modifier)
