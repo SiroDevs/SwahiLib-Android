@@ -15,7 +15,7 @@ import io.github.jan.supabase.postgrest.Postgrest
 import kotlin.collections.map
 
 @Singleton
-class IdiomRepository @Inject constructor(
+class IdiomRepo @Inject constructor(
     context: Context,
     private val supabase: Postgrest,
 )  {

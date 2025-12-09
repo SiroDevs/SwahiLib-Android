@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.helpers.NetworkUtils
-import com.swahilib.domain.repos.PreferencesRepository
-import com.swahilib.domain.repos.SubscriptionsRepository
+import com.swahilib.domain.repos.PrefsRepo
+import com.swahilib.domain.repos.SubsRepo
 import com.swahilib.presentation.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val prefsRepo: PreferencesRepository,
-    private val subsRepo: SubscriptionsRepository,
+    private val prefsRepo: PrefsRepo,
+    private val subsRepo: SubsRepo,
 ) : ViewModel() {
     private val _nextRoute = MutableStateFlow(Routes.SPLASH)
     val nextRoute: StateFlow<String> = _nextRoute.asStateFlow()

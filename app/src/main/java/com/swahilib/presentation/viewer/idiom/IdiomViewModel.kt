@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.swahilib.core.utils.cleanMeaning
 import com.swahilib.data.models.Idiom
 import com.swahilib.domain.entity.ViewerState
-import com.swahilib.domain.repos.IdiomRepository
+import com.swahilib.domain.repos.IdiomRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IdiomViewModel @Inject constructor(
-    private val idiomRepo: IdiomRepository,
+    private val idiomRepo: IdiomRepo,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<ViewerState> = MutableStateFlow(ViewerState.Loading)
     val uiState: StateFlow<ViewerState> = _uiState.asStateFlow()

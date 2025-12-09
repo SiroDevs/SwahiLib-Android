@@ -8,11 +8,11 @@ import com.swahilib.data.models.Saying
 import com.swahilib.data.models.Word
 import com.swahilib.domain.entity.HomeTab
 import com.swahilib.domain.entity.UiState
-import com.swahilib.domain.repos.IdiomRepository
-import com.swahilib.domain.repos.PreferencesRepository
-import com.swahilib.domain.repos.ProverbRepository
-import com.swahilib.domain.repos.SayingRepository
-import com.swahilib.domain.repos.WordRepository
+import com.swahilib.domain.repos.IdiomRepo
+import com.swahilib.domain.repos.PrefsRepo
+import com.swahilib.domain.repos.ProverbRepo
+import com.swahilib.domain.repos.SayingRepo
+import com.swahilib.domain.repos.WordRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,11 +22,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val idiomRepo: IdiomRepository,
-    private val proverbRepo: ProverbRepository,
-    private val sayingRepo: SayingRepository,
-    private val wordRepo: WordRepository,
-    private val prefsRepo: PreferencesRepository,
+    private val idiomRepo: IdiomRepo,
+    private val proverbRepo: ProverbRepo,
+    private val sayingRepo: SayingRepo,
+    private val wordRepo: WordRepo,
+    private val prefsRepo: PrefsRepo,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()

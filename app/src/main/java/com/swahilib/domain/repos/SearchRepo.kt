@@ -11,7 +11,7 @@ import com.swahilib.data.sources.local.daos.SearchDao
 import io.github.jan.supabase.postgrest.Postgrest
 
 @Singleton
-class SearchRepository @Inject constructor(
+class SearchRepo @Inject constructor(
     context: Context,
     private val supabase: Postgrest,
 )  {

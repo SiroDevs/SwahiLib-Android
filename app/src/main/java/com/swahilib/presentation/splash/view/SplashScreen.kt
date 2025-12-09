@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import com.swahilib.R
 import com.swahilib.core.utils.AppConstants
-import com.swahilib.domain.repos.PreferencesRepository
+import com.swahilib.domain.repos.PrefsRepo
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.splash.SplashViewModel
 import kotlinx.coroutines.delay
@@ -25,7 +25,7 @@ fun SplashScreen(
     viewModel: SplashViewModel,
 ) {
     val context = LocalContext.current
-    val prefs = remember { PreferencesRepository(context) }
+    val prefs = remember { PrefsRepo(context) }
     val isLoading by viewModel.isLoading.collectAsState()
 
     LaunchedEffect(Unit) {

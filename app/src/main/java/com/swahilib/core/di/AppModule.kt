@@ -16,7 +16,7 @@ class AppModule {
     @Singleton
     fun providePreferencesRepository(
         @ApplicationContext context: Context,
-    ): PreferencesRepository = PreferencesRepository(context)
+    ): PrefsRepo = PrefsRepo(context)
 
     @Provides
     @Singleton
@@ -30,39 +30,39 @@ class AppModule {
     fun provideIdiomRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): IdiomRepository = IdiomRepository(context, supabase)
+    ): IdiomRepo = IdiomRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideProverbRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): ProverbRepository = ProverbRepository(context, supabase)
+    ): ProverbRepo = ProverbRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideSayingRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): SayingRepository = SayingRepository(context, supabase)
+    ): SayingRepo = SayingRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideSearchRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): SearchRepository = SearchRepository(context, supabase)
+    ): SearchRepo = SearchRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideSubscriptionRepository(
-    ): SubscriptionsRepository = SubscriptionsRepository()
+    ): SubsRepo = SubsRepo()
 
     @Provides
     @Singleton
     fun provideWordRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): WordRepository = WordRepository(context, supabase)
+    ): WordRepo = WordRepo(context, supabase)
 
 }

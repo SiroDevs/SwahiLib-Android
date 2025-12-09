@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.swahilib.core.utils.cleanMeaning
 import com.swahilib.data.models.Proverb
 import com.swahilib.domain.entity.ViewerState
-import com.swahilib.domain.repos.ProverbRepository
+import com.swahilib.domain.repos.ProverbRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProverbViewModel @Inject constructor(
-    private val proverbRepo: ProverbRepository,
+    private val proverbRepo: ProverbRepo,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<ViewerState> = MutableStateFlow(ViewerState.Loading)
     val uiState: StateFlow<ViewerState> = _uiState.asStateFlow()

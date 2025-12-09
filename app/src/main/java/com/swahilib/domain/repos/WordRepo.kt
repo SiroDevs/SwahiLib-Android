@@ -15,7 +15,7 @@ import com.swahilib.data.sources.remote.dtos.WordDto
 import io.github.jan.supabase.postgrest.Postgrest
 
 @Singleton
-class WordRepository @Inject constructor(
+class WordRepo @Inject constructor(
     context: Context,
     private val supabase: Postgrest,
 ) {
