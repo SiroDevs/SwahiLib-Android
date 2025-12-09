@@ -1,7 +1,7 @@
 package com.swahilib.core.di
 
 import android.content.*
-import com.swahilib.domain.repository.*
+import com.swahilib.domain.repos.*
 import dagger.*
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -23,7 +23,7 @@ class AppModule {
     fun provideHistoryRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): HistoryRepository = HistoryRepository(context, supabase)
+    ): HistoryRepo = HistoryRepo(context, supabase)
 
     @Provides
     @Singleton

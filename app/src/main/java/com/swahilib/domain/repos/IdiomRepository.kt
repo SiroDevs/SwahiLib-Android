@@ -1,4 +1,4 @@
-package com.swahilib.domain.repository
+package com.swahilib.domain.repos
 
 import android.content.*
 import android.util.Log

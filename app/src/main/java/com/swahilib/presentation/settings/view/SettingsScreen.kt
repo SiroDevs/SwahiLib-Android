@@ -8,7 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.swahilib.domain.repository.*
+import com.swahilib.domain.repos.*
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.screens.settings.components.*

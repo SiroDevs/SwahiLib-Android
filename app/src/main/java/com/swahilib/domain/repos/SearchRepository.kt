@@ -1,4 +1,4 @@
-package com.swahilib.domain.repository
+package com.swahilib.domain.repos
 
 import android.content.*
 import android.util.Log
@@ -7,7 +7,6 @@ import com.swahilib.data.models.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.*
-import com.swahilib.core.utils.Collections
 import com.swahilib.data.sources.local.daos.SearchDao
 import io.github.jan.supabase.postgrest.Postgrest
 

@@ -1,4 +1,4 @@
-package com.swahilib.domain.repository
+package com.swahilib.domain.repos
 
 import android.content.*
 import android.util.Log
@@ -12,7 +12,7 @@ import com.swahilib.data.sources.local.daos.HistoryDao
 import io.github.jan.supabase.postgrest.Postgrest
 
 @Singleton
-class HistoryRepository @Inject constructor(
+class HistoryRepo @Inject constructor(
     context: Context,
     private val supabase: Postgrest,
 )  {

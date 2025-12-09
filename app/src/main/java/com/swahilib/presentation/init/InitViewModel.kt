@@ -8,11 +8,11 @@ import com.swahilib.data.models.Proverb
 import com.swahilib.data.models.Saying
 import com.swahilib.data.models.Word
 import com.swahilib.domain.entity.UiState
-import com.swahilib.domain.repository.IdiomRepository
-import com.swahilib.domain.repository.PreferencesRepository
-import com.swahilib.domain.repository.ProverbRepository
-import com.swahilib.domain.repository.SayingRepository
-import com.swahilib.domain.repository.WordRepository
+import com.swahilib.domain.repos.IdiomRepository
+import com.swahilib.domain.repos.PreferencesRepository
+import com.swahilib.domain.repos.ProverbRepository
+import com.swahilib.domain.repos.SayingRepository
+import com.swahilib.domain.repos.WordRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

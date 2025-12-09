@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import com.swahilib.R
 import com.swahilib.core.utils.AppConstants
-import com.swahilib.domain.repository.PreferencesRepository
+import com.swahilib.domain.repos.PreferencesRepository
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.splash.SplashViewModel
 import kotlinx.coroutines.delay

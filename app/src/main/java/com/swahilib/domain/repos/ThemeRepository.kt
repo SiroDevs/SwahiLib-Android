@@ -1,4 +1,4 @@
-package com.swahilib.domain.repository
+package com.swahilib.domain.repos
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

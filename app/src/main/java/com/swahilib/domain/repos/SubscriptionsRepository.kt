@@ -1,4 +1,4 @@
-package com.swahilib.domain.repository
+package com.swahilib.domain.repos
 
 import com.revenuecat.purchases.*
 import com.swahilib.core.utils.AppConstants

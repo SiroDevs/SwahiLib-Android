@@ -15,7 +15,7 @@ import com.swahilib.presentation.screens.viewer.idiom.IdiomScreen
 import com.swahilib.presentation.screens.viewer.proverb.ProverbScreen
 import com.swahilib.presentation.screens.viewer.saying.SayingScreen
 import com.swahilib.presentation.screens.viewer.word.WordScreen
-import com.swahilib.domain.repository.ThemeRepository
+import com.swahilib.domain.repos.ThemeRepository
 import com.swahilib.presentation.home.HomeViewModel
 import com.swahilib.presentation.init.InitViewModel
 import com.swahilib.presentation.settings.SettingsViewModel

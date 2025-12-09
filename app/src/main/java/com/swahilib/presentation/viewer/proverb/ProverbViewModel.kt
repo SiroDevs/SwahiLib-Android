@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.swahilib.core.utils.cleanMeaning
 import com.swahilib.data.models.Proverb
 import com.swahilib.domain.entity.ViewerState
-import com.swahilib.domain.repository.ProverbRepository
+import com.swahilib.domain.repos.ProverbRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
