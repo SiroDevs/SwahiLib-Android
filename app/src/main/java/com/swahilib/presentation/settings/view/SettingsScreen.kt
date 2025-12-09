@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import com.swahilib.domain.repos.*
 import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.navigation.Routes
-import com.swahilib.presentation.screens.settings.components.*
+import com.swahilib.presentation.settings.components.*
 import com.swahilib.presentation.settings.SettingsViewModel
 
 @Composable
