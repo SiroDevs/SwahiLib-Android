@@ -1,7 +1,7 @@
 package com.swahilib.core.di
 
 import android.content.*
-import com.swahilib.domain.repository.*
+import com.swahilib.domain.repos.*
 import dagger.*
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,53 +16,53 @@ class AppModule {
     @Singleton
     fun providePreferencesRepository(
         @ApplicationContext context: Context,
-    ): PreferencesRepository = PreferencesRepository(context)
+    ): PrefsRepo = PrefsRepo(context)
 
     @Provides
     @Singleton
     fun provideHistoryRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): HistoryRepository = HistoryRepository(context, supabase)
+    ): HistoryRepo = HistoryRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideIdiomRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): IdiomRepository = IdiomRepository(context, supabase)
+    ): IdiomRepo = IdiomRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideProverbRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): ProverbRepository = ProverbRepository(context, supabase)
+    ): ProverbRepo = ProverbRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideSayingRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): SayingRepository = SayingRepository(context, supabase)
+    ): SayingRepo = SayingRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideSearchRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): SearchRepository = SearchRepository(context, supabase)
+    ): SearchRepo = SearchRepo(context, supabase)
 
     @Provides
     @Singleton
     fun provideSubscriptionRepository(
-    ): SubscriptionsRepository = SubscriptionsRepository()
+    ): SubsRepo = SubsRepo()
 
     @Provides
     @Singleton
     fun provideWordRepository(
         @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): WordRepository = WordRepository(context, supabase)
+    ): WordRepo = WordRepo(context, supabase)
 
 }

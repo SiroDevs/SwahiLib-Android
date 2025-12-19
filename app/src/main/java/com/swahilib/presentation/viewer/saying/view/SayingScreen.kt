@@ -1,0 +1,87 @@
+package com.swahilib.presentation.viewer.saying.view
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.swahilib.data.models.Saying
+import com.swahilib.domain.entity.ViewerState
+import com.swahilib.presentation.components.indicators.LoadingState
+import com.swahilib.presentation.components.action.AppTopBar
+import com.swahilib.presentation.components.indicators.*
+import com.swahilib.presentation.viewer.saying.SayingViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SayingScreen(
+    navController: NavHostController,
+    viewModel: SayingViewModel,
+    saying: Saying?,
+) {
+    val viewerState by viewModel.uiState.collectAsState()
+    val title by viewModel.title.collectAsState()
+    val meanings by viewModel.meanings.collectAsState()
+    val isLiked by viewModel.isLiked.collectAsState()
+
+    LaunchedEffect(saying) {
+        saying?.let { viewModel.loadSaying(it) }
+    }
+
+    Scaffold(topBar = {
+        Surface(shadowElevation = 3.dp) {
+            AppTopBar(
+                title = "Kamusi ya Kiswahili",
+                actions = {
+//                    IconButton(onClick = {
+//                        saying?.let {
+//                            viewModel.likeSaying(it)
+//
+//                            val text = if (isLiked) {
+//                                "Neno: ${saying.title} limeongezwa kwa vipendwa"
+//                            } else {
+//                                "Neno: ${saying.title} limeondolewa kwa vipendwa"
+//                            }
+//                            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+//                        }
+//                    }) {
+//                        Icon(
+//                            imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
+//                            contentDescription = "Penda"
+//                        )
+//                    }
+                },
+                showGoBack = true,
+                onNavIconClick = { navController.popBackStack() },
+            )
+        }
+    }, content = {
+        Box(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.onPrimary)
+        ) {
+            when (viewerState) {
+                is ViewerState.Error -> ErrorState(
+                    message = (viewerState as ViewerState.Error).message, onRetry = { })
+
+                ViewerState.Loaded -> {
+                    SayingView(
+                        title = title,
+                        meanings = meanings,
+                    )
+                }
+
+                ViewerState.Loading -> LoadingState(
+                    title = "Subiri kidogo ...",
+                    fileName = "opener-loading",
+                )
+
+                else -> EmptyState()
+            }
+        }
+    })
+}

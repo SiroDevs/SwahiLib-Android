@@ -7,7 +7,7 @@ import androidx.annotation.*
 import androidx.compose.foundation.*
 import androidx.compose.ui.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.swahilib.domain.repository.*
+import com.swahilib.domain.repos.*
 import com.swahilib.presentation.navigation.*
 import com.swahilib.presentation.theme.*
 import dagger.hilt.android.AndroidEntryPoint
