@@ -1,27 +1,14 @@
 package com.swahilib.presentation.init
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.swahilib.data.models.Idiom
-import com.swahilib.data.models.Proverb
-import com.swahilib.data.models.Saying
-import com.swahilib.data.models.Word
+import androidx.lifecycle.*
+import com.swahilib.data.models.*
 import com.swahilib.domain.entity.UiState
-import com.swahilib.domain.repos.IdiomRepo
-import com.swahilib.domain.repos.PrefsRepo
-import com.swahilib.domain.repos.ProverbRepo
-import com.swahilib.domain.repos.SayingRepo
-import com.swahilib.domain.repos.WordRepo
+import com.swahilib.domain.repos.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -96,7 +83,7 @@ class InitViewModel @Inject constructor(
                 _uiState.emit(UiState.Saved)
             } catch (e: Exception) {
                 prefsRepo.isDataLoaded = false
-                Log.e("SaveSongs", "Failed to save data", e)
+                Log.e("SaveData", "Failed to save data", e)
                 _uiState.emit(UiState.Error("Failed to save data: ${e.message}"))
             }
         }
