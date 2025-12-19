@@ -33,7 +33,7 @@ fun SayingScreen(
     Scaffold(topBar = {
         Surface(shadowElevation = 3.dp) {
             AppTopBar(
-                title = "Kamusi ya Kiswahili",
+                title = "Msemo wa Kiswahili",
                 actions = {
 //                    IconButton(onClick = {
 //                        saying?.let {

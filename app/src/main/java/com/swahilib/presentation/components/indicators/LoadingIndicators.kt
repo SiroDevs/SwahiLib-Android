@@ -18,7 +18,7 @@ import com.airbnb.lottie.compose.*
 
 @Composable
 fun LoadingState(
-    title: String,
+    title: String = "",
     fileName: String,
     showProgress: Boolean = false,
     progressValue: Int = 0,

@@ -14,53 +14,52 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun providePreferencesRepository(
+    fun providePrefsRepo(
         @ApplicationContext context: Context,
     ): PrefsRepo = PrefsRepo(context)
 
     @Provides
     @Singleton
-    fun provideHistoryRepository(
+    fun provideHistoryRepo(
         @ApplicationContext context: Context,
         supabase: Postgrest,
     ): HistoryRepo = HistoryRepo(context, supabase)
 
     @Provides
     @Singleton
-    fun provideIdiomRepository(
+    fun provideIdiomRepo(
         @ApplicationContext context: Context,
         supabase: Postgrest,
     ): IdiomRepo = IdiomRepo(context, supabase)
 
     @Provides
     @Singleton
-    fun provideProverbRepository(
+    fun provideProverbRepo(
         @ApplicationContext context: Context,
         supabase: Postgrest,
     ): ProverbRepo = ProverbRepo(context, supabase)
 
     @Provides
     @Singleton
-    fun provideSayingRepository(
+    fun provideSayingRepo(
         @ApplicationContext context: Context,
         supabase: Postgrest,
     ): SayingRepo = SayingRepo(context, supabase)
 
     @Provides
     @Singleton
-    fun provideSearchRepository(
+    fun provideSearchRepo(
         @ApplicationContext context: Context,
         supabase: Postgrest,
     ): SearchRepo = SearchRepo(context, supabase)
 
     @Provides
     @Singleton
-    fun provideSubscriptionRepository(
-    ): SubsRepo = SubsRepo()
+    fun provideSubsRepo(): SubsRepo = SubsRepo()
 
     @Provides
     @Singleton
-    fun provideWordRepository(
+    fun provideWordRepo(
         @ApplicationContext context: Context,
         supabase: Postgrest,
     ): WordRepo = WordRepo(context, supabase)

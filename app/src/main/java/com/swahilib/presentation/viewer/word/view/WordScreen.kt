@@ -35,7 +35,7 @@ fun WordScreen(
     Scaffold(topBar = {
         Surface(shadowElevation = 3.dp) {
             AppTopBar(
-                title = "Kamusi ya Kiswahili",
+                title = "Neno la Kiswahili",
                 actions = {
 //                    IconButton(onClick = {
 //                        word?.let {

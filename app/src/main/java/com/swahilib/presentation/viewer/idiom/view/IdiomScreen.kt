@@ -33,7 +33,7 @@ fun IdiomScreen(
     Scaffold(topBar = {
         Surface(shadowElevation = 3.dp) {
             AppTopBar(
-                title = "Kamusi ya Kiswahili",
+                title = "Nahau ya Kiswahili",
                 actions = {
 //                    IconButton(onClick = {
 //                        idiom?.let {

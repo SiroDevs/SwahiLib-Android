@@ -11,9 +11,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.data.sample.SampleWords
 import com.swahilib.domain.entity.*
-import com.swahilib.presentation.screens.home.components.*
+import com.swahilib.presentation.home.components.*
 import com.swahilib.presentation.components.listitems.*
-import com.swahilib.presentation.screens.home.lists.*
+import com.swahilib.presentation.home.view.lists.*
 import com.swahilib.presentation.home.HomeViewModel
 
 @OptIn(ExperimentalMaterialApi::class)

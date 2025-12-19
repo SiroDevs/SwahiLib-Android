@@ -9,9 +9,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entity.UiState
-import com.swahilib.presentation.components.indicators.EmptyState
-import com.swahilib.presentation.components.indicators.ErrorState
-import com.swahilib.presentation.components.indicators.LoadingState
+import com.swahilib.presentation.components.indicators.*
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.init.InitViewModel
 
@@ -22,8 +20,6 @@ fun InitScreen(
     navController: NavHostController,
 ) {
     var fetchData by rememberSaveable { mutableStateOf(0) }
-    val progress by viewModel.progress.collectAsState(initial = 0)
-    val status by viewModel.status.collectAsState(initial = "Inahifadhi data")
 
     if (fetchData == 0) {
         viewModel.fetchData()
@@ -53,21 +49,8 @@ fun InitScreen(
                     )
 
                     is UiState.Loading -> LoadingState(
-                        title = "Inapakia data ...",
-                        fileName = "bar-loader",
+                        fileName = "opener-loading",
                     )
-
-                    is UiState.Saving ->
-                        LoadingState(
-                            title = status,
-                            fileName = "opener-loading",
-                            showProgress = true,
-                            progressValue = progress
-                        )
-
-                    is UiState.Loaded -> {
-                        viewModel.saveData()
-                    }
 
                     else -> EmptyState()
                 }
