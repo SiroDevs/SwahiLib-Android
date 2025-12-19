@@ -35,7 +35,7 @@ fun ProverbScreen(
     Scaffold(topBar = {
         Surface(shadowElevation = 3.dp) {
             AppTopBar(
-                title = "Kamusi ya Kiswahili",
+                title = "Methali ya Kiswahili",
                 actions = {
 //                    IconButton(onClick = {
 //                        proverb?.let {

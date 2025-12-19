@@ -13,6 +13,7 @@ import com.swahilib.data.sources.local.daos.WordDao
 import com.swahilib.data.sources.remote.MapDtoToEntity
 import com.swahilib.data.sources.remote.dtos.WordDto
 import io.github.jan.supabase.postgrest.Postgrest
+import kotlinx.coroutines.delay
 
 @Singleton
 class WordRepo @Inject constructor(
@@ -26,40 +27,65 @@ class WordRepo @Inject constructor(
         wordsDao = db.wordsDao()
     }
 
-    suspend fun fetchRemoteData() {
-        var offset = 0L
-        val pageSize = 2000
-        val allWords = mutableListOf<Word>()
+    suspend fun fetchRemoteData(): Result<Int> = withContext(Dispatchers.IO) {
+        runCatching {
+            var offset = 0L
+            val pageSize = 2000
+            val allWords = mutableListOf<Word>()
+            var totalFetched = 0
 
-        try {
             while (true) {
-                Log.d("TAG", "Fetching words from $offset to ${offset + pageSize - 1}")
+                Log.d("TAG", "Fetching words batch: $offset to ${offset + pageSize - 1}")
+
                 val batch = supabase[Collections.WORDS]
                     .select {
                         range(offset, offset + pageSize - 1)
                     }.decodeList<WordDto>()
-                if (batch.isEmpty()) break
 
-                val mapped = batch.map(MapDtoToEntity::mapToEntity)
-                allWords += mapped
+                if (batch.isEmpty()) {
+                    Log.d("TAG", "No more words to fetch")
+                    break
+                }
 
-                if (batch.size < pageSize) break
+                val mappedBatch = batch.map(MapDtoToEntity::mapToEntity)
+                allWords.addAll(mappedBatch)
+                totalFetched += batch.size
+
+                if (batch.size < pageSize) {
+                    Log.d("TAG", "Last page reached with ${batch.size} items")
+                    break
+                }
+
                 offset += pageSize
+
+                if (offset % 10000 == 0L) {
+                    delay(100)
+                }
             }
-            Log.d("TAG", "✅ ${allWords.size} words fetched")
+
+            Log.d("TAG", "✅ $totalFetched words fetched")
             saveWords(allWords)
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
+
+            Result.success(totalFetched)
+        }.getOrElse { exception ->
+            Log.e("TAG", "❌ Error fetching words: ${exception.message}", exception)
+            Result.failure(exception)
         }
     }
 
     suspend fun saveWords(words: List<Word>) {
-        withContext(Dispatchers.IO) {
-            words.forEachIndexed { index, word ->
-                wordsDao?.insert(word)
-            }
+        if (words.isEmpty()) {
+            Log.d("TAG", "⚠️ No words to save")
+            return
         }
-        Log.d("TAG", "✅ words saved successfully")
+
+        try {
+            wordsDao?.insertAll(words)
+            Log.d("TAG", "✅ ${words.size} words saved successfully")
+        } catch (e: Exception) {
+            Log.e("TAG", "❌ Error saving words: ${e.message}", e)
+            throw e
+        }
     }
 
     suspend fun fetchLocalData(): List<Word> {

@@ -13,6 +13,10 @@ class PrefsRepo @Inject constructor(
     private val prefs =
         context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
 
+    fun getAllPreferences(): Map<String, *> {
+        return prefs.all
+    }
+
     var isDataLoaded: Boolean
         get() = prefs.getBoolean(PrefConstants.IS_DATA_LOADED, false)
         set(value) = prefs.edit { putBoolean(PrefConstants.IS_DATA_LOADED, value) }

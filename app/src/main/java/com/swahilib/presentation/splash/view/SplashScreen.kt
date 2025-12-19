@@ -1,5 +1,6 @@
 package com.swahilib.presentation.splash.view
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -14,7 +15,6 @@ import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import com.swahilib.R
 import com.swahilib.core.utils.AppConstants
-import com.swahilib.domain.repos.PrefsRepo
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.splash.SplashViewModel
 import kotlinx.coroutines.delay
@@ -25,25 +25,26 @@ fun SplashScreen(
     viewModel: SplashViewModel,
 ) {
     val context = LocalContext.current
-    val prefs = remember { PrefsRepo(context) }
     val isLoading by viewModel.isLoading.collectAsState()
+    val isDataLoaded by viewModel.isDataLoaded.collectAsState()
+
+    var hasNavigated by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.initializeApp(context)
     }
 
-    LaunchedEffect(Unit) {
-        delay(3000)
+    LaunchedEffect(isLoading, isDataLoaded) {
+        if (!isLoading && !hasNavigated) {
+            delay(3000)
 
-        val nextRoute = when {
-            prefs.isDataLoaded -> Routes.HOME
-            else -> Routes.INIT
-        }
+            val nextRoute = if (isDataLoaded) Routes.HOME else Routes.INIT
+            Log.d("SplashScreen", "Navigating to: $nextRoute, isDataLoaded: $isDataLoaded")
 
-        if (!isLoading) {
             navController.navigate(nextRoute) {
                 popUpTo(Routes.SPLASH) { inclusive = true }
             }
+            hasNavigated = true
         }
     }
 

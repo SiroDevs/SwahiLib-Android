@@ -30,22 +30,34 @@ class IdiomRepo @Inject constructor(
         try {
             Log.d("TAG", "Fetching idioms")
             val result = supabase[Collections.IDIOMS]
-                .select().decodeList<IdiomDto>()
-            val idioms = result.map { MapDtoToEntity.mapToEntity(it) }
-            Log.d("TAG", "✅ ${idioms.size} idioms fetched")
-            saveIdioms(idioms)
+                .select()
+                .decodeList<IdiomDto>()
+
+            if (result.isNotEmpty()) {
+                val idioms = result.map { MapDtoToEntity.mapToEntity(it) }
+                Log.d("TAG", "✅ ${idioms.size} idioms fetched")
+                saveIdioms(idioms)
+            } else {
+                Log.d("TAG", "⚠️ No idioms fetched from remote")
+            }
         } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
+            Log.e("TAG", "❌ Error fetching idioms: ${e.message}", e)
         }
     }
 
     suspend fun saveIdioms(idioms: List<Idiom>) {
-        withContext(Dispatchers.IO) {
-            idioms.forEachIndexed { index, idiom ->
-                idiomsDao?.insert(idiom)
-            }
+        if (idioms.isEmpty()) {
+            Log.d("TAG", "⚠️ No idioms to save")
+            return
         }
-        Log.d("TAG", "✅ idioms saved successfully")
+
+        try {
+            idiomsDao?.insertAll(idioms)
+            Log.d("TAG", "✅ ${idioms.size} idioms saved successfully")
+        } catch (e: Exception) {
+            Log.e("TAG", "❌ Error saving idioms: ${e.message}", e)
+            throw e
+        }
     }
 
     suspend fun fetchLocalData(): List<Idiom> {

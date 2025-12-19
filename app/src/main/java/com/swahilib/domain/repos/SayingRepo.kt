@@ -30,22 +30,34 @@ class SayingRepo @Inject constructor(
         try {
             Log.d("TAG", "Fetching sayings")
             val result = supabase[Collections.SAYINGS]
-                .select().decodeList<SayingDto>()
-            val sayings = result.map { MapDtoToEntity.mapToEntity(it) }
-            Log.d("TAG", "✅ Fetched ${sayings.size} sayings")
-            saveSayings(sayings)
+                .select()
+                .decodeList<SayingDto>()
+
+            if (result.isNotEmpty()) {
+                val sayings = result.map { MapDtoToEntity.mapToEntity(it) }
+                Log.d("TAG", "✅ ${sayings.size} sayings fetched")
+                saveSayings(sayings)
+            } else {
+                Log.d("TAG", "⚠️ No sayings fetched from remote")
+            }
         } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
+            Log.e("TAG", "❌ Error fetching sayings: ${e.message}", e)
         }
     }
 
     suspend fun saveSayings(sayings: List<Saying>) {
-        withContext(Dispatchers.IO) {
-            sayings.forEachIndexed { index, saying ->
-                sayingsDao?.insert(saying)
-            }
+        if (sayings.isEmpty()) {
+            Log.d("TAG", "⚠️ No sayings to save")
+            return
         }
-        Log.d("TAG", "✅ sayings saved successfully")
+
+        try {
+            sayingsDao?.insertAll(sayings)
+            Log.d("TAG", "✅ ${sayings.size} sayings saved successfully")
+        } catch (e: Exception) {
+            Log.e("TAG", "❌ Error saving sayings: ${e.message}", e)
+            throw e
+        }
     }
 
     suspend fun fetchLocalData(): List<Saying> {

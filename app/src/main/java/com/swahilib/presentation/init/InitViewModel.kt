@@ -2,7 +2,6 @@ package com.swahilib.presentation.init
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.swahilib.data.models.*
 import com.swahilib.domain.entity.UiState
 import com.swahilib.domain.repos.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,13 +26,16 @@ class InitViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.emit(UiState.Loading)
             try {
-                async { idiomRepo.fetchRemoteData() }.await()
+                // Launch all async operations and collect them
+                val idiomDeferred = async { idiomRepo.fetchRemoteData() }
+                val proverbDeferred = async { proverbRepo.fetchRemoteData() }
+                val sayingDeferred = async { sayingRepo.fetchRemoteData() }
+                val wordDeferred = async { wordRepo.fetchRemoteData() }
 
-                async { proverbRepo.fetchRemoteData() }.await()
-
-                async { sayingRepo.fetchRemoteData() }.await()
-
-                async { wordRepo.fetchRemoteData() }.await()
+                idiomDeferred.await()
+                proverbDeferred.await()
+                sayingDeferred.await()
+                wordDeferred.await()
 
                 Log.d("TAG", "✅ Data fetched and saved successfully.")
                 prefsRepo.isDataLoaded = true
@@ -44,6 +46,7 @@ class InitViewModel @Inject constructor(
                     else -> "Network error: ${e.message}"
                 }
                 Log.e("TAG", message, e)
+                prefsRepo.isDataLoaded = false // Reset on error
                 _uiState.emit(UiState.Error(message))
             }
         }
