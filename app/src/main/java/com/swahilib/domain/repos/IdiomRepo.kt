@@ -45,6 +45,14 @@ class IdiomRepo @Inject constructor(
         }
     }
 
+    suspend fun saveIdioms(idioms: List<Idiom>) {
+        withContext(Dispatchers.IO) {
+            idioms.forEachIndexed { index, idiom ->
+                idiomsDao?.insert(idiom)
+            }
+        }
+    }
+
     suspend fun saveIdiom(idiom: Idiom) {
         withContext(Dispatchers.IO) {
             idiomsDao?.insert(idiom)

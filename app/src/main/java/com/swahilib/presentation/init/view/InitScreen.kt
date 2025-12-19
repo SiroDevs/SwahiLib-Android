@@ -52,15 +52,6 @@ fun InitScreen(
                         fileName = "opener-loading",
                     )
 
-                    is UiState.Saving ->
-                        LoadingState(
-                            fileName = "opener-loading"
-                        )
-
-                    is UiState.Loaded -> {
-                        viewModel.saveData()
-                    }
-
                     else -> EmptyState()
                 }
             }

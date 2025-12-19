@@ -45,6 +45,14 @@ class SayingRepo @Inject constructor(
         }
     }
 
+    suspend fun saveSayings(sayings: List<Saying>) {
+        withContext(Dispatchers.IO) {
+            sayings.forEachIndexed { index, saying ->
+                sayingsDao?.insert(saying)
+            }
+        }
+    }
+
     suspend fun saveSaying(saying: Saying) {
         withContext(Dispatchers.IO) {
             sayingsDao?.insert(saying)

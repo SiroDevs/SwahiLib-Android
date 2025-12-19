@@ -45,6 +45,14 @@ class ProverbRepo @Inject constructor(
         }
     }
 
+    suspend fun saveProverbs(proverbs: List<Proverb>) {
+        withContext(Dispatchers.IO) {
+            proverbs.forEachIndexed { index, proverb ->
+                proverbsDao?.insert(proverb)
+            }
+        }
+    }
+
     suspend fun saveProverb(proverb: Proverb) {
         withContext(Dispatchers.IO) {
             proverbsDao?.insert(proverb)

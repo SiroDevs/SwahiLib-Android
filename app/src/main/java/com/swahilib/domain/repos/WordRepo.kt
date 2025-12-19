@@ -59,6 +59,14 @@ class WordRepo @Inject constructor(
         }
     }
 
+    suspend fun saveWords(words: List<Word>) {
+        withContext(Dispatchers.IO) {
+            words.forEachIndexed { index, word ->
+                wordsDao?.insert(word)
+            }
+        }
+    }
+
     suspend fun saveWord(word: Word) {
         try {
             withContext(Dispatchers.IO) {

@@ -70,6 +70,7 @@ class InitViewModel @Inject constructor(
                 _sayings.emit(sayings.await())
                 _words.emit(words.await())
 
+                saveData()
                 _uiState.emit(UiState.Loaded)
             } catch (e: Exception) {
                 val message = when (e) {
@@ -86,15 +87,10 @@ class InitViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.emit(UiState.Saving)
             try {
-                val idiomsJob = async { saveIdioms() }
-                val proverbsJob = async { saveProverbs() }
-                val sayingsJob = async { saveSayings() }
-                val wordsJob = async { saveWords() }
-
-                idiomsJob.await()
-                proverbsJob.await()
-                sayingsJob.await()
-                wordsJob.await()
+                async { idiomRepo.saveIdioms(_idioms.value) }
+                async { sayingRepo.saveSayings(_sayings.value) }
+                async { proverbRepo.saveProverbs(_proverbs.value) }
+                async { wordRepo.saveWords(_words.value) }.await()
 
                 prefsRepo.isDataLoaded = true
                 _uiState.emit(UiState.Saved)
@@ -103,42 +99,6 @@ class InitViewModel @Inject constructor(
                 Log.e("SaveSongs", "Failed to save data", e)
                 _uiState.emit(UiState.Error("Failed to save data: ${e.message}"))
             }
-        }
-    }
-
-    suspend fun saveIdioms() = withContext(Dispatchers.IO) {
-        Log.d("TAG", "Saving idioms")
-        val idioms = _idioms.value
-
-        idioms.forEachIndexed { index, idiom ->
-            idiomRepo.saveIdiom(idiom)
-        }
-    }
-
-    suspend fun saveProverbs() = withContext(Dispatchers.IO) {
-        Log.d("TAG", "Saving proverbs")
-        val proverbs = _proverbs.value
-
-        proverbs.forEachIndexed { index, proverb ->
-            proverbRepo.saveProverb(proverb)
-        }
-    }
-
-    suspend fun saveSayings() = withContext(Dispatchers.IO) {
-        Log.d("TAG", "Saving sayings")
-        val sayings = _sayings.value
-
-        sayings.forEachIndexed { index, saying ->
-            sayingRepo.saveSaying(saying)
-        }
-    }
-
-    suspend fun saveWords() = withContext(Dispatchers.IO) {
-        Log.d("TAG", "Saving words")
-        val words = _words.value
-
-        words.forEachIndexed { index, word ->
-            wordRepo.saveWord(word)
         }
     }
 }
