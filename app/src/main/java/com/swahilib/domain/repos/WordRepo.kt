@@ -26,14 +26,14 @@ class WordRepo @Inject constructor(
         wordsDao = db.wordsDao()
     }
 
-    fun fetchRemoteData(): Flow<List<Word>> = flow {
+    suspend fun fetchRemoteData() {
         var offset = 0L
         val pageSize = 2000
         val allWords = mutableListOf<Word>()
 
         try {
             while (true) {
-                Log.d("TAG", "Now fetching words")
+                Log.d("TAG", "Fetching words from $offset to ${offset + pageSize - 1}")
                 val batch = supabase[Collections.WORDS]
                     .select {
                         range(offset, offset + pageSize - 1)
@@ -43,19 +43,13 @@ class WordRepo @Inject constructor(
                 val mapped = batch.map(MapDtoToEntity::mapToEntity)
                 allWords += mapped
 
-                if (batch.size < pageSize) break // last batch
+                if (batch.size < pageSize) break
                 offset += pageSize
             }
-            Log.d("TAG", "Fetched ${allWords.size} words")
-            emit(allWords)
+            Log.d("TAG", "✅ ${allWords.size} words fetched")
+            saveWords(allWords)
         } catch (e: Exception) {
             Log.d("TAG", e.message.toString())
-        }
-    }
-
-    suspend fun fetchLocalData(): List<Word> {
-        return withContext(Dispatchers.IO) {
-            wordsDao?.getAll()?.first() ?: emptyList()
         }
     }
 
@@ -64,6 +58,13 @@ class WordRepo @Inject constructor(
             words.forEachIndexed { index, word ->
                 wordsDao?.insert(word)
             }
+        }
+        Log.d("TAG", "✅ words saved successfully")
+    }
+
+    suspend fun fetchLocalData(): List<Word> {
+        return withContext(Dispatchers.IO) {
+            wordsDao?.getAll()?.first() ?: emptyList()
         }
     }
 

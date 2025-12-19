@@ -26,22 +26,16 @@ class SayingRepo @Inject constructor(
         sayingsDao = db.sayingsDao()
     }
 
-    fun fetchRemoteData(): Flow<List<Saying>> = flow {
+    suspend fun fetchRemoteData() {
         try {
-            Log.d("TAG", "Now fetching sayings")
+            Log.d("TAG", "Fetching sayings")
             val result = supabase[Collections.SAYINGS]
                 .select().decodeList<SayingDto>()
             val sayings = result.map { MapDtoToEntity.mapToEntity(it) }
-            Log.d("TAG", "Fetched ${sayings.size} sayings")
-            emit(sayings)
+            Log.d("TAG", "✅ Fetched ${sayings.size} sayings")
+            saveSayings(sayings)
         } catch (e: Exception) {
             Log.d("TAG", e.message.toString())
-        }
-    }
-
-    suspend fun fetchLocalData(): List<Saying> {
-        return withContext(Dispatchers.IO) {
-            sayingsDao?.getAll()?.first() ?: emptyList()
         }
     }
 
@@ -50,6 +44,13 @@ class SayingRepo @Inject constructor(
             sayings.forEachIndexed { index, saying ->
                 sayingsDao?.insert(saying)
             }
+        }
+        Log.d("TAG", "✅ sayings saved successfully")
+    }
+
+    suspend fun fetchLocalData(): List<Saying> {
+        return withContext(Dispatchers.IO) {
+            sayingsDao?.getAll()?.first() ?: emptyList()
         }
     }
 

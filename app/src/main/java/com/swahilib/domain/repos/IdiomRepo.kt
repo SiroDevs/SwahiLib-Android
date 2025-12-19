@@ -26,22 +26,16 @@ class IdiomRepo @Inject constructor(
         idiomsDao = db.idiomsDao()
     }
 
-    fun fetchRemoteData(): Flow<List<Idiom>> = flow {
+    suspend fun fetchRemoteData() {
         try {
-            Log.d("TAG", "Now fetching idioms")
+            Log.d("TAG", "Fetching idioms")
             val result = supabase[Collections.IDIOMS]
                 .select().decodeList<IdiomDto>()
             val idioms = result.map { MapDtoToEntity.mapToEntity(it) }
-            Log.d("TAG", "Fetched ${idioms.size} idioms")
-            emit(idioms)
+            Log.d("TAG", "✅ ${idioms.size} idioms fetched")
+            saveIdioms(idioms)
         } catch (e: Exception) {
             Log.d("TAG", e.message.toString())
-        }
-    }
-
-    suspend fun fetchLocalData(): List<Idiom> {
-        return withContext(Dispatchers.IO) {
-            idiomsDao?.getAll()?.first() ?: emptyList()
         }
     }
 
@@ -50,6 +44,13 @@ class IdiomRepo @Inject constructor(
             idioms.forEachIndexed { index, idiom ->
                 idiomsDao?.insert(idiom)
             }
+        }
+        Log.d("TAG", "✅ idioms saved successfully")
+    }
+
+    suspend fun fetchLocalData(): List<Idiom> {
+        return withContext(Dispatchers.IO) {
+            idiomsDao?.getAll()?.first() ?: emptyList()
         }
     }
 

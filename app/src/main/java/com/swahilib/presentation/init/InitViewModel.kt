@@ -23,42 +23,21 @@ class InitViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _idioms = MutableStateFlow<List<Idiom>>(emptyList())
-    private val _proverbs = MutableStateFlow<List<Proverb>>(emptyList())
-    private val _sayings = MutableStateFlow<List<Saying>>(emptyList())
-    private val _words = MutableStateFlow<List<Word>>(emptyList())
-
     fun fetchData() {
         viewModelScope.launch {
             _uiState.emit(UiState.Loading)
             try {
-                val idioms = async {
-                    idiomRepo.fetchRemoteData()
-                        .firstOrNull() ?: emptyList()
-                }
+                async { idiomRepo.fetchRemoteData() }.await()
 
-                val proverbs = async {
-                    proverbRepo.fetchRemoteData()
-                        .firstOrNull() ?: emptyList()
-                }
+                async { proverbRepo.fetchRemoteData() }.await()
 
-                val sayings = async {
-                    sayingRepo.fetchRemoteData()
-                        .firstOrNull() ?: emptyList()
-                }
+                async { sayingRepo.fetchRemoteData() }.await()
 
-                val words = async {
-                    wordRepo.fetchRemoteData()
-                        .firstOrNull() ?: emptyList()
-                }
+                async { wordRepo.fetchRemoteData() }.await()
 
-                _idioms.emit(idioms.await())
-                _proverbs.emit(proverbs.await())
-                _sayings.emit(sayings.await())
-                _words.emit(words.await())
-
-                saveData()
-                _uiState.emit(UiState.Loaded)
+                Log.d("TAG", "✅ Data fetched and saved successfully.")
+                prefsRepo.isDataLoaded = true
+                _uiState.emit(UiState.Saved)
             } catch (e: Exception) {
                 val message = when (e) {
                     is HttpException -> "HTTP Error: ${e.code()}"
@@ -66,25 +45,6 @@ class InitViewModel @Inject constructor(
                 }
                 Log.e("TAG", message, e)
                 _uiState.emit(UiState.Error(message))
-            }
-        }
-    }
-
-    fun saveData() {
-        viewModelScope.launch {
-            _uiState.emit(UiState.Saving)
-            try {
-                async { idiomRepo.saveIdioms(_idioms.value) }
-                async { sayingRepo.saveSayings(_sayings.value) }
-                async { proverbRepo.saveProverbs(_proverbs.value) }
-                async { wordRepo.saveWords(_words.value) }.await()
-
-                prefsRepo.isDataLoaded = true
-                _uiState.emit(UiState.Saved)
-            } catch (e: Exception) {
-                prefsRepo.isDataLoaded = false
-                Log.e("SaveData", "Failed to save data", e)
-                _uiState.emit(UiState.Error("Failed to save data: ${e.message}"))
             }
         }
     }
