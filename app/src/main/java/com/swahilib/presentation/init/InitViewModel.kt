@@ -41,12 +41,6 @@ class InitViewModel @Inject constructor(
     private val _sayings = MutableStateFlow<List<Saying>>(emptyList())
     private val _words = MutableStateFlow<List<Word>>(emptyList())
 
-    private val _progress = MutableStateFlow(0)
-    val progress: StateFlow<Int> = _progress.asStateFlow()
-
-    private val _status = MutableStateFlow("Inapakia data ...")
-    val status: StateFlow<String> = _status.asStateFlow()
-
     fun fetchData() {
         viewModelScope.launch {
             _uiState.emit(UiState.Loading)
@@ -114,52 +108,37 @@ class InitViewModel @Inject constructor(
 
     suspend fun saveIdioms() = withContext(Dispatchers.IO) {
         Log.d("TAG", "Saving idioms")
-        _status.emit("Inahifadhi nahau 527 ...")
         val idioms = _idioms.value
 
         idioms.forEachIndexed { index, idiom ->
             idiomRepo.saveIdiom(idiom)
-            val percent = ((index + 1).toFloat() / idioms.size * 100).toInt()
-            _progress.emit(percent)
         }
     }
 
     suspend fun saveProverbs() = withContext(Dispatchers.IO) {
         Log.d("TAG", "Saving proverbs")
         val proverbs = _proverbs.value
-        val total = proverbs.size
-        _status.emit("Inahifadhi methali $total ...")
 
         proverbs.forEachIndexed { index, proverb ->
             proverbRepo.saveProverb(proverb)
-            val percent = ((index + 1).toFloat() / total * 100).toInt()
-            _progress.emit(percent)
         }
     }
 
     suspend fun saveSayings() = withContext(Dispatchers.IO) {
         Log.d("TAG", "Saving sayings")
         val sayings = _sayings.value
-        val total = sayings.size
-        _status.emit("Inahifadhi misemo $total ...")
 
         sayings.forEachIndexed { index, saying ->
             sayingRepo.saveSaying(saying)
-            val percent = ((index + 1).toFloat() / total * 100).toInt()
-            _progress.emit(percent)
         }
     }
 
     suspend fun saveWords() = withContext(Dispatchers.IO) {
         Log.d("TAG", "Saving words")
         val words = _words.value
-        val total = words.size
-        _status.emit("Inahifadhi maneno $total ...")
 
         words.forEachIndexed { index, word ->
             wordRepo.saveWord(word)
-            val percent = ((index + 1).toFloat() / total * 100).toInt()
-            _progress.emit(percent)
         }
     }
 }
