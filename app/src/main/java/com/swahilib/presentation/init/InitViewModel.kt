@@ -26,7 +26,6 @@ class InitViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.emit(UiState.Loading)
             try {
-                // Launch all async operations and collect them
                 val idiomDeferred = async { idiomRepo.fetchRemoteData() }
                 val proverbDeferred = async { proverbRepo.fetchRemoteData() }
                 val sayingDeferred = async { sayingRepo.fetchRemoteData() }
@@ -46,7 +45,6 @@ class InitViewModel @Inject constructor(
                     else -> "Network error: ${e.message}"
                 }
                 Log.e("TAG", message, e)
-                prefsRepo.isDataLoaded = false // Reset on error
                 _uiState.emit(UiState.Error(message))
             }
         }
