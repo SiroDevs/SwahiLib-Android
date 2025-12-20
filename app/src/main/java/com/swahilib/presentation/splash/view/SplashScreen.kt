@@ -28,23 +28,19 @@ fun SplashScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val isDataLoaded by viewModel.isDataLoaded.collectAsState()
 
-    var hasNavigated by remember { mutableStateOf(false) }
-
     LaunchedEffect(Unit) {
         viewModel.initializeApp(context)
     }
 
     LaunchedEffect(isLoading, isDataLoaded) {
-        if (!isLoading && !hasNavigated) {
+        if (!isLoading) {
             delay(3000)
 
             val nextRoute = if (isDataLoaded) Routes.HOME else Routes.INIT
-            Log.d("SplashScreen", "Navigating to: $nextRoute, isDataLoaded: $isDataLoaded")
 
             navController.navigate(nextRoute) {
                 popUpTo(Routes.SPLASH) { inclusive = true }
             }
-            hasNavigated = true
         }
     }
 
@@ -93,14 +89,16 @@ fun SplashContent() {
                         )
                     )
                     Spacer(Modifier.weight(1f))
+
+                    KiswahiliKitukuzwe()
                     Divider(
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         thickness = 2.dp,
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
+                            .padding(vertical = 20.dp)
                             .height(1.dp)
                     )
-                    KiswahiliKitukuzwe()
                     AppCredits()
                     Spacer(Modifier.height(50.dp))
                 }

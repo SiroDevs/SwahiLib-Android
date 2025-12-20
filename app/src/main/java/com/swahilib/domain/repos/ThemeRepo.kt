@@ -77,8 +77,8 @@ fun ThemeSelectorDialog(
 
 fun appThemeName(mode: ThemeMode):String {
     return when (mode){
-        ThemeMode.SYSTEM -> "Chaguo la Mfumo"
-        ThemeMode.LIGHT -> "Mandhari ya Nuru"
-        ThemeMode.DARK -> "Mandhari ya Giza"
+        ThemeMode.SYSTEM -> "Chaguo la Mfumo (System)"
+        ThemeMode.LIGHT -> "Mandhari ya Nuru (Light)"
+        ThemeMode.DARK -> "Mandhari ya Giza (Dark)"
     }
 }

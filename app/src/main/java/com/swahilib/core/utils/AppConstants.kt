@@ -4,7 +4,7 @@ object AppConstants {
     const val APP_TITLE = "SwahiLib"
     const val APP_TITLE2 = "Kamusi ya Kiswahili"
     const val APP_TAGLINE = "Kiswahili Kitukuzwe"
-    const val APP_CREDITS = "© 2021 - 2025 @SiroDevs"
+    const val APP_CREDITS = "© Siro Devs"
     const val ENTITLEMENTS = "swahilib_offering_1"
     const val APP_LINK = "https://linktr.ee/SwahilibApp"
     const val SUPPORT_EMAIL = "futuristicken@gmail.com"
