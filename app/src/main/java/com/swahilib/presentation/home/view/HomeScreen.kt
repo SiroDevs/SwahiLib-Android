@@ -1,8 +1,6 @@
 package com.swahilib.presentation.home.view
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -10,16 +8,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.*
 import androidx.navigation.NavHostController
 import com.revenuecat.purchases.ui.revenuecatui.*
 import com.revenuecat.purchases.ui.revenuecatui.customercenter.CustomerCenter
-import com.swahilib.domain.entity.*
+import com.swahilib.domain.entity.UiState
+import com.swahilib.domain.entity.homeTabs
 import com.swahilib.presentation.components.action.*
+import com.swahilib.presentation.components.indicators.*
 import com.swahilib.presentation.home.HomeViewModel
-import com.swahilib.presentation.home.components.*
 import com.swahilib.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -28,18 +25,18 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navController: NavHostController,
 ) {
+    val canShowPaywall by viewModel.canShowPaywall.collectAsState()
+    var showPaywall by remember { mutableStateOf(false) }
+
     val lastTabIndex = viewModel.lastHomeTab
+    val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by rememberSaveable { mutableStateOf(lastTabIndex) }
     val selectedTab = homeTabs[selectedTabIndex]
 
-    val uiState by viewModel.uiState.collectAsState()
-
-    var searchQuery by rememberSaveable { mutableStateOf("") }
-    var selectedLetter by rememberSaveable { mutableStateOf("") }
-    val lazyListState = rememberLazyListState()
-
-    val canShowPaywall by viewModel.canShowPaywall.collectAsState()
-    var showPaywall by remember { mutableStateOf(false) }
+    val idioms by viewModel.filteredIdioms.collectAsState(initial = emptyList())
+    val proverbs by viewModel.filteredProverbs.collectAsState(initial = emptyList())
+    val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
+    val words by viewModel.filteredWords.collectAsState(initial = emptyList())
 
     LaunchedEffect(Unit) {
         viewModel.fetchData()
@@ -78,51 +75,39 @@ fun HomeScreen(
             )
         },
     ) { padding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            state = lazyListState,
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+            contentAlignment = Alignment.Center,
         ) {
-            item {
-                SearchBox(
-                    query = searchQuery,
-                    onQueryChange = {
-                        searchQuery = it
-                        selectedLetter = ""
-                        viewModel.filterData(selectedTab, it)
-                    },
-                    onAdvancedSearch = { navController.navigate(Routes.ADVSEARCH) },
-                    onClear = {
-                        searchQuery = ""
-                        viewModel.filterData(selectedTab, "")
-                    }
-                )
-            }
-            item {
-                CustomTabTitles(
-                    selectedTab = selectedTab,
-                    onTabSelected = { tab ->
-                        val tabIndex = homeTabs.indexOf(tab)
-                        selectedTabIndex = tabIndex
-                        selectedLetter = ""
-                        viewModel.filterData(homeTabs[tabIndex], "")
-                    },
-                )
-            }
+            when (uiState) {
+                is UiState.Filtered -> {
+                    HomeContent(
+                        selectedTab = selectedTab,
+                        idioms = idioms,
+                        proverbs = proverbs,
+                        sayings = sayings,
+                        words = words,
+                        viewModel = viewModel,
+                        navController = navController,
+                        onTabSelected = { tab ->
+                            val tabIndex = homeTabs.indexOf(tab)
+                            selectedTabIndex = tabIndex
+                            viewModel.filterData(tab, "")
+                        }
+                    )
+                }
 
-            item {
-                HomeContent(
-                    viewModel = viewModel,
-                    navController = navController,
-                    selectedTab = selectedTab,
-                    selectedLetter = selectedLetter,
-                    onLetterSelected = { letter ->
-                        selectedLetter = letter
-                        viewModel.filterData(selectedTab, letter)
-                    }
-                )
+                is UiState.Error -> {
+                    ErrorState(
+                        message = (uiState as UiState.Error).message,
+                        onRetry = { }
+                    )
+                }
+
+                UiState.Loading -> LoadingState(fileName = "circle-loader" )
+                else -> EmptyState()
             }
         }
     }

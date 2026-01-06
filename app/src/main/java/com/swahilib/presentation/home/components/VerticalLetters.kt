@@ -23,22 +23,23 @@ fun VerticalLetters(
             .map { it.toString() }
             .filter { it != "Q" && it != "X" }
     }
-
-    val scrollState = rememberLazyListState()
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.width(75.dp)
     ) {
-        letters.forEach { letter ->
-            LetterItem(
-                text = letter,
-                isSelected = selectedLetter == letter,
-                onClick = { onLetterSelected(letter) }
-            )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            letters.forEach { letter ->
+                LetterItem(
+                    text = letter,
+                    isSelected = selectedLetter == letter,
+                    onClick = { onLetterSelected(letter) }
+                )
+            }
         }
     }
 }
