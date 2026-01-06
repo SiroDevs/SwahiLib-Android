@@ -1,11 +1,9 @@
 package com.swahilib.presentation.splash
 
-import android.util.Log
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.helpers.NetworkUtils
-import com.swahilib.core.utils.PrefConstants
 import com.swahilib.domain.repos.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

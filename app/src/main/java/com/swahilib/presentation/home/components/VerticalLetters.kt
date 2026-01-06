@@ -26,15 +26,14 @@ fun VerticalLetters(
 
     val scrollState = rememberLazyListState()
 
-    LazyColumn(
-        state = scrollState,
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(letters) { letter ->
+        letters.forEach { letter ->
             LetterItem(
                 text = letter,
                 isSelected = selectedLetter == letter,

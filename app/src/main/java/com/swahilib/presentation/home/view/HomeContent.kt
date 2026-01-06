@@ -23,37 +23,27 @@ fun HomeContent(
     navController: NavHostController,
     selectedTab: HomeTab,
     selectedLetter: String,
-    onTabSelected: (HomeTab) -> Unit,
     onLetterSelected: (String) -> Unit
 ) {
-
-    Column(
+    Row(
         modifier = Modifier.fillMaxSize()
     ) {
-        CustomTabTitles(
-            selectedTab = selectedTab,
-            onTabSelected = onTabSelected
-        )
-        Row(
-            modifier = Modifier.fillMaxSize()
+        Box(
+            modifier = Modifier.width(75.dp)
         ) {
-            Box(
-                modifier = Modifier.width(75.dp)
-            ) {
-                VerticalLetters(
-                    selectedLetter = selectedLetter,
-                    onLetterSelected = onLetterSelected
-                )
+            VerticalLetters(
+                selectedLetter = selectedLetter,
+                onLetterSelected = onLetterSelected
+            )
 
-            }
+        }
 
-            HomeSurface() {
-                when (selectedTab) {
-                    HomeTab.Idioms -> IdiomsList(viewModel, navController)
-                    HomeTab.Proverbs -> ProverbsList(viewModel, navController)
-                    HomeTab.Sayings -> SayingsList(viewModel, navController)
-                    HomeTab.Words -> WordsList(viewModel, navController)
-                }
+        HomeSurface() {
+            when (selectedTab) {
+                HomeTab.Idioms -> IdiomsList(viewModel, navController)
+                HomeTab.Proverbs -> ProverbsList(viewModel, navController)
+                HomeTab.Sayings -> SayingsList(viewModel, navController)
+                HomeTab.Words -> WordsList(viewModel, navController)
             }
         }
     }
@@ -63,36 +53,28 @@ fun HomeContent(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    Column(
+    Row(
         modifier = Modifier.fillMaxSize()
     ) {
-        CustomTabTitles(
-            selectedTab = HomeTab.Words,
-            onTabSelected = {},
-        )
-        Row(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Box(modifier = Modifier.width(60.dp)) {
-                VerticalLetters(
-                    selectedLetter = "A",
-                    onLetterSelected = {}
-                )
-            }
+        Box(modifier = Modifier.width(60.dp)) {
+            VerticalLetters(
+                selectedLetter = "A",
+                onLetterSelected = {}
+            )
+        }
 
-            HomeSurface() {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 5.dp),
-                    contentPadding = PaddingValues(horizontal = 5.dp)
-                ) {
-                    items(SampleWords) { word ->
-                        WordItem(
-                            word = word,
-                            onTap = { },
-                        )
-                    }
+        HomeSurface() {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 5.dp),
+                contentPadding = PaddingValues(horizontal = 5.dp)
+            ) {
+                items(SampleWords) { word ->
+                    WordItem(
+                        word = word,
+                        onTap = { },
+                    )
                 }
             }
         }

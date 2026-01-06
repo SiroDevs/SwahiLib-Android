@@ -1,7 +1,6 @@
 package com.swahilib.domain.repos
 
 import android.content.Context
-import android.util.Log
 import com.swahilib.core.utils.PrefConstants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.*
@@ -14,21 +13,14 @@ class PrefsRepo @Inject constructor(
     private val prefs =
         context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
 
-//    var isDataLoaded: Boolean
-//        get() = prefs.getBoolean(PrefConstants.IS_DATA_LOADED, false)
-//        set(value) = prefs.edit { putBoolean(PrefConstants.IS_DATA_LOADED, value) }
-
     var isDataLoaded: Boolean
         get() = {
             val value = prefs.getBoolean(PrefConstants.IS_DATA_LOADED, false)
-            Log.d("PrefsRepo", "GET isDataLoaded: $value")
             value
         }()
         set(value) = {
-            Log.d("PrefsRepo", "SET isDataLoaded: $value")
             prefs.edit {
                 putBoolean(PrefConstants.IS_DATA_LOADED, value)
-                Log.d("PrefsRepo", "Saved isDataLoaded: $value")
             }
         }()
 
@@ -74,9 +66,9 @@ class PrefsRepo @Inject constructor(
         lastAppOpenTime = System.currentTimeMillis()
     }
 
-//    fun getTimeSinceLastOpen(): Long {
-//        val lastTime = lastAppOpenTime
-//        if (lastTime == 0L) return 0L
-//        return System.currentTimeMillis() - lastTime
-//    }
+    fun getTimeSinceLastOpen(): Long {
+        val lastTime = lastAppOpenTime
+        if (lastTime == 0L) return 0L
+        return System.currentTimeMillis() - lastTime
+    }
 }

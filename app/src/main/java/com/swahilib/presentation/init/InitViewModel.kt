@@ -26,15 +26,15 @@ class InitViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.emit(UiState.Loading)
             try {
-                val idiomDeferred = async { idiomRepo.fetchRemoteData() }
-                val proverbDeferred = async { proverbRepo.fetchRemoteData() }
-                val sayingDeferred = async { sayingRepo.fetchRemoteData() }
-                val wordDeferred = async { wordRepo.fetchRemoteData() }
+                val idiomInitialization = async { idiomRepo.fetchRemoteData() }
+                val proverbInitialization = async { proverbRepo.fetchRemoteData() }
+                val sayingInitialization = async { sayingRepo.fetchRemoteData() }
+                val wordInitialization = async { wordRepo.fetchRemoteData() }
 
-                idiomDeferred.await()
-                proverbDeferred.await()
-                sayingDeferred.await()
-                wordDeferred.await()
+                idiomInitialization.await()
+                proverbInitialization.await()
+                sayingInitialization.await()
+                wordInitialization.await()
 
                 Log.d("TAG", "✅ Data fetched and saved successfully.")
                 prefsRepo.isDataLoaded = true

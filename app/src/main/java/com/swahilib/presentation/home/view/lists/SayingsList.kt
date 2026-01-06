@@ -6,6 +6,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entity.UiState
 import com.swahilib.presentation.components.indicators.*
@@ -29,11 +31,15 @@ fun SayingsList(
             is UiState.Filtered -> {
                 when {
                     sayings.isNotEmpty() -> {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(horizontal = 5.dp)
+                        val scrollState = rememberScrollState()
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(scrollState)
+                                .padding(horizontal = 5.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            itemsIndexed(sayings) { index, saying ->
+                            sayings.forEachIndexed { index, saying ->
                                 SayingItem(
                                     saying = saying,
                                     onTap = {
