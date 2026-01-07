@@ -28,15 +28,7 @@ fun HomeScreen(
     val canShowPaywall by viewModel.canShowPaywall.collectAsState()
     var showPaywall by remember { mutableStateOf(false) }
 
-    val lastTabIndex = viewModel.lastHomeTab
     val uiState by viewModel.uiState.collectAsState()
-    var selectedTabIndex by rememberSaveable { mutableStateOf(lastTabIndex) }
-    val selectedTab = homeTabs[selectedTabIndex]
-
-    val idioms by viewModel.filteredIdioms.collectAsState(initial = emptyList())
-    val proverbs by viewModel.filteredProverbs.collectAsState(initial = emptyList())
-    val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
-    val words by viewModel.filteredWords.collectAsState(initial = emptyList())
 
     LaunchedEffect(Unit) {
         viewModel.fetchData()
@@ -84,18 +76,8 @@ fun HomeScreen(
             when (uiState) {
                 is UiState.Filtered -> {
                     HomeContent(
-                        selectedTab = selectedTab,
-                        idioms = idioms,
-                        proverbs = proverbs,
-                        sayings = sayings,
-                        words = words,
                         viewModel = viewModel,
                         navController = navController,
-                        onTabSelected = { tab ->
-                            val tabIndex = homeTabs.indexOf(tab)
-                            selectedTabIndex = tabIndex
-                            viewModel.filterData(tab, "")
-                        }
                     )
                 }
 

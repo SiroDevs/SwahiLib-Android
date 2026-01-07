@@ -2,7 +2,6 @@ package com.swahilib.presentation.components.listitems
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -18,6 +17,7 @@ import com.swahilib.data.sample.SampleSayings
 fun SayingItem(
     modifier: Modifier = Modifier,
     saying: Saying,
+    showSidebar: Boolean = false,
     onTap: (() -> Unit)? = null,
 ) {
     val titleTxtStyle = MaterialTheme.typography.titleLarge.copy(
@@ -43,31 +43,35 @@ fun SayingItem(
         result
     }
 
-    ElevatedCard(
+    Box(
+        modifier = modifier.padding(start = if (showSidebar) 75.dp else 0.dp)
+    ) {
+        ElevatedCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(5.dp)
             .clickable { onTap?.invoke() },
         elevation = CardDefaults.cardElevation(5.dp),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 5.dp)
-        ) {
-            Text(
-                text = saying.title ?: "",
-                style = titleTxtStyle,
-                modifier = Modifier.padding(bottom = 5.dp)
-            )
-
-            if (meaning.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 5.dp)
+            ) {
                 Text(
-                    text = meaning,
-                    style = bodyTxtStyle,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
+                    text = saying.title ?: "",
+                    style = titleTxtStyle,
+                    modifier = Modifier.padding(bottom = 5.dp)
                 )
+
+                if (meaning.isNotEmpty()) {
+                    Text(
+                        text = meaning,
+                        style = bodyTxtStyle,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }
