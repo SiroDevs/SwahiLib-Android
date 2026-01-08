@@ -63,7 +63,7 @@ fun LetterItem(
     val contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.primary
 
     if (text.isEmpty()) {
-        Box( modifier = Modifier .size(40.dp) )
+        Box( modifier = Modifier .size(45.dp) )
     } else {
         Surface(
             modifier = Modifier

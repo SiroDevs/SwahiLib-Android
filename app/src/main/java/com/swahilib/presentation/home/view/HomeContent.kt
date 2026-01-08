@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entity.*
@@ -40,6 +41,7 @@ fun HomeContent(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
+            item { Box(modifier = Modifier.height(5.dp)) }
             item {
                 SearchBox(
                     query = searchQuery,

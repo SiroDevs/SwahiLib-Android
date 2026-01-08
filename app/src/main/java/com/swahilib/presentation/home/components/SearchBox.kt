@@ -38,8 +38,8 @@ fun SearchBox(
                 modifier = Modifier.fillMaxSize(),
                 placeholder = {
                     Text(
-                        text = "Tafuta kwenye Kamusi ... ",
-                        color = Color.White,
+                        text = "Tafuta Kamusi ... ",
+//                        color = Color.White,
                         fontSize = 16.sp
                     )
                 },
