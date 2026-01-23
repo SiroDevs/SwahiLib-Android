@@ -19,8 +19,8 @@ class SubsRepo @Inject constructor() {
             },
             onSuccess = { customerInfo ->
                 val isActive =
-                    customerInfo.entitlements[AppConstants.ENTITLEMENTS]?.isActive == true
-                completion(isActive)
+                    customerInfo.entitlements.active.isEmpty()
+                completion(!isActive)
             }
         )
     }
