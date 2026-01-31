@@ -10,19 +10,18 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import com.swahilib.data.models.Proverb
-import com.swahilib.presentation.components.general.CollapsingHeader
-import com.swahilib.presentation.components.general.MeaningsView
+import com.swahilib.presentation.components.general.*
 import com.swahilib.presentation.components.listitems.SynonymItem
 import com.swahilib.presentation.viewer.proverb.ProverbViewModel
 
 @Composable
-fun ProverbView(
+fun ProverbDetails(
     modifier: Modifier = Modifier,
     viewModel: ProverbViewModel,
     title: String,
-    conjugation: String,
     meanings: List<String>,
-    synonyms: List<Proverb>
+    synonyms: List<Proverb>,
+    explanations: List<String>,
 ) {
     val scrollState = rememberLazyListState()
 
@@ -41,21 +40,21 @@ fun ProverbView(
                         MeaningsView(meanings = meanings)
                     }
 
-                    if (conjugation.isNotEmpty()) {
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("Mnyambuliko: ")
-                                }
-                                withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
-                                    append(conjugation)
-                                }
-                            },
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
-                    }
+//                    if (conjugation.isNotEmpty()) {
+//                        Text(
+//                            text = buildAnnotatedString {
+//                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+//                                    append("Mnyambuliko: ")
+//                                }
+//                                withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
+//                                    append(conjugation)
+//                                }
+//                            },
+//                            fontSize = 20.sp,
+//                            color = MaterialTheme.colorScheme.primary,
+//                            modifier = Modifier.padding(start = 10.dp)
+//                        )
+//                    }
 
                     if (synonyms.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(20.dp))

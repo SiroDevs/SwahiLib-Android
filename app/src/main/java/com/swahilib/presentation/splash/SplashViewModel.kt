@@ -24,7 +24,7 @@ class SplashViewModel @Inject constructor(
     private val _installTime = MutableStateFlow(0L)
     val installTime: StateFlow<Long> = _installTime.asStateFlow()
 
-    fun initializeApp(context: Context) {
+    fun initialize(context: Context) {
         viewModelScope.launch {
             val installTime = prefsRepo.installDate
 

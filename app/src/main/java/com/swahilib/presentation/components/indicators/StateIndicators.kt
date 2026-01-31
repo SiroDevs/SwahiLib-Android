@@ -29,7 +29,7 @@ fun ErrorState(message: String, onRetry: () -> Unit) {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Button(onClick = onRetry) {
-                Text(text = "Retry")
+                Text(text = "Jaribu Tena")
             }
         }
     }

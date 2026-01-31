@@ -23,9 +23,9 @@ fun ProverbScreen(
 ) {
     val viewerState by viewModel.uiState.collectAsState()
     val title by viewModel.title.collectAsState()
-    val conjugation by viewModel.conjugation.collectAsState()
     val meanings by viewModel.meanings.collectAsState()
     val synonyms by viewModel.synonyms.collectAsState()
+    val explanations by viewModel.explanations.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
 
     LaunchedEffect(proverb) {
@@ -71,12 +71,12 @@ fun ProverbScreen(
                     message = (viewerState as ViewerState.Error).message, onRetry = { })
 
                 ViewerState.Loaded -> {
-                    ProverbView(
+                    ProverbDetails(
                         viewModel = viewModel,
                         title = title,
-                        conjugation = conjugation,
                         meanings = meanings,
-                        synonyms = synonyms
+                        synonyms = synonyms,
+                        explanations = explanations,
                     )
                 }
 

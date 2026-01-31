@@ -1,6 +1,5 @@
 package com.swahilib.presentation.splash.view
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -29,7 +28,7 @@ fun SplashScreen(
     val isDataLoaded by viewModel.isDataLoaded.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.initializeApp(context)
+        viewModel.initialize(context)
     }
 
     LaunchedEffect(isLoading, isDataLoaded) {
