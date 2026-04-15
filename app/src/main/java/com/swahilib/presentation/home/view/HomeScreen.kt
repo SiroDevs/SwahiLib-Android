@@ -36,24 +36,37 @@ fun HomeScreen(
     if (showPaywall) {
         Dialog(
             onDismissRequest = { showPaywall = false },
-            properties = DialogProperties(usePlatformDefaultWidth = false)
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                decorFitsSystemWindows = false
+            )
         ) {
-            val paywallOptions = remember {
-                PaywallOptions.Builder(dismissRequest = { showPaywall = false })
-                    .setShouldDisplayDismissButton(true)
-                    .build()
-            }
-            Box() {
-                if (canShowPaywall) {
-                    Paywall(paywallOptions)
-                } else {
-                    CustomerCenter(onDismiss = { showPaywall = false })
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                val paywallOptions = remember {
+                    PaywallOptions.Builder(dismissRequest = { showPaywall = false })
+                        .setShouldDisplayDismissButton(true)
+                        .build()
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .systemBarsPadding()
+                ) {
+                    if (canShowPaywall) {
+                        Paywall(paywallOptions)
+                    } else {
+                        CustomerCenter(onDismiss = { showPaywall = false })
+                    }
                 }
             }
         }
     }
 
     Scaffold(
+        modifier = Modifier.systemBarsPadding(),
         topBar = {
             AppTopBar(
                 title = "SwahiLib",
@@ -64,11 +77,11 @@ fun HomeScreen(
                 }
             )
         },
-    ) { padding ->
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(paddingValues),
             contentAlignment = Alignment.Center,
         ) {
             when (uiState) {
@@ -82,11 +95,13 @@ fun HomeScreen(
                 is UiState.Error -> {
                     ErrorState(
                         message = (uiState as UiState.Error).message,
-                        onRetry = { }
+                        onRetry = {
+                            viewModel.fetchData()
+                        }
                     )
                 }
 
-                UiState.Loading -> LoadingState(fileName = "circle-loader" )
+                UiState.Loading -> LoadingState(fileName = "circle-loader")
                 else -> EmptyState()
             }
         }

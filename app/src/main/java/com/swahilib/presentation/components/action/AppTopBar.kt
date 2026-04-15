@@ -26,30 +26,27 @@ fun AppTopBar(
     onNavIconClick: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    Surface(
-        shadowElevation = 4.dp
-    ) {
-        TopAppBar(
-            title = { Text(text = title) },
-            actions = actions,
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.onPrimary,
-                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            ),
-            navigationIcon = {
-                if (showGoBack) {
-                    IconButton(onClick = { onNavIconClick?.invoke() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                        )
-                    }
+    TopAppBar(
+        title = { Text(text = title) },
+        actions = actions,
+        windowInsets = WindowInsets(0, 0, 0, 0),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        ),
+        navigationIcon = {
+            if (showGoBack) {
+                IconButton(onClick = { onNavIconClick?.invoke() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                    )
                 }
             }
-        )
-    }
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
