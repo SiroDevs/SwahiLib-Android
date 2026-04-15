@@ -4,12 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.domain.entity.UiState
-import com.swahilib.presentation.components.action.AppTopBar
 import com.swahilib.presentation.components.indicators.*
 import com.swahilib.presentation.navigation.Routes
 import com.swahilib.presentation.init.InitViewModel
@@ -34,30 +32,24 @@ fun InitScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            AppTopBar(title = "SwahiLib")
-        },
-        content = { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .background(color = MaterialTheme.colorScheme.onPrimary)
-            ) {
-                when (uiState) {
-                    is UiState.Error -> ErrorState(
-                        message = (uiState as UiState.Error).message,
-                        onRetry = { viewModel.initialize(context) }
-                    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.onPrimary)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
+        when (uiState) {
+            is UiState.Error -> ErrorState(
+                message = (uiState as UiState.Error).message,
+                onRetry = { viewModel.initialize(context) }
+            )
 
-                    is UiState.Loading -> LoadingState(
-                        fileName = "opener-loading",
-                    )
+            is UiState.Loading -> LoadingState(
+                fileName = "opener-loading",
+            )
 
-                    else -> EmptyState()
-                }
-            }
-        },
-    )
+            else -> EmptyState()
+        }
+    }
 }

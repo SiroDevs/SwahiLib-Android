@@ -49,59 +49,56 @@ fun SplashScreen(
 @Preview(showBackground = true)
 @Composable
 fun SplashContent() {
-    Scaffold(
-        content = {
-            Box(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.onPrimary)
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Spacer(Modifier.weight(1f))
-                    Image(
-                        painter = painterResource(id = R.drawable.app_icon),
-                        contentDescription = "",
-                        modifier = Modifier.size(150.dp)
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    Text(
-                        text = AppConstants.APP_TITLE,
-                        style = TextStyle(
-                            fontSize = 35.sp,
-                            letterSpacing = 5.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    )
-                    Text(
-                        text = AppConstants.APP_TITLE2,
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            letterSpacing = 3.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    )
-                    Spacer(Modifier.weight(1f))
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.onPrimary)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Spacer(Modifier.weight(1f))
+            Image(
+                painter = painterResource(id = R.drawable.app_icon),
+                contentDescription = "",
+                modifier = Modifier.size(150.dp)
+            )
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = AppConstants.APP_TITLE,
+                style = TextStyle(
+                    fontSize = 35.sp,
+                    letterSpacing = 5.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            )
+            Text(
+                text = AppConstants.APP_TITLE2,
+                style = TextStyle(
+                    fontSize = 22.sp,
+                    letterSpacing = 3.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            )
+            Spacer(Modifier.weight(1f))
 
-                    KiswahiliKitukuzwe()
-                    Divider(
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        thickness = 2.dp,
-                        modifier = Modifier
-                            .padding(horizontal = 10.dp)
-                            .padding(vertical = 20.dp)
-                            .height(1.dp)
-                    )
-                    AppCredits()
-                    Spacer(Modifier.height(50.dp))
-                }
-            }
-        },
-    )
+            KiswahiliKitukuzwe()
+            Divider(
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                thickness = 2.dp,
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .padding(vertical = 20.dp)
+                    .height(1.dp)
+            )
+            AppCredits()
+            Spacer(Modifier.height(50.dp))
+        }
+    }
 }
