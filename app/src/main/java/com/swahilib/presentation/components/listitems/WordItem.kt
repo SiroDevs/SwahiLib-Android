@@ -18,6 +18,7 @@ import com.swahilib.data.sample.SampleWords
 fun WordItem(
     modifier: Modifier = Modifier,
     word: Word,
+    showSidebar: Boolean = false,
     onTap: (() -> Unit)? = null,
 ) {
     val titleTxtStyle = MaterialTheme.typography.titleLarge.copy(
@@ -50,55 +51,59 @@ fun WordItem(
             ?: emptyList()
     }
 
-    ElevatedCard(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(5.dp)
-            .clickable { onTap?.invoke() },
-        elevation = CardDefaults.cardElevation(5.dp),
+    Box(
+        modifier = modifier.padding(start = if (showSidebar) 75.dp else 0.dp)
     ) {
-        Column(
-            modifier = Modifier
+        ElevatedCard(
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 5.dp)
+                .padding(5.dp)
+                .clickable { onTap?.invoke() },
+            elevation = CardDefaults.cardElevation(5.dp),
         ) {
-            Text(
-                text = word.title ?: "",
-                style = titleTxtStyle,
-                modifier = Modifier.padding(bottom = 5.dp)
-            )
-
-            if (meaning.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 5.dp)
+            ) {
                 Text(
-                    text = meaning,
-                    style = bodyTxtStyle,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = if (synonyms.isNotEmpty()) 8.dp else 0.dp)
+                    text = word.title ?: "",
+                    style = titleTxtStyle,
+                    modifier = Modifier.padding(bottom = 5.dp)
                 )
-            }
 
-            if (synonyms.isNotEmpty()) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                if (meaning.isNotEmpty()) {
                     Text(
-                        text = if (synonyms.size == 1) "KISAWE:" else "VISAWE ${synonyms.size}:",
-                        style = bodyTxtStyle.copy(fontWeight = FontWeight.Bold)
+                        text = meaning,
+                        style = bodyTxtStyle,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = if (synonyms.isNotEmpty()) 8.dp else 0.dp)
                     )
+                }
 
-                    Spacer(Modifier.width(5.dp))
-
-                    LazyRow(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(35.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                if (synonyms.isNotEmpty()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(synonyms) { synonym ->
-                            TagView(tagText = synonym.toString())
-                            Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = if (synonyms.size == 1) "KISAWE:" else "VISAWE ${synonyms.size}:",
+                            style = bodyTxtStyle.copy(fontWeight = FontWeight.Bold)
+                        )
+
+                        Spacer(Modifier.width(5.dp))
+
+                        LazyRow(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(35.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            items(synonyms) { synonym ->
+                                TagView(tagText = synonym.toString())
+                                Spacer(Modifier.width(8.dp))
+                            }
                         }
                     }
                 }

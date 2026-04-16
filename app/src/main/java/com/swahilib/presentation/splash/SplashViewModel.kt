@@ -1,7 +1,6 @@
 package com.swahilib.presentation.splash
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.helpers.NetworkUtils
@@ -22,17 +21,22 @@ class SplashViewModel @Inject constructor(
     private val _isDataLoaded = MutableStateFlow(prefsRepo.isDataLoaded)
     val isDataLoaded: StateFlow<Boolean> = _isDataLoaded.asStateFlow()
 
-    init {
-        Log.d("SplashViewModel", "ViewModel created. Initial isDataLoaded: ${_isDataLoaded.value}")
-        Log.d("SplashViewModel", "PrefsRepo.isDataLoaded: ${prefsRepo.isDataLoaded}")
-    }
+    private val _installTime = MutableStateFlow(0L)
+    val installTime: StateFlow<Long> = _installTime.asStateFlow()
 
-    fun initializeApp(context: Context) {
+    fun initialize(context: Context) {
         viewModelScope.launch {
             val installTime = prefsRepo.installDate
-            if (installTime < 0) {
+
+            if (installTime == 0L) {
                 prefsRepo.installDate = System.currentTimeMillis()
+                _installTime.value = prefsRepo.installDate
+            } else {
+                _installTime.value = installTime
             }
+
+            _isDataLoaded.value = prefsRepo.isDataLoaded
+
             try {
                 if (NetworkUtils.isNetworkAvailable(context)) {
                     checkSubscriptionAndTime(true)
@@ -44,7 +48,6 @@ class SplashViewModel @Inject constructor(
             } finally {
                 _isLoading.value = false
             }
-            _isDataLoaded.value = prefsRepo.isDataLoaded
         }
     }
 

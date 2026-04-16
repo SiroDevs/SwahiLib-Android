@@ -2,6 +2,7 @@ package com.swahilib.presentation.home.components
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.*
 @Composable
 fun VerticalLetters(
     selectedLetter: String,
-    onLetterSelected: (String) -> Unit
+    onLetterSelected: (String) -> Unit,
 ) {
     val letters = remember {
         ('A'..'Z')
@@ -26,20 +27,27 @@ fun VerticalLetters(
 
     val scrollState = rememberLazyListState()
 
-    LazyColumn(
-        state = scrollState,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        items(letters) { letter ->
-            LetterItem(
-                text = letter,
-                isSelected = selectedLetter == letter,
-                onClick = { onLetterSelected(letter) }
-            )
+        LazyColumn(
+            state = scrollState,
+            modifier = Modifier
+                .width(75.dp)
+                .padding(horizontal = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            item { LetterItem() }
+            item { LetterItem() }
+
+            items(letters) { letter ->
+                LetterItem(
+                    text = letter,
+                    isSelected = selectedLetter == letter,
+                    onClick = { onLetterSelected(letter) }
+                )
+            }
         }
     }
 }
@@ -47,36 +55,40 @@ fun VerticalLetters(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LetterItem(
-    text: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
+    text: String = "",
+    isSelected: Boolean = false,
+    onClick: () -> Unit = { },
 ) {
     val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.White
     val contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.primary
 
-    Surface(
-        modifier = Modifier
-            .size(60.dp)
-            .combinedClickable(onClick = onClick),
-        shape = RoundedCornerShape(15.dp),
-        color = backgroundColor,
-        border = BorderStroke(
-            width = if (isSelected) 0.dp else 1.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-        ),
-        shadowElevation = 5.dp
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+    if (text.isEmpty()) {
+        Box( modifier = Modifier .size(45.dp) )
+    } else {
+        Surface(
+            modifier = Modifier
+                .size(60.dp)
+                .combinedClickable(onClick = onClick),
+            shape = RoundedCornerShape(15.dp),
+            color = backgroundColor,
+            border = BorderStroke(
+                width = if (isSelected) 0.dp else 1.dp,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+            ),
+            shadowElevation = 5.dp
         ) {
-            Text(
-                text = text,
-                color = contentColor,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = text,
+                    color = contentColor,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
@@ -86,6 +98,6 @@ fun LetterItem(
 fun VerticalLettersPreview() {
     VerticalLetters(
         selectedLetter = "A",
-        onLetterSelected = {}
+        onLetterSelected = {},
     )
 }

@@ -20,30 +20,25 @@ fun CustomTabTitles(
     onTabSelected: (HomeTab) -> Unit
 ) {
     Surface(
-        color = Color.LightGray,
+        shape = RoundedCornerShape(bottomEnd = 15.dp),
     ) {
-        Surface(
-            color = Color.White,
-            shape = RoundedCornerShape(bottomEnd = 15.dp),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 5.dp)
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp, vertical = 5.dp)
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.width(4.dp))
 
-                homeTabs.forEach { tab ->
-                    TabItem(
-                        text = tab.title.uppercase(),
-                        isSelected = selectedTab == tab,
-                        onClick = { onTabSelected(tab) }
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
+            homeTabs.forEach { tab ->
+                TabItem(
+                    text = tab.title.uppercase(),
+                    isSelected = selectedTab == tab,
+                    onClick = { onTabSelected(tab) }
+                )
+                Spacer(modifier = Modifier.width(8.dp))
             }
         }
     }

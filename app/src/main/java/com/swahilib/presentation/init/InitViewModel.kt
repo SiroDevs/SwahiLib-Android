@@ -1,7 +1,9 @@
 package com.swahilib.presentation.init
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
+import com.swahilib.core.helpers.NetworkUtils
 import com.swahilib.domain.entity.UiState
 import com.swahilib.domain.repos.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,32 +24,36 @@ class InitViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun fetchData() {
+    fun initialize(context: Context) {
         viewModelScope.launch {
             _uiState.emit(UiState.Loading)
             try {
-                // Launch all async operations and collect them
-                val idiomDeferred = async { idiomRepo.fetchRemoteData() }
-                val proverbDeferred = async { proverbRepo.fetchRemoteData() }
-                val sayingDeferred = async { sayingRepo.fetchRemoteData() }
-                val wordDeferred = async { wordRepo.fetchRemoteData() }
+                if (NetworkUtils.isNetworkAvailable(context)) {
+                    val idiomInitialization = async { idiomRepo.fetchRemoteData() }
+                    val proverbInitialization = async { proverbRepo.fetchRemoteData() }
+                    val sayingInitialization = async { sayingRepo.fetchRemoteData() }
+                    val wordInitialization = async { wordRepo.fetchRemoteData() }
 
-                idiomDeferred.await()
-                proverbDeferred.await()
-                sayingDeferred.await()
-                wordDeferred.await()
+                    idiomInitialization.await()
+                    proverbInitialization.await()
+                    sayingInitialization.await()
+                    wordInitialization.await()
 
-                Log.d("TAG", "✅ Data fetched and saved successfully.")
-                prefsRepo.isDataLoaded = true
-                _uiState.emit(UiState.Saved)
+                    Log.d("TAG", "✅ Data fetched and saved successfully.")
+                    prefsRepo.isDataLoaded = true
+                    _uiState.emit(UiState.Saved)
+                } else {
+                    _uiState.emit(UiState.Error("Loo! Hapa bila muunganisho wa intaneti unaoaminika hutoboi."))
+                }
             } catch (e: Exception) {
                 val message = when (e) {
                     is HttpException -> "HTTP Error: ${e.code()}"
                     else -> "Network error: ${e.message}"
                 }
                 Log.e("TAG", message, e)
-                prefsRepo.isDataLoaded = false // Reset on error
                 _uiState.emit(UiState.Error(message))
+            } finally {
+                _uiState.emit(UiState.Error("Loo! Hapa bila muunganisho wa intaneti unaoaminika hutoboi!"))
             }
         }
     }

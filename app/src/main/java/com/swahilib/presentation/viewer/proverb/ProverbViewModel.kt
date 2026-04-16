@@ -23,26 +23,25 @@ class ProverbViewModel @Inject constructor(
     private val _title = MutableStateFlow("")
     val title: StateFlow<String> get() = _title
 
-    private val _conjugation = MutableStateFlow("")
-    val conjugation: StateFlow<String> get() = _conjugation
+    private val _meanings = MutableStateFlow<List<String>>(emptyList())
+    val meanings: StateFlow<List<String>> get() = _meanings
 
     private val _isLiked = MutableStateFlow(false)
     val isLiked: StateFlow<Boolean> get() = _isLiked
 
-    private val _meanings = MutableStateFlow<List<String>>(emptyList())
-    val meanings: StateFlow<List<String>> get() = _meanings
-
     private val _synonyms = MutableStateFlow<List<Proverb>>(emptyList())
     val synonyms: StateFlow<List<Proverb>> get() = _synonyms
+
+    private val _explanations = MutableStateFlow<List<String>>(emptyList())
+    val explanations: StateFlow<List<String>> get() = _explanations
 
     fun loadProverb(proverb: Proverb) {
         _uiState.value = ViewerState.Loading
         _isLiked.value = proverb.liked
 
         _title.value = proverb.title.toString()
-        _conjugation.value = proverb.conjugation.toString()
-
-        _meanings.value = cleanMeaning(proverb.meaning).split("|")
+        _meanings.value = cleanMeaning(proverb.meaning).split("#")
+        _explanations.value = cleanMeaning(proverb.conjugation).split("#")
 
         val synonymTitles = proverb.synonyms
             ?.takeIf { it.isNotEmpty() }

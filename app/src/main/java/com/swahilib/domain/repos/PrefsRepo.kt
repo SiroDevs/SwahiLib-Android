@@ -1,10 +1,10 @@
 package com.swahilib.domain.repos
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.swahilib.core.utils.PrefConstants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.*
+import androidx.core.content.edit
 
 @Singleton
 class PrefsRepo @Inject constructor(
@@ -13,13 +13,16 @@ class PrefsRepo @Inject constructor(
     private val prefs =
         context.getSharedPreferences(PrefConstants.PREFERENCE_FILE, Context.MODE_PRIVATE)
 
-    fun getAllPreferences(): Map<String, *> {
-        return prefs.all
-    }
-
     var isDataLoaded: Boolean
-        get() = prefs.getBoolean(PrefConstants.IS_DATA_LOADED, false)
-        set(value) = prefs.edit { putBoolean(PrefConstants.IS_DATA_LOADED, value) }
+        get() = {
+            val value = prefs.getBoolean(PrefConstants.IS_DATA_LOADED, false)
+            value
+        }()
+        set(value) = {
+            prefs.edit {
+                putBoolean(PrefConstants.IS_DATA_LOADED, value)
+            }
+        }()
 
     var appThemeMode: ThemeMode
         get() = ThemeMode.valueOf(
@@ -27,10 +30,6 @@ class PrefsRepo @Inject constructor(
                 ?: ThemeMode.SYSTEM.name
         )
         set(value) = prefs.edit { putString(PrefConstants.THEME_MODE, value.name) }
-
-    var isReviewDone: Boolean
-        get() = prefs.getBoolean(PrefConstants.IS_REVIEW_DONE, false)
-        set(value) = prefs.edit { putBoolean(PrefConstants.IS_REVIEW_DONE, value) }
 
     var installDate: Long
         get() = prefs.getLong(PrefConstants.INSTALL_DATE, 0L)
@@ -71,16 +70,5 @@ class PrefsRepo @Inject constructor(
         val lastTime = lastAppOpenTime
         if (lastTime == 0L) return 0L
         return System.currentTimeMillis() - lastTime
-    }
-
-    private inline fun SharedPreferences.edit(
-        commit: Boolean = false,
-        action: SharedPreferences.Editor.() -> Unit
-    ) {
-        val editor = edit()
-        editor.action()
-        if (commit) {
-            editor.apply()
-        }
     }
 }

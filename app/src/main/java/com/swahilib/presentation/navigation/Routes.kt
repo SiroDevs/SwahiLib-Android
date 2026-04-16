@@ -8,5 +8,6 @@ object Routes {
     const val PROVERB = "proverb"
     const val SAYING = "saying"
     const val WORD = "word"
+    const val ADVSEARCH = "advsearch"
     const val SETTINGS = "settings"
 }
