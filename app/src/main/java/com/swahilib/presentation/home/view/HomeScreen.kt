@@ -66,7 +66,6 @@ fun HomeScreen(
     }
 
     Scaffold(
-        modifier = Modifier.systemBarsPadding(),
         topBar = {
             AppTopBar(
                 title = "SwahiLib",
