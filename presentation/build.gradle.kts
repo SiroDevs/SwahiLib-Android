@@ -8,6 +8,12 @@ plugins {
     alias(libs.plugins.devtools.ksp)
 }
 
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("keystore/key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(keystorePropertiesFile.inputStream())
+}
+
 val configProperties = Properties()
 val configFile = rootProject.file("gradle/config/config.properties")
 if (configFile.exists()) {
@@ -17,6 +23,34 @@ if (configFile.exists()) {
 android {
     namespace = (configProperties["applicationId"] as String) + ".presentation"
     compileSdk = (configProperties["targetSdk"] as String).toInt()
+
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storePassword = keystoreProperties["storePassword"] as String
+            storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        create("staging") {
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
 }
 
 dependencies {
