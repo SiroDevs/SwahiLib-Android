@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.12.3"
 kotlin = "2.1.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -25,6 +25,8 @@ billing = "8.0.0"
 revenuecat = "9.7.2"
 compiler = "3.2.0-alpha11"
 foundation = "1.10.0"
+appcompat = "1.7.1"
+material = "1.13.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,6 +68,8 @@ revenuecat = { module = "com.revenuecat.purchases:purchases", version.ref = "rev
 revenuecat-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "revenuecat" }
 androidx-compiler = { group = "androidx.databinding", name = "compiler", version.ref = "compiler" }
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -74,3 +78,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 io-sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
+android-library = { id = "com.android.library", version.ref = "agp" }
