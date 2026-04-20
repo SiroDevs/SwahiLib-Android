@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.devtools.ksp)
-    kotlin("plugin.serialization") version "2.1.21"
-    id("kotlin-parcelize")
     alias(libs.plugins.io.sentry)
 }
 
@@ -27,7 +25,7 @@ val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
-    namespace = "com.swahilib"
+    namespace = configProperties["applicationId"] as String
     compileSdk = (configProperties["targetSdk"] as String).toInt()
 
     composeOptions {
@@ -35,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.swahilib"
+        applicationId = configProperties["applicationId"] as String
         minSdk = (configProperties["minSdk"] as String).toInt()
         targetSdk = (configProperties["targetSdk"] as String).toInt()
         versionCode = (configProperties["versionCode"] as String).toInt()
@@ -108,48 +106,15 @@ configurations.all {
 }
 
 dependencies {
-//    implementation(project(":core"))
-//    implementation(project(":data"))
-//    implementation(project(":domain"))
-//    implementation(project(":presentation"))
+    implementation(project(":core"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
+    implementation(project(":presentation"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.icons.extended)
-    implementation(libs.compose.navigation)
-    implementation(libs.compose.hilt.navigation)
-    implementation(libs.androidx.compose.livedata)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.compiler)
-    implementation(libs.androidx.foundation)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.lottie.compose)
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    annotationProcessor(libs.androidx.room.compiler)
-    implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    kspAndroidTest(libs.hilt.android.compiler)
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.gson)
-    implementation(libs.squareup.okhttp3.logging)
-    implementation(platform(libs.jan.tennert.supabase.bom))
-    implementation(libs.jan.tennert.supabase.postgrest)
-    implementation(libs.ktor.client.android)
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.hilt.android)
+    implementation(libs.compose.hilt.navigation)
+    implementation(libs.androidx.foundation)
     implementation(libs.android.billing)
     implementation(libs.revenuecat)
-    implementation(libs.revenuecat.ui)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
 }

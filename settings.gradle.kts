@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "SwahiLib"
 include(":app")
+include(":core")
+include(":data")
+include(":domain")
+include(":presentation")
