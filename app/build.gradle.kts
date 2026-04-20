@@ -35,7 +35,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = configProperties["applicationId"] as String
+        applicationId = "com.swahilib"
         minSdk = (configProperties["minSdk"] as String).toInt()
         targetSdk = (configProperties["targetSdk"] as String).toInt()
         versionCode = (configProperties["versionCode"] as String).toInt()
