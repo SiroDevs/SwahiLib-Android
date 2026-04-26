@@ -2,13 +2,12 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.devtools.ksp)
     kotlin("plugin.serialization") version "2.1.21"
     id("kotlin-parcelize")
-    alias(libs.plugins.io.sentry)
+//    alias(libs.plugins.io.sentry)
 }
 
 val keystoreProperties = Properties()
@@ -78,13 +77,6 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     buildFeatures {
         compose = true
         buildConfig = true
@@ -94,14 +86,14 @@ android {
     }
 }
 
-sentry {
-    debug.set(true)
-    includeSourceContext.set(true)
-    org.set("futuristicken")
-    projectName.set("swahilib-android")
-    additionalSourceDirsForSourceContext.set(setOf("detail/src/main/java", "core/src/main/java"))
-    authToken.set(localProperties.getProperty("SENTRY_AUTH_TOKEN"))
-}
+//sentry {
+//    debug.set(true)
+//    includeSourceContext.set(true)
+//    org.set("futuristicken")
+//    projectName.set("swahilib-android")
+//    additionalSourceDirsForSourceContext.set(setOf("detail/src/main/java", "core/src/main/java"))
+//    authToken.set(localProperties.getProperty("SENTRY_AUTH_TOKEN"))
+//}
 
 configurations.all {
     exclude(group = "com.google.guava", module = "listenablefuture")

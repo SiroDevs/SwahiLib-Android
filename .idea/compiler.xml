@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="21" />
+    <bytecodeTargetLevel target="21">
+      <module name="build-logic.convention" target="17" />
+      <module name="build-logic.convention.main" target="17" />
+      <module name="build-logic.convention.test" target="17" />
+      <module name="SwahiLib.app-catalog" target="21" />
+      <module name="SwahiLib.benchmarks" target="21" />
+      <module name="SwahiLib.core.analytics" target="21" />
+      <module name="SwahiLib.core.data" target="21" />
+      <module name="SwahiLib.core.data-test" target="21" />
+      <module name="SwahiLib.core.database" target="21" />
+      <module name="SwahiLib.core.datastore" target="21" />
+      <module name="SwahiLib.core.datastore-test" target="21" />
+      <module name="SwahiLib.core.designsystem" target="21" />
+      <module name="SwahiLib.core.domain" target="21" />
+      <module name="SwahiLib.core.navigation" target="21" />
+      <module name="SwahiLib.core.network" target="21" />
+      <module name="SwahiLib.core.notifications" target="21" />
+      <module name="SwahiLib.core.screenshot-testing" target="21" />
+      <module name="SwahiLib.core.testing" target="21" />
+      <module name="SwahiLib.core.ui" target="21" />
+      <module name="SwahiLib.feature.bookmarks.api" target="21" />
+      <module name="SwahiLib.feature.bookmarks.impl" target="21" />
+      <module name="SwahiLib.feature.foryou.api" target="21" />
+      <module name="SwahiLib.feature.foryou.impl" target="21" />
+      <module name="SwahiLib.feature.interests.api" target="21" />
+      <module name="SwahiLib.feature.interests.impl" target="21" />
+      <module name="SwahiLib.feature.search.api" target="21" />
+      <module name="SwahiLib.feature.search.impl" target="21" />
+      <module name="SwahiLib.feature.settings.impl" target="21" />
+      <module name="SwahiLib.feature.topic.api" target="21" />
+      <module name="SwahiLib.feature.topic.impl" target="21" />
+      <module name="SwahiLib.sync.sync-test" target="21" />
+      <module name="SwahiLib.sync.work" target="21" />
+      <module name="SwahiLib.ui-test-hilt-manifest" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
