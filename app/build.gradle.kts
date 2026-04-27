@@ -16,29 +16,23 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(keystorePropertiesFile.inputStream())
 }
 
-val configProperties = Properties()
-val configFile = rootProject.file("gradle/config/config.properties")
-if (configFile.exists()) {
-    configProperties.load(configFile.inputStream())
-}
-
 val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
-    namespace = configProperties["applicationId"] as String
-    compileSdk = (configProperties["targetSdk"] as String).toInt()
+    namespace = "com.swahilib"
+    compileSdk = 36
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.8.1"
     }
 
     defaultConfig {
-        applicationId = configProperties["applicationId"] as String
-        minSdk = (configProperties["minSdk"] as String).toInt()
-        targetSdk = (configProperties["targetSdk"] as String).toInt()
-        versionCode = (configProperties["versionCode"] as String).toInt()
-        versionName = configProperties["versionName"] as String
+        applicationId = "com.swahilib"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 142
+        versionName = "1.0.142"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
