@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.devtools.ksp)
     kotlin("plugin.serialization") version "2.1.21"
     id("kotlin-parcelize")
-//    alias(libs.plugins.io.sentry)
 }
 
 val keystoreProperties = Properties()
@@ -79,15 +78,6 @@ android {
         disable += "NullSafeMutableLiveData"
     }
 }
-
-//sentry {
-//    debug.set(true)
-//    includeSourceContext.set(true)
-//    org.set("futuristicken")
-//    projectName.set("swahilib-android")
-//    additionalSourceDirsForSourceContext.set(setOf("detail/src/main/java", "core/src/main/java"))
-//    authToken.set(localProperties.getProperty("SENTRY_AUTH_TOKEN"))
-//}
 
 configurations.all {
     exclude(group = "com.google.guava", module = "listenablefuture")

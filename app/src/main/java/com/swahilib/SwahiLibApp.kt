@@ -4,7 +4,7 @@ import android.app.Application
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import dagger.hilt.android.HiltAndroidApp
-import io.sentry.android.core.SentryAndroid
+//import io.sentry.android.core.SentryAndroid
 
 @HiltAndroidApp
 class SwahiLibApp : Application() {
@@ -17,10 +17,10 @@ class SwahiLibApp : Application() {
                 .build()
         )
 
-        SentryAndroid.init(this) { options ->
-            options.dsn = BuildConfig.SentryDsn
-            options.tracesSampleRate = 1.0
-            options.isDebug = false
-        }
+//        SentryAndroid.init(this) { options ->
+//            options.dsn = BuildConfig.SentryDsn
+//            options.tracesSampleRate = 1.0
+//            options.isDebug = false
+//        }
     }
 }

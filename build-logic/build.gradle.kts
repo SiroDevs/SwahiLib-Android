@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `kotlin-dsl`
-//    alias(libs.plugins.android.lint)
 }
 
 group = "com.swahilib.buildlogic"
@@ -32,15 +31,15 @@ dependencies {
 gradlePlugin {
     plugins {
         register("convention") {
-            id = libs.plugins.swahilib.app.asProvider().get().pluginId
+            id = libs.plugins.swahilib.convention.get().pluginId
             implementationClass = "ConventionPlugin"
         }
         register("appCompose") {
-            id = libs.plugins.swahilib.app.compose.get().pluginId
+            id = libs.plugins.swahilib.compose.get().pluginId
             implementationClass = "ComposeConventionPlugin"
         }
         register("jacoco") {
-            id = libs.plugins.swahilib.app.jacoco.get().pluginId
+            id = libs.plugins.swahilib.jacoco.get().pluginId
             implementationClass = "JacocoConventionPlugin"
         }
         register("libCompose") {
@@ -72,7 +71,7 @@ gradlePlugin {
             implementationClass = "RoomConventionPlugin"
         }
         register("appFlavors") {
-            id = libs.plugins.swahilib.app.flavors.get().pluginId
+            id = libs.plugins.swahilib.flavors.get().pluginId
             implementationClass = "AppFlavorsConventionPlugin"
         }
         register("lint") {
