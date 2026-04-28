@@ -25,3 +25,4 @@ dependencyResolutionManagement {
 rootProject.name = "SwahiLib"
 include(":app")
 include(":build-logic")
+include(":data")

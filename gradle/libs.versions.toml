@@ -33,6 +33,7 @@ truth = "1.4.5"
 uiTestJunit4 = "1.11.0"
 benchmark = "1.5.0-alpha05"
 roborazzi = "1.59.0"
+dependencyGuard = "0.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -90,29 +91,34 @@ spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plug
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+android-lint = { id = "com.android.lint", version.ref = "agp" }
+android-test = { id = "com.android.test", version.ref = "agp" }
+dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 io-sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
-android-library = { id = "com.android.library", version.ref = "agp" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "benchmark"}
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
+room = { id = "androidx.room", version.ref = "room" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 # Plugins defined by this project
-swahilib-convention = { id = "swahilib.app.convention" }
-swahilib-compose = { id = "swahilib.app.compose" }
-swahilib-flavors = { id = "swahilib.app.flavors" }
-swahilib-jacoco = { id = "swahilib.app.jacoco" }
-swahilib-feature-impl = { id = "swahilib.feature.impl" }
-swahilib-feature-api = { id = "swahilib.feature.api" }
-swahilib-lib = { id = "swahilib.lib.convention" }
-swahilib-lib-compose = { id = "swahilib.lib.compose" }
-swahilib-lib-jacoco = { id = "swahilib.lib.jacoco" }
-swahilib-lint = { id = "swahilib.lint" }
-swahilib-room = { id = "swahilib.room" }
-swahilib-test = { id = "swahilib.test" }
+swahilib-android-app = { id = "swahilib.android.app" }
+swahilib-android-app-compose = { id = "swahilib.android.app.compose" }
+swahilib-android-app-flavors = { id = "swahilib.android.app.flavors" }
+swahilib-android-app-jacoco = { id = "swahilib.android.app.jacoco" }
+swahilib-android-feature-impl = { id = "swahilib.android.feature.impl" }
+swahilib-android-feature-api = { id = "swahilib.android.feature.api" }
+swahilib-android-library = { id = "swahilib.android.library" }
+swahilib-android-library-compose = { id = "swahilib.android.library.compose" }
+swahilib-android-library-jacoco = { id = "swahilib.android.library.jacoco" }
+swahilib-android-lint = { id = "swahilib.android.lint" }
+swahilib-android-room = { id = "swahilib.android.room" }
+swahilib-android-test = { id = "swahilib.android.test" }
 swahilib-hilt = { id = "swahilib.hilt" }
-swahilib-jvm-lib = { id = "swahilib.jvm.lib" }
+swahilib-jvm-library = { id = "swahilib.jvm.library" }
 swahilib-root = { id = "swahilib.root" }
