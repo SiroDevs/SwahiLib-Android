@@ -22,7 +22,6 @@ androidxHiltLifecycleViewModelCompose = "1.3.0-alpha02"
 androidxLifecycle = "2.10.0"
 androidxLintGradle = "1.0.0-alpha03"
 androidxLifecycleViewModelNavigation3 = "2.10.0"
-androidxMacroBenchmark = "1.5.0-alpha01"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.8.5"
 androidxNavigation3 = "1.0.0"
@@ -78,7 +77,6 @@ accompanist-permissions = { group = "com.google.accompanist", name = "accompanis
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
-androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidxMacroBenchmark" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom-alpha", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxComposeFoundation" }
@@ -198,7 +196,6 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 android-test = { id = "com.android.test", version.ref = "agp" }
-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark"}
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
@@ -214,7 +211,6 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 # Plugins defined by this project
 swahilib-android-app = { id = "swahilib.android.app" }
 swahilib-android-app-compose = { id = "swahilib.android.app.compose" }
-swahilib-app-flavors = { id = "libs.plugins.swahilib.app.flavors" }
 swahilib-android-app-jacoco = { id = "swahilib.android.app.jacoco" }
 swahilib-android-feature-impl = { id = "swahilib.android.feature.impl" }
 swahilib-android-feature-api = { id = "swahilib.android.feature.api" }

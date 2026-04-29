@@ -1,18 +1,21 @@
-import com.swahilib.AppBuildType
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.swahilib.android.app)
     alias(libs.plugins.swahilib.android.app.compose)
-    alias(libs.plugins.swahilib.app.flavors)
     alias(libs.plugins.swahilib.android.app.jacoco)
     alias(libs.plugins.swahilib.hilt)
-    alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.swahilib.supabase)
     alias(libs.plugins.swahilib.android.room)
     id("kotlin-parcelize")
+}
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("keystore/key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(keystorePropertiesFile.inputStream())
 }
 
 val localProperties = Properties()
@@ -36,19 +39,33 @@ android {
         buildConfigField("String", "SentryDsn", "\"${localProperties.getProperty("SENTRY_DSN")}\"")
     }
 
-    buildTypes {
-        debug {
-            applicationIdSuffix = AppBuildType.DEBUG.applicationIdSuffix
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storePassword = keystoreProperties["storePassword"] as String
+            storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
         }
+    }
+
+    buildTypes {
         release {
             isMinifyEnabled = providers.gradleProperty("minifyWithR8")
                 .map(String::toBooleanStrict).getOrElse(true)
-            applicationIdSuffix = AppBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro")
-
-            signingConfig = signingConfigs.named("debug").get()
+            signingConfig = signingConfigs.getByName("release")
 //            baselineProfile.automaticGenerationDuringBuild = true
+        }
+        create("staging") {
+            isMinifyEnabled = providers.gradleProperty("minifyWithR8")
+                .map(String::toBooleanStrict).getOrElse(true)
+            signingConfig = signingConfigs.getByName("release")
+            applicationIdSuffix = ".stg"
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -133,13 +150,6 @@ dependencies {
     testImplementation(libs.hilt.android.testing)
 //    testImplementation(projects.sync.syncTest)
     testImplementation(libs.kotlin.test)
-//
-    testDemoImplementation(libs.androidx.navigation.testing)
-    testDemoImplementation(libs.robolectric)
-    testDemoImplementation(libs.roborazzi)
-//    testDemoImplementation(projects.core.screenshotTesting)
-//    testDemoImplementation(projects.core.testing)
-//
 //    androidTestImplementation(projects.core.testing)
 //    androidTestImplementation(projects.core.dataTest)
 //    androidTestImplementation(projects.core.datastoreTest)
@@ -147,17 +157,6 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.kotlin.test)
-
-//    baselineProfile(projects.benchmarks)
-}
-
-baselineProfile {
-    // Don't build on every iteration of a full assemble.
-    // Instead enable generation directly for the release build variant.
-    automaticGenerationDuringBuild = false
-
-    // Make use of Dex Layout Optimizations via Startup Profiles
-    dexLayoutOptimization = true
 }
 
 dependencyGuard {

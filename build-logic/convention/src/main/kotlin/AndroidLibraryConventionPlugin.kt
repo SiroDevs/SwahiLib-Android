@@ -1,6 +1,5 @@
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.swahilib.configureFlavors
 import com.swahilib.configureGradleManagedDevices
 import com.swahilib.configureKotlinAndroid
 import com.swahilib.configurePrintApksTask
@@ -25,7 +24,6 @@ abstract class AndroidLibraryConventionPlugin : Plugin<Project> {
                 lint.targetSdk = 36
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 testOptions.animationsDisabled = true
-                configureFlavors(this)
                 configureGradleManagedDevices(this)
                 // The resource prefix is derived from the module name,
                 // so resources inside ":core:module1" must be prefixed with "core_module1_"

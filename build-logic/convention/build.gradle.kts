@@ -82,10 +82,6 @@ gradlePlugin {
             id = libs.plugins.swahilib.android.room.get().pluginId
             implementationClass = "AndroidRoomConventionPlugin"
         }
-        register("appFlavors") {
-            id = libs.plugins.swahilib.app.flavors.get().pluginId
-            implementationClass = "AppFlavorsConventionPlugin"
-        }
         register("androidLint") {
             id = libs.plugins.swahilib.android.lint.get().pluginId
             implementationClass = "AndroidLintConventionPlugin"
