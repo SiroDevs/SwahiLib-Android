@@ -1,4 +1,3 @@
-
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -7,9 +6,6 @@ plugins {
 }
 
 group = "com.swahilib.buildlogic"
-
-// Configure the build-logic plugins to target JDK 17
-// This matches the JDK used to build the project, and is not related to what is running on device.
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -25,8 +21,6 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
-    compileOnly(libs.firebase.crashlytics.gradlePlugin)
-    compileOnly(libs.firebase.performance.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
@@ -44,19 +38,19 @@ tasks {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = libs.plugins.swahilib.android.application.compose.get().pluginId
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        register("appCompose") {
+            id = libs.plugins.swahilib.android.app.compose.get().pluginId
+            implementationClass = "AndroidAppComposeConventionPlugin"
         }
-        register("androidApplication") {
-            id = libs.plugins.swahilib.android.application.asProvider().get().pluginId
-            implementationClass = "AndroidApplicationConventionPlugin"
+        register("androidApp") {
+            id = libs.plugins.swahilib.android.app.asProvider().get().pluginId
+            implementationClass = "AndroidAppConventionPlugin"
         }
-        register("androidApplicationJacoco") {
-            id = libs.plugins.swahilib.android.application.jacoco.get().pluginId
-            implementationClass = "AndroidApplicationJacocoConventionPlugin"
+        register("jacoco") {
+            id = libs.plugins.swahilib.android.app.jacoco.get().pluginId
+            implementationClass = "AndroidAppJacocoConventionPlugin"
         }
-        register("androidLibraryCompose") {
+        register("composeLibrary") {
             id = libs.plugins.swahilib.android.library.compose.get().pluginId
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
@@ -64,15 +58,15 @@ gradlePlugin {
             id = libs.plugins.swahilib.android.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-        register("androidFeatureImpl") {
+        register("featureImpl") {
             id = libs.plugins.swahilib.android.feature.impl.get().pluginId
             implementationClass = "AndroidFeatureImplConventionPlugin"
         }
-        register("androidFeatureApi") {
+        register("featureApi") {
             id = libs.plugins.swahilib.android.feature.api.get().pluginId
             implementationClass = "AndroidFeatureApiConventionPlugin"
         }
-        register("androidLibraryJacoco") {
+        register("jacocoLibrary") {
             id = libs.plugins.swahilib.android.library.jacoco.get().pluginId
             implementationClass = "AndroidLibraryJacocoConventionPlugin"
         }
@@ -84,17 +78,13 @@ gradlePlugin {
             id = libs.plugins.swahilib.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
         }
-        register("androidRoom") {
+        register("room") {
             id = libs.plugins.swahilib.android.room.get().pluginId
             implementationClass = "AndroidRoomConventionPlugin"
         }
-        register("androidFirebase") {
-            id = libs.plugins.swahilib.android.application.firebase.get().pluginId
-            implementationClass = "AndroidApplicationFirebaseConventionPlugin"
-        }
-        register("androidFlavors") {
-            id = libs.plugins.swahilib.android.application.flavors.get().pluginId
-            implementationClass = "AndroidApplicationFlavorsConventionPlugin"
+        register("appFlavors") {
+            id = libs.plugins.swahilib.app.flavors.get().pluginId
+            implementationClass = "AppFlavorsConventionPlugin"
         }
         register("androidLint") {
             id = libs.plugins.swahilib.android.lint.get().pluginId

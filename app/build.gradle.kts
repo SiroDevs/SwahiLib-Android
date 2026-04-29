@@ -1,38 +1,26 @@
+import com.swahilib.AppBuildType
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.dagger.hilt)
-    alias(libs.plugins.devtools.ksp)
-    id("kotlin-parcelize")
-}
-
-val keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("keystore/key.properties")
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(keystorePropertiesFile.inputStream())
+    alias(libs.plugins.swahilib.android.app)
+    alias(libs.plugins.swahilib.android.app.compose)
+    alias(libs.plugins.swahilib.app.flavors)
+    alias(libs.plugins.swahilib.android.app.jacoco)
+    alias(libs.plugins.swahilib.hilt)
+    alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.roborazzi)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
-    namespace = "com.swahilib"
-    compileSdk = 36
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.8.1"
-    }
-
     defaultConfig {
         applicationId = "com.swahilib"
-        minSdk = 24
-        targetSdk = 36
-        versionCode = 142
-        versionName = "1.0.142"
-        multiDexEnabled = true
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        versionCode = 150
+        versionName = "1.0.150"
+        testInstrumentationRunner = "com.swahilib.core.testing.AppTestRunner"
 
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
@@ -41,110 +29,111 @@ android {
         buildConfigField("String", "SentryDsn", "\"${localProperties.getProperty("SENTRY_DSN")}\"")
     }
 
-    signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storePassword = keystoreProperties["storePassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
-        }
-    }
-
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("release")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+        debug {
+            applicationIdSuffix = AppBuildType.DEBUG.applicationIdSuffix
         }
-        create("staging") {
-            isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("release")
-            applicationIdSuffix = ".stg"
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-    lint {
-        disable += "NullSafeMutableLiveData"
-    }
-}
+        release {
+            isMinifyEnabled = providers.gradleProperty("minifyWithR8")
+                .map(String::toBooleanStrict).getOrElse(true)
+            applicationIdSuffix = AppBuildType.RELEASE.applicationIdSuffix
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro")
 
-configurations.all {
-    exclude(group = "com.google.guava", module = "listenablefuture")
+            signingConfig = signingConfigs.named("debug").get()
+            baselineProfile.automaticGenerationDuringBuild = true
+        }
+    }
+
+    packaging {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        }
+    }
+    testOptions.unitTests.isIncludeAndroidResources = true
+    namespace = "com.swahilib"
 }
 
 dependencies {
-    // Core AndroidX
-    implementation(libs.androidx.core.ktx)     //  Kotlin extensions for core Android APIs
-    implementation(libs.androidx.lifecycle.runtime.ktx)     //  Lifecycle-aware components
+//    implementation(projects.feature.interests.api)
+//    implementation(projects.feature.interests.impl)
+//    implementation(projects.feature.foryou.api)
+//    implementation(projects.feature.foryou.impl)
+//    implementation(projects.feature.bookmarks.api)
+//    implementation(projects.feature.bookmarks.impl)
+//    implementation(projects.feature.topic.api)
+//    implementation(projects.feature.topic.impl)
+//    implementation(projects.feature.search.api)
+//    implementation(projects.feature.search.impl)
+//    implementation(projects.feature.settings.impl)
 
-    // Jetpack Compose - BOM
-    implementation(platform(libs.androidx.compose.bom))     //  Compose Bill of Materials (BOM)
+//    implementation(projects.core.common)
+//    implementation(projects.core.ui)
+//    implementation(projects.core.designsystem)
+//    implementation(projects.core.data)
+//    implementation(projects.core.model)
+//    implementation(projects.core.analytics)
+//    implementation(projects.sync.work)
 
-    // Jetpack Compose - Core UI
-    implementation(libs.androidx.activity.compose)     //  Activity support for Compose
-    implementation(libs.androidx.ui)     //  Core Compose UI elements
-    implementation(libs.androidx.ui.graphics)     //  Compose graphics primitives
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
+    implementation(libs.androidx.compose.material3.adaptive.navigation3)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.runtime.tracing)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModel.navigation3)
+    implementation(libs.androidx.profileinstaller)
+    implementation(libs.androidx.tracing.ktx)
+    implementation(libs.androidx.window.core)
+    implementation(libs.kotlinx.coroutines.guava)
+    implementation(libs.coil.kt)
+    implementation(libs.kotlinx.serialization.json)
 
-    // Jetpack Compose - Material Design
-    implementation(libs.androidx.material3)     //  Material 3 UI components
-    implementation(libs.androidx.compose.material)     //  Material 2 UI components (legacy)
-    implementation(libs.androidx.icons.extended)     //  Extended material icons
+    ksp(libs.hilt.compiler)
 
-    // Jetpack Compose - Navigation & State
-    implementation(libs.compose.navigation)     //  Navigation support in Compose
-    implementation(libs.compose.hilt.navigation)     //  Hilt + Compose Navigation integration
-    implementation(libs.androidx.compose.livedata)     //  LiveData support in Compose
+    debugImplementation(libs.androidx.compose.ui.testManifest)
+//    debugImplementation(projects.uiTestHiltManifest)
 
-    // Jetpack Compose - Tooling & Preview
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.compiler)
-    implementation(libs.androidx.foundation)     //  Compose UI preview support
-    debugImplementation(libs.androidx.ui.tooling)     //  Compose UI tools (debug only)
-    debugImplementation(libs.androidx.ui.test.manifest)     //  Compose test manifest (debug only)
-    implementation(libs.lottie.compose)     //  Lottie loader
+    kspTest(libs.hilt.compiler)
+//
+//    testImplementation(projects.core.dataTest)
+//    testImplementation(projects.core.datastoreTest)
+    testImplementation(libs.hilt.android.testing)
+//    testImplementation(projects.sync.syncTest)
+    testImplementation(libs.kotlin.test)
+//
+    testDemoImplementation(libs.androidx.navigation.testing)
+    testDemoImplementation(libs.robolectric)
+    testDemoImplementation(libs.roborazzi)
+//    testDemoImplementation(projects.core.screenshotTesting)
+//    testDemoImplementation(projects.core.testing)
+//
+//    androidTestImplementation(projects.core.testing)
+//    androidTestImplementation(projects.core.dataTest)
+//    androidTestImplementation(projects.core.datastoreTest)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.kotlin.test)
 
-    // Room Database
-    implementation(libs.androidx.room.runtime)     //  Room runtime
-    ksp(libs.androidx.room.compiler)     //  Room annotation processor (KSP)
-    annotationProcessor(libs.androidx.room.compiler)     //  Room annotation processor (fallback/tests)
+//    baselineProfile(projects.benchmarks)
+}
 
-    // Hilt for Dependency Injection
-    implementation(libs.hilt.android)     //  Hilt core
-    ksp(libs.hilt.compiler)     //  Hilt code generation
-    kspAndroidTest(libs.hilt.android.compiler)     //  Hilt compiler for instrumentation tests
+baselineProfile {
+    // Don't build on every iteration of a full assemble.
+    // Instead enable generation directly for the release build variant.
+    automaticGenerationDuringBuild = false
 
-    // Networking - Retrofit & OkHttp
-    implementation(libs.squareup.retrofit)     //  Retrofit for networking
-    implementation(libs.squareup.retrofit.gson)     //  Gson converter for Retrofit
-    implementation(libs.squareup.okhttp3.logging)     //  OkHttp logging interceptor
+    // Make use of Dex Layout Optimizations via Startup Profiles
+    dexLayoutOptimization = true
+}
 
-    // Networking - Supabase & Ktor
-    implementation(platform(libs.jan.tennert.supabase.bom))     //  Supabase BOM
-    implementation(libs.jan.tennert.supabase.postgrest)     //  Supabase PostgREST support
-    implementation(libs.ktor.client.android)     //  Ktor HTTP client for Android
-    implementation(libs.kotlinx.serialization.json)     //  Kotlin Serialization for Android
-
-    // Subscriptions
-    implementation(libs.android.billing)     //  Play Billing Library
-    implementation(libs.revenuecat)     //  Revenue Cat Purchases
-    implementation(libs.revenuecat.ui)     //  Revenue Cat UI
-
-    // Testing - Unit Tests
-    testImplementation(libs.junit)     //  JUnit for unit testing
-
-    // Testing - Android Instrumentation Tests
-    androidTestImplementation(libs.androidx.junit)     //  AndroidX JUnit extensions
-    androidTestImplementation(libs.androidx.espresso.core)     //  Espresso for UI testing
-    androidTestImplementation(platform(libs.androidx.compose.bom))     //  Compose BOM for tests
-    androidTestImplementation(libs.androidx.ui.test.junit4)     //  Compose JUnit4 test support
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
 }
