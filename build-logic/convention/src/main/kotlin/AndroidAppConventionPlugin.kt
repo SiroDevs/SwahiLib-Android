@@ -19,7 +19,7 @@ abstract class AndroidAppConventionPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 36
+                defaultConfig.targetSdk = 37
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
             }

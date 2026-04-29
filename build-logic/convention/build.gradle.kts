@@ -90,6 +90,10 @@ gradlePlugin {
             id = libs.plugins.swahilib.android.lint.get().pluginId
             implementationClass = "AndroidLintConventionPlugin"
         }
+        register("supabase") {
+            id = libs.plugins.swahilib.supabase.get().pluginId
+            implementationClass = "SupabaseConventionPlugin"
+        }
         register("jvmLibrary") {
             id = libs.plugins.swahilib.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"

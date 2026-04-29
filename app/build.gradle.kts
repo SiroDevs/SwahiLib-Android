@@ -10,10 +10,17 @@ plugins {
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.swahilib.supabase)
+    alias(libs.plugins.swahilib.android.room)
+    id("kotlin-parcelize")
 }
 
 val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
 android {
     defaultConfig {
@@ -41,7 +48,7 @@ android {
                 "proguard-rules.pro")
 
             signingConfig = signingConfigs.named("debug").get()
-            baselineProfile.automaticGenerationDuringBuild = true
+//            baselineProfile.automaticGenerationDuringBuild = true
         }
     }
 
@@ -49,6 +56,10 @@ android {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
     testOptions.unitTests.isIncludeAndroidResources = true
     namespace = "com.swahilib"
@@ -77,6 +88,8 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.icons.extended)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.layout)
@@ -93,7 +106,20 @@ dependencies {
     implementation(libs.androidx.window.core)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+    implementation(libs.lottie.compose)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.compose.navigation)
+    implementation(libs.compose.hilt.navigation)
+    implementation(libs.androidx.compose.livedata)
+
+    implementation(libs.android.billing)
+    implementation(libs.revenuecat)
+    implementation(libs.revenuecat.ui)
+
+    implementation(libs.squareup.retrofit)
+    implementation(libs.squareup.retrofit.gson)
+    implementation(libs.squareup.okhttp3.logging)
 
     ksp(libs.hilt.compiler)
 
