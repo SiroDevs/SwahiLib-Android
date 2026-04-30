@@ -68,6 +68,8 @@ uiTestJunit4 = "1.9.0-rc01"
 lottie-compose = "6.6.9"
 squareup = "3.0.0"
 squareupOk = "5.3.2"
+sentry-plugin = "6.5.0"
+sentry-sdk = "8.40.0"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -180,6 +182,7 @@ supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "s
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+io-sentry-sdk = { module = "io.sentry:sentry-android", version.ref = "sentry-sdk" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "agp" }
@@ -207,6 +210,7 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 room = { id = "androidx.room", version.ref = "room" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+io-sentry = { id = "io.sentry.android.gradle", version.ref = "sentry-plugin" }
 
 # Plugins defined by this project
 swahilib-android-app = { id = "swahilib.android.app" }

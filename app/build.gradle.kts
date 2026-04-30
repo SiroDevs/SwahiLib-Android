@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.swahilib.supabase)
     alias(libs.plugins.swahilib.android.room)
+    alias(libs.plugins.io.sentry)
     id("kotlin-parcelize")
 }
 
@@ -55,7 +56,6 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
-//            baselineProfile.automaticGenerationDuringBuild = true
         }
         create("staging") {
             isMinifyEnabled = providers.gradleProperty("minifyWithR8")
@@ -83,26 +83,6 @@ android {
 }
 
 dependencies {
-//    implementation(projects.feature.interests.api)
-//    implementation(projects.feature.interests.impl)
-//    implementation(projects.feature.foryou.api)
-//    implementation(projects.feature.foryou.impl)
-//    implementation(projects.feature.bookmarks.api)
-//    implementation(projects.feature.bookmarks.impl)
-//    implementation(projects.feature.topic.api)
-//    implementation(projects.feature.topic.impl)
-//    implementation(projects.feature.search.api)
-//    implementation(projects.feature.search.impl)
-//    implementation(projects.feature.settings.impl)
-
-//    implementation(projects.core.common)
-//    implementation(projects.core.ui)
-//    implementation(projects.core.designsystem)
-//    implementation(projects.core.data)
-//    implementation(projects.core.model)
-//    implementation(projects.core.analytics)
-//    implementation(projects.sync.work)
-
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material)
@@ -138,21 +118,17 @@ dependencies {
     implementation(libs.squareup.retrofit.gson)
     implementation(libs.squareup.okhttp3.logging)
 
+    implementation(libs.io.sentry.sdk)
+
     ksp(libs.hilt.compiler)
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
-//    debugImplementation(projects.uiTestHiltManifest)
 
     kspTest(libs.hilt.compiler)
-//
-//    testImplementation(projects.core.dataTest)
-//    testImplementation(projects.core.datastoreTest)
+
     testImplementation(libs.hilt.android.testing)
-//    testImplementation(projects.sync.syncTest)
     testImplementation(libs.kotlin.test)
-//    androidTestImplementation(projects.core.testing)
-//    androidTestImplementation(projects.core.dataTest)
-//    androidTestImplementation(projects.core.datastoreTest)
+
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
