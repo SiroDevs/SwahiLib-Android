@@ -1,12 +1,16 @@
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.dagger.hilt)
-    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.swahilib.android.app)
+    alias(libs.plugins.swahilib.android.app.compose)
+    alias(libs.plugins.swahilib.android.app.jacoco)
+    alias(libs.plugins.swahilib.hilt)
+    alias(libs.plugins.roborazzi)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.swahilib.supabase)
+    alias(libs.plugins.swahilib.android.room)
     alias(libs.plugins.io.sentry)
+    id("kotlin-parcelize")
 }
 
 val keystoreProperties = Properties()
@@ -15,31 +19,19 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(keystorePropertiesFile.inputStream())
 }
 
-val configProperties = Properties()
-val configFile = rootProject.file("gradle/config/config.properties")
-if (configFile.exists()) {
-    configProperties.load(configFile.inputStream())
-}
-
 val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 android {
-    namespace = configProperties["applicationId"] as String
-    compileSdk = (configProperties["targetSdk"] as String).toInt()
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.8.1"
-    }
-
     defaultConfig {
-        applicationId = configProperties["applicationId"] as String
-        minSdk = (configProperties["minSdk"] as String).toInt()
-        targetSdk = (configProperties["targetSdk"] as String).toInt()
-        versionCode = (configProperties["versionCode"] as String).toInt()
-        versionName = configProperties["versionName"] as String
-        multiDexEnabled = true
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        applicationId = "com.swahilib"
+        versionCode = 150
+        versionName = "1.0.150"
+        testInstrumentationRunner = "com.swahilib.core.testing.AppTestRunner"
 
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
@@ -58,16 +50,16 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = true
+        release {
+            isMinifyEnabled = providers.gradleProperty("minifyWithR8")
+                .map(String::toBooleanStrict).getOrElse(true)
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
         create("staging") {
-            isMinifyEnabled = true
+            isMinifyEnabled = providers.gradleProperty("minifyWithR8")
+                .map(String::toBooleanStrict).getOrElse(true)
             signingConfig = signingConfigs.getByName("release")
             applicationIdSuffix = ".stg"
             proguardFiles(
@@ -76,45 +68,73 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+
+    packaging {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        }
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
     buildFeatures {
-        compose = true
         buildConfig = true
     }
-    lint {
-        disable += "NullSafeMutableLiveData"
-    }
-}
-
-sentry {
-    debug.set(true)
-    includeSourceContext.set(true)
-    org.set("futuristicken")
-    projectName.set("swahilib-android")
-    additionalSourceDirsForSourceContext.set(setOf("detail/src/main/java", "core/src/main/java"))
-    authToken.set(localProperties.getProperty("SENTRY_AUTH_TOKEN"))
-}
-
-configurations.all {
-    exclude(group = "com.google.guava", module = "listenablefuture")
+    testOptions.unitTests.isIncludeAndroidResources = true
+    namespace = "com.swahilib"
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":data"))
-    implementation(project(":domain"))
-    implementation(project(":presentation"))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.icons.extended)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
+    implementation(libs.androidx.compose.material3.adaptive.navigation3)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.runtime.tracing)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModel.navigation3)
+    implementation(libs.androidx.profileinstaller)
+    implementation(libs.androidx.tracing.ktx)
+    implementation(libs.androidx.window.core)
+    implementation(libs.kotlinx.coroutines.guava)
+    implementation(libs.coil.kt)
+    implementation(libs.lottie.compose)
+    implementation(libs.kotlinx.serialization.json)
 
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.android)
+    implementation(libs.compose.navigation)
     implementation(libs.compose.hilt.navigation)
-    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.compose.livedata)
+
     implementation(libs.android.billing)
     implementation(libs.revenuecat)
+    implementation(libs.revenuecat.ui)
+
+    implementation(libs.squareup.retrofit)
+    implementation(libs.squareup.retrofit.gson)
+    implementation(libs.squareup.okhttp3.logging)
+
+    implementation(libs.io.sentry.sdk)
+
+    ksp(libs.hilt.compiler)
+
+    debugImplementation(libs.androidx.compose.ui.testManifest)
+
+    kspTest(libs.hilt.compiler)
+
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.kotlin.test)
+
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.kotlin.test)
+}
+
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
 }
