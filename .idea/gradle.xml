@@ -23,51 +23,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/app-catalog" />
-            <option value="$PROJECT_DIR$/benchmarks" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
-            <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/core/analytics" />
-            <option value="$PROJECT_DIR$/core/common" />
-            <option value="$PROJECT_DIR$/core/data" />
-            <option value="$PROJECT_DIR$/core/data-test" />
-            <option value="$PROJECT_DIR$/core/database" />
-            <option value="$PROJECT_DIR$/core/datastore" />
-            <option value="$PROJECT_DIR$/core/datastore-proto" />
-            <option value="$PROJECT_DIR$/core/datastore-test" />
-            <option value="$PROJECT_DIR$/core/designsystem" />
-            <option value="$PROJECT_DIR$/core/domain" />
-            <option value="$PROJECT_DIR$/core/model" />
-            <option value="$PROJECT_DIR$/core/navigation" />
-            <option value="$PROJECT_DIR$/core/network" />
-            <option value="$PROJECT_DIR$/core/notifications" />
-            <option value="$PROJECT_DIR$/core/screenshot-testing" />
-            <option value="$PROJECT_DIR$/core/testing" />
-            <option value="$PROJECT_DIR$/core/ui" />
-            <option value="$PROJECT_DIR$/feature" />
-            <option value="$PROJECT_DIR$/feature/bookmarks" />
-            <option value="$PROJECT_DIR$/feature/bookmarks/api" />
-            <option value="$PROJECT_DIR$/feature/bookmarks/impl" />
-            <option value="$PROJECT_DIR$/feature/foryou" />
-            <option value="$PROJECT_DIR$/feature/foryou/api" />
-            <option value="$PROJECT_DIR$/feature/foryou/impl" />
-            <option value="$PROJECT_DIR$/feature/interests" />
-            <option value="$PROJECT_DIR$/feature/interests/api" />
-            <option value="$PROJECT_DIR$/feature/interests/impl" />
-            <option value="$PROJECT_DIR$/feature/search" />
-            <option value="$PROJECT_DIR$/feature/search/api" />
-            <option value="$PROJECT_DIR$/feature/search/impl" />
-            <option value="$PROJECT_DIR$/feature/settings" />
-            <option value="$PROJECT_DIR$/feature/settings/impl" />
-            <option value="$PROJECT_DIR$/feature/topic" />
-            <option value="$PROJECT_DIR$/feature/topic/api" />
-            <option value="$PROJECT_DIR$/feature/topic/impl" />
-            <option value="$PROJECT_DIR$/lint" />
-            <option value="$PROJECT_DIR$/sync" />
-            <option value="$PROJECT_DIR$/sync/sync-test" />
-            <option value="$PROJECT_DIR$/sync/work" />
-            <option value="$PROJECT_DIR$/ui-test-hilt-manifest" />
           </set>
         </option>
       </GradleProjectSettings>

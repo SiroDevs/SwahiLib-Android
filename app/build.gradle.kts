@@ -7,10 +7,10 @@ plugins {
     alias(libs.plugins.swahilib.hilt)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.swahilib.networking)
+    alias(libs.plugins.swahilib.subscriptions)
     alias(libs.plugins.swahilib.supabase)
-    alias(libs.plugins.swahilib.android.room)
     alias(libs.plugins.io.sentry)
-    id("kotlin-parcelize")
 }
 
 val keystoreProperties = Properties()
@@ -22,16 +22,12 @@ if (keystorePropertiesFile.exists()) {
 val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-
 android {
     defaultConfig {
         applicationId = "com.swahilib"
         versionCode = 150
         versionName = "1.0.150"
-        testInstrumentationRunner = "com.swahilib.core.testing.AppTestRunner"
+        testInstrumentationRunner = "com.swahilib.testing.AppTestRunner"
 
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
@@ -82,43 +78,25 @@ android {
     namespace = "com.swahilib"
 }
 
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
+}
+
+
+sentry {
+    org.set("futuristicken")
+    projectName.set("swahilib-android")
+    includeSourceContext.set(true)
+}
+
 dependencies {
+    api(project(":data"))
+    api(project(":domain"))
+    api(project(":presentation"))
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.icons.extended)
-    implementation(libs.androidx.navigation3.ui)
-    implementation(libs.androidx.compose.material3.adaptive)
-    implementation(libs.androidx.compose.material3.adaptive.layout)
-    implementation(libs.androidx.compose.material3.adaptive.navigation)
-    implementation(libs.androidx.compose.material3.adaptive.navigation3)
-    implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.compose.runtime.tracing)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModel.navigation3)
-    implementation(libs.androidx.profileinstaller)
-    implementation(libs.androidx.tracing.ktx)
-    implementation(libs.androidx.window.core)
-    implementation(libs.kotlinx.coroutines.guava)
-    implementation(libs.coil.kt)
-    implementation(libs.lottie.compose)
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.compose.navigation)
-    implementation(libs.compose.hilt.navigation)
-    implementation(libs.androidx.compose.livedata)
-
-    implementation(libs.android.billing)
-    implementation(libs.revenuecat)
-    implementation(libs.revenuecat.ui)
-
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.gson)
-    implementation(libs.squareup.okhttp3.logging)
-
-    implementation(libs.io.sentry.sdk)
 
     ksp(libs.hilt.compiler)
 
@@ -133,8 +111,4 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.kotlin.test)
-}
-
-dependencyGuard {
-    configuration("prodReleaseRuntimeClasspath")
 }

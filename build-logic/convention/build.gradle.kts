@@ -86,17 +86,25 @@ gradlePlugin {
             id = libs.plugins.swahilib.android.lint.get().pluginId
             implementationClass = "AndroidLintConventionPlugin"
         }
-        register("supabase") {
-            id = libs.plugins.swahilib.supabase.get().pluginId
-            implementationClass = "SupabaseConventionPlugin"
-        }
         register("jvmLibrary") {
             id = libs.plugins.swahilib.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("networking") {
+            id = libs.plugins.swahilib.networking.get().pluginId
+            implementationClass = "NetworkingConventionPlugin"
+        }
         register("root") {
             id = libs.plugins.swahilib.root.get().pluginId
             implementationClass = "RootPlugin"
+        }
+        register("subscriptions") {
+            id = libs.plugins.swahilib.subscriptions.get().pluginId
+            implementationClass = "SubscriptionsConventionPlugin"
+        }
+        register("supabase") {
+            id = libs.plugins.swahilib.supabase.get().pluginId
+            implementationClass = "SupabaseConventionPlugin"
         }
     }
 }

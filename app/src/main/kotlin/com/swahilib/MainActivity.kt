@@ -1,15 +1,19 @@
 package com.swahilib
 
-import android.os.*
-import androidx.activity.*
+import android.os.Build
+import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.*
-import androidx.compose.foundation.*
-import androidx.compose.ui.*
+import androidx.annotation.Keep
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.swahilib.domain.repos.*
-import com.swahilib.presentation.navigation.*
-import com.swahilib.presentation.theme.*
+import com.swahilib.core.repos.ThemeMode
+import com.swahilib.core.repos.ThemeRepository
+import com.swahilib.presentation.navigation.AppNavHost
+import com.swahilib.core.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalComposeUiApi
@@ -20,7 +24,6 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             val themeRepo: ThemeRepository = hiltViewModel()
             val themeMode = themeRepo.selectedTheme
@@ -28,6 +31,7 @@ class MainActivity : ComponentActivity() {
                 ThemeMode.DARK -> true
                 ThemeMode.LIGHT -> false
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
+                else -> false
             }
 
             AppTheme(useDarkTheme = isDarkTheme) {
