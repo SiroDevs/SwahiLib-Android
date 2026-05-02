@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.swahilib.hilt)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.swahilib.networking)
+    alias(libs.plugins.swahilib.subscriptions)
     alias(libs.plugins.swahilib.supabase)
     alias(libs.plugins.swahilib.android.room)
     alias(libs.plugins.io.sentry)
@@ -110,16 +112,6 @@ dependencies {
     implementation(libs.compose.hilt.navigation)
     implementation(libs.androidx.compose.livedata)
 
-    implementation(libs.android.billing)
-    implementation(libs.revenuecat)
-    implementation(libs.revenuecat.ui)
-
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.gson)
-    implementation(libs.squareup.okhttp3.logging)
-
-    implementation(libs.io.sentry.sdk)
-
     ksp(libs.hilt.compiler)
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
@@ -137,4 +129,14 @@ dependencies {
 
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
+}
+
+
+sentry {
+    org.set("futuristicken")
+    projectName.set("swahilib-android")
+
+    // this will upload your source code to Sentry to show it as part of the stack traces
+    // disable if you don't want to expose your sources
+    includeSourceContext.set(true)
 }

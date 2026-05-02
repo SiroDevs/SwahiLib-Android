@@ -56,3 +56,6 @@ key.properties
 google-services.json
 
 keys*.json
+
+# Sentry Config File
+sentry.properties

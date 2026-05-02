@@ -28,7 +28,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "SwahiLib"
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {

@@ -81,26 +81,4 @@ class IdiomRepo @Inject constructor(
             Log.d("TAG", e.message.toString())
         }
     }
-
-    suspend fun searchIdiomsByTitle(title: String?) {
-//        idiomsDao?.searchIdiomByTitle(title)?.map { it.asDomainModel() }
-    }
-
-    fun getIdiomsByTitles(titles: List<String>): Flow<List<Idiom>> {
-        return idiomsDao?.getIdiomsByTitles(titles) ?: flowOf(emptyList())
-    }
-
-    suspend fun getIdiomById(idiomId: String): Flow<Idiom> {
-        try {
-//            val idiomFlow = idiomsDao?.getById(idiomId)
-//            return idiomFlow.map {
-//                it.asDomainModel()
-//            }
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
-        return flow {}
-    }
-
 }
-

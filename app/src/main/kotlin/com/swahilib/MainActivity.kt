@@ -20,7 +20,6 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             val themeRepo: ThemeRepository = hiltViewModel()
             val themeMode = themeRepo.selectedTheme
