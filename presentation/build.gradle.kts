@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.swahilib.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.swahilib.supabase)
+    alias(libs.plugins.swahilib.subscriptions)
 }
 
 android {

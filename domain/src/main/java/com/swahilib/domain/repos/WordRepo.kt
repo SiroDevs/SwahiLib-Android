@@ -1,8 +1,6 @@
 package com.swahilib.domain.repos
 
-import android.content.Context
 import android.util.Log
-import com.swahilib.data.di.DatabaseModule
 import com.swahilib.data.models.Word
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -19,16 +17,9 @@ import kotlinx.coroutines.delay
 
 @Singleton
 class WordRepo @Inject constructor(
-    context: Context,
     private val supabase: Postgrest,
+    private val wordDao: WordDao,
 ) {
-    private var wordDao: WordDao?
-
-    init {
-        val db = DatabaseModule.provideDatabase(context)
-        wordDao = db.wordDao()
-    }
-
     suspend fun fetchRemoteData(): Result<Int> = withContext(Dispatchers.IO) {
         runCatching {
             var offset = 0L

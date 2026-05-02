@@ -12,5 +12,6 @@ android {
 }
 
 dependencies {
+    api(project(":core"))
     api(project(":data"))
 }

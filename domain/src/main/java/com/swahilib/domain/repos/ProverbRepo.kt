@@ -1,8 +1,6 @@
 package com.swahilib.domain.repos
 
-import android.content.Context
 import android.util.Log
-import com.swahilib.data.di.DatabaseModule
 import com.swahilib.data.models.Proverb
 import com.swahilib.data.sources.local.daos.ProverbDao
 import com.swahilib.data.sources.remote.MapDtoToEntity
@@ -19,16 +17,9 @@ import kotlinx.coroutines.withContext
 
 @Singleton
 class ProverbRepo @Inject constructor(
-    context: Context,
     private val supabase: Postgrest,
+    private val proverbDao: ProverbDao,
 )  {
-    private var proverbDao: ProverbDao?
-
-    init {
-        val db = DatabaseModule.provideDatabase(context)
-        proverbDao = db.proverbDao()
-    }
-
     suspend fun fetchRemoteData() {
         try {
             Log.d("TAG", "Fetching proverbs")

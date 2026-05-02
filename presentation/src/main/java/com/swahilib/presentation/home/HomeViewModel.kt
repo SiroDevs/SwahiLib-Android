@@ -9,7 +9,7 @@ import com.swahilib.data.models.Word
 import com.swahilib.domain.entity.HomeTab
 import com.swahilib.domain.entity.UiState
 import com.swahilib.domain.repos.IdiomRepo
-import com.swahilib.domain.repos.PrefsRepo
+import com.swahilib.core.repos.PrefsRepo
 import com.swahilib.domain.repos.ProverbRepo
 import com.swahilib.domain.repos.SayingRepo
 import com.swahilib.domain.repos.WordRepo

@@ -1,4 +1,4 @@
-package com.swahilib.domain.repos
+package com.swahilib.core.repos
 
 import com.revenuecat.purchases.CacheFetchPolicy
 import com.revenuecat.purchases.Purchases

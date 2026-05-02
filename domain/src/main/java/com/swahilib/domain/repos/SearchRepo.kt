@@ -1,8 +1,6 @@
 package com.swahilib.domain.repos
 
-import android.content.Context
 import android.util.Log
-import com.swahilib.data.di.DatabaseModule
 import com.swahilib.data.models.Search
 import com.swahilib.data.sources.local.daos.SearchDao
 import io.github.jan.supabase.postgrest.Postgrest
@@ -16,16 +14,9 @@ import javax.inject.Singleton
 
 @Singleton
 class SearchRepo @Inject constructor(
-    context: Context,
     private val supabase: Postgrest,
+    private val searchDao: SearchDao,
 )  {
-    private var searchDao: SearchDao?
-
-    init {
-        val db = DatabaseModule.provideDatabase(context)
-        searchDao = db.searchDao()
-    }
-
     suspend fun fetchLocalData(): List<Search> {
         return withContext(Dispatchers.IO) {
             searchDao?.getAll()?.first() ?: emptyList()

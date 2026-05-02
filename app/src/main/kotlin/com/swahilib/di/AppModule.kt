@@ -1,13 +1,19 @@
 package com.swahilib.di
 
 import android.content.Context
+import com.swahilib.data.sources.local.daos.HistoryDao
+import com.swahilib.data.sources.local.daos.IdiomDao
+import com.swahilib.data.sources.local.daos.ProverbDao
+import com.swahilib.data.sources.local.daos.SayingDao
+import com.swahilib.data.sources.local.daos.SearchDao
+import com.swahilib.data.sources.local.daos.WordDao
 import com.swahilib.domain.repos.HistoryRepo
 import com.swahilib.domain.repos.IdiomRepo
-import com.swahilib.domain.repos.PrefsRepo
+import com.swahilib.core.repos.PrefsRepo
 import com.swahilib.domain.repos.ProverbRepo
 import com.swahilib.domain.repos.SayingRepo
 import com.swahilib.domain.repos.SearchRepo
-import com.swahilib.domain.repos.SubsRepo
+import com.swahilib.core.repos.SubsRepo
 import com.swahilib.domain.repos.WordRepo
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,37 +33,37 @@ class AppModule {
     @Provides
     @Singleton
     fun provideHistoryRepo(
-        @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): HistoryRepo = HistoryRepo(context, supabase)
+        historyDao: HistoryDao,
+    ): HistoryRepo = HistoryRepo(supabase, historyDao)
 
     @Provides
     @Singleton
     fun provideIdiomRepo(
-        @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): IdiomRepo = IdiomRepo(context, supabase)
+        idiomDao: IdiomDao,
+    ): IdiomRepo = IdiomRepo(supabase, idiomDao)
 
     @Provides
     @Singleton
     fun provideProverbRepo(
-        @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): ProverbRepo = ProverbRepo(context, supabase)
+        proverbDao: ProverbDao,
+    ): ProverbRepo = ProverbRepo(supabase, proverbDao)
 
     @Provides
     @Singleton
     fun provideSayingRepo(
-        @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): SayingRepo = SayingRepo(context, supabase)
+        sayingDao: SayingDao,
+    ): SayingRepo = SayingRepo(supabase, sayingDao)
 
     @Provides
     @Singleton
     fun provideSearchRepo(
-        @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): SearchRepo = SearchRepo(context, supabase)
+        searchDao: SearchDao,
+    ): SearchRepo = SearchRepo(supabase, searchDao)
 
     @Provides
     @Singleton
@@ -66,8 +72,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideWordRepo(
-        @ApplicationContext context: Context,
         supabase: Postgrest,
-    ): WordRepo = WordRepo(context, supabase)
-
+        wordDao: WordDao,
+    ): WordRepo = WordRepo(supabase, wordDao)
 }

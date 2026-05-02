@@ -10,10 +10,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.swahilib.domain.repos.ThemeMode
-import com.swahilib.domain.repos.ThemeRepository
+import com.swahilib.core.repos.ThemeMode
+import com.swahilib.core.repos.ThemeRepository
 import com.swahilib.presentation.navigation.AppNavHost
-import com.swahilib.presentation.theme.AppTheme
+import com.swahilib.core.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalComposeUiApi

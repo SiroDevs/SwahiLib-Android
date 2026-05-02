@@ -1,4 +1,4 @@
-package com.swahilib.presentation.theme
+package com.swahilib.core.theme
 
 import androidx.compose.ui.graphics.Color
 

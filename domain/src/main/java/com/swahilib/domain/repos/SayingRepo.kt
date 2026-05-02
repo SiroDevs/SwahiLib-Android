@@ -1,9 +1,6 @@
 package com.swahilib.domain.repos
 
-import android.content.Context
 import android.util.Log
-import com.swahilib.data.di.DatabaseModule
-import com.swahilib.core.utils.Collections
 import com.swahilib.data.models.Saying
 import com.swahilib.data.sources.local.daos.SayingDao
 import com.swahilib.data.sources.remote.MapDtoToEntity
@@ -21,20 +18,13 @@ import kotlin.collections.map
 
 @Singleton
 class SayingRepo @Inject constructor(
-    context: Context,
     private val supabase: Postgrest,
+    private val sayingDao: SayingDao,
 )  {
-    private var sayingDao: SayingDao?
-
-    init {
-        val db = DatabaseModule.provideDatabase(context)
-        sayingDao = db.sayingDao()
-    }
-
     suspend fun fetchRemoteData() {
         try {
             Log.d("TAG", "Fetching sayings")
-            val result = supabase[Collections.SAYINGS]
+            val result = supabase["sayings"]
                 .select()
                 .decodeList<SayingDto>()
 

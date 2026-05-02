@@ -1,8 +1,6 @@
 package com.swahilib.domain.repos
 
-import android.content.Context
 import android.util.Log
-import com.swahilib.data.di.DatabaseModule
 import com.swahilib.data.models.History
 import com.swahilib.data.sources.local.daos.HistoryDao
 import io.github.jan.supabase.postgrest.Postgrest
@@ -16,16 +14,9 @@ import kotlinx.coroutines.withContext
 
 @Singleton
 class HistoryRepo @Inject constructor(
-    context: Context,
     private val supabase: Postgrest,
+    private val historyDao: HistoryDao,
 )  {
-    private var historyDao: HistoryDao?
-
-    init {
-        val db = DatabaseModule.provideDatabase(context)
-        historyDao = db.historyDao()
-    }
-
     fun fetchRemoteData(): Flow<List<History>> = flow {
         try {
             val histories = supabase["words"]

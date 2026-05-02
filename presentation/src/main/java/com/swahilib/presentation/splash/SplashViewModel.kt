@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.helpers.NetworkUtils
-import com.swahilib.domain.repos.*
+import com.swahilib.core.repos.PrefsRepo
+import com.swahilib.core.repos.SubsRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

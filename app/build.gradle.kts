@@ -10,9 +10,7 @@ plugins {
     alias(libs.plugins.swahilib.networking)
     alias(libs.plugins.swahilib.subscriptions)
     alias(libs.plugins.swahilib.supabase)
-    alias(libs.plugins.swahilib.android.room)
     alias(libs.plugins.io.sentry)
-    id("kotlin-parcelize")
 }
 
 val keystoreProperties = Properties()
@@ -24,16 +22,12 @@ if (keystorePropertiesFile.exists()) {
 val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-
 android {
     defaultConfig {
         applicationId = "com.swahilib"
         versionCode = 150
         versionName = "1.0.150"
-        testInstrumentationRunner = "com.swahilib.core.testing.AppTestRunner"
+        testInstrumentationRunner = "com.swahilib.testing.AppTestRunner"
 
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
@@ -99,6 +93,10 @@ dependencies {
     api(project(":data"))
     api(project(":domain"))
     api(project(":presentation"))
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material)
 
     ksp(libs.hilt.compiler)
 

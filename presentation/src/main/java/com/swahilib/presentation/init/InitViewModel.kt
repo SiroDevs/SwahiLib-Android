@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.swahilib.core.helpers.NetworkUtils
+import com.swahilib.core.repos.PrefsRepo
 import com.swahilib.domain.entity.UiState
 import com.swahilib.domain.repos.*
 import dagger.hilt.android.lifecycle.HiltViewModel

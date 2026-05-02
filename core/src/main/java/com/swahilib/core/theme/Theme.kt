@@ -1,4 +1,4 @@
-package com.swahilib.presentation.theme
+package com.swahilib.core.theme
 
 import android.app.Activity
 import android.os.Build

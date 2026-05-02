@@ -1,8 +1,10 @@
 plugins {
-    alias(libs.plugins.swahilib.android.library)
-    alias(libs.plugins.swahilib.android.library.jacoco)
+    alias(libs.plugins.swahilib.android.app)
+    alias(libs.plugins.swahilib.android.app.compose)
+    alias(libs.plugins.swahilib.android.app.jacoco)
+    alias(libs.plugins.swahilib.networking)
     alias(libs.plugins.swahilib.hilt)
-    id("kotlinx-serialization")
+    alias(libs.plugins.swahilib.subscriptions)
 }
 
 android {
@@ -11,5 +13,12 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material)
 
+    kspTest(libs.hilt.compiler)
+
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.kotlin.test)
 }

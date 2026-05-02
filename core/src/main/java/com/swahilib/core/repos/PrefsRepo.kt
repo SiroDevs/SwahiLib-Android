@@ -1,4 +1,4 @@
-package com.swahilib.domain.repos
+package com.swahilib.core.repos
 
 import android.content.Context
 import com.swahilib.core.utils.PrefConstants
