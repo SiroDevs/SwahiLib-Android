@@ -84,33 +84,21 @@ android {
     namespace = "com.swahilib"
 }
 
-dependencies {
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.icons.extended)
-    implementation(libs.androidx.navigation3.ui)
-    implementation(libs.androidx.compose.material3.adaptive)
-    implementation(libs.androidx.compose.material3.adaptive.layout)
-    implementation(libs.androidx.compose.material3.adaptive.navigation)
-    implementation(libs.androidx.compose.material3.adaptive.navigation3)
-    implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.compose.runtime.tracing)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModel.navigation3)
-    implementation(libs.androidx.profileinstaller)
-    implementation(libs.androidx.tracing.ktx)
-    implementation(libs.androidx.window.core)
-    implementation(libs.kotlinx.coroutines.guava)
-    implementation(libs.coil.kt)
-    implementation(libs.lottie.compose)
-    implementation(libs.kotlinx.serialization.json)
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
+}
 
-    implementation(libs.compose.navigation)
-    implementation(libs.compose.hilt.navigation)
-    implementation(libs.androidx.compose.livedata)
+
+sentry {
+    org.set("futuristicken")
+    projectName.set("swahilib-android")
+    includeSourceContext.set(true)
+}
+
+dependencies {
+    api(project(":data"))
+    api(project(":domain"))
+    api(project(":presentation"))
 
     ksp(libs.hilt.compiler)
 
@@ -125,18 +113,4 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.kotlin.test)
-}
-
-dependencyGuard {
-    configuration("prodReleaseRuntimeClasspath")
-}
-
-
-sentry {
-    org.set("futuristicken")
-    projectName.set("swahilib-android")
-
-    // this will upload your source code to Sentry to show it as part of the stack traces
-    // disable if you don't want to expose your sources
-    includeSourceContext.set(true)
 }
