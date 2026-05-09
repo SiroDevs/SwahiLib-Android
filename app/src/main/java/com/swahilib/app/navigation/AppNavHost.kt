@@ -1,0 +1,90 @@
+package com.swahilib.app.navigation
+
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.data.repos.ThemeRepo
+import com.swahilib.core.database.model.IdiomEntity
+import com.swahilib.core.database.model.ProverbEntity
+import com.swahilib.core.database.model.SayingEntity
+import com.swahilib.core.database.model.WordEntity
+
+// Feature ViewModels
+import com.swahilib.feature.home.HomeViewModel
+import com.swahilib.feature.init.InitViewModel
+import com.swahilib.feature.settings.SettingsViewModel
+import com.swahilib.feature.splash.SplashViewModel
+import com.swahilib.feature.idiom.IdiomViewModel
+import com.swahilib.feature.proverb.ProverbViewModel
+import com.swahilib.feature.saying.SayingViewModel
+import com.swahilib.feature.word.WordViewModel
+
+// Feature Screens
+import com.swahilib.feature.home.view.HomeScreen
+import com.swahilib.feature.init.view.InitScreen
+import com.swahilib.feature.settings.view.SettingsScreen
+import com.swahilib.feature.splash.view.SplashScreen
+import com.swahilib.feature.idiom.view.IdiomScreen
+import com.swahilib.feature.proverb.view.ProverbScreen
+import com.swahilib.feature.saying.view.SayingScreen
+import com.swahilib.feature.word.view.WordScreen
+
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
+@Composable
+fun AppNavHost(
+    navController: NavHostController = rememberNavController(),
+    themeRepo: ThemeRepo,
+) {
+    NavHost(navController = navController, startDestination = Routes.SPLASH) {
+
+        composable(Routes.SPLASH) {
+            val viewModel: SplashViewModel = hiltViewModel()
+            SplashScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable(Routes.INIT) {
+            val viewModel: InitViewModel = hiltViewModel()
+            InitScreen(viewModel = viewModel, navController = navController)
+        }
+
+        composable(Routes.HOME) {
+            val viewModel: HomeViewModel = hiltViewModel()
+            HomeScreen(viewModel = viewModel, navController = navController)
+        }
+
+        composable(Routes.IDIOM) {
+            val idiom = navController.previousBackStackEntry?.savedStateHandle?.get<IdiomEntity>("idiom")
+            val viewModel: IdiomViewModel = hiltViewModel()
+            IdiomScreen(navController = navController, viewModel = viewModel, idiom = idiom)
+        }
+
+        composable(Routes.PROVERB) {
+            val proverb = navController.previousBackStackEntry?.savedStateHandle?.get<ProverbEntity>("proverb")
+            val viewModel: ProverbViewModel = hiltViewModel()
+            ProverbScreen(navController = navController, viewModel = viewModel, proverb = proverb)
+        }
+
+        composable(Routes.SAYING) {
+            val saying = navController.previousBackStackEntry?.savedStateHandle?.get<SayingEntity>("saying")
+            val viewModel: SayingViewModel = hiltViewModel()
+            SayingScreen(navController = navController, viewModel = viewModel, saying = saying)
+        }
+
+        composable(Routes.WORD) {
+            val word = navController.previousBackStackEntry?.savedStateHandle?.get<WordEntity>("word")
+            val viewModel: WordViewModel = hiltViewModel()
+            WordScreen(navController = navController, viewModel = viewModel, word = word)
+        }
+
+        composable(Routes.SETTINGS) {
+            val viewModel: SettingsViewModel = hiltViewModel()
+            SettingsScreen(navController = navController, viewModel = viewModel, themeRepo = themeRepo)
+        }
+    }
+}
