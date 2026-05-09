@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml:2:13-83
+INJECTED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml:2:13-83
+	package
+		INJECTED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml
+	xmlns:android
+		ADDED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml:2:23-81
+uses-sdk
+INJECTED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml reason: use-sdk injection requested
+INJECTED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml
+INJECTED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml
+	android:targetSdkVersion
+		INJECTED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml
+	android:minSdkVersion
+		INJECTED from /Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/saying/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11200053940387803667.xml

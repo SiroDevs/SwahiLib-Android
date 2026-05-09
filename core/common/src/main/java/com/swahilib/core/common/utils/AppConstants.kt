@@ -1,0 +1,36 @@
+package com.swahilib.core.common.utils
+
+object AppConstants {
+    const val APP_TITLE = "SwahiLib"
+    const val APP_TITLE2 = "Kamusi ya Kiswahili"
+    const val APP_TAGLINE = "Kiswahili Kitukuzwe"
+    const val APP_CREDITS = "© Siro Devs"
+    const val APP_LINK = "https://linktr.ee/SwahilibApp"
+    const val SUPPORT_EMAIL = "futuristicken@gmail.com"
+}
+
+object PrefConstants {
+    const val PREFERENCE_FILE = "app_pref"
+
+    const val THEME_MODE = "theme_mode"
+    const val IS_DATA_LOADED = "is_data_loaded"
+    const val INSTALL_DATE = "install_date"
+    const val USAGE_TIME = "usage_time"
+    const val IS_REVIEW_DONE = "is_review_done"
+    const val LAST_HOME_TAB = "last_home_tab"
+    const val IS_PRO_USER = "isProUser"
+    const val CAN_SHOW_PAYWALL = "canShowPaywall"
+    const val LAST_APP_OPEN_TIME = "lastAppOpenTime"
+}
+
+object Routes {
+    const val SPLASH   = "splash"
+    const val INIT     = "init"
+    const val HOME     = "home"
+    const val IDIOM    = "idiom"
+    const val PROVERB  = "proverb"
+    const val SAYING   = "saying"
+    const val WORD     = "word"
+    const val SETTINGS = "settings"
+    const val ADVSEARCH = "advsearch"
+}

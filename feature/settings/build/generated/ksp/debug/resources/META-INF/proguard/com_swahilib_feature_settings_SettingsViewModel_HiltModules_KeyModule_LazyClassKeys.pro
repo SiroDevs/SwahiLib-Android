@@ -1,0 +1,1 @@
+-keep,allowobfuscation,allowshrinking class com.swahilib.feature.settings.SettingsViewModel

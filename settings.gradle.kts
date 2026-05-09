@@ -12,32 +12,33 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
 dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        google()
         mavenCentral()
     }
 }
+
 rootProject.name = "SwahiLib"
 
+// App shell
 include(":app")
-include(":data")
-include(":core")
-include(":domain")
-include(":presentation")
 
-check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
-    """
-    SwahiLib requires JDK 17+ but it is currently using JDK ${JavaVersion.current()}.
-    Java Home: [${System.getProperty("java.home")}]
-    https://developer.android.com/build/jdks#jdk-config-in-studio
-    """.trimIndent()
-}
+// Core modules
+include(":core:common")
+include(":core:data")
+include(":core:database")
+include(":core:network")
+include(":core:ui")
+include(":core:designsystem")
+
+// Feature modules
+include(":feature:splash")
+include(":feature:init")
+include(":feature:home")
+include(":feature:word")
+include(":feature:idiom")
+include(":feature:proverb")
+include(":feature:saying")
+include(":feature:settings")

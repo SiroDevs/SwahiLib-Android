@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.swahilib.app-mergeDebugResources-75:/values-v30/values-v30.xml",
+            "map": [
+                {
+                    "source": "/Users/sirodaves/.gradle/caches/9.4.1/transforms/febb40f23425b6e7825e380620a9182a/transformed/material3/res/values-v30/values-v30.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "72",
+                        "endOffsets": "123"
+                    }
+                }
+            ]
+        }
+    ]
+}
