@@ -1,1 +1,0 @@
--keep,allowobfuscation,allowshrinking class com.swahilib.feature.home.HomeViewModel

@@ -1,3 +1,0 @@
-com.swahilib.feature.splash
-drawable app_icon
-drawable empty
