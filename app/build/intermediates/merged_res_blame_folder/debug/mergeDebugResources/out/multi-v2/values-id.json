@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.swahilib.app-mergeDebugResources-75:/values-id/values-id.xml",
+            "map": [
+                {
+                    "source": "/Users/sirodaves/.gradle/caches/9.4.1/transforms/1ba3c33e8ae5ea80c7878dae011eb847/transformed/purchases-ui-9.7.2/res/values-id/values-id.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,90,144,187,233,318,371,522,572,616,732,791,835,896,940,987,1057,1102,1146,1216",
+                        "endColumns": "34,53,42,45,84,52,150,49,43,115,58,43,60,43,46,69,44,43,69,43",
+                        "endOffsets": "85,139,182,228,313,366,517,567,611,727,786,830,891,935,982,1052,1097,1141,1211,1255"
+                    }
+                }
+            ]
+        }
+    ]
+}

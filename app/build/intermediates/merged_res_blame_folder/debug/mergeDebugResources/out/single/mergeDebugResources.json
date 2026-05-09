@@ -1,0 +1,94 @@
+[
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/xml_data_extraction_rules.xml.flat",
+        "source": "com.swahilib.app-main-79:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.swahilib.app-main-79:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xxhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.swahilib.app-main-79:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/drawable_empty.png.flat",
+        "source": "com.swahilib.app-main-79:/drawable/empty.png"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/drawable_app_icon.png.flat",
+        "source": "com.swahilib.app-main-79:/drawable/app_icon.png"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/xml_backup_rules.xml.flat",
+        "source": "com.swahilib.app-main-79:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-hdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-hdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-mdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-mdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.swahilib.app-debug-77:/mipmap-xxxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.swahilib.app-main-79:/mipmap-xxxhdpi/ic_launcher_foreground.webp"
+    }
+]

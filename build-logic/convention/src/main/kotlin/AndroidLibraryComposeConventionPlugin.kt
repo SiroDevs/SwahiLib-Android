@@ -1,18 +1,27 @@
-import com.android.build.api.dsl.LibraryExtension
-import com.swahilib.configureAndroidCompose
+import com.android.build.gradle.LibraryExtension
+import com.swahilib.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 
+/**
+ * Applies the base Android library plugin PLUS Compose support.
+ * Feature modules that expose Composables should use this plugin.
+ */
 class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = "com.android.library")
-            apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            pluginManager.apply("swahilib.android.library")
+            pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
 
-            val extension = extensions.getByType<LibraryExtension>()
-            configureAndroidCompose(extension)
+            dependencies {
+                "implementation"(libs.findLibrary("androidx.core.ktx").get())
+                "implementation"(libs.findLibrary("androidx.lifecycle.runtime.ktx").get())
+            }
+            extensions.configure<LibraryExtension> {
+                buildFeatures { compose = true }
+            }
         }
     }
 }
