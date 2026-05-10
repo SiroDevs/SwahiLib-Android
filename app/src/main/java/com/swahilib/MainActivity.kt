@@ -33,9 +33,6 @@ class MainActivity : ComponentActivity() {
                 ThemeMode.DARK -> true
                 ThemeMode.LIGHT -> false
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
-                else -> {
-                    isSystemInDarkTheme()
-                }
             }
 
             AppTheme(useDarkTheme = isDarkTheme) {
