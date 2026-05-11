@@ -53,6 +53,7 @@ captures/
 key.properties
 **/*.keystore
 **/*.jks
+keystore/
 google-services.json
 
 keys*.json
