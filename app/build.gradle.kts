@@ -96,10 +96,6 @@ sentry {
     authToken.set(localProperties.getProperty("SENTRY_AUTH_TOKEN"))
 }
 
-configurations.all {
-    exclude(group = "com.google.guava", module = "listenablefuture")
-}
-
 dependencies {
     // Core modules
     implementation(project(":core:common"))
@@ -131,6 +127,7 @@ dependencies {
     implementation(libs.revenuecat)
     implementation(libs.revenuecat.ui)
     implementation(libs.android.billing)
+    implementation("androidx.concurrent:concurrent-futures:1.3.0")
 
     // Testing
     testImplementation(libs.junit)

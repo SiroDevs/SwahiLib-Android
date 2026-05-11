@@ -10,8 +10,10 @@ class SwahiLibApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Purchases.configure(
-            PurchasesConfiguration.Builder(this, BuildConfig.RcApiKey).build()
-        )
+        if (!BuildConfig.DEBUG) {
+            Purchases.configure(
+                PurchasesConfiguration.Builder(this, BuildConfig.RcApiKey).build()
+            )
+        }
     }
 }
