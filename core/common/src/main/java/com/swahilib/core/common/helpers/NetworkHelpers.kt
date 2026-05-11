@@ -39,7 +39,6 @@ suspend inline fun <reified T> safeApiCall(block: () -> HttpResponse): NetworkRe
 }
 
 object NetworkUtils {
-    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork
@@ -48,7 +47,6 @@ object NetworkUtils {
         return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
-    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     fun observeNetworkConnectivity(context: Context): Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 

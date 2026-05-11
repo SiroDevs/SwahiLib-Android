@@ -22,7 +22,6 @@ class SplashViewModel @Inject constructor(
     val isDataLoaded: StateFlow<Boolean> = _isDataLoaded.asStateFlow()
 
     private val _installTime = MutableStateFlow(0L)
-    val installTime: StateFlow<Long> = _installTime.asStateFlow()
 
     fun initialize(context: Context) {
         viewModelScope.launch {
