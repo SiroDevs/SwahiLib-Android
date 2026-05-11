@@ -37,7 +37,6 @@ android {
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
         buildConfigField("String", "RcCatId", "\"${localProperties.getProperty("REVENUECAT_ID")}\"")
         buildConfigField("String", "RcApiKey", "\"${localProperties.getProperty("REVENUECAT_API_KEY")}\"")
-        buildConfigField("String", "SentryDsn", "\"${localProperties.getProperty("SENTRY_DSN")}\"")
     }
 
     signingConfigs {
@@ -52,6 +51,8 @@ android {
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            isDebuggable = true
         }
         getByName("release") {
             isMinifyEnabled = true
