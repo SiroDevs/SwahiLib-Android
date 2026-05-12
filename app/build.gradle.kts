@@ -101,19 +101,19 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":core:database"))
+    implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
     implementation(project(":core:ui"))
-    implementation(project(":core:designsystem"))
 
     // Feature modules
+    implementation(project(":feature:splash"))
+    implementation(project(":feature:init"))
     implementation(project(":feature:home"))
     implementation(project(":feature:word"))
     implementation(project(":feature:idiom"))
     implementation(project(":feature:proverb"))
     implementation(project(":feature:saying"))
     implementation(project(":feature:settings"))
-    implementation(project(":feature:splash"))
-    implementation(project(":feature:init"))
 
     // Navigation
     implementation(libs.compose.navigation)
@@ -127,7 +127,7 @@ dependencies {
     implementation(libs.revenuecat)
     implementation(libs.revenuecat.ui)
     implementation(libs.android.billing)
-    implementation("androidx.concurrent:concurrent-futures:1.3.0")
+    implementation(libs.androidx.concurrent.futures)
 
     // Testing
     testImplementation(libs.junit)
