@@ -9,7 +9,7 @@ import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkConfigModule {
+object AppConfigModule {
     @Provides
     @Named("supabase_url")
     fun provideSupabaseUrl(): String = BuildConfig.SupabaseUrl
