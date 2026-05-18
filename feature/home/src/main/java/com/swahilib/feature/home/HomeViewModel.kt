@@ -47,16 +47,12 @@ class HomeViewModel @Inject constructor(
     private val _filteredWords = MutableStateFlow<List<WordEntity>>(emptyList())
     val filteredWords: StateFlow<List<WordEntity>> get() = _filteredWords
 
-    private val _canShowPaywall = MutableStateFlow(false)
-    val canShowPaywall: StateFlow<Boolean> = _canShowPaywall.asStateFlow()
-
     val lastHomeTab = prefsRepo.lastHomeTab
 
     fun fetchData() {
         _uiState.tryEmit(UiState.Loading)
 
         viewModelScope.launch {
-            _canShowPaywall.value = prefsRepo.canShowPaywall
             _allIdioms.value = idiomRepo.fetchLocalData()
             _filteredIdioms.value = _allIdioms.value
 

@@ -13,7 +13,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val prefsRepo: PrefsRepo,
-    private val subsRepo: SubsRepo,
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -38,9 +37,9 @@ class SplashViewModel @Inject constructor(
 
             try {
                 if (NetworkUtils.isNetworkAvailable(context)) {
-                    checkSubscriptionAndTime(true)
+
                 } else {
-                    checkSubscriptionAndTime(false)
+
                 }
             } catch (e: Exception) {
                 _isLoading.value = false
@@ -48,15 +47,5 @@ class SplashViewModel @Inject constructor(
                 _isLoading.value = false
             }
         }
-    }
-
-    private suspend fun checkSubscriptionAndTime(isOnline: Boolean) {
-        if (!prefsRepo.isProUser && prefsRepo.hasTimeExceeded(5)) {
-            subsRepo.isProUser(isOnline) { isActive ->
-                prefsRepo.isProUser = isActive
-                prefsRepo.canShowPaywall = !isActive
-            }
-        }
-        prefsRepo.updateAppOpenTime()
     }
 }

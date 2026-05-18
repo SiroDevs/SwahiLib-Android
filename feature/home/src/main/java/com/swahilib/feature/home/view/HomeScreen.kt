@@ -7,11 +7,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.window.*
 import androidx.navigation.NavHostController
-import com.revenuecat.purchases.ui.revenuecatui.Paywall
-import com.revenuecat.purchases.ui.revenuecatui.PaywallOptions
-import com.revenuecat.purchases.ui.revenuecatui.customercenter.CustomerCenter
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.action.*
@@ -24,46 +20,10 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navController: NavHostController,
 ) {
-    val canShowPaywall by viewModel.canShowPaywall.collectAsState()
-    var showPaywall by remember { mutableStateOf(false) }
-
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchData()
-        showPaywall = canShowPaywall
-    }
-
-    if (showPaywall) {
-        Dialog(
-            onDismissRequest = { showPaywall = false },
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false,
-                decorFitsSystemWindows = false
-            )
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                val paywallOptions = remember {
-                    PaywallOptions.Builder(dismissRequest = { showPaywall = false })
-                        .setShouldDisplayDismissButton(true)
-                        .build()
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .systemBarsPadding()
-                ) {
-                    if (canShowPaywall) {
-                        Paywall(paywallOptions)
-                    } else {
-                        CustomerCenter(onDismiss = { showPaywall = false })
-                    }
-                }
-            }
-        }
     }
 
     Scaffold(

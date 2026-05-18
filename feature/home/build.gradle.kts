@@ -10,6 +10,4 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
-    implementation(libs.revenuecat)
-    implementation(libs.revenuecat.ui)
 }
