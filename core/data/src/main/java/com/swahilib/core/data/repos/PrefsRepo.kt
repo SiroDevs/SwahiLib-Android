@@ -40,14 +40,6 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getInt(PrefConstants.LAST_HOME_TAB, 0)
         set(value) = prefs.edit { putInt(PrefConstants.LAST_HOME_TAB, value) }
 
-    var isProUser: Boolean
-        get() = prefs.getBoolean(PrefConstants.IS_PRO_USER, false)
-        set(value) = prefs.edit { putBoolean(PrefConstants.IS_PRO_USER, value) }
-
-    var canShowPaywall: Boolean
-        get() = prefs.getBoolean(PrefConstants.CAN_SHOW_PAYWALL, false)
-        set(value) = prefs.edit { putBoolean(PrefConstants.CAN_SHOW_PAYWALL, value) }
-
     var lastAppOpenTime: Long
         get() = prefs.getLong(PrefConstants.LAST_APP_OPEN_TIME, 0L)
         set(value) = prefs.edit { putLong(PrefConstants.LAST_APP_OPEN_TIME, value) }

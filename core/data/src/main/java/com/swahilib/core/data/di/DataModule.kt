@@ -7,7 +7,6 @@ import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.data.repos.ProverbRepo
 import com.swahilib.core.data.repos.SayingRepo
 import com.swahilib.core.data.repos.SearchRepo
-import com.swahilib.core.data.repos.SubsRepo
 import com.swahilib.core.data.repos.WordRepo
 import com.swahilib.core.database.daos.HistoryDao
 import com.swahilib.core.database.daos.IdiomDao
@@ -60,8 +59,4 @@ object DataModule {
     @Singleton
     fun provideSearchRepo(searchDao: SearchDao, supabase: Postgrest): SearchRepo =
         SearchRepo(searchDao, supabase)
-
-    @Provides
-    @Singleton
-    fun provideSubsRepo(): SubsRepo = SubsRepo()
 }

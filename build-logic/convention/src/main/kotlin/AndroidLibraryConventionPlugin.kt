@@ -1,14 +1,15 @@
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
                 apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
             }
             extensions.configure<LibraryExtension> {
                 compileSdk = 35
@@ -20,14 +21,13 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     sourceCompatibility = org.gradle.api.JavaVersion.VERSION_11
                     targetCompatibility = org.gradle.api.JavaVersion.VERSION_11
                 }
-                kotlinOptions { jvmTarget = "11" }
+            }
+
+            extensions.configure<KotlinAndroidProjectExtension> {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_11)
+                }
             }
         }
-    }
-
-    // Extension function kept here for brevity; in real projects extract to a separate file
-    private fun LibraryExtension.kotlinOptions(block: org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions.() -> Unit) {
-        (this as org.gradle.api.plugins.ExtensionAware).extensions
-            .configure("kotlinOptions", block)
     }
 }

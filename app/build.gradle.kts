@@ -2,7 +2,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.swahilib.hilt)
     alias(libs.plugins.devtools.ksp)
@@ -77,7 +76,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions { jvmTarget = "11" }
     buildFeatures {
         compose = true
         buildConfig = true
@@ -86,6 +84,12 @@ android {
         disable += "NullSafeMutableLiveData"
     }
     namespace = "com.swahilib"
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
 }
 
 sentry {
@@ -123,9 +127,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    // Subscriptions & Monitoring
-    implementation(libs.revenuecat)
-    implementation(libs.revenuecat.ui)
+    // Monitoring
     implementation(libs.android.billing)
     implementation(libs.androidx.concurrent.futures)
 
