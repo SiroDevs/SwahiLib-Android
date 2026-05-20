@@ -20,14 +20,14 @@ val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 150
-        versionName = "1.0.150"
+        versionCode = 152
+        versionName = "1.0.152"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
 
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -56,15 +56,6 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("release")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-        create("staging") {
-            isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("release")
-            applicationIdSuffix = ".stg"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
