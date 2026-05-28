@@ -34,8 +34,6 @@ android {
 
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
-        buildConfigField("String", "RcCatId", "\"${localProperties.getProperty("REVENUECAT_ID")}\"")
-        buildConfigField("String", "RcApiKey", "\"${localProperties.getProperty("REVENUECAT_API_KEY")}\"")
     }
 
     signingConfigs {
@@ -104,11 +102,14 @@ dependencies {
     implementation(project(":feature:splash"))
     implementation(project(":feature:init"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:advsearch"))
     implementation(project(":feature:word"))
     implementation(project(":feature:idiom"))
     implementation(project(":feature:proverb"))
     implementation(project(":feature:saying"))
     implementation(project(":feature:settings"))
+    implementation(project(":feature:howitworks"))
+    implementation(project(":feature:help"))
 
     // Navigation
     implementation(libs.compose.navigation)

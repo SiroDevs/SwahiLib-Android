@@ -11,7 +11,6 @@ object AppConstants {
 
 object PrefConstants {
     const val PREFERENCE_FILE = "app_pref"
-
     const val THEME_MODE = "theme_mode"
     const val IS_DATA_LOADED = "is_data_loaded"
     const val INSTALL_DATE = "install_date"
@@ -22,13 +21,15 @@ object PrefConstants {
 }
 
 object Routes {
-    const val SPLASH   = "splash"
-    const val INIT     = "init"
-    const val HOME     = "home"
-    const val IDIOM    = "idiom"
-    const val PROVERB  = "proverb"
-    const val SAYING   = "saying"
-    const val WORD     = "word"
-    const val SETTINGS = "settings"
+    const val SPLASH    = "splash"
+    const val INIT      = "init"
+    const val HOME      = "home"
+    const val IDIOM     = "idiom"
+    const val PROVERB   = "proverb"
+    const val SAYING    = "saying"
+    const val WORD      = "word"
+    const val SETTINGS  = "settings"
     const val ADVSEARCH = "advsearch"
+    const val HOW_IT_WORKS = "how_it_works"
+    const val HELP      = "help"
 }

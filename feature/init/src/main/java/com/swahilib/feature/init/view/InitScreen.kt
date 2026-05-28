@@ -1,15 +1,24 @@
 package com.swahilib.feature.init.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.ui.components.indicators.*
+import com.swahilib.core.ui.components.indicators.EmptyState
+import com.swahilib.core.ui.components.indicators.ErrorState
+import com.swahilib.core.ui.components.indicators.LoadingState
 import com.swahilib.feature.init.InitViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
