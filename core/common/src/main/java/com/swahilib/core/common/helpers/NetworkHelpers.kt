@@ -1,13 +1,11 @@
 package com.swahilib.core.common.helpers
 
-import android.Manifest
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.util.Log
-import androidx.annotation.RequiresPermission
 import io.ktor.client.call.DoubleReceiveException
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body

@@ -1,28 +1,52 @@
 package com.swahilib.feature.home.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.material.icons.filled.Brightness6
+import androidx.compose.material.icons.filled.HelpOutline
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.swahilib.core.common.entity.HomeTab
 import com.swahilib.core.common.entity.UiState
-import com.swahilib.core.common.entity.homeTabs
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.ThemeRepo
 import com.swahilib.core.designsystem.theme.ThemeSelectorDialog
-import com.swahilib.core.ui.components.action.*
-import com.swahilib.core.ui.components.indicators.*
+import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.indicators.EmptyState
+import com.swahilib.core.ui.components.indicators.ErrorState
+import com.swahilib.core.ui.components.indicators.LoadingState
 import com.swahilib.feature.home.HomeViewModel
-import com.swahilib.feature.home.view.tabs.HomeHistoria
-import com.swahilib.feature.home.view.tabs.HomeTafuta
-import com.swahilib.feature.home.view.tabs.HomeVipendwa
+import com.swahilib.feature.home.components.HomeTab
+import com.swahilib.feature.home.components.homeTabs
+import com.swahilib.feature.home.view.tabs.HomeHistory
+import com.swahilib.feature.home.view.tabs.HomeSearch
+import com.swahilib.feature.home.view.tabs.HomeLikes
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -37,10 +61,9 @@ fun HomeScreen(
     var showMoreMenu by remember { mutableStateOf(false) }
     val theme = themeRepo.selectedTheme
 
-    val tabs = listOf(HomeTab.Search, HomeTab.Likes, HomeTab.History)
     val pagerState = rememberPagerState(
-        initialPage = tabs.indexOf(selectedTab).coerceAtLeast(0),
-        pageCount = { tabs.size }
+        initialPage = homeTabs.indexOf(selectedTab).coerceAtLeast(0),
+        pageCount = { homeTabs.size }
     )
 
     LaunchedEffect(Unit) {
@@ -48,11 +71,11 @@ fun HomeScreen(
     }
 
     LaunchedEffect(pagerState.currentPage) {
-        viewModel.setSelectedTab(tabs[pagerState.currentPage])
+        viewModel.setSelectedTab(homeTabs[pagerState.currentPage])
     }
 
     LaunchedEffect(selectedTab) {
-        val idx = tabs.indexOf(selectedTab)
+        val idx = homeTabs.indexOf(selectedTab)
         if (idx >= 0 && pagerState.currentPage != idx) {
             pagerState.animateScrollToPage(idx)
         }
@@ -86,7 +109,12 @@ fun HomeScreen(
                     ) {
                         DropdownMenuItem(
                             text = { Text("Mipangilio") },
-                            leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null) },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Default.Settings,
+                                    contentDescription = null
+                                )
+                            },
                             onClick = {
                                 showMoreMenu = false
                                 navController.navigate(Routes.SETTINGS)
@@ -102,7 +130,12 @@ fun HomeScreen(
                         )
                         DropdownMenuItem(
                             text = { Text("Usaidizi na Maoni") },
-                            leadingIcon = { Icon(Icons.Default.HelpOutline, contentDescription = null) },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Default.HelpOutline,
+                                    contentDescription = null
+                                )
+                            },
                             onClick = {
                                 showMoreMenu = false
                                 navController.navigate(Routes.HELP)
@@ -114,7 +147,7 @@ fun HomeScreen(
         },
         bottomBar = {
             NavigationBar(containerColor = MaterialTheme.colorScheme.onPrimary) {
-                tabs.forEach { tab ->
+                homeTabs.forEach { tab ->
                     NavigationBarItem(
                         icon = { Icon(tab.icon, contentDescription = tab.title) },
                         label = { Text(tab.title) },
@@ -145,28 +178,32 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxSize(),
                         userScrollEnabled = true,
                     ) { page ->
-                        when (tabs[page]) {
-                            HomeTab.Search -> HomeTafuta(
+                        when (homeTabs[page]) {
+                            HomeTab.Search -> HomeSearch(
                                 viewModel = viewModel,
                                 navController = navController,
                             )
-                            HomeTab.Likes -> HomeVipendwa(
+
+                            HomeTab.Likes -> HomeLikes(
                                 viewModel = viewModel,
                                 navController = navController,
                             )
-                            HomeTab.History -> HomeHistoria(
+
+                            HomeTab.History -> HomeHistory(
                                 viewModel = viewModel,
                                 navController = navController,
                             )
                         }
                     }
                 }
+
                 is UiState.Error -> {
                     ErrorState(
                         message = (uiState as UiState.Error).message,
                         onRetry = { viewModel.fetchData() }
                     )
                 }
+
                 UiState.Loading -> LoadingState(fileName = "circle-loader")
                 else -> EmptyState()
             }
