@@ -29,18 +29,19 @@ class InitViewModel @Inject constructor(
             _uiState.emit(UiState.Loading)
             try {
                 if (NetworkUtils.isNetworkAvailable(context)) {
-                    val idiomInitialization = async { idiomRepo.fetchRemoteData() }
-                    val proverbInitialization = async { proverbRepo.fetchRemoteData() }
-                    val sayingInitialization = async { sayingRepo.fetchRemoteData() }
-                    val wordInitialization = async { wordRepo.fetchRemoteData() }
+                    val idiomInit = async { idiomRepo.fetchRemoteData() }
+                    val proverbInit = async { proverbRepo.fetchRemoteData() }
+                    val sayingInit = async { sayingRepo.fetchRemoteData() }
+                    val wordInit = async { wordRepo.fetchRemoteData() }
 
-                    idiomInitialization.await()
-                    proverbInitialization.await()
-                    sayingInitialization.await()
-                    wordInitialization.await()
+                    idiomInit.await()
+                    proverbInit.await()
+                    sayingInit.await()
+                    wordInit.await()
 
                     Log.d("TAG", "✅ Data fetched and saved successfully.")
                     prefsRepo.isDataLoaded = true
+                    prefsRepo.updateAppOpenTime()
                     _uiState.emit(UiState.Saved)
                 } else {
                     _uiState.emit(UiState.Error("Loo! Hapa bila muunganisho wa intaneti unaoaminika hutoboi."))
@@ -52,8 +53,6 @@ class InitViewModel @Inject constructor(
                 }
                 Log.e("TAG", message, e)
                 _uiState.emit(UiState.Error(message))
-            } finally {
-                _uiState.emit(UiState.Error("Loo! Hapa bila muunganisho wa intaneti unaoaminika hutoboi!"))
             }
         }
     }

@@ -15,9 +15,8 @@ import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
 
-// Feature ViewModels
-import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.init.InitViewModel
+import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.settings.SettingsViewModel
 import com.swahilib.feature.splash.SplashViewModel
 import com.swahilib.feature.idiom.IdiomViewModel
@@ -25,15 +24,17 @@ import com.swahilib.feature.proverb.ProverbViewModel
 import com.swahilib.feature.saying.SayingViewModel
 import com.swahilib.feature.word.WordViewModel
 
-// Feature Screens
-import com.swahilib.feature.home.view.HomeScreen
 import com.swahilib.feature.init.view.InitScreen
-import com.swahilib.feature.settings.view.SettingsScreen
+import com.swahilib.feature.home.view.HomeScreen
+import com.swahilib.feature.advsearch.view.AdvSearchScreen
 import com.swahilib.feature.splash.view.SplashScreen
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.proverb.view.ProverbScreen
 import com.swahilib.feature.saying.view.SayingScreen
 import com.swahilib.feature.word.view.WordScreen
+import com.swahilib.feature.settings.view.SettingsScreen
+import com.swahilib.feature.howitworks.view.HowItWorksScreen
+import com.swahilib.feature.help.view.HelpScreen
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -55,7 +56,7 @@ fun AppNavHost(
 
         composable(Routes.HOME) {
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen(viewModel = viewModel, navController = navController)
+            HomeScreen(viewModel = viewModel, navController = navController, themeRepo = themeRepo)
         }
 
         composable(Routes.IDIOM) {
@@ -85,6 +86,19 @@ fun AppNavHost(
         composable(Routes.SETTINGS) {
             val viewModel: SettingsViewModel = hiltViewModel()
             SettingsScreen(navController = navController, viewModel = viewModel, themeRepo = themeRepo)
+        }
+
+        composable(Routes.ADVSEARCH) {
+            val viewModel: HomeViewModel = hiltViewModel()
+            AdvSearchScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable(Routes.HOW_IT_WORKS) {
+            HowItWorksScreen(navController = navController)
+        }
+
+        composable(Routes.HELP) {
+            HelpScreen(navController = navController)
         }
     }
 }
