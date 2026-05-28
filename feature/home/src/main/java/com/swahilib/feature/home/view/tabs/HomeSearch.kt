@@ -17,9 +17,10 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.listitems.*
 import com.swahilib.feature.home.HomeViewModel
+import com.swahilib.feature.home.components.SearchFieldRow
+import com.swahilib.feature.home.components.SectionHeader
 import com.swahilib.feature.home.components.VerticalLetters
 import java.util.Locale
 
@@ -34,12 +35,14 @@ fun HomeSearch(
     var selectedLetter by rememberSaveable { mutableStateOf("") }
     val lazyListState = rememberLazyListState()
 
+    var selectedType by rememberSaveable { mutableStateOf("MANENO") }
+    val types = listOf("MANENO", "NAHAU", "METHALI", "MISEMO")
+
     val idioms by viewModel.filteredIdioms.collectAsState(initial = emptyList())
     val proverbs by viewModel.filteredProverbs.collectAsState(initial = emptyList())
     val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
     val words by viewModel.filteredWords.collectAsState(initial = emptyList())
 
-    // Voice search launcher
     val speechLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -54,119 +57,134 @@ fun HomeSearch(
 
     fun startVoiceSearch() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            putExtra(RecognizerIntent.EXTRA_PROMPT, "Sema neno la kutafuta...")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Sema unachotafuta ...")
         }
         speechLauncher.launch(intent)
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-        LazyColumn(
-            state = lazyListState,
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(end = 78.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            item {
-                // Modern Search Box
-                SearchFieldRow(
-                    query = searchQuery,
-                    placeholder = "Tafuta Kamusi...",
-                    onQueryChange = {
-                        searchQuery = it
-                        selectedLetter = ""
-                        viewModel.filterData(it)
-                    },
-                    onClear = {
-                        searchQuery = ""
-                        viewModel.filterData("")
-                    },
-                    onVoiceSearch = { startVoiceSearch() }
-                )
-            }
+            SearchFieldRow(
+                query = searchQuery,
+                placeholder = "Tafuta kwenye Kamusi ...",
+                onQueryChange = {
+                    searchQuery = it
+                    selectedLetter = ""
+                    viewModel.filterData(it)
+                },
+                onClear = {
+                    searchQuery = ""
+                    viewModel.filterData("")
+                },
+                onVoiceSearch = { startVoiceSearch() }
+            )
 
-            // Words section
-            if (words.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(title = "Maneno", count = words.size)
-                }
-                items(words, key = { it.rid }) { word ->
-                    WordItem(
-                        word = word,
-                        onTap = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set("word", word)
-                            viewModel.addToHistory(word.rid, "word")
-                            navController.navigate(Routes.WORD)
-                        },
-                        onLike = { viewModel.likeWord(word) }
+            LazyRow(
+                modifier = Modifier.padding(horizontal = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                items(types) { type ->
+                    FilterChip(
+                        selected = selectedType == type,
+                        onClick = { selectedType = type },
+                        label = { Text(type) },
                     )
                 }
             }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(start = 70.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                if (selectedType == "MANENO") {
+                    item { SectionHeader("Matokeo", words.size) }
+                    if (words.isNotEmpty()) {
+                        items(words, key = { it.rid }) { word ->
+                            WordItem(
+                                word = word,
+                                onTap = {
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "word",
+                                        word
+                                    )
+                                    viewModel.addToHistory(word.rid, "word")
+                                    navController.navigate(Routes.WORD)
+                                },
+                                onLike = { viewModel.likeWord(word) }
+                            )
+                        }
+                    }
+                }
+                if (selectedType == "NAHAU") {
+                    item { SectionHeader("Matokeo", idioms.size) }
+                    if (idioms.isNotEmpty()) {
+                        items(idioms, key = { it.rid }) { idiom ->
+                            IdiomItem(
+                                idiom = idiom,
+                                onTap = {
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "idiom",
+                                        idiom
+                                    )
+                                    viewModel.addToHistory(idiom.rid, "idiom")
+                                    navController.navigate(Routes.IDIOM)
+                                },
+                                onLike = { viewModel.likeIdiom(idiom) }
+                            )
+                        }
+                    }
+                }
+                if (selectedType == "METHALI") {
+                    item { SectionHeader("Matokeo", proverbs.size) }
+                    if (proverbs.isNotEmpty()) {
+                        items(proverbs, key = { it.rid }) { proverb ->
+                            ProverbItem(
+                                proverb = proverb,
+                                onTap = {
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "proverb",
+                                        proverb
+                                    )
+                                    viewModel.addToHistory(proverb.rid, "proverb")
+                                    navController.navigate(Routes.PROVERB)
+                                },
+                                onLike = { viewModel.likeProverb(proverb) }
+                            )
+                        }
+                    }
+                }
+                if (selectedType == "MISEMO") {
+                    item { SectionHeader("Matokeo", sayings.size) }
+                    if (sayings.isNotEmpty()) {
+                        items(sayings, key = { it.rid }) { saying ->
+                            SayingItem(
+                                saying = saying,
+                                onTap = {
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "saying",
+                                        saying
+                                    )
+                                    viewModel.addToHistory(saying.rid, "saying")
+                                    navController.navigate(Routes.SAYING)
+                                },
+                                onLike = { viewModel.likeSaying(saying) }
+                            )
+                        }
+                    }
+                }
 
-            // Idioms section
-            if (idioms.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(title = "Nahau", count = idioms.size)
-                }
-                items(idioms, key = { it.rid }) { idiom ->
-                    IdiomItem(
-                        idiom = idiom,
-                        onTap = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set("idiom", idiom)
-                            viewModel.addToHistory(idiom.rid, "idiom")
-                            navController.navigate(Routes.IDIOM)
-                        },
-                        onLike = { viewModel.likeIdiom(idiom) }
-                    )
-                }
+                item { Spacer(Modifier.height(80.dp)) }
             }
 
-            // Proverbs section
-            if (proverbs.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(title = "Methali", count = proverbs.size)
-                }
-                items(proverbs, key = { it.rid }) { proverb ->
-                    ProverbItem(
-                        proverb = proverb,
-                        onTap = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set("proverb", proverb)
-                            viewModel.addToHistory(proverb.rid, "proverb")
-                            navController.navigate(Routes.PROVERB)
-                        },
-                        onLike = { viewModel.likeProverb(proverb) }
-                    )
-                }
-            }
-
-            // Sayings section
-            if (sayings.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(title = "Misemo", count = sayings.size)
-                }
-                items(sayings, key = { it.rid }) { saying ->
-                    SayingItem(
-                        saying = saying,
-                        onTap = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set("saying", saying)
-                            viewModel.addToHistory(saying.rid, "saying")
-                            navController.navigate(Routes.SAYING)
-                        },
-                        onLike = { viewModel.likeSaying(saying) }
-                    )
-                }
-            }
-
-            if (words.isEmpty() && idioms.isEmpty() && proverbs.isEmpty() && sayings.isEmpty()) {
-                item { EmptyState(message = "Hamna matokeo ya utafutaji") }
-            }
-
-            item { Spacer(Modifier.height(80.dp)) }
         }
 
-        // Vertical letter scrubber
         VerticalLetters(
             selectedLetter = selectedLetter,
             onLetterSelected = { letter ->
@@ -176,7 +194,6 @@ fun HomeSearch(
             },
         )
 
-        // FAB for Advanced Search
         FloatingActionButton(
             onClick = { navController.navigate(Routes.ADVSEARCH) },
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -195,65 +212,3 @@ fun HomeSearch(
     }
 }
 
-@Composable
-fun SearchFieldRow(
-    query: String,
-    placeholder: String,
-    onQueryChange: (String) -> Unit,
-    onClear: () -> Unit,
-    onVoiceSearch: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = query,
-        onValueChange = onQueryChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        placeholder = { Text(placeholder) },
-        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
-        trailingIcon = {
-            Row {
-                if (query.isNotEmpty()) {
-                    IconButton(onClick = onClear) {
-                        Icon(Icons.Filled.Clear, contentDescription = "Futa")
-                    }
-                }
-                IconButton(onClick = onVoiceSearch) {
-                    Icon(Icons.Filled.Mic, contentDescription = "Tafuta kwa Sauti")
-                }
-            }
-        },
-        singleLine = true,
-        shape = MaterialTheme.shapes.extraLarge
-    )
-}
-
-@Composable
-fun SectionHeader(title: String, count: Int) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(horizontal = 16.dp, vertical = 6.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = title.uppercase(),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Surface(
-            shape = MaterialTheme.shapes.small,
-            color = MaterialTheme.colorScheme.primary,
-        ) {
-            Text(
-                text = "$count",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-            )
-        }
-    }
-}

@@ -13,6 +13,7 @@ import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.listitems.*
 import com.swahilib.feature.home.HomeViewModel
+import com.swahilib.feature.home.components.SectionHeader
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

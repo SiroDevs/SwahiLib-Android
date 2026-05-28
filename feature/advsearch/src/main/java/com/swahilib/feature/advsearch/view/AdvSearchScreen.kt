@@ -5,21 +5,41 @@ import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.*
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.core.ui.components.listitems.*
+import com.swahilib.core.ui.components.listitems.IdiomItem
+import com.swahilib.core.ui.components.listitems.ProverbItem
+import com.swahilib.core.ui.components.listitems.SayingItem
+import com.swahilib.core.ui.components.listitems.WordItem
 import com.swahilib.feature.home.HomeViewModel
+import com.swahilib.feature.home.components.SearchFieldRow
+import com.swahilib.feature.home.components.SectionHeader
 import java.util.Locale
 
 @Composable
@@ -28,9 +48,9 @@ fun AdvSearchScreen(
     viewModel: HomeViewModel,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
-    var selectedType by rememberSaveable { mutableStateOf("Yote") }
+    var selectedType by rememberSaveable { mutableStateOf("YOTE") }
 
-    val types = listOf("Yote", "Maneno", "Nahau", "Methali", "Misemo")
+    val types = listOf("YOTE", "MANENO", "NAHAU", "METHALI", "Misemo")
 
     val words by viewModel.filteredWords.collectAsState(initial = emptyList())
     val idioms by viewModel.filteredIdioms.collectAsState(initial = emptyList())
@@ -48,10 +68,22 @@ fun AdvSearchScreen(
         }
     }
 
+    fun startVoiceSearch() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Sema unachotafuta ...")
+        }
+        speechLauncher.launch(intent)
+    }
+
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Tafuta kwa Kina",
+                title = "Tafuta Kamusi kwa Kina",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() }
             )
@@ -62,39 +94,20 @@ fun AdvSearchScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // Search field
-            OutlinedTextField(
-                value = query,
-                onValueChange = { query = it; viewModel.filterData(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                placeholder = { Text("Andika neno la kutafuta...") },
-                leadingIcon = { Icon(Icons.Filled.Search, null) },
-                trailingIcon = {
-                    Row {
-                        if (query.isNotEmpty()) {
-                            IconButton(onClick = { query = ""; viewModel.filterData("") }) {
-                                Icon(Icons.Filled.Clear, null)
-                            }
-                        }
-                        IconButton(onClick = {
-                            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                                putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                                putExtra(RecognizerIntent.EXTRA_PROMPT, "Sema neno la kutafuta...")
-                            }
-                            speechLauncher.launch(intent)
-                        }) {
-                            Icon(Icons.Filled.Mic, null)
-                        }
-                    }
+            SearchFieldRow(
+                query = query,
+                placeholder = "Utafutaji wa kina ...",
+                onQueryChange = {
+                    query = it
+                    viewModel.filterData(it)
                 },
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp)
+                onClear = {
+                    query = ""
+                    viewModel.filterData("")
+                },
+                onVoiceSearch = { startVoiceSearch() }
             )
 
-            // Type filter chips
             LazyRow(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -113,14 +126,13 @@ fun AdvSearchScreen(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
-            // Results
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                if (selectedType == "Yote" || selectedType == "Maneno") {
+                if (selectedType == "YOTE" || selectedType == "MANENO") {
+                    stickyHeader { SectionHeader("Matokeo ya maneno", words.size) }
                     if (words.isNotEmpty()) {
-                        stickyHeader { com.swahilib.feature.home.view.tabs.SectionHeader("Maneno", words.size) }
                         items(words, key = { it.rid }) { word ->
                             WordItem(
                                 word = word,
@@ -134,9 +146,9 @@ fun AdvSearchScreen(
                         }
                     }
                 }
-                if (selectedType == "Yote" || selectedType == "Nahau") {
+                if (selectedType == "YOTE" || selectedType == "NAHAU") {
+                    stickyHeader { SectionHeader("Matokeo ya nahau", idioms.size) }
                     if (idioms.isNotEmpty()) {
-                        stickyHeader { com.swahilib.feature.home.view.tabs.SectionHeader("Nahau", idioms.size) }
                         items(idioms, key = { it.rid }) { idiom ->
                             IdiomItem(
                                 idiom = idiom,
@@ -150,9 +162,9 @@ fun AdvSearchScreen(
                         }
                     }
                 }
-                if (selectedType == "Yote" || selectedType == "Methali") {
+                if (selectedType == "YOTE" || selectedType == "METHALI") {
+                    stickyHeader { SectionHeader("Matokeo ya methali", proverbs.size) }
                     if (proverbs.isNotEmpty()) {
-                        stickyHeader { com.swahilib.feature.home.view.tabs.SectionHeader("Methali", proverbs.size) }
                         items(proverbs, key = { it.rid }) { proverb ->
                             ProverbItem(
                                 proverb = proverb,
@@ -166,9 +178,9 @@ fun AdvSearchScreen(
                         }
                     }
                 }
-                if (selectedType == "Yote" || selectedType == "Misemo") {
+                if (selectedType == "YOTE" || selectedType == "MISEMO") {
+                    stickyHeader { SectionHeader("Matokeo ya misemo", sayings.size) }
                     if (sayings.isNotEmpty()) {
-                        stickyHeader { com.swahilib.feature.home.view.tabs.SectionHeader("Misemo", sayings.size) }
                         items(sayings, key = { it.rid }) { saying ->
                             SayingItem(
                                 saying = saying,
