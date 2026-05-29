@@ -18,7 +18,7 @@ fun SayingView(
     val scrollState = rememberLazyListState()
     Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         LazyColumn(state = scrollState) {
-            item { CollapsingHeader(title = title, subtitle = "Msemo") }
+            item { CollapsingHeader(title = title) }
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
                     if (meanings.isNotEmpty()) MeaningsView(meanings = meanings)

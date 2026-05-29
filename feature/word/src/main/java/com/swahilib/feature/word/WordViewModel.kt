@@ -40,7 +40,7 @@ class WordViewModel @Inject constructor(
         _isLiked.value = word.liked
 
         _title.value = word.title.toString()
-        _conjugation.value = word.conjugation.toString()
+        _conjugation.value = word.conjugation.toString().replace("null","")
 
         _meanings.value = cleanMeaning(word.meaning).split("|")
 

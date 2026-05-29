@@ -11,12 +11,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.indicators.EmptyState
-import com.swahilib.core.ui.components.listitems.*
-import com.swahilib.feature.home.ContentItem
 import com.swahilib.feature.home.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.ui.platform.LocalLocale
+import com.swahilib.core.ui.components.listitems.IdiomItem
+import com.swahilib.core.ui.components.listitems.ProverbItem
+import com.swahilib.core.ui.components.listitems.SayingItem
+import com.swahilib.core.ui.components.listitems.WordItem
+import com.swahilib.feature.home.components.ContentItem
 
 @Composable
 fun HomeHistory(
@@ -39,22 +42,6 @@ fun HomeHistory(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Vitu ${history.size} vilivyotembelewa",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
         items(history, key = { it.id }) { historyEntry ->
             val contentItem = viewModel.resolveHistoryItem(historyEntry)
             val ms = historyEntry.createdAt.toLong()

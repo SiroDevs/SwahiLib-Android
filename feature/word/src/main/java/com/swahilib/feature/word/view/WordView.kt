@@ -27,7 +27,7 @@ fun WordView(
     val scrollState = rememberLazyListState()
     Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         LazyColumn(state = scrollState) {
-            item { CollapsingHeader(title = title, subtitle = "Neno") }
+            item { CollapsingHeader(title = title) }
             item {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     if (meanings.isNotEmpty()) MeaningsView(meanings = meanings)

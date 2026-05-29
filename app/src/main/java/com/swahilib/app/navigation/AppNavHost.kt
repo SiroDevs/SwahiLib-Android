@@ -14,6 +14,7 @@ import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
+import com.swahilib.feature.advsearch.AdvSearchViewModel
 
 import com.swahilib.feature.init.InitViewModel
 import com.swahilib.feature.home.HomeViewModel
@@ -89,7 +90,7 @@ fun AppNavHost(
         }
 
         composable(Routes.ADVSEARCH) {
-            val viewModel: HomeViewModel = hiltViewModel()
+            val viewModel: AdvSearchViewModel = hiltViewModel()
             AdvSearchScreen(navController = navController, viewModel = viewModel)
         }
 
