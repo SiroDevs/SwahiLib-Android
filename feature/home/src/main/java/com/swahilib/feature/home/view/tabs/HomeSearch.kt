@@ -33,7 +33,6 @@ fun HomeSearch(
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedLetter by rememberSaveable { mutableStateOf("") }
-    val lazyListState = rememberLazyListState()
 
     var selectedType by rememberSaveable { mutableStateOf("MANENO") }
     val types = listOf("MANENO", "NAHAU", "METHALI", "MISEMO")
@@ -194,21 +193,16 @@ fun HomeSearch(
             },
         )
 
-        FloatingActionButton(
+        ExtendedFloatingActionButton(
             onClick = { navController.navigate(Routes.ADVSEARCH) },
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .navigationBarsPadding()
-                .padding(end = 16.dp, bottom = 16.dp)
-                .size(52.dp)
-        ) {
-            Icon(
-                Icons.Filled.ManageSearch,
-                contentDescription = "Tafuta kwa Kina",
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
+                .padding(end = 16.dp, bottom = 16.dp),  // ← .size(52.dp) removed
+            icon = { Icon(Icons.Filled.ManageSearch, "Tafuta kwa Kina") },
+            text = { Text(text = "Tafuta kwa Kina") },
+        )
     }
 }
 

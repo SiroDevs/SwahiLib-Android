@@ -37,19 +37,17 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _allIdioms = MutableStateFlow<List<IdiomEntity>>(emptyList())
-    private val _filteredIdioms = MutableStateFlow<List<IdiomEntity>>(emptyList())
-    val filteredIdioms: StateFlow<List<IdiomEntity>> get() = _filteredIdioms
-
     private val _allProverbs = MutableStateFlow<List<ProverbEntity>>(emptyList())
-    private val _filteredProverbs = MutableStateFlow<List<ProverbEntity>>(emptyList())
-    val filteredProverbs: StateFlow<List<ProverbEntity>> get() = _filteredProverbs
-
     private val _allSayings = MutableStateFlow<List<SayingEntity>>(emptyList())
-    private val _filteredSayings = MutableStateFlow<List<SayingEntity>>(emptyList())
-    val filteredSayings: StateFlow<List<SayingEntity>> get() = _filteredSayings
-
     private val _allWords = MutableStateFlow<List<WordEntity>>(emptyList())
+
+    private val _filteredIdioms = MutableStateFlow<List<IdiomEntity>>(emptyList())
+    private val _filteredProverbs = MutableStateFlow<List<ProverbEntity>>(emptyList())
+    private val _filteredSayings = MutableStateFlow<List<SayingEntity>>(emptyList())
     private val _filteredWords = MutableStateFlow<List<WordEntity>>(emptyList())
+    val filteredIdioms: StateFlow<List<IdiomEntity>> get() = _filteredIdioms
+    val filteredProverbs: StateFlow<List<ProverbEntity>> get() = _filteredProverbs
+    val filteredSayings: StateFlow<List<SayingEntity>> get() = _filteredSayings
     val filteredWords: StateFlow<List<WordEntity>> get() = _filteredWords
 
     val likedWords: StateFlow<List<WordEntity>>
@@ -78,39 +76,33 @@ class HomeViewModel @Inject constructor(
     fun fetchData() {
         _uiState.tryEmit(UiState.Loading)
         viewModelScope.launch {
-            _allIdioms.value = idiomRepo.fetchLocalData()
+            _allIdioms.value = idiomRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
             _filteredIdioms.value = _allIdioms.value
 
-            _allProverbs.value = proverbRepo.fetchLocalData()
+            _allProverbs.value = proverbRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
             _filteredProverbs.value = _allProverbs.value
 
-            _allSayings.value = sayingRepo.fetchLocalData()
+            _allSayings.value = sayingRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
             _filteredSayings.value = _allSayings.value
 
-            _allWords.value = wordRepo.fetchLocalData()
+            _allWords.value = wordRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
             _filteredWords.value = _allWords.value
 
             _history.value = historyRepo.fetchLocalData().sortedByDescending { it.createdAt }
-
             _uiState.tryEmit(UiState.Filtered)
         }
     }
 
     fun filterData(query: String) {
         val q = query.lowercase()
-        _filteredIdioms.value = if (q.isEmpty()) _allIdioms.value else _allIdioms.value.filter {
-            it.title?.lowercase()?.startsWith(q) == true
-        }
-        _filteredProverbs.value =
-            if (q.isEmpty()) _allProverbs.value else _allProverbs.value.filter {
-                it.title?.lowercase()?.startsWith(q) == true
-            }
-        _filteredSayings.value = if (q.isEmpty()) _allSayings.value else _allSayings.value.filter {
-            it.title?.lowercase()?.startsWith(q) == true
-        }
-        _filteredWords.value = if (q.isEmpty()) _allWords.value else _allWords.value.filter {
-            it.title?.lowercase()?.startsWith(q) == true
-        }
+        _filteredIdioms.value = if (q.isEmpty()) _allIdioms.value
+        else _allIdioms.value.filter { it.title?.lowercase()?.startsWith(q) == true }
+        _filteredProverbs.value = if (q.isEmpty()) _allProverbs.value
+        else _allProverbs.value.filter { it.title?.lowercase()?.startsWith(q) == true }
+        _filteredSayings.value = if (q.isEmpty()) _allSayings.value
+        else _allSayings.value.filter { it.title?.lowercase()?.startsWith(q) == true }
+        _filteredWords.value = if (q.isEmpty()) _allWords.value
+        else _allWords.value.filter { it.title?.lowercase()?.startsWith(q) == true }
     }
 
     fun likeWord(word: WordEntity) {

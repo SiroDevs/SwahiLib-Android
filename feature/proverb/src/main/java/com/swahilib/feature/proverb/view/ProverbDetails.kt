@@ -59,6 +59,8 @@ fun ProverbDetails(
                 ) {
                     if (hasFirstExplanation) FirstExplanationView(explanation = explanations[0])
 
+                    Spacer(Modifier.height(80.dp))
+
                     if (synonyms.isNotEmpty()) {
                         Column {
                             Text(
@@ -75,6 +77,8 @@ fun ProverbDetails(
                             }
                         }
                     }
+
+                    Spacer(Modifier.height(80.dp))
 
                     if (meanings.isNotEmpty()) {
                         if (hasLiteralAndFigurativeMeanings) {
@@ -102,6 +106,8 @@ fun ProverbDetails(
                             MeaningsView(meanings = meanings)
                         }
                     }
+
+                    Spacer(Modifier.height(80.dp))
 
                     if (hasSecondExplanation) SecondExplanationView(explanation = explanations[1])
 
