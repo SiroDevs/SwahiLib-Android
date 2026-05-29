@@ -5,6 +5,9 @@ import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -23,6 +26,7 @@ import com.swahilib.feature.home.components.SearchFieldRow
 import com.swahilib.feature.home.components.SectionHeader
 import com.swahilib.feature.home.components.VerticalLetters
 import java.util.Locale
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -33,7 +37,6 @@ fun HomeSearch(
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedLetter by rememberSaveable { mutableStateOf("") }
-
     var selectedType by rememberSaveable { mutableStateOf("MANENO") }
     val types = listOf("MANENO", "NAHAU", "METHALI", "MISEMO")
 
@@ -42,64 +45,74 @@ fun HomeSearch(
     val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
     val words by viewModel.filteredWords.collectAsState(initial = emptyList())
 
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
+    // FAB is extended when at the very top, collapsed when scrolled down
+    val isAtTop by remember { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
+    // Scroll-to-top button appears as soon as we leave the top
+    val showScrollToTop by remember { derivedStateOf { !isAtTop } }
+
     val speechLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val results = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            val text = results?.firstOrNull() ?: ""
+            val text = result.data
+                ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                ?.firstOrNull() ?: ""
             searchQuery = text
             selectedLetter = ""
             viewModel.filterData(text)
         }
     }
 
-    fun startVoiceSearch() {
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            )
+    fun startVoiceSearch() = speechLauncher.launch(
+        Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             putExtra(RecognizerIntent.EXTRA_PROMPT, "Sema unachotafuta ...")
         }
-        speechLauncher.launch(intent)
-    }
+    )
 
-    Box(modifier = modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
+    // ── Outer column so filter chips are outside the overlay Box ─────────────
+    Column(modifier = modifier.fillMaxSize()) {
+
+        SearchFieldRow(
+            query = searchQuery,
+            placeholder = "Tafuta kwenye Kamusi ...",
+            onQueryChange = {
+                searchQuery = it
+                selectedLetter = ""
+                viewModel.filterData(it)
+            },
+            onClear = {
+                searchQuery = ""
+                viewModel.filterData("")
+            },
+            onVoiceSearch = { startVoiceSearch() }
+        )
+
+        LazyRow(
+            modifier = Modifier.padding(horizontal = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            SearchFieldRow(
-                query = searchQuery,
-                placeholder = "Tafuta kwenye Kamusi ...",
-                onQueryChange = {
-                    searchQuery = it
-                    selectedLetter = ""
-                    viewModel.filterData(it)
-                },
-                onClear = {
-                    searchQuery = ""
-                    viewModel.filterData("")
-                },
-                onVoiceSearch = { startVoiceSearch() }
-            )
-
-            LazyRow(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                items(types) { type ->
-                    FilterChip(
-                        selected = selectedType == type,
-                        onClick = { selectedType = type },
-                        label = { Text(type) },
-                    )
-                }
+            items(types) { type ->
+                FilterChip(
+                    selected = selectedType == type,
+                    onClick = { selectedType = type },
+                    label = { Text(type) },
+                )
             }
+        }
+
+        // ── Box only wraps the scrollable area so VerticalLetters aligns here ─
+        Box(modifier = Modifier.fillMaxSize()) {
+
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(start = 70.dp),
+                state = listState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 70.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 if (selectedType == "MANENO") {
@@ -109,10 +122,7 @@ fun HomeSearch(
                             WordItem(
                                 word = word,
                                 onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "word",
-                                        word
-                                    )
+                                    navController.currentBackStackEntry?.savedStateHandle?.set("word", word)
                                     viewModel.addToHistory(word.rid, "word")
                                     navController.navigate(Routes.WORD)
                                 },
@@ -128,10 +138,7 @@ fun HomeSearch(
                             IdiomItem(
                                 idiom = idiom,
                                 onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "idiom",
-                                        idiom
-                                    )
+                                    navController.currentBackStackEntry?.savedStateHandle?.set("idiom", idiom)
                                     viewModel.addToHistory(idiom.rid, "idiom")
                                     navController.navigate(Routes.IDIOM)
                                 },
@@ -147,10 +154,7 @@ fun HomeSearch(
                             ProverbItem(
                                 proverb = proverb,
                                 onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "proverb",
-                                        proverb
-                                    )
+                                    navController.currentBackStackEntry?.savedStateHandle?.set("proverb", proverb)
                                     viewModel.addToHistory(proverb.rid, "proverb")
                                     navController.navigate(Routes.PROVERB)
                                 },
@@ -166,10 +170,7 @@ fun HomeSearch(
                             SayingItem(
                                 saying = saying,
                                 onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "saying",
-                                        saying
-                                    )
+                                    navController.currentBackStackEntry?.savedStateHandle?.set("saying", saying)
                                     viewModel.addToHistory(saying.rid, "saying")
                                     navController.navigate(Routes.SAYING)
                                 },
@@ -182,27 +183,47 @@ fun HomeSearch(
                 item { Spacer(Modifier.height(80.dp)) }
             }
 
+            // VerticalLetters now overlays only the list area, below the chips
+            VerticalLetters(
+                selectedLetter = selectedLetter,
+                onLetterSelected = { letter ->
+                    selectedLetter = letter
+                    searchQuery = letter
+                    viewModel.filterData(letter)
+                    scope.launch { listState.animateScrollToItem(0) }
+                },
+            )
+
+            // FAB stack — scroll-to-top sits above the main FAB
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .navigationBarsPadding()
+                    .padding(end = 16.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.End,
+            ) {
+                AnimatedVisibility(
+                    visible = showScrollToTop,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                ) {
+                    SmallFloatingActionButton(
+                        onClick = { scope.launch { listState.animateScrollToItem(0) } },
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    ) {
+                        Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Rudi Juu")
+                    }
+                }
+
+                ExtendedFloatingActionButton(
+                    onClick = { navController.navigate(Routes.ADVSEARCH) },
+                    expanded = isAtTop,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    icon = { Icon(Icons.Filled.ManageSearch, "Tafuta kwa Kina") },
+                    text = { Text("Tafuta kwa Kina") },
+                )
+            }
         }
-
-        VerticalLetters(
-            selectedLetter = selectedLetter,
-            onLetterSelected = { letter ->
-                selectedLetter = letter
-                searchQuery = letter
-                viewModel.filterData(letter)
-            },
-        )
-
-        ExtendedFloatingActionButton(
-            onClick = { navController.navigate(Routes.ADVSEARCH) },
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .navigationBarsPadding()
-                .padding(end = 16.dp, bottom = 16.dp),  // ← .size(52.dp) removed
-            icon = { Icon(Icons.Filled.ManageSearch, "Tafuta kwa Kina") },
-            text = { Text(text = "Tafuta kwa Kina") },
-        )
     }
 }
-
