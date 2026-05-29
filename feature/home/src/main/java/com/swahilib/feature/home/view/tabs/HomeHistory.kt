@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
@@ -28,6 +27,8 @@ fun HomeHistory(
     modifier: Modifier = Modifier
 ) {
     val history by viewModel.history.collectAsState(initial = emptyList())
+
+    LaunchedEffect(Unit) { viewModel.refreshHistory() }
 
     if (history.isEmpty()) {
         EmptyState(

@@ -47,7 +47,8 @@ class AdvSearchViewModel @Inject constructor(
     val filteredSayings:  StateFlow<List<SayingEntity>>  get() = _filteredSayings
     val filteredWords:    StateFlow<List<WordEntity>>    get() = _filteredWords
 
-    fun fetchData() {
+    fun fetchData(force: Boolean = false) {
+        if (!force && _allWords.value.isNotEmpty()) return
         _uiState.tryEmit(UiState.Loading)
         viewModelScope.launch {
             _allIdioms.value   = idiomRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
@@ -66,7 +67,6 @@ class AdvSearchViewModel @Inject constructor(
         }
     }
 
-    // ── Public search entry point ─────────────────────────────────────────────
     fun filterData(query: String, sortOrder: SortOrder, searchMode: SearchMode) {
         when (searchMode) {
             SearchMode.BEGINNING -> searchBeginningOfTerms(query, sortOrder)
@@ -75,7 +75,6 @@ class AdvSearchViewModel @Inject constructor(
         }
     }
 
-    /** Matches terms whose title/fields START WITH the query. */
     fun searchBeginningOfTerms(query: String, sortOrder: SortOrder = SortOrder.AZ) {
         val q = query.lowercase().trim()
         _filteredWords.value    = _allWords.value.matchStart(q, sortOrder,
@@ -88,7 +87,6 @@ class AdvSearchViewModel @Inject constructor(
             { listOfNotNull(it.title, it.meaning) }, { it.title }, { it.liked })
     }
 
-    /** Matches terms that CONTAIN the query anywhere in their fields. */
     fun searchMiddleOfTerms(query: String, sortOrder: SortOrder = SortOrder.AZ) {
         val q = query.lowercase().trim()
         _filteredWords.value    = _allWords.value.matchContains(q, sortOrder,
@@ -101,7 +99,6 @@ class AdvSearchViewModel @Inject constructor(
             { listOfNotNull(it.title, it.meaning) }, { it.title }, { it.liked })
     }
 
-    /** Matches terms whose title/fields END WITH the query. */
     fun searchEndOfTerms(query: String, sortOrder: SortOrder = SortOrder.AZ) {
         val q = query.lowercase().trim()
         _filteredWords.value    = _allWords.value.matchEnd(q, sortOrder,
@@ -114,7 +111,6 @@ class AdvSearchViewModel @Inject constructor(
             { listOfNotNull(it.title, it.meaning) }, { it.title }, { it.liked })
     }
 
-    // ── Likes ─────────────────────────────────────────────────────────────────
     fun likeWord(word: WordEntity) = viewModelScope.launch {
         val updated = word.copy(liked = !word.liked)
         wordRepo.updateWord(updated)
@@ -149,7 +145,6 @@ class AdvSearchViewModel @Inject constructor(
         )
     }
 
-    // ── Private helpers ───────────────────────────────────────────────────────
     private fun <T> List<T>.replace(rid: Int, updated: T): List<T>
         where T : Any = map { if ((it as? WordEntity)?.rid == rid ||
         (it as? IdiomEntity)?.rid == rid ||
