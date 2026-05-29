@@ -24,38 +24,40 @@ fun ProverbDetails(
     explanations: List<String>,
 ) {
     val scrollState = rememberLazyListState()
-    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        LazyColumn(state = scrollState) {
-            item { CollapsingHeader(title = title, subtitle = "Methali") }
-            item {
-                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    if (meanings.isNotEmpty()) MeaningsView(meanings = meanings)
 
-                    if (explanations.isNotEmpty() && explanations.any { it.isNotBlank() }) {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
-                        ) {
-                            Column(modifier = Modifier.padding(14.dp)) {
-                                Text(
-                                    text = "MAELEZO YA KINA",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                    letterSpacing = 1.5.sp
-                                )
-                                Spacer(Modifier.height(8.dp))
-                                explanations.filter { it.isNotBlank() }.forEachIndexed { i, ex ->
-                                    if (i > 0) Spacer(Modifier.height(6.dp))
-                                    Text(
-                                        text = ex,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onTertiaryContainer
-                                    )
-                                }
-                            }
-                        }
-                    }
+    val hasLiteralAndFigurativeMeanings =
+        meanings.indices.contains(1) && meanings[1].isNotEmpty()
+
+    val literalMeanings = meanings[0]
+        .takeIf { it.isNotEmpty() }
+        ?.split(";")
+        ?.map { it.trim() }
+        ?.filter { it.isNotEmpty() }
+        ?: emptyList()
+    val figurativeMeanings = meanings[1]
+        .takeIf { it.isNotEmpty() }
+        ?.split(";")
+        ?.map { it.trim() }
+        ?.filter { it.isNotEmpty() }
+        ?: emptyList()
+    val hasFirstExplanation = explanations.indices.contains(0) && explanations.isNotEmpty()
+    val hasSecondExplanation = explanations.indices.contains(1) && explanations.isNotEmpty()
+    val synonymsTitle =
+        if (synonyms.size == 1) "Kisawe" else "Visawe ${synonyms.size}"
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        LazyColumn(state = scrollState) {
+            item { CollapsingHeader(title = title) }
+            item {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    if (hasFirstExplanation) FirstExplanationView(explanation = explanations[0])
 
                     if (synonyms.isNotEmpty()) {
                         Column {
@@ -73,6 +75,36 @@ fun ProverbDetails(
                             }
                         }
                     }
+
+                    if (meanings.isNotEmpty()) {
+                        if (hasLiteralAndFigurativeMeanings) {
+                            Text(
+                                text = "MAANA HALISI ${literalMeanings.size}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
+                            )
+                            MeaningsView(meanings = literalMeanings)
+                            Text(
+                                text = "MAANA YA KIFALSAFA/KIMAFUMBO ${figurativeMeanings.size}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
+                            )
+                            MeaningsView(meanings = figurativeMeanings)
+                        } else {
+                            Text(
+                                text = "MAANA YA METHALI ${meanings.size}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
+                            )
+                            MeaningsView(meanings = meanings)
+                        }
+                    }
+
+                    if (hasSecondExplanation) SecondExplanationView(explanation = explanations[1])
+
                 }
             }
         }

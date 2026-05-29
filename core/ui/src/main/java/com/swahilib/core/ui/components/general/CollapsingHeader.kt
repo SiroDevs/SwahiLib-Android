@@ -12,37 +12,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 
 @Composable
-fun CollapsingHeader(title: String, subtitle: String? = null) {
+fun CollapsingHeader(title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.primaryContainer
-                    )
-                )
-            )
             .padding(horizontal = 20.dp, vertical = 24.dp)
     ) {
         Column {
-            if (subtitle != null) {
-                Text(
-                    text = subtitle.uppercase(),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
-                    letterSpacing = 2.sp
-                )
-                Spacer(Modifier.height(4.dp))
-            }
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 ),
-                color = MaterialTheme.colorScheme.onPrimary
+//                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }

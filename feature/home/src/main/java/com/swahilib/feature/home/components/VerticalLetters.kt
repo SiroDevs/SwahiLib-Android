@@ -77,7 +77,7 @@ fun LetterItem(
     isSelected: Boolean = false,
     onClick: () -> Unit = { },
 ) {
-    val bgColor = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else Color.White
+    val bgColor = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.background
     val textColor = if (isSelected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
 
     if (text.isEmpty()) {

@@ -22,8 +22,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/view/components/AdvSearchBox.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/components/SearchFieldRow.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbsComponents.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -34,16 +33,13 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/IdiomItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/IdiomItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/ProverbItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/ProverbItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/SayingItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/SayingItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/TagItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/TagItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/WordItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/listitems/WordItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/view/AdvSearchScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/view/AdvSearchScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/components/SearchBox.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/components/SectionHeader.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeHistory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeHistory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeLikes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeLikes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeSearch.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeSearch.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/general/CollapsingHeader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/general/CollapsingHeader.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/components/VerticalLetters.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/components/VerticalLetters.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/idiom/src/main/java/com/swahilib/feature/idiom/view/IdiomView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/idiom/src/main/java/com/swahilib/feature/idiom/view/IdiomView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbDetails.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbDetails.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/saying/src/main/java/com/swahilib/feature/saying/view/SayingView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/saying/src/main/java/com/swahilib/feature/saying/view/SayingView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/WordViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/WordViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/view/WordView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/view/WordView.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
