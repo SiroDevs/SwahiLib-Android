@@ -43,7 +43,8 @@ fun ProverbScreen(
                     IconButton(onClick = {
                         proverb?.let {
                             viewModel.likeProverb(it)
-                            val msg = if (!isLiked) "Methali imeongezwa kwa vipendwa" else "Methali imeondolewa kwa vipendwa"
+                            val msg =
+                                if (!isLiked) "Methali imeongezwa kwa vipendwa" else "Methali imeondolewa kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {
@@ -51,7 +52,7 @@ fun ProverbScreen(
                             imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
                             contentDescription = "Penda",
                             tint = if (isLiked) MaterialTheme.colorScheme.primary
-                                   else MaterialTheme.colorScheme.onPrimaryContainer
+                            else MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
@@ -65,7 +66,10 @@ fun ProverbScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             when (viewerState) {
-                is ViewerState.Error -> ErrorState(message = (viewerState as ViewerState.Error).message, onRetry = { })
+                is ViewerState.Error -> ErrorState(
+                    message = (viewerState as ViewerState.Error).message,
+                    onRetry = { })
+
                 ViewerState.Loaded -> ProverbDetails(
                     viewModel = viewModel,
                     title = title,
@@ -73,7 +77,12 @@ fun ProverbScreen(
                     synonyms = synonyms,
                     explanations = explanations,
                 )
-                ViewerState.Loading -> LoadingState(title = "Subiri kidogo ...", fileName = "opener-loading")
+
+                ViewerState.Loading -> LoadingState(
+                    title = "Subiri kidogo ...",
+                    fileName = "opener-loading"
+                )
+
                 else -> EmptyState()
             }
         }

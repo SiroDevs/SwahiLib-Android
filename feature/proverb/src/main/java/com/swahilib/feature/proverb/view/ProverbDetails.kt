@@ -25,25 +25,26 @@ fun ProverbDetails(
 ) {
     val scrollState = rememberLazyListState()
 
-    val hasLiteralAndFigurativeMeanings =
-        meanings.indices.contains(1) && meanings[1].isNotEmpty()
+    val literalMeanings = meanings.getOrNull(0)
+        ?.takeIf { it.isNotEmpty() }
+        ?.split(";")
+        ?.map { it.trim() }
+        ?.filter { it.isNotEmpty() }
+        ?: emptyList()
 
-    val literalMeanings = meanings[0]
-        .takeIf { it.isNotEmpty() }
+    val figurativeMeanings = meanings.getOrNull(1)
+        ?.takeIf { it.isNotEmpty() }
         ?.split(";")
         ?.map { it.trim() }
         ?.filter { it.isNotEmpty() }
         ?: emptyList()
-    val figurativeMeanings = meanings[1]
-        .takeIf { it.isNotEmpty() }
-        ?.split(";")
-        ?.map { it.trim() }
-        ?.filter { it.isNotEmpty() }
-        ?: emptyList()
-    val hasFirstExplanation = explanations.indices.contains(0) && explanations.isNotEmpty()
-    val hasSecondExplanation = explanations.indices.contains(1) && explanations.isNotEmpty()
-    val synonymsTitle =
-        if (synonyms.size == 1) "Kisawe" else "Visawe ${synonyms.size}"
+
+    val hasLiteralAndFigurativeMeanings = figurativeMeanings.isNotEmpty()
+
+    val hasFirstExplanation  = explanations.getOrNull(0)?.isNotEmpty() == true
+    val hasSecondExplanation = explanations.getOrNull(1)?.isNotEmpty() == true
+
+    val synonymsTitle = if (synonyms.size == 1) "KISAWE" else "VISAWE (${synonyms.size})"
 
     Box(
         modifier = modifier
@@ -59,12 +60,10 @@ fun ProverbDetails(
                 ) {
                     if (hasFirstExplanation) FirstExplanationView(explanation = explanations[0])
 
-                    Spacer(Modifier.height(80.dp))
-
                     if (synonyms.isNotEmpty()) {
                         Column {
                             Text(
-                                text = if (synonyms.size == 1) "KISAWE" else "VISAWE (${synonyms.size})",
+                                text = synonymsTitle,
                                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                                 color = MaterialTheme.colorScheme.primary
                             )
@@ -78,39 +77,36 @@ fun ProverbDetails(
                         }
                     }
 
-                    Spacer(Modifier.height(80.dp))
-
                     if (meanings.isNotEmpty()) {
                         if (hasLiteralAndFigurativeMeanings) {
                             Text(
-                                text = "MAANA HALISI ${literalMeanings.size}",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                text = "MAANA HALISI",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
                             )
                             MeaningsView(meanings = literalMeanings)
                             Text(
-                                text = "MAANA YA KIFALSAFA/KIMAFUMBO ${figurativeMeanings.size}",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                text = "MAANA YA KIFALSAFA/KIMAFUMBO",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
                             )
                             MeaningsView(meanings = figurativeMeanings)
                         } else {
                             Text(
-                                text = "MAANA YA METHALI ${meanings.size}",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                text = "MAANA YA METHALI",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
                             )
-                            MeaningsView(meanings = meanings)
+                            MeaningsView(meanings = literalMeanings)
                         }
                     }
 
-                    Spacer(Modifier.height(80.dp))
-
                     if (hasSecondExplanation) SecondExplanationView(explanation = explanations[1])
 
+                    Spacer(Modifier.height(10.dp))
                 }
             }
         }

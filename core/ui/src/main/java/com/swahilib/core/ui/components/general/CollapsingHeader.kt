@@ -16,7 +16,7 @@ fun CollapsingHeader(title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 24.dp)
+            .padding(horizontal = 20.dp, vertical = 5.dp)
     ) {
         Column {
             Text(
