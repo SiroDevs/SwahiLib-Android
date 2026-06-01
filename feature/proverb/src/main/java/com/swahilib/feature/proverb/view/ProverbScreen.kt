@@ -12,7 +12,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.common.entity.ViewerState
+import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.core.ui.components.indicators.*
 import com.swahilib.feature.proverb.ProverbViewModel
 
@@ -22,6 +24,7 @@ fun ProverbScreen(
     navController: NavHostController,
     viewModel: ProverbViewModel,
     proverb: ProverbEntity?,
+    prefsRepo: PrefsRepo,
 ) {
     val context = LocalContext.current
     val viewerState by viewModel.uiState.collectAsState()
@@ -30,6 +33,9 @@ fun ProverbScreen(
     val synonyms by viewModel.synonyms.collectAsState()
     val explanations by viewModel.explanations.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
+
+    var showDonationDialog by remember { mutableStateOf(false) }
+    val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     LaunchedEffect(proverb) { proverb?.let { viewModel.loadProverb(it) } }
 
@@ -76,6 +82,8 @@ fun ProverbScreen(
                     meanings = meanings,
                     synonyms = synonyms,
                     explanations = explanations,
+                    showDonation = showDonation,
+                    onShowDonation = { showDonationDialog = true },
                 )
 
                 ViewerState.Loading -> LoadingState(
@@ -86,5 +94,12 @@ fun ProverbScreen(
                 else -> EmptyState()
             }
         }
+    }
+
+    if (showDonationDialog) {
+        DonationDialog(
+            onRemindLater = { prefsRepo.donationRemindNextOpen = true; showDonationDialog = false },
+            onDismiss = { prefsRepo.recordDonation(); showDonationDialog = false },
+        )
     }
 }

@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.data.repos.ThemeRepo
 import com.swahilib.core.designsystem.theme.ThemeSelectorDialog
 import com.swahilib.core.ui.components.action.AppTopBar
@@ -54,6 +55,7 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navController: NavHostController,
     themeRepo: ThemeRepo,
+    prefsRepo: PrefsRepo,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val selectedTab by viewModel.selectedTab.collectAsState()

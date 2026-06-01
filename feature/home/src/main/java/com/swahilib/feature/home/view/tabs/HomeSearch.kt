@@ -8,38 +8,71 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.ManageSearch
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.*
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.ui.components.listitems.*
+import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.ui.components.donation.DonationBanner
+import com.swahilib.core.ui.components.listitems.IdiomItem
+import com.swahilib.core.ui.components.listitems.ProverbItem
+import com.swahilib.core.ui.components.listitems.SayingItem
+import com.swahilib.core.ui.components.listitems.WordItem
 import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.home.components.SearchFieldRow
 import com.swahilib.feature.home.components.SectionHeader
 import com.swahilib.feature.home.components.VerticalLetters
-import java.util.Locale
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeSearch(
     viewModel: HomeViewModel,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    prefsRepo: PrefsRepo,
+    onShowDonationDialog: () -> Unit,
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedLetter by rememberSaveable { mutableStateOf("") }
     var selectedType by rememberSaveable { mutableStateOf("MANENO") }
     val types = listOf("MANENO", "NAHAU", "METHALI", "MISEMO")
 
+    val showDonation = remember { prefsRepo.shouldShowDonation() }
     val idioms by viewModel.filteredIdioms.collectAsState(initial = emptyList())
     val proverbs by viewModel.filteredProverbs.collectAsState(initial = emptyList())
     val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
@@ -48,9 +81,7 @@ fun HomeSearch(
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
-    // FAB is extended when at the very top, collapsed when scrolled down
     val isAtTop by remember { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
-    // Scroll-to-top button appears as soon as we leave the top
     val showScrollToTop by remember { derivedStateOf { !isAtTop } }
 
     val speechLauncher = rememberLauncherForActivityResult(
@@ -74,7 +105,6 @@ fun HomeSearch(
         }
     )
 
-    // ── Outer column so filter chips are outside the overlay Box ─────────────
     Column(modifier = modifier.fillMaxSize()) {
 
         SearchFieldRow(
@@ -105,7 +135,6 @@ fun HomeSearch(
             }
         }
 
-        // ── Box only wraps the scrollable area so VerticalLetters aligns here ─
         Box(modifier = Modifier.fillMaxSize()) {
 
             LazyColumn(
@@ -118,7 +147,8 @@ fun HomeSearch(
                 if (selectedType == "MANENO") {
                     item { SectionHeader("Matokeo", words.size) }
                     if (words.isNotEmpty()) {
-                        items(words, key = { it.rid }) { word ->
+                        itemsIndexed(words, key = { _, w -> w.rid }) { index, word ->
+                            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonationDialog)
                             WordItem(
                                 word = word,
                                 onTap = {
@@ -134,7 +164,8 @@ fun HomeSearch(
                 if (selectedType == "NAHAU") {
                     item { SectionHeader("Matokeo", idioms.size) }
                     if (idioms.isNotEmpty()) {
-                        items(idioms, key = { it.rid }) { idiom ->
+                        itemsIndexed(idioms, key = { _, i -> i.rid }) { index, idiom ->
+                            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonationDialog)
                             IdiomItem(
                                 idiom = idiom,
                                 onTap = {
@@ -150,7 +181,8 @@ fun HomeSearch(
                 if (selectedType == "METHALI") {
                     item { SectionHeader("Matokeo", proverbs.size) }
                     if (proverbs.isNotEmpty()) {
-                        items(proverbs, key = { it.rid }) { proverb ->
+                        itemsIndexed(proverbs, key = { _, p -> p.rid }) { index, proverb ->
+                            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonationDialog)
                             ProverbItem(
                                 proverb = proverb,
                                 onTap = {
@@ -166,7 +198,8 @@ fun HomeSearch(
                 if (selectedType == "MISEMO") {
                     item { SectionHeader("Matokeo", sayings.size) }
                     if (sayings.isNotEmpty()) {
-                        items(sayings, key = { it.rid }) { saying ->
+                        itemsIndexed(sayings, key = { _, s -> s.rid }) { index, saying ->
+                            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonationDialog)
                             SayingItem(
                                 saying = saying,
                                 onTap = {
@@ -183,7 +216,6 @@ fun HomeSearch(
                 item { Spacer(Modifier.height(80.dp)) }
             }
 
-            // VerticalLetters now overlays only the list area, below the chips
             VerticalLetters(
                 selectedLetter = selectedLetter,
                 onLetterSelected = { letter ->
@@ -194,7 +226,6 @@ fun HomeSearch(
                 },
             )
 
-            // FAB stack — scroll-to-top sits above the main FAB
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)

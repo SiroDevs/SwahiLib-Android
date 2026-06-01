@@ -1,24 +1,32 @@
 package com.swahilib.feature.home.view.tabs
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.indicators.EmptyState
-import com.swahilib.feature.home.HomeViewModel
-import java.text.SimpleDateFormat
-import java.util.*
-import androidx.compose.ui.platform.LocalLocale
 import com.swahilib.core.ui.components.listitems.IdiomItem
 import com.swahilib.core.ui.components.listitems.ProverbItem
 import com.swahilib.core.ui.components.listitems.SayingItem
 import com.swahilib.core.ui.components.listitems.WordItem
+import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.home.components.ContentItem
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @Composable
 fun HomeHistory(

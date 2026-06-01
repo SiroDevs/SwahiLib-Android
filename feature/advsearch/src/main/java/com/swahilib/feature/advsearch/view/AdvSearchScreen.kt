@@ -19,25 +19,28 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.feature.advsearch.AdvSearchViewModel
 import com.swahilib.feature.advsearch.SearchMode
 import com.swahilib.feature.advsearch.SortOrder
-import com.swahilib.feature.advsearch.components.IdiomsSection
+import com.swahilib.feature.advsearch.components.idiomsSection
 import com.swahilib.feature.advsearch.components.EmptySearchPrompt
-import com.swahilib.feature.advsearch.components.ProverbsSection
+import com.swahilib.feature.advsearch.components.proverbsSection
 import com.swahilib.feature.advsearch.components.ResultCountBadge
-import com.swahilib.feature.advsearch.components.SayingsSection
+import com.swahilib.feature.advsearch.components.sayingsSection
 import com.swahilib.feature.advsearch.components.SearchModeMenu
 import com.swahilib.feature.advsearch.components.SortDropdown
 import com.swahilib.feature.advsearch.components.TypeFilterRow
-import com.swahilib.feature.advsearch.components.WordsSection
+import com.swahilib.feature.advsearch.components.wordsSection
 import com.swahilib.feature.home.components.SearchFieldRow
 import java.util.Locale
 
@@ -47,11 +50,15 @@ private val TYPES = listOf("YOTE", "MANENO", "NAHAU", "METHALI", "MISEMO")
 fun AdvSearchScreen(
     navController: NavHostController,
     viewModel: AdvSearchViewModel,
+    prefsRepo: PrefsRepo,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     var selectedType by rememberSaveable { mutableStateOf("YOTE") }
     var sortOrder by rememberSaveable { mutableStateOf(SortOrder.AZ) }
     var searchMode by rememberSaveable { mutableStateOf(SearchMode.BEGINNING) }
+
+    var showDonationDialog by remember { mutableStateOf(false) }
+    val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     val words by viewModel.filteredWords.collectAsState(initial = emptyList())
     val idioms by viewModel.filteredIdioms.collectAsState(initial = emptyList())
@@ -138,30 +145,46 @@ fun AdvSearchScreen(
                 if (query.isEmpty()) {
                     item { EmptySearchPrompt() }
                 } else {
-
-                    WordsSection(
+                    wordsSection(
                         words = words, query = query,
                         show = selectedType == "YOTE" || selectedType == "MANENO",
                         navController = navController, viewModel = viewModel,
+                        showDonation = showDonation, onShowDonation = { showDonationDialog = true },
                     )
-                    IdiomsSection(
+                    idiomsSection(
                         idioms = idioms, query = query,
                         show = selectedType == "YOTE" || selectedType == "NAHAU",
                         navController = navController, viewModel = viewModel,
+                        showDonation = showDonation, onShowDonation = { showDonationDialog = true },
                     )
-                    ProverbsSection(
+                    proverbsSection(
                         proverbs = proverbs, query = query,
                         show = selectedType == "YOTE" || selectedType == "METHALI",
                         navController = navController, viewModel = viewModel,
+                        showDonation = showDonation, onShowDonation = { showDonationDialog = true },
                     )
-                    SayingsSection(
+                    sayingsSection(
                         sayings = sayings, query = query,
                         show = selectedType == "YOTE" || selectedType == "MISEMO",
                         navController = navController, viewModel = viewModel,
+                        showDonation = showDonation, onShowDonation = { showDonationDialog = true },
                     )
                 }
                 item { Spacer(Modifier.height(80.dp)) }
             }
         }
+    }
+
+    if (showDonationDialog) {
+        DonationDialog(
+            onRemindLater = {
+                prefsRepo.donationRemindNextOpen = true
+                showDonationDialog = false
+            },
+            onDismiss = {
+                prefsRepo.recordDonation()
+                showDonationDialog = false
+            },
+        )
     }
 }

@@ -1,18 +1,28 @@
 package com.swahilib.feature.proverb.view
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.text.font.*
-import androidx.compose.ui.unit.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.swahilib.core.database.model.ProverbEntity
-import com.swahilib.core.ui.components.general.*
+import com.swahilib.core.ui.components.donation.DonationBanner
+import com.swahilib.core.ui.components.general.CollapsingHeader
+import com.swahilib.core.ui.components.general.MeaningsView
 import com.swahilib.core.ui.components.listitems.SynonymItem
 import com.swahilib.feature.proverb.ProverbViewModel
+import kotlin.collections.forEach
 
 @Composable
 fun ProverbDetails(
@@ -22,6 +32,8 @@ fun ProverbDetails(
     meanings: List<String>,
     synonyms: List<ProverbEntity>,
     explanations: List<String>,
+    showDonation: Boolean = false,
+    onShowDonation: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
 
@@ -109,6 +121,14 @@ fun ProverbDetails(
                     Spacer(Modifier.height(10.dp))
                 }
             }
+            item {
+                DonationBanner(
+                    show = showDonation,
+                    onTap = onShowDonation,
+                    modifier = Modifier.padding(bottom = 24.dp),
+                )
+            }
         }
+
     }
 }

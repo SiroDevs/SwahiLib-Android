@@ -21,7 +21,20 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="" />
+    <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/app/navigation/AppNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/app/navigation/AppNavHost.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components/ResultsComponents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components/ResultsComponents.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/view/AdvSearchScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/view/AdvSearchScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/HomeScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeSearch.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeSearch.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/idiom/src/main/java/com/swahilib/feature/idiom/view/IdiomScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/idiom/src/main/java/com/swahilib/feature/idiom/view/IdiomScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/saying/src/main/java/com/swahilib/feature/saying/view/SayingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/saying/src/main/java/com/swahilib/feature/saying/view/SayingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/view/WordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/view/WordScreen.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
