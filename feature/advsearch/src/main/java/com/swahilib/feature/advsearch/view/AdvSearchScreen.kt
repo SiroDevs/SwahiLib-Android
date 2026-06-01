@@ -31,7 +31,6 @@ import com.swahilib.feature.advsearch.SearchMode
 import com.swahilib.feature.advsearch.SortOrder
 import com.swahilib.feature.advsearch.components.IdiomsSection
 import com.swahilib.feature.advsearch.components.EmptySearchPrompt
-import com.swahilib.feature.advsearch.components.NoResultsPlaceholder
 import com.swahilib.feature.advsearch.components.ProverbsSection
 import com.swahilib.feature.advsearch.components.ResultCountBadge
 import com.swahilib.feature.advsearch.components.SayingsSection
