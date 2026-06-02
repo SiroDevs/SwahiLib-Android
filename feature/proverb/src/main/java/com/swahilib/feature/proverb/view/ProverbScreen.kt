@@ -39,6 +39,19 @@ fun ProverbScreen(
 
     LaunchedEffect(proverb) { proverb?.let { viewModel.loadProverb(it) } }
 
+    if (showDonationDialog) {
+        DonationDialog(
+            onRemindLater = {
+                prefsRepo.donationRemindNextOpen = true
+                showDonationDialog = false
+            },
+            onDismiss = {
+                prefsRepo.recordDonation()
+                showDonationDialog = false
+            },
+        )
+    }
+
     Scaffold(
         topBar = {
             AppTopBar(
@@ -94,12 +107,5 @@ fun ProverbScreen(
                 else -> EmptyState()
             }
         }
-    }
-
-    if (showDonationDialog) {
-        DonationDialog(
-            onRemindLater = { prefsRepo.donationRemindNextOpen = true; showDonationDialog = false },
-            onDismiss = { prefsRepo.recordDonation(); showDonationDialog = false },
-        )
     }
 }

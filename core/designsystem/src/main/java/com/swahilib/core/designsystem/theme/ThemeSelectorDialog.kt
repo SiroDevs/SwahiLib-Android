@@ -33,7 +33,7 @@ fun ThemeSelectorDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Choose Theme") },
+        title = { Text("Chagua Mandhari") },
         text = {
             Column {
                 ThemeMode.entries.forEach { mode ->
@@ -54,17 +54,17 @@ fun ThemeSelectorDialog(
         },
         confirmButton = {
             TextButton(onClick = { onThemeSelected(selected); onDismiss() }) {
-                Text("SAWA")
+                Text("Sawa")
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Kataa") }
+            TextButton(onClick = onDismiss) { Text("Ghairi") }
         },
     )
 }
 
 fun appThemeName(mode: ThemeMode): String = when (mode) {
-    ThemeMode.SYSTEM -> "Chaguo la Mfumo"
-    ThemeMode.LIGHT  -> "Mandhari ya Nuru"
-    ThemeMode.DARK   -> "Mandhari ya Giza"
+    ThemeMode.SYSTEM -> "Chaguo la Mfumo (System)"
+    ThemeMode.LIGHT  -> "Mandhari ya Nuru (Light Theme)"
+    ThemeMode.DARK   -> "Mandhari ya Giza (Dark Theme)"
 }

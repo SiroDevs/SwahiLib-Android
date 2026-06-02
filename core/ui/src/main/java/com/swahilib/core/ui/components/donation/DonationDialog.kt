@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -72,7 +72,7 @@ fun DonationDialog(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Icon(
-                        Icons.Default.Favorite,
+                        Icons.Default.MonetizationOn,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(22.dp),
@@ -87,19 +87,19 @@ fun DonationDialog(
                 Text(
                     text = "SwahiLib inahitaji mchango wako mdogo au mkubwa ili kuweza kuendelea " +
                         "kuboreshwa na server zetu kuwa active ili kukuhudumia wewe na wengine " +
-                        "wanaitumia.\n\n\"Chagua namna ya kuchanga\"",
+                        "wanaitumia.\n\nChagua namna ya kuchanga:",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
                 DonationOption(
-                    label = "M-Pesa",
-                    value = "+254115586529",
-                    onCopy = { clipboard.setText(AnnotatedString("+254115586529")) },
+                    label = "M-PESA (KENYA)",
+                    value = "+254 115 586 529",
+                    onCopy = { clipboard.setText(AnnotatedString("254115586529")) },
                 )
 
                 DonationOption(
-                    label = "PayPal",
+                    label = "PAYPAL (KIMATAIFA)",
                     value = "jacksiroke@gmail.com",
                     onCopy = { clipboard.setText(AnnotatedString("jacksiroke@gmail.com")) },
                 )
@@ -114,7 +114,7 @@ fun DonationDialog(
                         shape = RoundedCornerShape(10.dp),
                     ) {
                         Text(
-                            text = "Nikumbushe baadaye",
+                            text = "BAADAYE",
                             style = MaterialTheme.typography.labelMedium,
                             textAlign = TextAlign.Center,
                         )
@@ -126,7 +126,7 @@ fun DonationDialog(
                         shape = RoundedCornerShape(10.dp),
                     ) {
                         Text(
-                            text = "SAWA",
+                            text = "Sawa",
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 1.sp,

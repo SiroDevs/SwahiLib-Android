@@ -27,6 +27,7 @@ import com.swahilib.core.common.entity.ViewerState
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.core.ui.components.indicators.LoadingState
@@ -50,6 +51,19 @@ fun SayingScreen(
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     LaunchedEffect(saying) { saying?.let { viewModel.loadSaying(it) } }
+
+    if (showDonationDialog) {
+        DonationDialog(
+            onRemindLater = {
+                prefsRepo.donationRemindNextOpen = true
+                showDonationDialog = false
+            },
+            onDismiss = {
+                prefsRepo.recordDonation()
+                showDonationDialog = false
+            },
+        )
+    }
 
     Scaffold(
         topBar = {

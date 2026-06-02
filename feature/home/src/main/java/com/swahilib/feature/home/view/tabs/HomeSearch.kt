@@ -99,7 +99,10 @@ fun HomeSearch(
 
     fun startVoiceSearch() = speechLauncher.launch(
         Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             putExtra(RecognizerIntent.EXTRA_PROMPT, "Sema unachotafuta ...")
         }
@@ -148,11 +151,17 @@ fun HomeSearch(
                     item { SectionHeader("Matokeo", words.size) }
                     if (words.isNotEmpty()) {
                         itemsIndexed(words, key = { _, w -> w.rid }) { index, word ->
-                            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonationDialog)
+                            if (index == 4 || index == 7) DonationBanner(
+                                show = showDonation,
+                                onTap = onShowDonationDialog
+                            )
                             WordItem(
                                 word = word,
                                 onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set("word", word)
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "word",
+                                        word
+                                    )
                                     viewModel.addToHistory(word.rid, "word")
                                     navController.navigate(Routes.WORD)
                                 },
@@ -165,11 +174,17 @@ fun HomeSearch(
                     item { SectionHeader("Matokeo", idioms.size) }
                     if (idioms.isNotEmpty()) {
                         itemsIndexed(idioms, key = { _, i -> i.rid }) { index, idiom ->
-                            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonationDialog)
+                            if (index == 3 || index == 7) DonationBanner(
+                                show = showDonation,
+                                onTap = onShowDonationDialog
+                            )
                             IdiomItem(
                                 idiom = idiom,
                                 onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set("idiom", idiom)
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "idiom",
+                                        idiom
+                                    )
                                     viewModel.addToHistory(idiom.rid, "idiom")
                                     navController.navigate(Routes.IDIOM)
                                 },
@@ -182,11 +197,17 @@ fun HomeSearch(
                     item { SectionHeader("Matokeo", proverbs.size) }
                     if (proverbs.isNotEmpty()) {
                         itemsIndexed(proverbs, key = { _, p -> p.rid }) { index, proverb ->
-                            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonationDialog)
+                            if (index == 4 || index == 10) DonationBanner(
+                                show = showDonation,
+                                onTap = onShowDonationDialog
+                            )
                             ProverbItem(
                                 proverb = proverb,
                                 onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set("proverb", proverb)
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "proverb",
+                                        proverb
+                                    )
                                     viewModel.addToHistory(proverb.rid, "proverb")
                                     navController.navigate(Routes.PROVERB)
                                 },
@@ -199,11 +220,17 @@ fun HomeSearch(
                     item { SectionHeader("Matokeo", sayings.size) }
                     if (sayings.isNotEmpty()) {
                         itemsIndexed(sayings, key = { _, s -> s.rid }) { index, saying ->
-                            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonationDialog)
+                            if (index == 2 || index == 6) DonationBanner(
+                                show = showDonation,
+                                onTap = onShowDonationDialog
+                            )
                             SayingItem(
                                 saying = saying,
                                 onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set("saying", saying)
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "saying",
+                                        saying
+                                    )
                                     viewModel.addToHistory(saying.rid, "saying")
                                     navController.navigate(Routes.SAYING)
                                 },
