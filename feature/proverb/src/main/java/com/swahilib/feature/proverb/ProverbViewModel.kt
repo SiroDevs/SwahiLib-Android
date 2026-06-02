@@ -48,6 +48,7 @@ class ProverbViewModel @Inject constructor(
             ?.split(",")
             ?.map { it.trim() }
             ?.filter { it.isNotEmpty() }
+            ?.distinct()
             ?: emptyList()
 
         if (synonymTitles.isNotEmpty()) {

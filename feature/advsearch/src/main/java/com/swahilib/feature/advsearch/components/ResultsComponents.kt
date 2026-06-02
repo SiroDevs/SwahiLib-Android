@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -26,6 +27,7 @@ import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.ui.components.donation.DonationBanner
 import com.swahilib.core.ui.components.listitems.IdiomItem
 import com.swahilib.core.ui.components.listitems.ProverbItem
 import com.swahilib.core.ui.components.listitems.SayingItem
@@ -61,13 +63,15 @@ fun NoResultsPlaceholder(query: String) {
     }
 }
 
-fun LazyListScope.WordsSection(
+fun LazyListScope.wordsSection(
     words: List<WordEntity>, query: String, show: Boolean,
     navController: NavHostController, viewModel: AdvSearchViewModel,
+    showDonation: Boolean = false, onShowDonation: () -> Unit = {},
 ) {
     if (!show) return
     if (words.isNotEmpty()) {
-        items(words, key = { it.rid }) { word ->
+        itemsIndexed(words, key = { _, w -> w.rid }) { index, word ->
+            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonation)
             WordItem(
                 word = word,
                 onTap = {
@@ -83,13 +87,15 @@ fun LazyListScope.WordsSection(
     }
 }
 
-fun LazyListScope.IdiomsSection(
+fun LazyListScope.idiomsSection(
     idioms: List<IdiomEntity>, query: String, show: Boolean,
     navController: NavHostController, viewModel: AdvSearchViewModel,
+    showDonation: Boolean = false, onShowDonation: () -> Unit = {},
 ) {
     if (!show) return
     if (idioms.isNotEmpty()) {
-        items(idioms, key = { it.rid }) { idiom ->
+        itemsIndexed(idioms, key = { _, i -> i.rid }) { index, idiom ->
+            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonation)
             IdiomItem(
                 idiom = idiom,
                 onTap = {
@@ -105,13 +111,15 @@ fun LazyListScope.IdiomsSection(
     }
 }
 
-fun LazyListScope.ProverbsSection(
+fun LazyListScope.proverbsSection(
     proverbs: List<ProverbEntity>, query: String, show: Boolean,
     navController: NavHostController, viewModel: AdvSearchViewModel,
+    showDonation: Boolean = false, onShowDonation: () -> Unit = {},
 ) {
     if (!show) return
     if (proverbs.isNotEmpty()) {
-        items(proverbs, key = { it.rid }) { proverb ->
+        itemsIndexed(proverbs, key = { _, p -> p.rid }) { index, proverb ->
+            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonation)
             ProverbItem(
                 proverb = proverb,
                 onTap = {
@@ -127,13 +135,15 @@ fun LazyListScope.ProverbsSection(
     }
 }
 
-fun LazyListScope.SayingsSection(
+fun LazyListScope.sayingsSection(
     sayings: List<SayingEntity>, query: String, show: Boolean,
     navController: NavHostController, viewModel: AdvSearchViewModel,
+    showDonation: Boolean = false, onShowDonation: () -> Unit = {},
 ) {
     if (!show) return
     if (sayings.isNotEmpty()) {
-        items(sayings, key = { it.rid }) { saying ->
+        itemsIndexed(sayings, key = { _, s -> s.rid }) { index, saying ->
+            if (index == 3) DonationBanner(show = showDonation, onTap = onShowDonation)
             SayingItem(
                 saying = saying,
                 onTap = {

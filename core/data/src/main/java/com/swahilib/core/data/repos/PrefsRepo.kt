@@ -64,4 +64,26 @@ class PrefsRepo @Inject constructor(
         if (lastTime == 0L) return 0L
         return System.currentTimeMillis() - lastTime
     }
+
+    var donationDoneAt: Long
+        get() = prefs.getLong(PrefConstants.DONATION_DONE_AT, 0L)
+        set(value) = prefs.edit { putLong(PrefConstants.DONATION_DONE_AT, value) }
+
+    var donationRemindNextOpen: Boolean
+        get() = prefs.getBoolean(PrefConstants.DONATION_REMIND_NEXT_OPEN, false)
+        set(value) = prefs.edit { putBoolean(PrefConstants.DONATION_REMIND_NEXT_OPEN, value) }
+
+    fun shouldShowDonation(): Boolean {
+        val now = System.currentTimeMillis()
+        val oneDayMs = 24 * 60 * 60 * 1000L
+        val sixtyDaysMs = 60 * oneDayMs
+        if (installDate == 0L || now - installDate < oneDayMs) return false
+        val donated = donationDoneAt
+        return donated == 0L || now - donated > sixtyDaysMs
+    }
+
+    fun recordDonation() {
+        donationDoneAt = System.currentTimeMillis()
+        donationRemindNextOpen = false
+    }
 }

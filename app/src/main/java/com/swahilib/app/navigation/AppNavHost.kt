@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.data.repos.ThemeRepo
 import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
@@ -42,6 +43,7 @@ import com.swahilib.feature.help.view.HelpScreen
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
     themeRepo: ThemeRepo,
+    prefsRepo: PrefsRepo,
 ) {
     NavHost(navController = navController, startDestination = Routes.SPLASH) {
 
@@ -57,41 +59,78 @@ fun AppNavHost(
 
         composable(Routes.HOME) {
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen(viewModel = viewModel, navController = navController, themeRepo = themeRepo)
+            HomeScreen(
+                viewModel = viewModel,
+                navController = navController,
+                themeRepo = themeRepo,
+                prefsRepo = prefsRepo
+            )
         }
 
         composable(Routes.IDIOM) {
-            val idiom = navController.previousBackStackEntry?.savedStateHandle?.get<IdiomEntity>("idiom")
+            val idiom =
+                navController.previousBackStackEntry?.savedStateHandle?.get<IdiomEntity>("idiom")
             val viewModel: IdiomViewModel = hiltViewModel()
-            IdiomScreen(navController = navController, viewModel = viewModel, idiom = idiom)
+            IdiomScreen(
+                navController = navController,
+                viewModel = viewModel,
+                idiom = idiom,
+                prefsRepo = prefsRepo
+            )
         }
 
         composable(Routes.PROVERB) {
-            val proverb = navController.previousBackStackEntry?.savedStateHandle?.get<ProverbEntity>("proverb")
+            val proverb =
+                navController.previousBackStackEntry?.savedStateHandle?.get<ProverbEntity>("proverb")
             val viewModel: ProverbViewModel = hiltViewModel()
-            ProverbScreen(navController = navController, viewModel = viewModel, proverb = proverb)
+            ProverbScreen(
+                navController = navController,
+                viewModel = viewModel,
+                proverb = proverb,
+                prefsRepo = prefsRepo
+            )
         }
 
         composable(Routes.SAYING) {
-            val saying = navController.previousBackStackEntry?.savedStateHandle?.get<SayingEntity>("saying")
+            val saying =
+                navController.previousBackStackEntry?.savedStateHandle?.get<SayingEntity>("saying")
             val viewModel: SayingViewModel = hiltViewModel()
-            SayingScreen(navController = navController, viewModel = viewModel, saying = saying)
+            SayingScreen(
+                navController = navController,
+                viewModel = viewModel,
+                saying = saying,
+                prefsRepo = prefsRepo
+            )
         }
 
         composable(Routes.WORD) {
-            val word = navController.previousBackStackEntry?.savedStateHandle?.get<WordEntity>("word")
+            val word =
+                navController.previousBackStackEntry?.savedStateHandle?.get<WordEntity>("word")
             val viewModel: WordViewModel = hiltViewModel()
-            WordScreen(navController = navController, viewModel = viewModel, word = word)
+            WordScreen(
+                navController = navController,
+                viewModel = viewModel,
+                word = word,
+                prefsRepo = prefsRepo
+            )
         }
 
         composable(Routes.SETTINGS) {
             val viewModel: SettingsViewModel = hiltViewModel()
-            SettingsScreen(navController = navController, viewModel = viewModel, themeRepo = themeRepo)
+            SettingsScreen(
+                navController = navController,
+                viewModel = viewModel,
+                themeRepo = themeRepo
+            )
         }
 
         composable(Routes.ADVSEARCH) {
             val viewModel: AdvSearchViewModel = hiltViewModel()
-            AdvSearchScreen(navController = navController, viewModel = viewModel)
+            AdvSearchScreen(
+                navController = navController,
+                viewModel = viewModel,
+                prefsRepo = prefsRepo
+            )
         }
 
         composable(Routes.HOW_IT_WORKS) {

@@ -22,27 +22,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/AdvSearchViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components/MenuComponents.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components/ResultsComponents.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components/SortingComponents.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components/StateComponents.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/app/navigation/AppNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/app/navigation/AppNavHost.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/view/AdvSearchScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/view/AdvSearchScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/HomeViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/HomeViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeLikes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeLikes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/swahilib/core/designsystem/theme/ThemeSelectorDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/swahilib/core/designsystem/theme/ThemeSelectorDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/donation/DonationBanner.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/donation/DonationBanner.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/donation/DonationDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/donation/DonationDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/HomeScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeSearch.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/tabs/HomeSearch.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbDetails.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbDetails.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/idiom/src/main/java/com/swahilib/feature/idiom/view/IdiomScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/idiom/src/main/java/com/swahilib/feature/idiom/view/IdiomScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/init/src/main/java/com/swahilib/feature/init/InitViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/init/src/main/java/com/swahilib/feature/init/InitViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/ProverbScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/saying/src/main/java/com/swahilib/feature/saying/view/SayingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/saying/src/main/java/com/swahilib/feature/saying/view/SayingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/components/SettingsDialogs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/components/SettingsDialogs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/view/WordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/view/WordScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +45,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=GUIF6PMR4LPZ4D5H]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/sirodaves/.android/avd/Medium_Phone.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -92,28 +85,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.app.executor": "Run",
-    "Android App.presentation.executor": "Run",
-    "GradleDaemonJvmCriteriaMigrationNotification.isNotificationDisabled": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "develop",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components",
-    "recommended.upgrade.do.not.ask.for.project": "true",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;Android App.presentation.executor&quot;: &quot;Run&quot;,
+    &quot;GradleDaemonJvmCriteriaMigrationNotification.isNotificationDisabled&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components&quot;,
+    &quot;recommended.upgrade.do.not.ask.for.project&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components" />

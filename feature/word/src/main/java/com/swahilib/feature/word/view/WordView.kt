@@ -1,19 +1,34 @@
 package com.swahilib.feature.word.view
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.*
-import androidx.compose.ui.unit.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.swahilib.core.database.model.WordEntity
-import com.swahilib.core.ui.components.general.*
+import com.swahilib.core.ui.components.donation.DonationBanner
+import com.swahilib.core.ui.components.general.CollapsingHeader
+import com.swahilib.core.ui.components.general.MeaningsView
 import com.swahilib.core.ui.components.listitems.SynonymItem
 import com.swahilib.feature.word.WordViewModel
+import kotlin.collections.forEach
 
 @Composable
 fun WordView(
@@ -22,7 +37,9 @@ fun WordView(
     title: String,
     conjugation: String,
     meanings: List<String>,
-    synonyms: List<WordEntity>
+    synonyms: List<WordEntity>,
+    showDonation: Boolean = false,
+    onShowDonation: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
     Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
@@ -72,6 +89,13 @@ fun WordView(
                         }
                     }
                 }
+            }
+            item {
+                DonationBanner(
+                    show = showDonation,
+                    onTap = onShowDonation,
+                    modifier = Modifier.padding(bottom = 24.dp),
+                )
             }
         }
     }

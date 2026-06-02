@@ -18,12 +18,12 @@ fun ConfirmResetDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("SAWA")
+                Text("Sawa")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Kataa")
+                Text("Ghairi")
             }
         },
         title = { Text("Weka upya data ya Kitumizi?") },

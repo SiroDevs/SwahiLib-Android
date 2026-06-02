@@ -31,13 +31,12 @@ fun FirstExplanationView(explanation: String) {
     Surface(
         shape = RoundedCornerShape(6.dp),
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(end = 10.dp, top = 2.dp)
     ) {
         Text(
             text = "ni methali $explanation",
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
         )
     }
 }
@@ -47,13 +46,12 @@ fun SecondExplanationView(explanation: String) {
     Surface(
         shape = RoundedCornerShape(6.dp),
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(end = 10.dp, top = 2.dp)
     ) {
         Text(
             text = explanation,
-            style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
+            style = MaterialTheme.typography.titleMedium.copy(fontStyle = FontStyle.Italic),
             color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
         )
     }
 }

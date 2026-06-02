@@ -14,10 +14,11 @@ object PrefConstants {
     const val THEME_MODE = "theme_mode"
     const val IS_DATA_LOADED = "is_data_loaded"
     const val INSTALL_DATE = "install_date"
-    const val USAGE_TIME = "usage_time"
-    const val IS_REVIEW_DONE = "is_review_done"
     const val LAST_HOME_TAB = "last_home_tab"
     const val LAST_APP_OPEN_TIME = "lastAppOpenTime"
+
+    const val DONATION_DONE_AT = "donation_done_at"
+    const val DONATION_REMIND_NEXT_OPEN = "donation_remind_next"
 }
 
 object Routes {

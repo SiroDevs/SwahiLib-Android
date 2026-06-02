@@ -12,7 +12,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.common.entity.ViewerState
+import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.core.ui.components.indicators.*
 import com.swahilib.feature.proverb.ProverbViewModel
 
@@ -22,6 +24,7 @@ fun ProverbScreen(
     navController: NavHostController,
     viewModel: ProverbViewModel,
     proverb: ProverbEntity?,
+    prefsRepo: PrefsRepo,
 ) {
     val context = LocalContext.current
     val viewerState by viewModel.uiState.collectAsState()
@@ -31,7 +34,23 @@ fun ProverbScreen(
     val explanations by viewModel.explanations.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
 
+    var showDonationDialog by remember { mutableStateOf(false) }
+    val showDonation = remember { prefsRepo.shouldShowDonation() }
+
     LaunchedEffect(proverb) { proverb?.let { viewModel.loadProverb(it) } }
+
+    if (showDonationDialog) {
+        DonationDialog(
+            onRemindLater = {
+                prefsRepo.donationRemindNextOpen = true
+                showDonationDialog = false
+            },
+            onDismiss = {
+                prefsRepo.recordDonation()
+                showDonationDialog = false
+            },
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -43,7 +62,8 @@ fun ProverbScreen(
                     IconButton(onClick = {
                         proverb?.let {
                             viewModel.likeProverb(it)
-                            val msg = if (!isLiked) "Methali imeongezwa kwa vipendwa" else "Methali imeondolewa kwa vipendwa"
+                            val msg =
+                                if (!isLiked) "Methali imeongezwa kwa vipendwa" else "Methali imeondolewa kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {
@@ -51,7 +71,7 @@ fun ProverbScreen(
                             imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
                             contentDescription = "Penda",
                             tint = if (isLiked) MaterialTheme.colorScheme.primary
-                                   else MaterialTheme.colorScheme.onPrimaryContainer
+                            else MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
@@ -65,15 +85,25 @@ fun ProverbScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             when (viewerState) {
-                is ViewerState.Error -> ErrorState(message = (viewerState as ViewerState.Error).message, onRetry = { })
+                is ViewerState.Error -> ErrorState(
+                    message = (viewerState as ViewerState.Error).message,
+                    onRetry = { })
+
                 ViewerState.Loaded -> ProverbDetails(
                     viewModel = viewModel,
                     title = title,
                     meanings = meanings,
                     synonyms = synonyms,
                     explanations = explanations,
+                    showDonation = showDonation,
+                    onShowDonation = { showDonationDialog = true },
                 )
-                ViewerState.Loading -> LoadingState(title = "Subiri kidogo ...", fileName = "opener-loading")
+
+                ViewerState.Loading -> LoadingState(
+                    title = "Subiri kidogo ...",
+                    fileName = "opener-loading"
+                )
+
                 else -> EmptyState()
             }
         }

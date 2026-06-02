@@ -105,7 +105,7 @@ fun HelpScreen(navController: NavHostController) {
             )
 
             Text(
-                text = "Picha au Rekodi (si lazima)",
+                text = "Picha au Video (Sio lazima)",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -120,7 +120,7 @@ fun HelpScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(Icons.Default.AttachFile, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                    Text("Gusa kuambatanisha picha", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
+                    Text("Ambatanisha picha", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
                     Text("Hadi faili 5", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }

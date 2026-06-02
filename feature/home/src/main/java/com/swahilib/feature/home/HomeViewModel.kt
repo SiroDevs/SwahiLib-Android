@@ -73,7 +73,8 @@ class HomeViewModel @Inject constructor(
         _selectedTab.value = tab
     }
 
-    fun fetchData() {
+    fun fetchData(force: Boolean = false) {
+        if (!force && _uiState.value is UiState.Filtered) return
         _uiState.tryEmit(UiState.Loading)
         viewModelScope.launch {
             _allIdioms.value = idiomRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
@@ -90,6 +91,12 @@ class HomeViewModel @Inject constructor(
 
             _history.value = historyRepo.fetchLocalData().sortedByDescending { it.createdAt }
             _uiState.tryEmit(UiState.Filtered)
+        }
+    }
+
+    fun refreshHistory() {
+        viewModelScope.launch {
+            _history.value = historyRepo.fetchLocalData().sortedByDescending { it.createdAt }
         }
     }
 

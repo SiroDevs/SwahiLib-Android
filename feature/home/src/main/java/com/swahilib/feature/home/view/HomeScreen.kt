@@ -35,9 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.data.repos.ThemeRepo
 import com.swahilib.core.designsystem.theme.ThemeSelectorDialog
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.core.ui.components.indicators.LoadingState
@@ -54,11 +56,13 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navController: NavHostController,
     themeRepo: ThemeRepo,
+    prefsRepo: PrefsRepo,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val selectedTab by viewModel.selectedTab.collectAsState()
     var showThemeDialog by remember { mutableStateOf(false) }
     var showMoreMenu by remember { mutableStateOf(false) }
+    var showDonationDialog by remember { mutableStateOf(false) }
     val theme = themeRepo.selectedTheme
 
     val pagerState = rememberPagerState(
@@ -89,6 +93,19 @@ fun HomeScreen(
                 themeRepo.setTheme(it)
                 showThemeDialog = false
             }
+        )
+    }
+
+    if (showDonationDialog) {
+        DonationDialog(
+            onRemindLater = {
+                prefsRepo.donationRemindNextOpen = true
+                showDonationDialog = false
+            },
+            onDismiss = {
+                prefsRepo.recordDonation()
+                showDonationDialog = false
+            },
         )
     }
 
@@ -182,6 +199,8 @@ fun HomeScreen(
                             HomeTab.Search -> HomeSearch(
                                 viewModel = viewModel,
                                 navController = navController,
+                                prefsRepo = prefsRepo,
+                                onShowDonationDialog = { showDonationDialog = true },
                             )
 
                             HomeTab.Likes -> HomeLikes(
