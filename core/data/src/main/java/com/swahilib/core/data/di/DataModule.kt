@@ -61,10 +61,4 @@ object DataModule {
     @Singleton
     fun provideSearchRepo(searchDao: SearchDao, supabase: Postgrest): SearchRepo =
         SearchRepo(searchDao, supabase)
-
-    @Provides
-    @Singleton
-    fun provideDonationRepo(pesaPalService: PesaPalService): DonationRepo =
-        DonationRepo(pesaPalService)
-
 }

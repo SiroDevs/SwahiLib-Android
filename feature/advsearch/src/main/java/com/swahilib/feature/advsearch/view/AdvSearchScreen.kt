@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.advsearch.AdvSearchViewModel
@@ -143,28 +144,42 @@ fun AdvSearchScreen(
                     item { EmptySearchPrompt() }
                 } else {
                     wordsSection(
-                        words = words, query = query,
+                        words = words,
+                        query = query,
                         show = selectedType == "YOTE" || selectedType == "MANENO",
-                        navController = navController, viewModel = viewModel,
-                        showDonation = showDonation, onShowDonation = { navController.navigate(Routes.DONATION) },
+                        navController = navController,
+                        viewModel = viewModel,
+                        showDonation = showDonation,
+                        onShowDonation = { navController.navigate(Routes.DONATION) },
                     )
                     idiomsSection(
                         idioms = idioms, query = query,
                         show = selectedType == "YOTE" || selectedType == "NAHAU",
                         navController = navController, viewModel = viewModel,
-                        showDonation = showDonation, onShowDonation = { navController.navigate(Routes.DONATION) },
+                        showDonation = showDonation,
+                        onShowDonation = {
+                            navController.navigate(
+                                Routes.DONATION
+                            )
+                        },
                     )
                     proverbsSection(
-                        proverbs = proverbs, query = query,
+                        proverbs = proverbs,
+                        query = query,
                         show = selectedType == "YOTE" || selectedType == "METHALI",
-                        navController = navController, viewModel = viewModel,
-                        showDonation = showDonation, onShowDonation = { navController.navigate(Routes.DONATION) },
+                        navController = navController,
+                        viewModel = viewModel,
+                        showDonation = showDonation,
+                        onShowDonation = { navController.navigate(Routes.DONATION) },
                     )
                     sayingsSection(
-                        sayings = sayings, query = query,
+                        sayings = sayings,
+                        query = query,
                         show = selectedType == "YOTE" || selectedType == "MISEMO",
-                        navController = navController, viewModel = viewModel,
-                        showDonation = showDonation, onShowDonation = { navController.navigate(Routes.DONATION) },
+                        navController = navController,
+                        viewModel = viewModel,
+                        showDonation = showDonation,
+                        onShowDonation = { navController.navigate(Routes.DONATION) },
                     )
                 }
                 item { Spacer(Modifier.height(80.dp)) }
