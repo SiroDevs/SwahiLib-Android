@@ -1,6 +1,7 @@
 package com.swahilib.core.data.di
 
 import android.content.Context
+import com.swahilib.core.data.repos.DonationRepo
 import com.swahilib.core.data.repos.HistoryRepo
 import com.swahilib.core.data.repos.IdiomRepo
 import com.swahilib.core.data.repos.PrefsRepo
@@ -14,6 +15,7 @@ import com.swahilib.core.database.daos.ProverbDao
 import com.swahilib.core.database.daos.SayingDao
 import com.swahilib.core.database.daos.SearchDao
 import com.swahilib.core.database.daos.WordDao
+import com.swahilib.core.network.PesaPalService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

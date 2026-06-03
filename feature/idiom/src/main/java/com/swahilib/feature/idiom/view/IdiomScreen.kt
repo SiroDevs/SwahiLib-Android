@@ -24,10 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.ViewerState
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.core.ui.components.indicators.LoadingState
@@ -51,19 +51,6 @@ fun IdiomScreen(
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     LaunchedEffect(idiom) { idiom?.let { viewModel.loadIdiom(it) } }
-
-    if (showDonationDialog) {
-        DonationDialog(
-            onRemindLater = {
-                prefsRepo.donationRemindNextOpen = true
-                showDonationDialog = false
-            },
-            onDismiss = {
-                prefsRepo.recordDonation()
-                showDonationDialog = false
-            },
-        )
-    }
 
     Scaffold(
         topBar = {
@@ -105,7 +92,7 @@ fun IdiomScreen(
                 ViewerState.Loaded -> IdiomView(
                     title = title, meanings = meanings,
                     showDonation = showDonation,
-                    onShowDonation = { showDonationDialog = true },
+                    onShowDonation = { navController.navigate(Routes.DONATION) },
                 )
 
                 ViewerState.Loading -> LoadingState(

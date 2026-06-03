@@ -25,6 +25,7 @@ import com.swahilib.feature.idiom.IdiomViewModel
 import com.swahilib.feature.proverb.ProverbViewModel
 import com.swahilib.feature.saying.SayingViewModel
 import com.swahilib.feature.word.WordViewModel
+import com.swahilib.feature.donation.DonationViewModel
 
 import com.swahilib.feature.init.view.InitScreen
 import com.swahilib.feature.home.view.HomeScreen
@@ -37,6 +38,7 @@ import com.swahilib.feature.word.view.WordScreen
 import com.swahilib.feature.settings.view.SettingsScreen
 import com.swahilib.feature.howitworks.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
+import com.swahilib.feature.donation.view.DonationScreen
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -139,6 +141,14 @@ fun AppNavHost(
 
         composable(Routes.HELP) {
             HelpScreen(navController = navController)
+        }
+
+        composable(Routes.DONATION) {
+            val viewModel: DonationViewModel = hiltViewModel()
+            DonationScreen(
+                navController = navController,
+                viewModel = viewModel,
+            )
         }
     }
 }

@@ -17,17 +17,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.ViewerState
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.WordEntity
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.core.ui.components.indicators.LoadingState
@@ -48,24 +46,9 @@ fun WordScreen(
     val meanings by viewModel.meanings.collectAsState()
     val synonyms by viewModel.synonyms.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
-
-    var showDonationDialog by remember { mutableStateOf(false) }
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     LaunchedEffect(word) { word?.let { viewModel.loadWord(it) } }
-
-    if (showDonationDialog) {
-        DonationDialog(
-            onRemindLater = {
-                prefsRepo.donationRemindNextOpen = true
-                showDonationDialog = false
-            },
-            onDismiss = {
-                prefsRepo.recordDonation()
-                showDonationDialog = false
-            },
-        )
-    }
 
     Scaffold(
         topBar = {
@@ -107,7 +90,7 @@ fun WordScreen(
                     meanings = meanings,
                     synonyms = synonyms,
                     showDonation = showDonation,
-                    onShowDonation = { showDonationDialog = true },
+                    onShowDonation = { navController.navigate(Routes.DONATION) },
                 )
                 ViewerState.Loading -> LoadingState(title = "Subiri kidogo ...", fileName = "opener-loading")
                 else -> EmptyState()

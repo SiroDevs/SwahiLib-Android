@@ -1,20 +1,31 @@
 package com.swahilib.feature.settings.view
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Brightness6
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.*
+import com.swahilib.core.data.repos.ThemeRepo
 import com.swahilib.core.designsystem.theme.ThemeSelectorDialog
 import com.swahilib.core.designsystem.theme.appThemeName
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.feature.settings.components.*
 import com.swahilib.feature.settings.SettingsViewModel
+import com.swahilib.feature.settings.components.ConfirmResetDialog
+import com.swahilib.feature.settings.components.SettingsSectionTitle
 
 @Composable
 fun SettingsScreen(
@@ -82,31 +93,18 @@ fun SettingsScreen(
             )
             HorizontalDivider()
 
-            /*SettingsSectionTitle("Selection")
+            SettingsSectionTitle("CHANGIA SWAHILIB")
             ListItem(
                 leadingContent = {
                     Icon(
-                        Icons.Default.EditNote, contentDescription = "Reset"
+                        Icons.Default.Brightness6, contentDescription = ""
                     )
                 },
-                headlineContent = { Text("Modify Collection") },
-                supportingContent = { Text("Add or Remove Songbooks") },
-                modifier = Modifier.clickable {
-                    viewModel.updateSelection(true)
-                    navigateToSplash()
-                },
+                headlineContent = { Text("Changa Hivi Sasa") },
+                supportingContent = { Text("Tunahitaji mchango wako ili tuzudi kukuhudumia") },
+                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
             )
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Default.Refresh, contentDescription = "Reset"
-                    )
-                },
-                headlineContent = { Text("Select Afresh") },
-                supportingContent = { Text("Reset everything and start over") },
-                modifier = Modifier.clickable { showResetDialog = true },
-            )
-            HorizontalDivider()*/
+            HorizontalDivider()
         }
     }
 }

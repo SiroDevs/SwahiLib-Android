@@ -9,6 +9,17 @@ object AppConstants {
     const val SUPPORT_EMAIL = "futuristicken@gmail.com"
 }
 
+object ApiConstants {
+    const val PESAPAL_BASE_URL = "https://pay.pesapal.com/v3/api/"
+    // For sandbox swap to: "https://cybqa.pesapal.com/pesapalv3/api/"
+
+    const val PESAPAL_AUTH  = "Auth/RequestToken"
+    const val PESAPAL_ORDER = "Transactions/SubmitOrderRequest"
+
+    const val CALLBACK_URL = "https://swahilib.vercel.app/donation/callback"
+    const val DONOR_EMAIL  = "donor@swahilib.app"
+}
+
 object PrefConstants {
     const val PREFERENCE_FILE = "app_pref"
     const val THEME_MODE = "theme_mode"
@@ -22,15 +33,16 @@ object PrefConstants {
 }
 
 object Routes {
-    const val SPLASH    = "splash"
-    const val INIT      = "init"
-    const val HOME      = "home"
-    const val IDIOM     = "idiom"
-    const val PROVERB   = "proverb"
-    const val SAYING    = "saying"
-    const val WORD      = "word"
-    const val SETTINGS  = "settings"
+    const val SPLASH = "splash"
+    const val INIT = "init"
+    const val HOME = "home"
+    const val IDIOM = "idiom"
+    const val PROVERB = "proverb"
+    const val SAYING = "saying"
+    const val WORD = "word"
+    const val SETTINGS = "settings"
     const val ADVSEARCH = "advsearch"
     const val HOW_IT_WORKS = "how_it_works"
-    const val HELP      = "help"
+    const val HELP = "help"
+    const val DONATION = "donation"
 }
