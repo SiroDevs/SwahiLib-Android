@@ -12,9 +12,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.common.entity.ViewerState
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.core.ui.components.indicators.*
 import com.swahilib.feature.proverb.ProverbViewModel
 
@@ -33,24 +33,9 @@ fun ProverbScreen(
     val synonyms by viewModel.synonyms.collectAsState()
     val explanations by viewModel.explanations.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
-
-    var showDonationDialog by remember { mutableStateOf(false) }
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     LaunchedEffect(proverb) { proverb?.let { viewModel.loadProverb(it) } }
-
-    if (showDonationDialog) {
-        DonationDialog(
-            onRemindLater = {
-                prefsRepo.donationRemindNextOpen = true
-                showDonationDialog = false
-            },
-            onDismiss = {
-                prefsRepo.recordDonation()
-                showDonationDialog = false
-            },
-        )
-    }
 
     Scaffold(
         topBar = {
@@ -96,7 +81,7 @@ fun ProverbScreen(
                     synonyms = synonyms,
                     explanations = explanations,
                     showDonation = showDonation,
-                    onShowDonation = { showDonationDialog = true },
+                    onShowDonation = { navController.navigate(Routes.DONATION) },
                 )
 
                 ViewerState.Loading -> LoadingState(

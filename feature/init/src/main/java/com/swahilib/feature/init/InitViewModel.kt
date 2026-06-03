@@ -44,7 +44,7 @@ class InitViewModel @Inject constructor(
                     prefsRepo.updateAppOpenTime()
                     _uiState.emit(UiState.Saved)
                 } else {
-                    _uiState.emit(UiState.Error("Masaalale! Hapa bila muunganisho wa intaneti thabiti hutoboi."))
+                    _uiState.emit(UiState.Error("Masaalale! Hapa bila muunganisho wa intaneti thabiti wewe jua tu hutoboi."))
                 }
             } catch (e: Exception) {
                 val message = when (e) {

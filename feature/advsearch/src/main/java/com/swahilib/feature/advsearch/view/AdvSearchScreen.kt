@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.core.ui.components.donation.DonationDialog
 import com.swahilib.feature.advsearch.AdvSearchViewModel
 import com.swahilib.feature.advsearch.SearchMode
 import com.swahilib.feature.advsearch.SortOrder
@@ -56,8 +55,6 @@ fun AdvSearchScreen(
     var selectedType by rememberSaveable { mutableStateOf("YOTE") }
     var sortOrder by rememberSaveable { mutableStateOf(SortOrder.AZ) }
     var searchMode by rememberSaveable { mutableStateOf(SearchMode.BEGINNING) }
-
-    var showDonationDialog by remember { mutableStateOf(false) }
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     val words by viewModel.filteredWords.collectAsState(initial = emptyList())
@@ -149,42 +146,29 @@ fun AdvSearchScreen(
                         words = words, query = query,
                         show = selectedType == "YOTE" || selectedType == "MANENO",
                         navController = navController, viewModel = viewModel,
-                        showDonation = showDonation, onShowDonation = { showDonationDialog = true },
+                        showDonation = showDonation, onShowDonation = { navController.navigate(Routes.DONATION) },
                     )
                     idiomsSection(
                         idioms = idioms, query = query,
                         show = selectedType == "YOTE" || selectedType == "NAHAU",
                         navController = navController, viewModel = viewModel,
-                        showDonation = showDonation, onShowDonation = { showDonationDialog = true },
+                        showDonation = showDonation, onShowDonation = { navController.navigate(Routes.DONATION) },
                     )
                     proverbsSection(
                         proverbs = proverbs, query = query,
                         show = selectedType == "YOTE" || selectedType == "METHALI",
                         navController = navController, viewModel = viewModel,
-                        showDonation = showDonation, onShowDonation = { showDonationDialog = true },
+                        showDonation = showDonation, onShowDonation = { navController.navigate(Routes.DONATION) },
                     )
                     sayingsSection(
                         sayings = sayings, query = query,
                         show = selectedType == "YOTE" || selectedType == "MISEMO",
                         navController = navController, viewModel = viewModel,
-                        showDonation = showDonation, onShowDonation = { showDonationDialog = true },
+                        showDonation = showDonation, onShowDonation = { navController.navigate(Routes.DONATION) },
                     )
                 }
                 item { Spacer(Modifier.height(80.dp)) }
             }
         }
-    }
-
-    if (showDonationDialog) {
-        DonationDialog(
-            onRemindLater = {
-                prefsRepo.donationRemindNextOpen = true
-                showDonationDialog = false
-            },
-            onDismiss = {
-                prefsRepo.recordDonation()
-                showDonationDialog = false
-            },
-        )
     }
 }
