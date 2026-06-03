@@ -95,7 +95,7 @@ fun DonationScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Changa SwahiLib",
+                title = "Changia SwahiLib",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
             )

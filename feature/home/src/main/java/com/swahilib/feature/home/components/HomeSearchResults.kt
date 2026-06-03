@@ -48,26 +48,23 @@ fun HomeSearchResults(
             "MANENO" -> {
                 item { SectionHeader("Matokeo", words.size) }
                 if (words.isNotEmpty()) {
-                    item { SectionHeader("Matokeo", words.size) }
-                    if (words.isNotEmpty()) {
-                        itemsIndexed(words, key = { _, w -> w.rid }) { index, word ->
-                            if (index == 4 || index == 7) DonationBanner(
-                                show = showDonation,
-                                onTap = onShowDonationDialog
-                            )
-                            WordItem(
-                                word = word,
-                                onTap = {
-                                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "word",
-                                        word
-                                    )
-                                    viewModel.addToHistory(word.rid, "word")
-                                    navController.navigate(Routes.WORD)
-                                },
-                                onLike = { viewModel.likeWord(word) }
-                            )
-                        }
+                    itemsIndexed(words, key = { _, w -> w.rid }) { index, word ->
+                        if (index == 4 || index == 7) DonationBanner(
+                            show = showDonation,
+                            onTap = onShowDonationDialog
+                        )
+                        WordItem(
+                            word = word,
+                            onTap = {
+                                navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    "word",
+                                    word
+                                )
+                                viewModel.addToHistory(word.rid, "word")
+                                navController.navigate(Routes.WORD)
+                            },
+                            onLike = { viewModel.likeWord(word) }
+                        )
                     }
                 }
             }

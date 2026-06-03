@@ -61,7 +61,9 @@ fun DonationHeaderCard() {
             )
             Text(
                 text = "Mchango wako wowote — mdogo au mkubwa — " +
-                    "unasaidia SwahiLib kuendelea kukua na kukuhudumia wewe na wengine.",
+                    "unasaidia SwahiLib kuendelea kukua na kukuhudumia wewe na wengine." +
+                    "\n\nMchango wako utatusaidia kuepuka kukuonyesha matangazo ya kibiashara" +
+                " na pia kuendelea kukudumisha server zetu wakati wote",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Center,
