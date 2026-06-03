@@ -56,7 +56,7 @@ fun HomeSearch(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     prefsRepo: PrefsRepo,
-    onShowDonationDialog: () -> Unit,
+    onShowDonation: () -> Unit,
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedLetter by rememberSaveable { mutableStateOf("") }
@@ -141,7 +141,7 @@ fun HomeSearch(
                 listState = listState,
                 viewModel = viewModel,
                 navController = navController,
-                onShowDonationDialog = onShowDonationDialog
+                onShowDonation = onShowDonation
             )
 
 

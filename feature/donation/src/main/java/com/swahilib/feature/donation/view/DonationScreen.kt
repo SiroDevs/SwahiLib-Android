@@ -163,7 +163,7 @@ fun DonationScreen(
 
                 Spacer(Modifier.height(4.dp))
 
-                ChangaSasaButton(
+                DonateNowButton(
                     isLoading = state is DonationState.Loading,
                     enabled = state !is DonationState.Loading && activeAmount != null && activeAmount > 0,
                     onClick = {
