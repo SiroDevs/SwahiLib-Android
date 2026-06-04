@@ -15,7 +15,7 @@ import com.swahilib.core.database.daos.ProverbDao
 import com.swahilib.core.database.daos.SayingDao
 import com.swahilib.core.database.daos.SearchDao
 import com.swahilib.core.database.daos.WordDao
-import com.swahilib.core.network.PesaPalService
+import com.swahilib.core.network.services.PesaPalService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

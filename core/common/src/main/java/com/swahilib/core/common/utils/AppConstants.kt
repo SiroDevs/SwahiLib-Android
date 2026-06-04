@@ -30,6 +30,7 @@ object PrefConstants {
 
     const val DONATION_DONE_AT = "donation_done_at"
     const val DONATION_REMIND_NEXT_OPEN = "donation_remind_next"
+    const val LAST_SYNCED_AT = "last_synced_at"
 }
 
 object Routes {

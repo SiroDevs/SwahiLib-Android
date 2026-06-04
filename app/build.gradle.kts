@@ -127,6 +127,11 @@ dependencies {
     implementation(libs.android.billing)
     implementation(libs.androidx.concurrent.futures)
 
+    // WorkManager (Configuration.Provider in SwahiLibApp)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

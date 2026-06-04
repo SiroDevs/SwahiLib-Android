@@ -86,4 +86,16 @@ class PrefsRepo @Inject constructor(
         donationDoneAt = System.currentTimeMillis()
         donationRemindNextOpen = false
     }
+
+    var lastSyncedAt: Long
+        get() = prefs.getLong(PrefConstants.LAST_SYNCED_AT, 0L)
+        set(value) = prefs.edit { putLong(PrefConstants.LAST_SYNCED_AT, value) }
+
+    fun needsDailySync(): Boolean {
+        val last = lastSyncedAt
+        if (last == 0L) return false
+        val elapsed = System.currentTimeMillis() - last
+        val oneDayMs = 24 * 60 * 60 * 1000L
+        return elapsed >= oneDayMs
+    }
 }
