@@ -61,7 +61,6 @@ fun HomeScreen(
     val selectedTab by viewModel.selectedTab.collectAsState()
     var showThemeDialog by remember { mutableStateOf(false) }
     var showMoreMenu by remember { mutableStateOf(false) }
-    var showDonationDialog by remember { mutableStateOf(false) }
     val theme = themeRepo.selectedTheme
 
     val pagerState = rememberPagerState(
@@ -186,7 +185,7 @@ fun HomeScreen(
                                 viewModel = viewModel,
                                 navController = navController,
                                 prefsRepo = prefsRepo,
-                                onShowDonationDialog = { navController.navigate(Routes.DONATION) },
+                                onShowDonation = { navController.navigate(Routes.DONATION) },
                             )
 
                             HomeTab.Likes -> HomeLikes(

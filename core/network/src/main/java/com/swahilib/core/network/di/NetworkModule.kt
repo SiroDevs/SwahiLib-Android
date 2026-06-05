@@ -17,7 +17,7 @@
 package com.swahilib.core.network.di
 
 import com.swahilib.core.common.utils.ApiConstants
-import com.swahilib.core.network.PesaPalService
+import com.swahilib.core.network.services.PesaPalService
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable

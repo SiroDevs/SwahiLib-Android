@@ -2,7 +2,7 @@ package com.swahilib.core.data.repos
 
 import android.util.Log
 import com.swahilib.core.common.utils.ApiConstants
-import com.swahilib.core.network.PesaPalService
+import com.swahilib.core.network.services.PesaPalService
 import com.swahilib.core.network.dtos.PesaPalAuthRequest
 import com.swahilib.core.network.dtos.PesaPalBillingAddress
 import com.swahilib.core.network.dtos.PesaPalOrderRequest

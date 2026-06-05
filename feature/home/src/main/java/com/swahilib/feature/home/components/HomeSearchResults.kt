@@ -35,7 +35,7 @@ fun HomeSearchResults(
     listState: LazyListState,
     viewModel: HomeViewModel,
     navController: NavHostController,
-    onShowDonationDialog: () -> Unit,
+    onShowDonation: () -> Unit,
 ) {
     LazyColumn(
         state = listState,
@@ -51,7 +51,7 @@ fun HomeSearchResults(
                     itemsIndexed(words, key = { _, w -> w.rid }) { index, word ->
                         if (index == 4 || index == 7) DonationBanner(
                             show = showDonation,
-                            onTap = onShowDonationDialog
+                            onTap = onShowDonation
                         )
                         WordItem(
                             word = word,
@@ -75,7 +75,7 @@ fun HomeSearchResults(
                     itemsIndexed(idioms, key = { _, i -> i.rid }) { index, idiom ->
                         if (index == 3 || index == 7) DonationBanner(
                             show = showDonation,
-                            onTap = onShowDonationDialog
+                            onTap = onShowDonation
                         )
                         IdiomItem(
                             idiom = idiom,
@@ -99,7 +99,7 @@ fun HomeSearchResults(
                     itemsIndexed(proverbs, key = { _, p -> p.rid }) { index, proverb ->
                         if (index == 4 || index == 10) DonationBanner(
                             show = showDonation,
-                            onTap = onShowDonationDialog
+                            onTap = onShowDonation
                         )
                         ProverbItem(
                             proverb = proverb,
@@ -123,7 +123,7 @@ fun HomeSearchResults(
                     itemsIndexed(sayings, key = { _, s -> s.rid }) { index, saying ->
                         if (index == 2 || index == 6) DonationBanner(
                             show = showDonation,
-                            onTap = onShowDonationDialog
+                            onTap = onShowDonation
                         )
                         SayingItem(
                             saying = saying,

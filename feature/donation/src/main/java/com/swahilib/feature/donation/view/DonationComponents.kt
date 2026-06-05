@@ -137,7 +137,7 @@ fun PresetAmountButton(
 }
 
 @Composable
-fun ChangaSasaButton(
+fun DonateNowButton(
     isLoading: Boolean,
     enabled: Boolean,
     onClick: () -> Unit,

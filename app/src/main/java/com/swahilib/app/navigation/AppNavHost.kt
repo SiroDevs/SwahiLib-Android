@@ -2,6 +2,7 @@ package com.swahilib.app.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -17,7 +18,6 @@ import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
 import com.swahilib.feature.advsearch.AdvSearchViewModel
 
-import com.swahilib.feature.init.InitViewModel
 import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.settings.SettingsViewModel
 import com.swahilib.feature.splash.SplashViewModel
@@ -27,7 +27,6 @@ import com.swahilib.feature.saying.SayingViewModel
 import com.swahilib.feature.word.WordViewModel
 import com.swahilib.feature.donation.DonationViewModel
 
-import com.swahilib.feature.init.view.InitScreen
 import com.swahilib.feature.home.view.HomeScreen
 import com.swahilib.feature.advsearch.view.AdvSearchScreen
 import com.swahilib.feature.splash.view.SplashScreen
@@ -55,8 +54,11 @@ fun AppNavHost(
         }
 
         composable(Routes.INIT) {
-            val viewModel: InitViewModel = hiltViewModel()
-            InitScreen(viewModel = viewModel, navController = navController)
+            LaunchedEffect(Unit) {
+                navController.navigate(Routes.HOME) {
+                    popUpTo(Routes.INIT) { inclusive = true }
+                }
+            }
         }
 
         composable(Routes.HOME) {
