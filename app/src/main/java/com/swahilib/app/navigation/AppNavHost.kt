@@ -53,14 +53,6 @@ fun AppNavHost(
             SplashScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(Routes.INIT) {
-            LaunchedEffect(Unit) {
-                navController.navigate(Routes.HOME) {
-                    popUpTo(Routes.INIT) { inclusive = true }
-                }
-            }
-        }
-
         composable(Routes.HOME) {
             val viewModel: HomeViewModel = hiltViewModel()
             HomeScreen(
