@@ -35,7 +35,6 @@ include(":core:ui")
 
 // Feature modules
 include(":feature:splash")
-include(":feature:init")
 include(":feature:home")
 include(":feature:advsearch")
 include(":feature:word")
