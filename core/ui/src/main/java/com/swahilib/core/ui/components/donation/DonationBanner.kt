@@ -42,7 +42,8 @@ fun DonationBanner(
     onTap: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (!show) return
+    return
+//    if (!show) return
 
     Row(
         modifier = modifier

@@ -93,18 +93,18 @@ fun SettingsScreen(
             )
             HorizontalDivider()
 
-            SettingsSectionTitle("CHANGIA SWAHILIB")
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Default.Brightness6, contentDescription = ""
-                    )
-                },
-                headlineContent = { Text("Changa Hivi Sasa") },
-                supportingContent = { Text("Tunahitaji mchango wako ili tuzudi kukuhudumia") },
-                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
-            )
-            HorizontalDivider()
+//            SettingsSectionTitle("CHANGIA SWAHILIB")
+//            ListItem(
+//                leadingContent = {
+//                    Icon(
+//                        Icons.Default.Brightness6, contentDescription = ""
+//                    )
+//                },
+//                headlineContent = { Text("Changa Hivi Sasa") },
+//                supportingContent = { Text("Tunahitaji mchango wako ili tuzudi kukuhudumia") },
+//                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
+//            )
+//            HorizontalDivider()
         }
     }
 }
