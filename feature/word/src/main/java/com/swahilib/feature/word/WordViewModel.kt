@@ -35,27 +35,43 @@ class WordViewModel @Inject constructor(
     private val _synonyms = MutableStateFlow<List<WordEntity>>(emptyList())
     val synonyms: StateFlow<List<WordEntity>> get() = _synonyms
 
+    private val _english = MutableStateFlow<String?>(null)
+    val english: StateFlow<String?> get() = _english
+
+    private var _currentWord: WordEntity? = null
+
     fun loadWord(word: WordEntity) {
         _uiState.value = ViewerState.Loading
+        _currentWord = word
         _isLiked.value = word.liked
-
-        _title.value = word.title.toString()
-        _conjugation.value = word.conjugation.toString().replace("null","")
-
+        _title.value = word.title.orEmpty()
+        _conjugation.value = word.conjugation.orEmpty().replace("null", "")
         _meanings.value = cleanMeaning(word.meaning).split("|")
+        _english.value = word.english?.takeIf { it.isNotBlank() }
 
+        // De-duplicate synonym titles (case-insensitive), then exclude the word itself
         val synonymTitles = word.synonyms
             ?.takeIf { it.isNotEmpty() }
             ?.split(",")
             ?.map { it.trim() }
             ?.filter { it.isNotEmpty() }
-            ?.distinct()
+            ?.map { it.lowercase() }
+            ?.distinct()                              // remove duplicate titles
+            ?.filter { it != word.title?.lowercase() } // exclude the word itself
+            ?.map { s -> word.synonyms!!              // restore original casing from first occurrence
+                .split(",")
+                .map { it.trim() }
+                .first { it.lowercase() == s }
+            }
             ?: emptyList()
 
         if (synonymTitles.isNotEmpty()) {
             viewModelScope.launch {
                 wordRepo.getWordsByTitles(synonymTitles).collect { words ->
-                    _synonyms.value = words.sortedBy { it.title?.lowercase() }
+                    // Final de-dup by rid in case DB returns duplicates
+                    _synonyms.value = words
+                        .distinctBy { it.rid }
+                        .sortedBy { it.title?.lowercase() }
                 }
             }
         } else {

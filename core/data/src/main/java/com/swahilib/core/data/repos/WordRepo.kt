@@ -29,86 +29,58 @@ class WordRepo @Inject constructor(
             var totalFetched = 0
 
             while (true) {
-                Log.d("TAG", "Fetching words batch: $offset to ${offset + pageSize - 1}")
-
                 val batch = supabase["words"]
-                    .select {
-                        range(offset, offset + pageSize - 1)
-                    }.decodeList<WordDto>()
+                    .select { range(offset, offset + pageSize - 1) }
+                    .decodeList<WordDto>()
 
-                if (batch.isEmpty()) {
-                    Log.d("TAG", "No more words to fetch")
-                    break
-                }
+                if (batch.isEmpty()) break
 
                 val mappedBatch = batch.map(MapDtoToEntity::mapToEntity)
                 allWords.addAll(mappedBatch)
                 totalFetched += batch.size
 
-                if (batch.size < pageSize) {
-                    Log.d("TAG", "Last page reached with ${batch.size} items")
-                    break
-                }
-
+                if (batch.size < pageSize) break
                 offset += pageSize
-
-                if (offset % 10000 == 0L) {
-                    delay(100)
-                }
+                if (offset % 10000 == 0L) delay(100)
             }
 
-            Log.d("TAG", "✅ $totalFetched words fetched")
             saveWords(allWords)
-
             Result.success(totalFetched)
         }.getOrElse { exception ->
-            Log.e("TAG", "❌ Error fetching words: ${exception.message}", exception)
+            Log.e("WordRepo", "❌ Error fetching words: ${exception.message}", exception)
             Result.failure(exception)
         }
     }
 
     suspend fun saveWords(words: List<WordEntity>) {
-        if (words.isEmpty()) {
-            Log.d("TAG", "⚠️ No words to save")
-            return
-        }
-
+        if (words.isEmpty()) return
         try {
             wordsDao.insertAll(words)
-            Log.d("TAG", "✅ ${words.size} words saved successfully")
         } catch (e: Exception) {
-            Log.e("TAG", "❌ Error saving words: ${e.message}", e)
+            Log.e("WordRepo", "❌ Error saving words: ${e.message}", e)
             throw e
         }
     }
 
-    suspend fun fetchLocalData(): List<WordEntity> {
-        return withContext(Dispatchers.IO) {
-            wordsDao.getAll()?.first() ?: emptyList()
-        }
+    suspend fun fetchLocalData(): List<WordEntity> = withContext(Dispatchers.IO) {
+        wordsDao.getAll()?.first() ?: emptyList()
     }
 
     suspend fun saveWord(word: WordEntity) {
-        try {
-            withContext(Dispatchers.IO) {
-                wordsDao.insert(word)
-            }
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
+        try { withContext(Dispatchers.IO) { wordsDao.insert(word) } }
+        catch (e: Exception) { Log.d("WordRepo", e.message.toString()) }
     }
 
     suspend fun updateWord(word: WordEntity) {
-        try {
-            withContext(Dispatchers.IO) {
-                wordsDao.update(word)
-            }
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
+        try { withContext(Dispatchers.IO) { wordsDao.update(word) } }
+        catch (e: Exception) { Log.d("WordRepo", e.message.toString()) }
     }
 
-    fun getWordsByTitles(titles: List<String>): Flow<List<WordEntity>> {
-        return wordsDao.getWordsByTitles(titles) ?: flowOf(emptyList())
+    fun getWordsByTitles(titles: List<String>): Flow<List<WordEntity>> =
+        wordsDao.getWordsByTitles(titles) ?: flowOf(emptyList())
+
+    /** Returns a random word; used by Neno la Siku. */
+    suspend fun getRandomWord(): WordEntity? = withContext(Dispatchers.IO) {
+        wordsDao.getRandomWord()
     }
 }

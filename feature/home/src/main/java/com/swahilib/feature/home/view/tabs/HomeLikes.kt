@@ -31,20 +31,26 @@ import com.swahilib.core.ui.components.listitems.WordItem
 import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.home.components.SectionHeader
 
+private enum class LikesTab(val label: String) {
+    MANENO("MANENO"),
+    NAHAU("NAHAU"),
+    METHALI("METHALI"),
+    MISEMO("MISEMO"),
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeLikes(
     viewModel: HomeViewModel,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val likedWords by viewModel.likedWords.collectAsState(initial = emptyList())
-    val likedIdioms by viewModel.likedIdioms.collectAsState(initial = emptyList())
+    val likedWords   by viewModel.likedWords.collectAsState(initial = emptyList())
+    val likedIdioms  by viewModel.likedIdioms.collectAsState(initial = emptyList())
     val likedProverbs by viewModel.likedProverbs.collectAsState(initial = emptyList())
     val likedSayings by viewModel.likedSayings.collectAsState(initial = emptyList())
 
-    var selectedType by rememberSaveable { mutableStateOf("MANENO") }
-    val types = listOf("MANENO", "NAHAU", "METHALI", "Misemo")
+    var selectedTab by rememberSaveable { mutableStateOf(LikesTab.MANENO) }
 
     val hasLikes = likedWords.isNotEmpty() || likedIdioms.isNotEmpty() ||
         likedProverbs.isNotEmpty() || likedSayings.isNotEmpty()
@@ -67,127 +73,83 @@ fun HomeLikes(
                 modifier = Modifier.padding(horizontal = 10.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                items(types) { type ->
+                items(LikesTab.entries) { tab ->
                     FilterChip(
-                        selected = selectedType == type,
-                        onClick = { selectedType = type },
-                        label = { Text(type) },
+                        selected = selectedTab == tab,
+                        onClick  = { selectedTab = tab },
+                        label    = { Text(tab.label) },
                     )
                 }
             }
         }
 
-        if (selectedType == "MANENO") {
-            if (likedWords.isNotEmpty()) {
-                stickyHeader { SectionHeader(title = "Maneno uliyopenda", count = likedWords.size) }
-                items(likedWords, key = { it.rid }) { word ->
-                    WordItem(
-                        word = word,
-                        onTap = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set("word", word)
-                            navController.navigate(Routes.WORD)
-                        },
-                        onLike = { viewModel.likeWord(word) }
-                    )
-                }
-            } else {
-                item {
-                    EmptyState(
-                        title = "Hamna Vipendwa vya Maneno",
-                        message = "Bonyeza moyo kwenye neno unalopenda ili kuongeza hapa",
-                        messageIcon = Icons.Default.FavoriteBorder
-                    )
+        when (selectedTab) {
+            LikesTab.MANENO -> {
+                if (likedWords.isNotEmpty()) {
+                    stickyHeader { SectionHeader("Maneno uliyopenda", likedWords.size) }
+                    items(likedWords, key = { it.rid }) { word ->
+                        WordItem(
+                            word   = word,
+                            onTap  = {
+                                navController.currentBackStackEntry?.savedStateHandle?.set("word", word)
+                                navController.navigate(Routes.WORD)
+                            },
+                            onLike = { viewModel.likeWord(word) }
+                        )
+                    }
+                } else {
+                    item { EmptyState("Hamna Vipendwa vya Maneno", messageIcon = Icons.Default.FavoriteBorder) }
                 }
             }
-        }
-
-        if (selectedType == "IDIOMS") {
-            if (likedIdioms.isNotEmpty()) {
-                stickyHeader { SectionHeader(title = "Nahau ulizopenda", count = likedIdioms.size) }
-                items(likedIdioms, key = { it.rid }) { idiom ->
-                    IdiomItem(
-                        idiom = idiom,
-                        onTap = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                "idiom",
-                                idiom
-                            )
-                            navController.navigate(Routes.IDIOM)
-                        },
-                        onLike = { viewModel.likeIdiom(idiom) }
-                    )
-                }
-            } else {
-                item {
-                    EmptyState(
-                        title = "Hamna Vipendwa vya Nahau",
-                        message = "Bonyeza moyo kwenye nahau unayopenda ili kuongeza hapa",
-                        messageIcon = Icons.Default.FavoriteBorder
-                    )
+            LikesTab.NAHAU -> {
+                if (likedIdioms.isNotEmpty()) {
+                    stickyHeader { SectionHeader("Nahau ulizopenda", likedIdioms.size) }
+                    items(likedIdioms, key = { it.rid }) { idiom ->
+                        IdiomItem(
+                            idiom  = idiom,
+                            onTap  = {
+                                navController.currentBackStackEntry?.savedStateHandle?.set("idiom", idiom)
+                                navController.navigate(Routes.IDIOM)
+                            },
+                            onLike = { viewModel.likeIdiom(idiom) }
+                        )
+                    }
+                } else {
+                    item { EmptyState("Hamna Vipendwa vya Nahau", messageIcon = Icons.Default.FavoriteBorder) }
                 }
             }
-        }
-
-        if (selectedType == "PROVERBS") {
-            if (likedProverbs.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(
-                        title = "Methali ulizopenda",
-                        count = likedProverbs.size
-                    )
-                }
-                items(likedProverbs, key = { it.rid }) { proverb ->
-                    ProverbItem(
-                        proverb = proverb,
-                        onTap = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                "proverb",
-                                proverb
-                            )
-                            navController.navigate(Routes.PROVERB)
-                        },
-                        onLike = { viewModel.likeProverb(proverb) }
-                    )
-                }
-            } else {
-                item {
-                    EmptyState(
-                        title = "Hamna Vipendwa vya Methali",
-                        message = "Bonyeza moyo kwenye methali unayopenda ili kuongeza hapa",
-                        messageIcon = Icons.Default.FavoriteBorder
-                    )
+            LikesTab.METHALI -> {
+                if (likedProverbs.isNotEmpty()) {
+                    stickyHeader { SectionHeader("Methali ulizopenda", likedProverbs.size) }
+                    items(likedProverbs, key = { it.rid }) { proverb ->
+                        ProverbItem(
+                            proverb = proverb,
+                            onTap   = {
+                                navController.currentBackStackEntry?.savedStateHandle?.set("proverb", proverb)
+                                navController.navigate(Routes.PROVERB)
+                            },
+                            onLike  = { viewModel.likeProverb(proverb) }
+                        )
+                    }
+                } else {
+                    item { EmptyState("Hamna Vipendwa vya Methali", messageIcon = Icons.Default.FavoriteBorder) }
                 }
             }
-        }
-
-        if (selectedType == "SAYINGS") {
-            if (likedSayings.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(
-                        title = "Misemo uliyopenda",
-                        count = likedSayings.size
-                    )
-                }
-                items(likedSayings, key = { it.rid }) { saying ->
-                    SayingItem(
-                        saying = saying,
-                        onTap = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                "saying",
-                                saying
-                            )
-                            navController.navigate(Routes.SAYING)
-                        },
-                        onLike = { viewModel.likeSaying(saying) }
-                    )
-                }
-            } else {
-                item {
-                    EmptyState(
-                        title = "Hamna Vipendwa vya Misemo",
-                        message = "Bonyeza moyo kwenye msemo unaopenda ili kuongeza hapa",
-                        messageIcon = Icons.Default.FavoriteBorder
-                    )
+            LikesTab.MISEMO -> {
+                if (likedSayings.isNotEmpty()) {
+                    stickyHeader { SectionHeader("Misemo uliyopenda", likedSayings.size) }
+                    items(likedSayings, key = { it.rid }) { saying ->
+                        SayingItem(
+                            saying = saying,
+                            onTap  = {
+                                navController.currentBackStackEntry?.savedStateHandle?.set("saying", saying)
+                                navController.navigate(Routes.SAYING)
+                            },
+                            onLike = { viewModel.likeSaying(saying) }
+                        )
+                    }
+                } else {
+                    item { EmptyState("Hamna Vipendwa vya Misemo", messageIcon = Icons.Default.FavoriteBorder) }
                 }
             }
         }
