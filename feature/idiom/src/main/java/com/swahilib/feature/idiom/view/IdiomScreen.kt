@@ -56,6 +56,7 @@ fun IdiomScreen(
         topBar = {
             AppTopBar(
                 title = "Nahau ya Kiswahili",
+                tagline = "SwahiLib - Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
                 actions = {

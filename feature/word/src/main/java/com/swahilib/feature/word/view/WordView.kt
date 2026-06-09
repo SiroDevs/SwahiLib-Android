@@ -53,7 +53,6 @@ fun WordView(
                 ) {
                     if (meanings.isNotEmpty()) MeaningsView(meanings = meanings)
 
-                    // English translation — shown only when available
                     if (!english.isNullOrBlank()) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),

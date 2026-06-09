@@ -52,6 +52,7 @@ fun SayingScreen(
         topBar = {
             AppTopBar(
                 title = "Msemo wa Kiswahili",
+                tagline = "SwahiLib - Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
                 actions = {

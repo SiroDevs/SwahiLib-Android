@@ -55,6 +55,7 @@ fun WordScreen(
         topBar = {
             AppTopBar(
                 title = "Neno la Kiswahili",
+                tagline = "SwahiLib - Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
                 actions = {

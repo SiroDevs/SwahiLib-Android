@@ -36,8 +36,8 @@ import com.swahilib.feature.settings.view.SettingsScreen
 import com.swahilib.feature.howitworks.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
 import com.swahilib.feature.donation.view.DonationScreen
-import com.swahilib.feature.dailyword.view.NenoLaSikuScreen
-import com.swahilib.feature.dailyword.view.MethaliYaSikuScreen
+import com.swahilib.feature.dailyword.view.DailyWordScreen
+import com.swahilib.feature.dailyword.view.DailyProverbScreen
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -113,11 +113,11 @@ fun AppNavHost(
         }
 
         composable(Routes.NENO_LA_SIKU) {
-            NenoLaSikuScreen(navController = navController)
+            DailyWordScreen(navController = navController)
         }
 
         composable(Routes.METHALI_YA_SIKU) {
-            MethaliYaSikuScreen(navController = navController)
+            DailyProverbScreen(navController = navController)
         }
     }
 }

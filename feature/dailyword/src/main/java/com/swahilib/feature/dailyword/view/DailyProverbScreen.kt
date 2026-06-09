@@ -36,7 +36,7 @@ import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.dailyword.DailyWordViewModel
 
 @Composable
-fun MethaliYaSikuScreen(
+fun DailyProverbScreen(
     navController: NavHostController,
     viewModel: DailyWordViewModel = hiltViewModel(),
 ) {
@@ -52,6 +52,7 @@ fun MethaliYaSikuScreen(
         topBar = {
             AppTopBar(
                 title = "Methali ya Siku",
+                tagline = "SwahiLib - Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() }
             )

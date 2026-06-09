@@ -36,7 +36,7 @@ import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.dailyword.DailyWordViewModel
 
 @Composable
-fun NenoLaSikuScreen(
+fun DailyWordScreen(
     navController: NavHostController,
     viewModel: DailyWordViewModel = hiltViewModel(),
 ) {
@@ -52,6 +52,7 @@ fun NenoLaSikuScreen(
         topBar = {
             AppTopBar(
                 title = "Neno la Siku",
+                tagline = "SwahiLib - Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() }
             )
@@ -75,7 +76,6 @@ fun NenoLaSikuScreen(
                         .padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Title hero card
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
