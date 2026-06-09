@@ -1,7 +1,11 @@
 package com.swahilib.core.database
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.swahilib.core.database.daos.HistoryDao
 import com.swahilib.core.database.daos.IdiomDao
 import com.swahilib.core.database.daos.ProverbDao
@@ -22,8 +26,9 @@ import com.swahilib.core.database.model.WordEntity
         ProverbEntity::class,
         SayingEntity::class,
         SearchEntity::class,
-        WordEntity::class],
-    version = 2,
+        WordEntity::class,
+    ],
+    version = 3,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -33,4 +38,26 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun sayingsDao(): SayingDao
     abstract fun searchesDao(): SearchDao
     abstract fun wordsDao(): WordDao
+
+    companion object {
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE words ADD COLUMN english TEXT")
+            }
+        }
+
+        @Volatile private var widgetInstance: AppDatabase? = null
+
+        fun getInstanceForWidget(context: Context): AppDatabase =
+            widgetInstance ?: synchronized(this) {
+                widgetInstance ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "SwahiliLibrary"
+                )
+                    .addMigrations(MIGRATION_2_3)
+                    .build()
+                    .also { widgetInstance = it }
+            }
+    }
 }

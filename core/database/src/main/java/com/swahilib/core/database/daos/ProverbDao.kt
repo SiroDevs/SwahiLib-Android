@@ -33,4 +33,8 @@ interface ProverbDao {
 
     @Query("SELECT * FROM proverbs")
     fun getAll(): Flow<List<ProverbEntity>>
+
+    /** Returns a single random proverb for Methali-ya-Siku. */
+    @Query("SELECT * FROM proverbs WHERE title IS NOT NULL AND meaning IS NOT NULL ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomProverb(): ProverbEntity?
 }

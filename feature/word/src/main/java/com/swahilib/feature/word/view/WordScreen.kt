@@ -46,6 +46,7 @@ fun WordScreen(
     val meanings by viewModel.meanings.collectAsState()
     val synonyms by viewModel.synonyms.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
+    val english by viewModel.english.collectAsState()
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     LaunchedEffect(word) { word?.let { viewModel.loadWord(it) } }
@@ -54,6 +55,7 @@ fun WordScreen(
         topBar = {
             AppTopBar(
                 title = "Neno la Kiswahili",
+                tagline = "SwahiLib - Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
                 actions = {
@@ -82,13 +84,17 @@ fun WordScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             when (viewerState) {
-                is ViewerState.Error -> ErrorState(message = (viewerState as ViewerState.Error).message, onRetry = { })
+                is ViewerState.Error -> ErrorState(
+                    message = (viewerState as ViewerState.Error).message,
+                    onRetry = { }
+                )
                 ViewerState.Loaded -> WordView(
                     viewModel = viewModel,
                     title = title,
                     conjugation = conjugation,
                     meanings = meanings,
                     synonyms = synonyms,
+                    english = english,
                     showDonation = showDonation,
                     onShowDonation = { navController.navigate(Routes.DONATION) },
                 )

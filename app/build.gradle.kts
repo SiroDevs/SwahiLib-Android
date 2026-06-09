@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 155
-        versionName = "1.0.155"
+        versionCode = 157
+        versionName = "1.0.157"
         minSdk = 26
         targetSdk = 37
 
@@ -103,7 +103,6 @@ dependencies {
 
     // Feature modules
     implementation(project(":feature:splash"))
-    implementation(project(":feature:init"))
     implementation(project(":feature:home"))
     implementation(project(":feature:advsearch"))
     implementation(project(":feature:word"))
@@ -114,6 +113,10 @@ dependencies {
     implementation(project(":feature:howitworks"))
     implementation(project(":feature:help"))
     implementation(project(":feature:donation"))
+    implementation(project(":feature:dailyword"))
+
+    // Android Room
+    implementation(libs.androidx.room.runtime)
 
     // Navigation
     implementation(libs.compose.navigation)
@@ -127,7 +130,7 @@ dependencies {
     implementation(libs.android.billing)
     implementation(libs.androidx.concurrent.futures)
 
-    // WorkManager (Configuration.Provider in SwahiLibApp)
+    // WorkManager — initialized in SwahiLibApp with Hilt-provided Configuration
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +29,6 @@ import com.swahilib.core.ui.components.general.CollapsingHeader
 import com.swahilib.core.ui.components.general.MeaningsView
 import com.swahilib.core.ui.components.listitems.SynonymItem
 import com.swahilib.feature.word.WordViewModel
-import kotlin.collections.forEach
 
 @Composable
 fun WordView(
@@ -38,6 +38,7 @@ fun WordView(
     conjugation: String,
     meanings: List<String>,
     synonyms: List<WordEntity>,
+    english: String? = null,
     showDonation: Boolean = false,
     onShowDonation: () -> Unit = {},
 ) {
@@ -46,14 +47,44 @@ fun WordView(
         LazyColumn(state = scrollState) {
             item { CollapsingHeader(title = title) }
             item {
-                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
                     if (meanings.isNotEmpty()) MeaningsView(meanings = meanings)
+
+                    if (!english.isNullOrBlank()) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                            )
+                        ) {
+                            Column(modifier = Modifier.padding(14.dp)) {
+                                Text(
+                                    text = "ENGLISH",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                    letterSpacing = 1.5.sp
+                                )
+                                Spacer(Modifier.height(6.dp))
+                                Text(
+                                    text = english,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                )
+                            }
+                        }
+                    }
 
                     if (conjugation.isNotEmpty()) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                            )
                         ) {
                             Column(modifier = Modifier.padding(14.dp)) {
                                 Text(
@@ -65,7 +96,9 @@ fun WordView(
                                 Spacer(Modifier.height(6.dp))
                                 Text(
                                     text = conjugation,
-                                    style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontStyle = FontStyle.Italic
+                                    ),
                                     color = MaterialTheme.colorScheme.onSecondaryContainer
                                 )
                             }
@@ -76,7 +109,9 @@ fun WordView(
                         Column {
                             Text(
                                 text = if (synonyms.size == 1) "KISAWE" else "VISAWE (${synonyms.size})",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
                                 color = MaterialTheme.colorScheme.primary
                             )
                             Spacer(Modifier.height(8.dp))

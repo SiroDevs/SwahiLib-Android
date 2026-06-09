@@ -59,6 +59,7 @@ object MapDtoToEntity {
             likes = entity.likes,
             createdAt = entity.createdAt,
             updatedAt = entity.updatedAt,
+            english = entity.english,
         )
     }
 }

@@ -41,6 +41,7 @@ fun ProverbScreen(
         topBar = {
             AppTopBar(
                 title = "Methali ya Kiswahili",
+                tagline = "SwahiLib - Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
                 actions = {

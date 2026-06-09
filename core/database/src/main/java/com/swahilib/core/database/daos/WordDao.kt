@@ -25,7 +25,23 @@ interface WordDao {
     @Query("DELETE FROM words")
     fun delete()
 
-    @Query("SELECT * FROM words WHERE title LIKE '%' || :title || '%'")
+    /**
+     * Exact-match-first search:
+     *  Priority 0 – title exactly equals query
+     *  Priority 1 – title starts with query
+     *  Priority 2 – title contains query elsewhere
+     */
+    @Query("""
+        SELECT * FROM words
+        WHERE title LIKE '%' || :title || '%'
+        ORDER BY
+            CASE
+                WHEN LOWER(title) = LOWER(:title)         THEN 0
+                WHEN LOWER(title) LIKE LOWER(:title) || '%' THEN 1
+                ELSE 2
+            END,
+            title ASC
+    """)
     fun searchWordByTitle(title: String?): Flow<List<WordEntity>>
 
     @Query("SELECT * FROM words WHERE title IN (:titles)")
@@ -33,4 +49,8 @@ interface WordDao {
 
     @Query("SELECT * FROM words")
     fun getAll(): Flow<List<WordEntity>>
+
+    /** Returns a single random word for Word-of-the-Day. */
+    @Query("SELECT * FROM words WHERE title IS NOT NULL AND meaning IS NOT NULL ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomWord(): WordEntity?
 }

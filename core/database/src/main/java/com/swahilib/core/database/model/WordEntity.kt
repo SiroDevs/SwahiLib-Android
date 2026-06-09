@@ -25,4 +25,5 @@ data class WordEntity(
     @ColumnInfo(name = "liked") val liked: Boolean = false,
     @ColumnInfo(name = "createdAt") val createdAt: String? = null,
     @ColumnInfo(name = "updatedAt") val updatedAt: String? = null,
+    @ColumnInfo(name = "english") val english: String? = null,
 ) : Parcelable

@@ -1,5 +1,6 @@
 package com.swahilib.core.network.dtos
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,4 +14,5 @@ data class WordDto(
     val likes: Int = 0,
     val createdAt: String? = null,
     val updatedAt: String? = null,
+    val english: String? = null,
 )
