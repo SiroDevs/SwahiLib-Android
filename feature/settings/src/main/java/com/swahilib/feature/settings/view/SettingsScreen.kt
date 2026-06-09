@@ -102,7 +102,6 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            // ── Appearance ────────────────────────────────────────────────
             SettingsSectionTitle("Mwonekano")
             ListItem(
                 leadingContent = { Icon(Icons.Default.Brightness6, contentDescription = null) },
@@ -112,7 +111,6 @@ fun SettingsScreen(
             )
             HorizontalDivider()
 
-            // ── Neno la Siku ──────────────────────────────────────────────
             SettingsSectionTitle("Neno la Siku")
             ListItem(
                 leadingContent = {
@@ -145,7 +143,6 @@ fun SettingsScreen(
             }
             HorizontalDivider()
 
-            // ── Methali ya Siku ───────────────────────────────────────────
             SettingsSectionTitle("Methali ya Siku")
             ListItem(
                 leadingContent = {
@@ -178,17 +175,15 @@ fun SettingsScreen(
             }
             HorizontalDivider()
 
-            // ── Donation ──────────────────────────────────────────────────
-            SettingsSectionTitle("Changia SwahiLib")
-            ListItem(
-                leadingContent = { Icon(Icons.Default.VolunteerActivism, contentDescription = null) },
-                headlineContent  = { Text("Changa Hivi Sasa") },
-                supportingContent = { Text("Tunahitaji mchango wako ili tuzidi kukuhudumia") },
-                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
-            )
-            HorizontalDivider()
+//            SettingsSectionTitle("Changia SwahiLib")
+//            ListItem(
+//                leadingContent = { Icon(Icons.Default.VolunteerActivism, contentDescription = null) },
+//                headlineContent  = { Text("Changa Hivi Sasa") },
+//                supportingContent = { Text("Tunahitaji mchango wako ili tuzidi kukuhudumia") },
+//                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
+//            )
+//            HorizontalDivider()
 
-            // ── Data ──────────────────────────────────────────────────────
             SettingsSectionTitle("Data")
             ListItem(
                 headlineContent = {

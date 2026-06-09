@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 155
-        versionName = "1.0.155"
+        versionCode = 160
+        versionName = "1.0.160"
         minSdk = 26
         targetSdk = 37
 
@@ -115,6 +115,9 @@ dependencies {
     implementation(project(":feature:help"))
     implementation(project(":feature:donation"))
     implementation(project(":feature:dailyword"))
+
+    // Android Room
+    implementation(libs.androidx.room.runtime)
 
     // Navigation
     implementation(libs.compose.navigation)
