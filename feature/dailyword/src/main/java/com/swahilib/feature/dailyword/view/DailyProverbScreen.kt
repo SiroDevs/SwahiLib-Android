@@ -11,12 +11,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,111 +36,157 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
+import com.swahilib.core.ui.components.share.ShareData
+import com.swahilib.core.ui.components.share.ShareFab
+import com.swahilib.core.ui.components.share.ShareSheet
 import com.swahilib.feature.dailyword.DailyWordViewModel
+import com.swahilib.feature.proverb.ProverbViewModel
+import com.swahilib.feature.proverb.view.ProverbScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyProverbScreen(
     navController: NavHostController,
+    prefsRepo: PrefsRepo,
     viewModel: DailyWordViewModel = hiltViewModel(),
+    proverbViewModel: ProverbViewModel = hiltViewModel(),
 ) {
     var proverb by remember { mutableStateOf<ProverbEntity?>(null) }
     var loading by remember { mutableStateOf(true) }
+    var showFullInfo by remember { mutableStateOf(false) }
+    var showShareSheet by remember { mutableStateOf(false) }
+
+    val fullInfoSheetState = rememberModalBottomSheetState(skipPartialExpansion = true)
+    val shareSheetState = rememberModalBottomSheetState(skipPartialExpansion = true)
 
     LaunchedEffect(Unit) {
         proverb = viewModel.getRandomProverb()
         loading = false
     }
 
+    // Stable single random meaning for this session
+    // ProverbViewModel splits on "#"; the raw entity has "|"-separated meanings
+    val singleMeaning = remember(proverb) {
+        proverb?.meaning
+            ?.split("|", "#")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.randomOrNull() ?: ""
+    }
+
+    val shareData = remember(proverb, singleMeaning) {
+        proverb?.let {
+            ShareData(
+                emoji = "🌿",
+                typeLabel = "Methali",
+                title = it.title ?: "",
+                meaning = singleMeaning,
+                textToShare = "\"${it.title}\"\n\n$singleMeaning\n\n— SwahiLib · Kamusi ya Kiswahili",
+            )
+        }
+    }
+
+    if (proverb != null) ScreenshotReminderDialog(onShareClick = { showShareSheet = true })
+
     Scaffold(
         topBar = {
             AppTopBar(
                 title = "Methali ya Siku",
-                tagline = "SwahiLib - Kamusi ya Kiswahili",
+                tagline = "SwahiLib · Kamusi ya Kiswahili",
                 showGoBack = true,
-                onNavIconClick = { navController.popBackStack() }
+                onNavIconClick = { navController.popBackStack() },
             )
-        }
+        },
+        floatingActionButton = {
+            if (proverb != null) ShareFab(onClick = { showShareSheet = true })
+        },
     ) { padding ->
         Box(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.padding(padding).fillMaxSize(),
+            contentAlignment = Alignment.Center,
         ) {
-            if (loading) {
-                CircularProgressIndicator()
-            } else if (proverb == null) {
-                Text("Hakuna methali iliyopatikana.", style = MaterialTheme.typography.bodyLarge)
-            } else {
-                Column(
+            when {
+                loading -> CircularProgressIndicator()
+                proverb == null -> Text("Hakuna methali iliyopatikana.", style = MaterialTheme.typography.bodyLarge)
+                else -> Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                         .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    // Proverb hero card
+                    // ── Proverb hero card ──
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
-                        ),
-                        elevation = CardDefaults.cardElevation(4.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                        elevation = CardDefaults.cardElevation(4.dp),
                     ) {
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            modifier = Modifier.fillMaxWidth().padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            Text(text = "🌿", fontSize = 40.sp)
+                            Text("🌿", fontSize = 40.sp)
                             Spacer(Modifier.height(12.dp))
                             Text(
                                 text = "\"${proverb!!.title}\"",
                                 style = MaterialTheme.typography.headlineSmall.copy(
                                     fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Italic
+                                    fontStyle = FontStyle.Italic,
                                 ),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
                         }
                     }
 
-                    // Meaning
-                    val meanings = proverb!!.meaning
-                        ?.split("|")
-                        ?.map { it.trim() }
-                        ?.filter { it.isNotEmpty() }
-                        ?: emptyList()
-
-                    if (meanings.isNotEmpty()) {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                        ) {
+                    // ── One random meaning ──
+                    if (singleMeaning.isNotEmpty()) {
+                        Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
-                                    text = "MAANA",
+                                    "MAANA",
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.primary,
-                                    letterSpacing = 1.5.sp
+                                    letterSpacing = 1.5.sp,
                                 )
                                 Spacer(Modifier.height(8.dp))
-                                meanings.forEachIndexed { idx, m ->
-                                    Text(
-                                        text = if (meanings.size > 1) "${idx + 1}. $m" else m,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        modifier = Modifier.padding(bottom = 4.dp)
-                                    )
-                                }
+                                Text(singleMeaning, style = MaterialTheme.typography.bodyLarge)
                             }
                         }
                     }
+
+                    // ── More info button ──
+                    Button(
+                        onClick = { showFullInfo = true },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                    ) { Text("Tazama Maelezo Zaidi") }
                 }
             }
+        }
+
+        if (showFullInfo) {
+            ModalBottomSheet(
+                onDismissRequest = { showFullInfo = false },
+                sheetState = fullInfoSheetState,
+                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                dragHandle = { BottomSheetDefaults.DragHandle() },
+            ) {
+                ProverbScreen(
+                    navController = navController,
+                    viewModel = proverbViewModel,
+                    proverb = proverb,
+                    prefsRepo = prefsRepo,
+                )
+            }
+        }
+
+        if (showShareSheet && shareData != null) {
+            ShareSheet(shareData = shareData, sheetState = shareSheetState, onDismiss = { showShareSheet = false })
         }
     }
 }

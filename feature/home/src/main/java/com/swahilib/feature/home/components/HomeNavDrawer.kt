@@ -89,14 +89,14 @@ fun HomeNavDrawer(
                     icon = { Icon(Icons.Default.AutoStories, contentDescription = null) },
                     label = { Text("Neno la Siku") },
                     selected = false,
-                    onClick = { navigateAndClose(Routes.NENO_LA_SIKU) },
+                    onClick = { navigateAndClose(Routes.DAILY_WORD) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.FormatQuote, contentDescription = null) },
                     label = { Text("Methali ya Siku") },
                     selected = false,
-                    onClick = { navigateAndClose(Routes.METHALI_YA_SIKU) },
+                    onClick = { navigateAndClose(Routes.DAILY_PROVERB) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
 

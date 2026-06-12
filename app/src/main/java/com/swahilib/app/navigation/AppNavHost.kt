@@ -63,11 +63,7 @@ fun AppNavHost(
 
         composable(Routes.HOME) {
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen(
-                viewModel = viewModel,
-                navController = navController,
-                prefsRepo = prefsRepo,
-            )
+            HomeScreen(viewModel = viewModel, navController = navController, prefsRepo = prefsRepo)
         }
 
         composable(Routes.IDIOM) {
@@ -112,12 +108,12 @@ fun AppNavHost(
             DonationScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(Routes.NENO_LA_SIKU) {
-            DailyWordScreen(navController = navController)
+        composable(Routes.DAILY_WORD) {
+            DailyWordScreen(navController = navController, prefsRepo = prefsRepo)
         }
 
-        composable(Routes.METHALI_YA_SIKU) {
-            DailyProverbScreen(navController = navController)
+        composable(Routes.DAILY_PROVERB) {
+            DailyProverbScreen(navController = navController, prefsRepo = prefsRepo)
         }
     }
 }

@@ -17,7 +17,7 @@ import com.swahilib.core.common.R
 import dagger.assisted.AssistedInject
 
 @HiltWorker
-class MethaliYaSikuWorker @AssistedInject constructor(
+class DailyProverbWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
     private val proverbRepo: ProverbRepo,

@@ -40,7 +40,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Home widget: small (4x1) shows Neno la Siku, large (4x2) shows Methali ya Siku -->
         <receiver
             android:name=".widget.SwahiLibWidgetReceiver"
             android:exported="true"
@@ -52,6 +51,16 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/swahilib_widget_info" />
         </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
 
         <meta-data android:name="io.sentry.dsn" android:value="https://5d37028f997b42e29ffd7286854acf72@o1365314.ingest.us.sentry.io/4504651527356416" />
         <meta-data android:name="io.sentry.send-default-pii" android:value="true" />

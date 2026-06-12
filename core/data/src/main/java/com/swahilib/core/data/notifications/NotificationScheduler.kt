@@ -20,7 +20,7 @@ object NotificationScheduler {
             wm.cancelUniqueWork(NotifConstants.WORK_WORD)
             return
         }
-        val request = PeriodicWorkRequestBuilder<NenoLaSikuWorker>(1, TimeUnit.DAYS)
+        val request = PeriodicWorkRequestBuilder<DailyWordWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(delayUntil(hour, minute), TimeUnit.MILLISECONDS)
             .build()
         wm.enqueueUniquePeriodicWork(
@@ -40,7 +40,7 @@ object NotificationScheduler {
             wm.cancelUniqueWork(NotifConstants.WORK_PROVERB)
             return
         }
-        val request = PeriodicWorkRequestBuilder<MethaliYaSikuWorker>(1, TimeUnit.DAYS)
+        val request = PeriodicWorkRequestBuilder<DailyWordWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(delayUntil(hour, minute), TimeUnit.MILLISECONDS)
             .build()
         wm.enqueueUniquePeriodicWork(

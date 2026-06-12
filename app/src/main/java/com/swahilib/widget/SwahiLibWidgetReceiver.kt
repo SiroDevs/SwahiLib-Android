@@ -12,13 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-/**
- * Home-screen widget.
- *  - Small (height < 110dp, ~1 cell): Neno la Siku
- *  - Large (height ≥ 110dp, ~2+ cells): Methali ya Siku
- *
- * Tapping the widget opens the app.
- */
 class SwahiLibWidgetReceiver : AppWidgetProvider() {
 
     override fun onUpdate(
@@ -35,7 +28,6 @@ class SwahiLibWidgetReceiver : AppWidgetProvider() {
             val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 40)
             val isLarge   = minHeight >= 110
 
-            // Tap opens the app
             val launchIntent = context.packageManager
                 .getLaunchIntentForPackage(context.packageName)
                 ?.apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
@@ -54,15 +46,24 @@ class SwahiLibWidgetReceiver : AppWidgetProvider() {
                     val proverb = db.proverbsDao().getRandomProverb()
                     views.setTextViewText(R.id.widget_label, "🌿 Methali ya Siku")
                     views.setTextViewText(R.id.widget_title, proverb?.title ?: "—")
+                    // ONE random meaning — split on "|" or "#"
                     val meaning = proverb?.meaning
-                        ?.split("|")?.firstOrNull()?.trim() ?: ""
+                        ?.split("|", "#")
+                        ?.map { it.trim() }
+                        ?.filter { it.isNotEmpty() }
+                        ?.randomOrNull() ?: ""
                     views.setTextViewText(R.id.widget_meaning, meaning)
                 } else {
                     val word = db.wordsDao().getRandomWord()
                     views.setTextViewText(R.id.widget_label, "📖 Neno la Siku")
                     views.setTextViewText(R.id.widget_title, word?.title ?: "—")
+                    // ONE random meaning — split on "|"
                     val meaning = word?.meaning
-                        ?.split("|")?.firstOrNull()?.trim()?.take(100) ?: ""
+                        ?.split("|")
+                        ?.map { it.trim() }
+                        ?.filter { it.isNotEmpty() }
+                        ?.randomOrNull()
+                        ?.take(120) ?: ""
                     views.setTextViewText(R.id.widget_meaning, meaning)
                 }
 

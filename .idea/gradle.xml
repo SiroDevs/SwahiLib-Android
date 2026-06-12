@@ -34,12 +34,12 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/advsearch" />
+            <option value="$PROJECT_DIR$/feature/dailyword" />
             <option value="$PROJECT_DIR$/feature/donation" />
             <option value="$PROJECT_DIR$/feature/help" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/howitworks" />
             <option value="$PROJECT_DIR$/feature/idiom" />
-            <option value="$PROJECT_DIR$/feature/init" />
             <option value="$PROJECT_DIR$/feature/proverb" />
             <option value="$PROJECT_DIR$/feature/saying" />
             <option value="$PROJECT_DIR$/feature/settings" />
