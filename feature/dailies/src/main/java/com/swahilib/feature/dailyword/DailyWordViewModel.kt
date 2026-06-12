@@ -1,4 +1,4 @@
-package com.swahilib.feature.dailyword
+package com.swahilib.feature.dailies
 
 import androidx.lifecycle.ViewModel
 import com.swahilib.core.data.repos.ProverbRepo

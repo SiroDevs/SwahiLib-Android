@@ -36,8 +36,8 @@ import com.swahilib.feature.settings.view.SettingsScreen
 import com.swahilib.feature.howitworks.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
 import com.swahilib.feature.donation.view.DonationScreen
-import com.swahilib.feature.dailyword.view.DailyWordScreen
-import com.swahilib.feature.dailyword.view.DailyProverbScreen
+import com.swahilib.feature.dailies.view.DailyWordScreen
+import com.swahilib.feature.dailies.view.DailyProverbScreen
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable

@@ -56,11 +56,10 @@ fun ProverbScreen(
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     var showShareSheet by remember { mutableStateOf(false) }
-    val shareSheetState = rememberModalBottomSheetState(skipPartialExpansion = true)
+    val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(proverb) { proverb?.let { viewModel.loadProverb(it) } }
 
-    // Pick ONE random meaning for the share card; stable per load
     val shareData = remember(title, meanings) {
         if (title.isNotBlank() && meanings.isNotEmpty()) {
             ShareData(

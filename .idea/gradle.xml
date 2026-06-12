@@ -34,7 +34,7 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/advsearch" />
-            <option value="$PROJECT_DIR$/feature/dailyword" />
+            <option value="$PROJECT_DIR$/feature/dailies" />
             <option value="$PROJECT_DIR$/feature/donation" />
             <option value="$PROJECT_DIR$/feature/help" />
             <option value="$PROJECT_DIR$/feature/home" />

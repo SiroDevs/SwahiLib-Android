@@ -113,7 +113,7 @@ dependencies {
     implementation(project(":feature:howitworks"))
     implementation(project(":feature:help"))
     implementation(project(":feature:donation"))
-    implementation(project(":feature:dailyword"))
+    implementation(project(":feature:dailies"))
 
     // Android Room
     implementation(libs.androidx.room.runtime)

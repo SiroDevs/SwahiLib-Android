@@ -54,7 +54,7 @@ fun IdiomScreen(
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     var showShareSheet by remember { mutableStateOf(false) }
-    val shareSheetState = rememberModalBottomSheetState(skipPartialExpansion = true)
+    val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(idiom) { idiom?.let { viewModel.loadIdiom(it) } }
 

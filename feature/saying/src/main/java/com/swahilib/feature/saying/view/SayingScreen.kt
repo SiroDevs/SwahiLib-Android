@@ -54,7 +54,7 @@ fun SayingScreen(
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     var showShareSheet by remember { mutableStateOf(false) }
-    val shareSheetState = rememberModalBottomSheetState(skipPartialExpansion = true)
+    val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(saying) { saying?.let { viewModel.loadSaying(it) } }
 
