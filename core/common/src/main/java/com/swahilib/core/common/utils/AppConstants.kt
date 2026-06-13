@@ -29,13 +29,13 @@ object PrefConstants {
     const val DONATION_REMIND_NEXT_OPEN = "donation_remind_next"
     const val LAST_SYNCED_AT = "last_synced_at"
 
-    // Notification preferences
     const val NOTIF_WORD_ENABLED = "notif_word_enabled"
     const val NOTIF_WORD_HOUR = "notif_word_hour"
     const val NOTIF_WORD_MINUTE = "notif_word_minute"
     const val NOTIF_PROVERB_ENABLED = "notif_proverb_enabled"
     const val NOTIF_PROVERB_HOUR = "notif_proverb_hour"
     const val NOTIF_PROVERB_MINUTE = "notif_proverb_minute"
+    const val NOTIF_BANNER_DISMISSED = "notif_banner_dismissed"
 }
 
 object NotifConstants {
@@ -67,3 +67,4 @@ object Routes {
     const val DAILY_WORD = "daily_word"
     const val DAILY_PROVERB = "daily_proverb"
 }
+

@@ -2,6 +2,7 @@ package com.swahilib.feature.home.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -31,6 +32,7 @@ import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.core.ui.components.indicators.LoadingState
@@ -110,45 +112,53 @@ fun HomeScreen(
                 }
             }
         ) { paddingValues ->
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-                contentAlignment = Alignment.Center,
             ) {
-                when (uiState) {
-                    is UiState.Filtered -> {
-                        HorizontalPager(
-                            state = pagerState,
-                            modifier = Modifier.fillMaxSize(),
-                            userScrollEnabled = true,
-                        ) { page ->
-                            when (homeTabs[page]) {
-                                HomeTab.Search -> HomeSearch(
-                                    viewModel = viewModel,
-                                    navController = navController,
-                                    prefsRepo = prefsRepo,
-                                    onShowDonation = { navController.navigate(Routes.DONATION) },
-                                )
-                                HomeTab.Likes -> HomeLikes(
-                                    viewModel = viewModel,
-                                    navController = navController,
-                                )
-                                HomeTab.History -> HomeHistory(
-                                    viewModel = viewModel,
-                                    navController = navController,
-                                )
+                NotificationReminderBanner(
+                    prefsRepo = prefsRepo,
+                    onGoToSettings = { navController.navigate(Routes.SETTINGS) },
+                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    when (uiState) {
+                        is UiState.Filtered -> {
+                            HorizontalPager(
+                                state = pagerState,
+                                modifier = Modifier.fillMaxSize(),
+                                userScrollEnabled = true,
+                            ) { page ->
+                                when (homeTabs[page]) {
+                                    HomeTab.Search -> HomeSearch(
+                                        viewModel = viewModel,
+                                        navController = navController,
+                                        prefsRepo = prefsRepo,
+                                        onShowDonation = { navController.navigate(Routes.DONATION) },
+                                    )
+                                    HomeTab.Likes -> HomeLikes(
+                                        viewModel = viewModel,
+                                        navController = navController,
+                                    )
+                                    HomeTab.History -> HomeHistory(
+                                        viewModel = viewModel,
+                                        navController = navController,
+                                    )
+                                }
                             }
                         }
+                        is UiState.Error -> ErrorState(
+                            message = (uiState as UiState.Error).message,
+                            onRetry = { viewModel.fetchData() }
+                        )
+                        UiState.Loading -> LoadingState(fileName = "circle-loader")
+                        else -> EmptyState()
                     }
-                    is UiState.Error -> ErrorState(
-                        message = (uiState as UiState.Error).message,
-                        onRetry = { viewModel.fetchData() }
-                    )
-                    UiState.Loading -> LoadingState(fileName = "circle-loader")
-                    else -> EmptyState()
-                }
-            }
+                } // Box
+            } // Column
         }
     }
 }

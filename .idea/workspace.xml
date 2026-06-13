@@ -22,9 +22,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/general/NotificationReminderBanner.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/SwahiLibApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/SwahiLibApp.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/NotificationScheduler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/NotificationScheduler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailyword/DailyWordViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/DailyWordViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailyword/view/DailyProverbScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/view/DailyProverbScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailyword/view/DailyWordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/view/DailyWordScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/SettingsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/SettingsViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +41,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=GUIF6PMR4LPZ4D5H]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/sirodaves/.android/avd/Medium_Phone.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
