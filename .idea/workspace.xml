@@ -22,16 +22,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/general/NotificationReminderBanner.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/SwahiLibApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/SwahiLibApp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/NotificationScheduler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/NotificationScheduler.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailyword/DailyWordViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/DailyWordViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailyword/view/DailyProverbScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/view/DailyProverbScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailyword/view/DailyWordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/view/DailyWordScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/SettingsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/SettingsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,12 +188,6 @@
       <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" IS_LOCATION_SIMULATION_SUPPORTED="false" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" DEVELOPMENT_TEAM="${TEAM_ID}" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
-      <embedded_app_extension_list />
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
