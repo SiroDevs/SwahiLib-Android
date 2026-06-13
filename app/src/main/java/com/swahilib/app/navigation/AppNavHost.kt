@@ -36,8 +36,8 @@ import com.swahilib.feature.settings.view.SettingsScreen
 import com.swahilib.feature.howitworks.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
 import com.swahilib.feature.donation.view.DonationScreen
-import com.swahilib.feature.dailyword.view.DailyWordScreen
-import com.swahilib.feature.dailyword.view.DailyProverbScreen
+import com.swahilib.feature.dailies.view.DailyWordScreen
+import com.swahilib.feature.dailies.view.DailyProverbScreen
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -63,11 +63,7 @@ fun AppNavHost(
 
         composable(Routes.HOME) {
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen(
-                viewModel = viewModel,
-                navController = navController,
-                prefsRepo = prefsRepo,
-            )
+            HomeScreen(viewModel = viewModel, navController = navController, prefsRepo = prefsRepo)
         }
 
         composable(Routes.IDIOM) {
@@ -112,12 +108,12 @@ fun AppNavHost(
             DonationScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(Routes.NENO_LA_SIKU) {
-            DailyWordScreen(navController = navController)
+        composable(Routes.DAILY_WORD) {
+            DailyWordScreen(navController = navController, prefsRepo = prefsRepo)
         }
 
-        composable(Routes.METHALI_YA_SIKU) {
-            DailyProverbScreen(navController = navController)
+        composable(Routes.DAILY_PROVERB) {
+            DailyProverbScreen(navController = navController, prefsRepo = prefsRepo)
         }
     }
 }

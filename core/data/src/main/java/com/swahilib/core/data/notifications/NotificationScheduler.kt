@@ -10,17 +10,13 @@ import java.util.concurrent.TimeUnit
 
 object NotificationScheduler {
 
-    /**
-     * Schedules (or re-schedules) the Neno la Siku daily notification.
-     * Pass [enabled] = false to cancel it.
-     */
-    fun scheduleNenoLaSiku(context: Context, enabled: Boolean, hour: Int, minute: Int) {
+    fun scheduleDailyWord(context: Context, enabled: Boolean, hour: Int, minute: Int) {
         val wm = WorkManager.getInstance(context)
         if (!enabled) {
             wm.cancelUniqueWork(NotifConstants.WORK_WORD)
             return
         }
-        val request = PeriodicWorkRequestBuilder<NenoLaSikuWorker>(1, TimeUnit.DAYS)
+        val request = PeriodicWorkRequestBuilder<DailyWordWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(delayUntil(hour, minute), TimeUnit.MILLISECONDS)
             .build()
         wm.enqueueUniquePeriodicWork(
@@ -30,17 +26,13 @@ object NotificationScheduler {
         )
     }
 
-    /**
-     * Schedules (or re-schedules) the Methali ya Siku daily notification.
-     * Pass [enabled] = false to cancel it.
-     */
-    fun scheduleMethaliYaSiku(context: Context, enabled: Boolean, hour: Int, minute: Int) {
+    fun scheduleDailyProverb(context: Context, enabled: Boolean, hour: Int, minute: Int) {
         val wm = WorkManager.getInstance(context)
         if (!enabled) {
             wm.cancelUniqueWork(NotifConstants.WORK_PROVERB)
             return
         }
-        val request = PeriodicWorkRequestBuilder<MethaliYaSikuWorker>(1, TimeUnit.DAYS)
+        val request = PeriodicWorkRequestBuilder<DailyProverbWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(delayUntil(hour, minute), TimeUnit.MILLISECONDS)
             .build()
         wm.enqueueUniquePeriodicWork(
@@ -50,7 +42,6 @@ object NotificationScheduler {
         )
     }
 
-    /** Computes milliseconds until the next occurrence of [hour]:[minute]. */
     private fun delayUntil(hour: Int, minute: Int): Long {
         val now = Calendar.getInstance()
         val target = Calendar.getInstance().apply {

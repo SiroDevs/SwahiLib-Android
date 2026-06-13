@@ -26,17 +26,17 @@ class SwahiLibApp : Application() {
     }
 
     private fun scheduleNotifications() {
-        NotificationScheduler.scheduleNenoLaSiku(
+        NotificationScheduler.scheduleDailyWord(
             context = this,
-            enabled = prefsRepo.nenoNotifEnabled,
-            hour    = prefsRepo.nenoNotifHour,
-            minute  = prefsRepo.nenoNotifMinute,
+            enabled = prefsRepo.wordNotifEnabled,
+            hour    = prefsRepo.wordNotifHour,
+            minute  = prefsRepo.wordNotifMinute,
         )
-        NotificationScheduler.scheduleMethaliYaSiku(
+        NotificationScheduler.scheduleDailyProverb(
             context = this,
-            enabled = prefsRepo.methaliNotifEnabled,
-            hour    = prefsRepo.methaliNotifHour,
-            minute  = prefsRepo.methaliNotifMinute,
+            enabled = prefsRepo.proverbNotifEnabled,
+            hour    = prefsRepo.proverbNotifHour,
+            minute  = prefsRepo.proverbNotifMinute,
         )
     }
 }

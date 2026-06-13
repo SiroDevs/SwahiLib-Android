@@ -20,54 +20,54 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
 
     // ── Neno la Siku ──────────────────────────────────────────────────────
-    private val _nenoEnabled = MutableStateFlow(prefsRepo.nenoNotifEnabled)
+    private val _nenoEnabled = MutableStateFlow(prefsRepo.wordNotifEnabled)
     val nenoEnabled: StateFlow<Boolean> = _nenoEnabled.asStateFlow()
 
-    private val _nenoHour = MutableStateFlow(prefsRepo.nenoNotifHour)
+    private val _nenoHour = MutableStateFlow(prefsRepo.wordNotifHour)
     val nenoHour: StateFlow<Int> = _nenoHour.asStateFlow()
 
-    private val _nenoMinute = MutableStateFlow(prefsRepo.nenoNotifMinute)
+    private val _nenoMinute = MutableStateFlow(prefsRepo.wordNotifMinute)
     val nenoMinute: StateFlow<Int> = _nenoMinute.asStateFlow()
 
     // ── Methali ya Siku ───────────────────────────────────────────────────
-    private val _methaliEnabled = MutableStateFlow(prefsRepo.methaliNotifEnabled)
+    private val _methaliEnabled = MutableStateFlow(prefsRepo.proverbNotifEnabled)
     val methaliEnabled: StateFlow<Boolean> = _methaliEnabled.asStateFlow()
 
-    private val _methaliHour = MutableStateFlow(prefsRepo.methaliNotifHour)
+    private val _methaliHour = MutableStateFlow(prefsRepo.proverbNotifHour)
     val methaliHour: StateFlow<Int> = _methaliHour.asStateFlow()
 
-    private val _methaliMinute = MutableStateFlow(prefsRepo.methaliNotifMinute)
+    private val _methaliMinute = MutableStateFlow(prefsRepo.proverbNotifMinute)
     val methaliMinute: StateFlow<Int> = _methaliMinute.asStateFlow()
 
     fun setNenoEnabled(enabled: Boolean) {
         _nenoEnabled.value = enabled
-        prefsRepo.nenoNotifEnabled = enabled
-        NotificationScheduler.scheduleNenoLaSiku(context, enabled, _nenoHour.value, _nenoMinute.value)
+        prefsRepo.wordNotifEnabled = enabled
+        NotificationScheduler.scheduleDailyWord(context, enabled, _nenoHour.value, _nenoMinute.value)
     }
 
     fun setNenoTime(hour: Int, minute: Int) {
         _nenoHour.value = hour
         _nenoMinute.value = minute
-        prefsRepo.nenoNotifHour = hour
-        prefsRepo.nenoNotifMinute = minute
+        prefsRepo.wordNotifHour = hour
+        prefsRepo.wordNotifMinute = minute
         if (_nenoEnabled.value) {
-            NotificationScheduler.scheduleNenoLaSiku(context, true, hour, minute)
+            NotificationScheduler.scheduleDailyWord(context, true, hour, minute)
         }
     }
 
     fun setMethaliEnabled(enabled: Boolean) {
         _methaliEnabled.value = enabled
-        prefsRepo.methaliNotifEnabled = enabled
-        NotificationScheduler.scheduleMethaliYaSiku(context, enabled, _methaliHour.value, _methaliMinute.value)
+        prefsRepo.proverbNotifEnabled = enabled
+        NotificationScheduler.scheduleDailyProverb(context, enabled, _methaliHour.value, _methaliMinute.value)
     }
 
     fun setMethaliTime(hour: Int, minute: Int) {
         _methaliHour.value = hour
         _methaliMinute.value = minute
-        prefsRepo.methaliNotifHour = hour
-        prefsRepo.methaliNotifMinute = minute
+        prefsRepo.proverbNotifHour = hour
+        prefsRepo.proverbNotifMinute = minute
         if (_methaliEnabled.value) {
-            NotificationScheduler.scheduleMethaliYaSiku(context, true, hour, minute)
+            NotificationScheduler.scheduleDailyProverb(context, true, hour, minute)
         }
     }
 

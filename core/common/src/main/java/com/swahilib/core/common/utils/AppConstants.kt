@@ -29,24 +29,24 @@ object PrefConstants {
     const val DONATION_REMIND_NEXT_OPEN = "donation_remind_next"
     const val LAST_SYNCED_AT = "last_synced_at"
 
-    // Notification preferences
     const val NOTIF_WORD_ENABLED = "notif_word_enabled"
     const val NOTIF_WORD_HOUR = "notif_word_hour"
     const val NOTIF_WORD_MINUTE = "notif_word_minute"
     const val NOTIF_PROVERB_ENABLED = "notif_proverb_enabled"
     const val NOTIF_PROVERB_HOUR = "notif_proverb_hour"
     const val NOTIF_PROVERB_MINUTE = "notif_proverb_minute"
+    const val NOTIF_BANNER_DISMISSED = "notif_banner_dismissed"
 }
 
 object NotifConstants {
     const val CHANNEL_WORD_ID = "swahilib_word_of_day"
     const val CHANNEL_PROVERB_ID = "swahilib_proverb_of_day"
-    const val CHANNEL_WORD_NAME = "Neno la Siku"
-    const val CHANNEL_PROVERB_NAME = "Methali ya Siku"
+    const val CHANNEL_WORD_NAME = "Word of the Day"
+    const val CHANNEL_PROVERB_NAME = "Proverb of the Day"
     const val NOTIF_WORD_ID = 1001
     const val NOTIF_PROVERB_ID = 1002
-    const val WORK_WORD = "work_neno_la_siku"
-    const val WORK_PROVERB = "work_methali_ya_siku"
+    const val WORK_WORD = "work_daily_word"
+    const val WORK_PROVERB = "work_daily_proverb"
     const val DEFAULT_HOUR = 7
     const val DEFAULT_MINUTE = 0
 }
@@ -64,6 +64,7 @@ object Routes {
     const val HOW_IT_WORKS = "how_it_works"
     const val HELP = "help"
     const val DONATION = "donation"
-    const val NENO_LA_SIKU = "neno_la_siku"
-    const val METHALI_YA_SIKU = "methali_ya_siku"
+    const val DAILY_WORD = "daily_word"
+    const val DAILY_PROVERB = "daily_proverb"
 }
+

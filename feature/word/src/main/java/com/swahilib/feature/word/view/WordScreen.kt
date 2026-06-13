@@ -13,11 +13,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -29,6 +32,10 @@ import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.core.ui.components.indicators.LoadingState
+import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
+import com.swahilib.core.ui.components.share.ShareData
+import com.swahilib.core.ui.components.share.ShareFab
+import com.swahilib.core.ui.components.share.ShareSheet
 import com.swahilib.feature.word.WordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,20 +56,40 @@ fun WordScreen(
     val english by viewModel.english.collectAsState()
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
+    var showShareSheet by remember { mutableStateOf(false) }
+    val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     LaunchedEffect(word) { word?.let { viewModel.loadWord(it) } }
+
+    // Pick ONE random meaning for the share card; stable per load
+    val shareData = remember(title, meanings) {
+        if (title.isNotBlank() && meanings.isNotEmpty()) {
+            ShareData(
+                emoji = "📖",
+                typeLabel = "Neno",
+                title = title,
+                meaning = meanings.random().trim(),
+            )
+        } else null
+    }
+
+    if (viewerState == ViewerState.Loaded) {
+        ScreenshotReminderDialog(onShareClick = { showShareSheet = true })
+    }
 
     Scaffold(
         topBar = {
             AppTopBar(
                 title = "Neno la Kiswahili",
-                tagline = "SwahiLib - Kamusi ya Kiswahili",
+                tagline = "SwahiLib · Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
                 actions = {
                     IconButton(onClick = {
                         word?.let {
                             viewModel.likeWord(it)
-                            val msg = if (!isLiked) "Neno limeongezwa kwa vipendwa" else "Neno limeondolewa kwa vipendwa"
+                            val msg = if (!isLiked) "Neno limeongezwa kwa vipendwa"
+                            else "Neno limeondolewa kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {
@@ -70,23 +97,28 @@ fun WordScreen(
                             imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
                             contentDescription = "Penda",
                             tint = if (isLiked) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onPrimaryContainer
+                            else MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                }
+                },
             )
-        }
-    ) {
+        },
+        floatingActionButton = {
+            if (viewerState == ViewerState.Loaded && shareData != null) {
+                ShareFab(onClick = { showShareSheet = true })
+            }
+        },
+    ) { padding ->
         Box(
             modifier = Modifier
-                .padding(it)
+                .padding(padding)
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.background),
         ) {
             when (viewerState) {
                 is ViewerState.Error -> ErrorState(
                     message = (viewerState as ViewerState.Error).message,
-                    onRetry = { }
+                    onRetry = {},
                 )
                 ViewerState.Loaded -> WordView(
                     viewModel = viewModel,
@@ -101,6 +133,10 @@ fun WordScreen(
                 ViewerState.Loading -> LoadingState(title = "Subiri kidogo ...", fileName = "opener-loading")
                 else -> EmptyState()
             }
+        }
+
+        if (showShareSheet && shareData != null) {
+            ShareSheet(shareData = shareData, sheetState = shareSheetState, onDismiss = { showShareSheet = false })
         }
     }
 }

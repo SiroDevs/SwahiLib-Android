@@ -89,29 +89,31 @@ class PrefsRepo @Inject constructor(
         return elapsed >= oneDayMs
     }
 
-    // ── Neno la Siku notification ──────────────────────────────────────────
-    var nenoNotifEnabled: Boolean
+    var wordNotifEnabled: Boolean
         get() = prefs.getBoolean(PrefConstants.NOTIF_WORD_ENABLED, true)
         set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_WORD_ENABLED, value) }
 
-    var nenoNotifHour: Int
+    var wordNotifHour: Int
         get() = prefs.getInt(PrefConstants.NOTIF_WORD_HOUR, NotifConstants.DEFAULT_HOUR)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_WORD_HOUR, value) }
 
-    var nenoNotifMinute: Int
+    var wordNotifMinute: Int
         get() = prefs.getInt(PrefConstants.NOTIF_WORD_MINUTE, NotifConstants.DEFAULT_MINUTE)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_WORD_MINUTE, value) }
 
-    // ── Methali ya Siku notification ───────────────────────────────────────
-    var methaliNotifEnabled: Boolean
+    var proverbNotifEnabled: Boolean
         get() = prefs.getBoolean(PrefConstants.NOTIF_PROVERB_ENABLED, true)
         set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_PROVERB_ENABLED, value) }
 
-    var methaliNotifHour: Int
+    var proverbNotifHour: Int
         get() = prefs.getInt(PrefConstants.NOTIF_PROVERB_HOUR, NotifConstants.DEFAULT_HOUR)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_PROVERB_HOUR, value) }
 
-    var methaliNotifMinute: Int
+    var proverbNotifMinute: Int
         get() = prefs.getInt(PrefConstants.NOTIF_PROVERB_MINUTE, NotifConstants.DEFAULT_MINUTE)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_PROVERB_MINUTE, value) }
+
+    var notifBannerDismissed: Boolean
+        get() = prefs.getBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, false)
+        set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, value) }
 }
