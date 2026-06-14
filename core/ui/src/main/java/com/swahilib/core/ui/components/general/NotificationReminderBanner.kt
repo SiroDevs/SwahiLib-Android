@@ -1,11 +1,8 @@
 package com.swahilib.core.ui.components.general
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -14,17 +11,21 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NotificationsOff
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,16 +39,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.designsystem.theme.LightColors
 
 fun shouldShowNotifBanner(prefsRepo: PrefsRepo, context: android.content.Context): Boolean {
     if (prefsRepo.notifBannerDismissed) return false
-
-    // Check system permission on Android 13+
     val permDenied = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         ContextCompat.checkSelfPermission(
             context,
@@ -67,10 +68,8 @@ fun NotificationReminderBanner(
 ) {
     val context = LocalContext.current
 
-    // Derive visibility from live state so it hides immediately once the user acts.
     var visible by remember { mutableStateOf(shouldShowNotifBanner(prefsRepo, context)) }
 
-    // Re-evaluate after the permission request returns.
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -87,77 +86,98 @@ fun NotificationReminderBanner(
         exit = fadeOut() + shrinkVertically(),
         modifier = modifier,
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 4.dp)
+                .padding(vertical = 5.dp, horizontal = 5.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.tertiaryContainer)
-                .padding(horizontal = 14.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                .background(MaterialTheme.colorScheme.onPrimaryContainer)
+                .padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Icon(
-                imageVector = Icons.Default.NotificationsOff,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onTertiaryContainer,
-                modifier = Modifier.size(20.dp),
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.NotificationsOff,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(20.dp),
+                )
 
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "Arifa zimezimwa",
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                )
-                Text(
-                    text = "Washa Neno la Siku na Methali ya Siku ili upate ujifunzaji kila asubuhi.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                )
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Arifa Zimelemazwa",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                    Text(
+                        text = "Wezesha Arifa (Notifications) za Neno la Siku na Methali ya Siku ili upate kujifunza kila asubuhi.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
 
-            Spacer(Modifier.width(4.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.End),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(
+                    onClick = {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val permGranted = ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            ) == PackageManager.PERMISSION_GRANTED
 
-            // "Enable" action
-            TextButton(
-                onClick = {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        val permGranted = ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-
-                        if (!permGranted) {
-                            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            if (!permGranted) {
+                                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            } else {
+                                onGoToSettings()
+                            }
                         } else {
-                            // Permission already granted but notifications are off in prefs;
-                            // take them to Settings to toggle the switches.
                             onGoToSettings()
                         }
-                    } else {
-                        // Pre-13: go straight to Settings.
-                        onGoToSettings()
-                    }
-                },
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.tertiary,
-                ),
-            ) {
-                Text("Washa", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold))
-            }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.tertiary,
+                    ),
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(30.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        "Wezesha",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
 
-            // "Dismiss" action
-            TextButton(
-                onClick = {
-                    prefsRepo.notifBannerDismissed = true
-                    visible = false
-                },
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.7f),
-                ),
-            ) {
-                Text("Acha", style = MaterialTheme.typography.labelSmall)
+                Button(
+                    onClick = {
+                        prefsRepo.notifBannerDismissed = true
+                        visible = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.7f),
+                    ),
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(30.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        "Baadaye",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
             }
         }
     }
