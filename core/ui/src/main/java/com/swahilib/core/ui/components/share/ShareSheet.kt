@@ -62,7 +62,7 @@ data class ShareData(
 @Composable
 fun ShareSheet(
     shareData: ShareData,
-    sheetState: SheetState = rememberModalBottomSheetState(skipPartialExpansion = true),
+    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
