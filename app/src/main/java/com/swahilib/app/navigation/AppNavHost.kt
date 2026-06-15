@@ -36,8 +36,8 @@ import com.swahilib.feature.settings.view.SettingsScreen
 import com.swahilib.feature.howitworks.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
 import com.swahilib.feature.donation.view.DonationScreen
-import com.swahilib.feature.dailies.view.DailyWordScreen
-import com.swahilib.feature.dailies.view.DailyProverbScreen
+import com.swahilib.feature.daily_content.view.DailyWordScreen
+import com.swahilib.feature.daily_content.view.DailyProverbScreen
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -45,12 +45,13 @@ fun AppNavHost(
     navController: NavHostController = rememberNavController(),
     themeRepo: ThemeRepo,
     prefsRepo: PrefsRepo,
+    deepLinkRoute: String? = null,
 ) {
     NavHost(navController = navController, startDestination = Routes.SPLASH) {
 
         composable(Routes.SPLASH) {
             val viewModel: SplashViewModel = hiltViewModel()
-            SplashScreen(navController = navController, viewModel = viewModel)
+            SplashScreen(navController = navController, viewModel = viewModel, deepLinkRoute = deepLinkRoute)
         }
 
         composable(Routes.INIT) {

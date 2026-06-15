@@ -22,6 +22,10 @@ interface ProverbDao {
     @Query("SELECT * FROM proverbs WHERE rid = :rid")
     fun getById(rid: String): Flow<ProverbEntity>
 
+    /** Direct (non-Flow) lookup by primary key, used for Proverb-of-the-Day. */
+    @Query("SELECT * FROM proverbs WHERE rid = :rid LIMIT 1")
+    suspend fun getByRid(rid: Int): ProverbEntity?
+
     @Query("DELETE FROM proverbs")
     fun delete()
 

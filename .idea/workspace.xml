@@ -22,9 +22,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/DailyContentRepo.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daily/DailyContentManager.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/DailyContentDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/DailyContentEntity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/daily_content/src/main/java/com/swahilib/feature/dailies/DailyContentViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/general/NotificationReminderBanner.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/general/NotificationReminderBanner.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/share/ShareSheet.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/share/ShareSheet.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/app/navigation/AppNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/app/navigation/AppNavHost.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/SwahiLibWidgetReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/SwahiLibWidgetReceiver.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/DailyProverbWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/DailyProverbWorker.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/DailyWordWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/DailyWordWorker.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/AppDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/AppDatabase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/ProverbDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/ProverbDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/WordDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/WordDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/di/DatabaseModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/di/DatabaseModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/dailies/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/daily_content/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/feature/daily_content/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/DailyWordViewModel.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/view/DailyProverbScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/daily_content/src/main/java/com/swahilib/feature/dailies/view/DailyProverbScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/dailies/src/main/java/com/swahilib/feature/dailies/view/DailyWordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/daily_content/src/main/java/com/swahilib/feature/dailies/view/DailyWordScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/splash/src/main/java/com/swahilib/feature/splash/view/SplashScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/splash/src/main/java/com/swahilib/feature/splash/view/SplashScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +59,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=GUIF6PMR4LPZ4D5H]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/sirodaves/.android/avd/Medium_Phone.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -186,6 +211,12 @@
       <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" IS_LOCATION_SIMULATION_SUPPORTED="false" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" DEVELOPMENT_TEAM="${TEAM_ID}" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
+      <embedded_app_extension_list />
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>

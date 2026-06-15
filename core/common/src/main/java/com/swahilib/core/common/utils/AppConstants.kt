@@ -51,6 +51,19 @@ object NotifConstants {
     const val DEFAULT_MINUTE = 0
 }
 
+/**
+ * Keys/values used to deep-link a [PendingIntent] (from a notification or a
+ * home-screen widget) straight into a specific screen instead of just
+ * relaunching the app to its default Home destination.
+ *
+ * MainActivity reads [EXTRA_NAVIGATE_TO] from its launch intent and forwards
+ * the requested route to [com.swahilib.app.navigation.AppNavHost], which
+ * navigates there right after the splash screen instead of going to Home.
+ */
+object DeepLinkConstants {
+    const val EXTRA_NAVIGATE_TO = "navigate_to"
+}
+
 object Routes {
     const val SPLASH = "splash"
     const val INIT = "init"

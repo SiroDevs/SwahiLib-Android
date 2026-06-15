@@ -10,8 +10,10 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 
+import com.swahilib.core.common.utils.DeepLinkConstants
 import com.swahilib.core.common.utils.NotifConstants
-import com.swahilib.core.data.repos.WordRepo
+import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.data.repos.DailyContentRepo
 import dagger.assisted.Assisted
 import com.swahilib.core.common.R
 import dagger.assisted.AssistedInject
@@ -20,11 +22,12 @@ import dagger.assisted.AssistedInject
 class DailyWordWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val wordRepo: WordRepo,
+    private val dailyContentRepo: DailyContentRepo,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        val word = wordRepo.getRandomWord() ?: return Result.success()
+        val (word, meaning) = dailyContentRepo.getDailyWord()
+        if (word == null) return Result.success()
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
@@ -36,21 +39,22 @@ class DailyWordWorker @AssistedInject constructor(
 
         val launchIntent = context.packageManager
             .getLaunchIntentForPackage(context.packageName)
-            ?.apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+            ?.apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra(DeepLinkConstants.EXTRA_NAVIGATE_TO, Routes.DAILY_WORD)
+            }
         val pendingIntent = PendingIntent.getActivity(
             context, NotifConstants.NOTIF_WORD_ID, launchIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val meaning = word.meaning
-            ?.split("|")?.firstOrNull()?.trim()
-            ?.take(120) ?: ""
+        val displayMeaning = meaning.take(120)
 
         val notification = NotificationCompat.Builder(context, NotifConstants.CHANNEL_WORD_ID)
             .setSmallIcon(R.drawable.ic_swahilib_notification)
             .setContentTitle("📖 Neno la Siku: ${word.title}")
-            .setContentText(meaning)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(meaning))
+            .setContentText(displayMeaning)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(displayMeaning))
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()

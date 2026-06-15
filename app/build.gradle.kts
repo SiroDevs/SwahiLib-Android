@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 157
-        versionName = "1.0.157"
+        versionCode = 158
+        versionName = "1.0.158"
         minSdk = 26
         targetSdk = 37
 
@@ -113,7 +113,7 @@ dependencies {
     implementation(project(":feature:howitworks"))
     implementation(project(":feature:help"))
     implementation(project(":feature:donation"))
-    implementation(project(":feature:dailies"))
+    implementation(project(":feature:daily_content"))
 
     // Android Room
     implementation(libs.androidx.room.runtime)

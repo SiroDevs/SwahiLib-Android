@@ -1,4 +1,4 @@
-package com.swahilib.feature.dailies.view
+package com.swahilib.feature.daily_content.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,26 +37,27 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.database.model.ProverbEntity
+import com.swahilib.core.database.model.WordEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.dailies.DailyWordViewModel
-import com.swahilib.feature.proverb.ProverbViewModel
-import com.swahilib.feature.proverb.view.ProverbScreen
+import com.swahilib.feature.daily_content.DailyContentViewModel
+import com.swahilib.feature.word.WordViewModel
+import com.swahilib.feature.word.view.WordScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DailyProverbScreen(
+fun DailyWordScreen(
     navController: NavHostController,
     prefsRepo: PrefsRepo,
-    viewModel: DailyWordViewModel = hiltViewModel(),
-    proverbViewModel: ProverbViewModel = hiltViewModel(),
+    viewModel: DailyContentViewModel = hiltViewModel(),
+    wordViewModel: WordViewModel = hiltViewModel(),
 ) {
-    var proverb by remember { mutableStateOf<ProverbEntity?>(null) }
+    var word by remember { mutableStateOf<WordEntity?>(null) }
+    var dailyMeaning by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(true) }
     var showFullInfo by remember { mutableStateOf(false) }
     var showShareSheet by remember { mutableStateOf(false) }
@@ -65,45 +66,39 @@ fun DailyProverbScreen(
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(Unit) {
-        proverb = viewModel.getRandomProverb()
+        val (dailyWord, meaning) = viewModel.getDailyWord()
+        word = dailyWord
+        dailyMeaning = meaning
         loading = false
     }
 
-    // Stable single random meaning for this session
-    // ProverbViewModel splits on "#"; the raw entity has "|"-separated meanings
-    val singleMeaning = remember(proverb) {
-        proverb?.meaning
-            ?.split("|", "#")
-            ?.map { it.trim() }
-            ?.filter { it.isNotEmpty() }
-            ?.randomOrNull() ?: ""
-    }
+    // Single meaning for this word, shared with the widget & notification
+    val singleMeaning = dailyMeaning
 
-    val shareData = remember(proverb, singleMeaning) {
-        proverb?.let {
+    val shareData = remember(word, singleMeaning) {
+        word?.let {
             ShareData(
-                emoji = "🌿",
-                typeLabel = "Methali",
+                emoji = "📖",
+                typeLabel = "Neno",
                 title = it.title ?: "",
                 meaning = singleMeaning,
-                textToShare = "\"${it.title}\"\n\n$singleMeaning\n\n— SwahiLib · Kamusi ya Kiswahili",
             )
         }
     }
 
-    if (proverb != null) ScreenshotReminderDialog(onShareClick = { showShareSheet = true })
+    if (word != null) ScreenshotReminderDialog(onShareClick = { showShareSheet = true })
 
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Methali ya Siku",
+                title = "Neno la Siku",
                 tagline = "SwahiLib · Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
             )
         },
         floatingActionButton = {
-            if (proverb != null) ShareFab(onClick = { showShareSheet = true })
+            if (word != null) ShareFab(onClick = { showShareSheet = true })
         },
     ) { padding ->
         Box(
@@ -112,7 +107,7 @@ fun DailyProverbScreen(
         ) {
             when {
                 loading -> CircularProgressIndicator()
-                proverb == null -> Text("Hakuna methali iliyopatikana.", style = MaterialTheme.typography.bodyLarge)
+                word == null -> Text("Hakuna neno lililopatikana.", style = MaterialTheme.typography.bodyLarge)
                 else -> Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -126,7 +121,7 @@ fun DailyProverbScreen(
                         onGoToSettings = { navController.navigate(com.swahilib.core.common.utils.Routes.SETTINGS) },
                         modifier = Modifier.padding(horizontal = 0.dp),
                     )
-                    // ── Proverb hero card ──
+                    // ── Hero card ──
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
@@ -137,16 +132,21 @@ fun DailyProverbScreen(
                             modifier = Modifier.fillMaxWidth().padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            Text("🌿", fontSize = 40.sp)
-                            Spacer(Modifier.height(12.dp))
+                            Text("📖", fontSize = 40.sp)
+                            Spacer(Modifier.height(8.dp))
                             Text(
-                                text = "\"${proverb!!.title}\"",
-                                style = MaterialTheme.typography.headlineSmall.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Italic,
-                                ),
+                                text = word!!.title ?: "",
+                                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
+                            if (!word!!.english.isNullOrBlank()) {
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    text = word!!.english!!,
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+                                )
+                            }
                         }
                     }
 
@@ -162,6 +162,31 @@ fun DailyProverbScreen(
                                 )
                                 Spacer(Modifier.height(8.dp))
                                 Text(singleMeaning, style = MaterialTheme.typography.bodyLarge)
+                            }
+                        }
+                    }
+
+                    // ── Conjugation ──
+                    val conj = word!!.conjugation?.replace("null", "")?.trim() ?: ""
+                    if (conj.isNotEmpty()) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    "MNYAMBULIKO",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    letterSpacing = 1.5.sp,
+                                )
+                                Spacer(Modifier.height(6.dp))
+                                Text(
+                                    conj,
+                                    style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                )
                             }
                         }
                     }
@@ -183,10 +208,10 @@ fun DailyProverbScreen(
                 shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
                 dragHandle = { BottomSheetDefaults.DragHandle() },
             ) {
-                ProverbScreen(
+                WordScreen(
                     navController = navController,
-                    viewModel = proverbViewModel,
-                    proverb = proverb,
+                    viewModel = wordViewModel,
+                    word = word,
                     prefsRepo = prefsRepo,
                 )
             }
