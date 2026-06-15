@@ -12,12 +12,14 @@ import com.swahilib.core.database.daos.ProverbDao
 import com.swahilib.core.database.daos.SayingDao
 import com.swahilib.core.database.daos.SearchDao
 import com.swahilib.core.database.daos.WordDao
+import com.swahilib.core.database.daos.DailyContentDao
 import com.swahilib.core.database.model.HistoryEntity
 import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.SearchEntity
 import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.model.DailyContentEntity
 
 @Database(
     entities = [
@@ -27,8 +29,9 @@ import com.swahilib.core.database.model.WordEntity
         SayingEntity::class,
         SearchEntity::class,
         WordEntity::class,
+        DailyContentEntity::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -38,11 +41,30 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun sayingsDao(): SayingDao
     abstract fun searchesDao(): SearchDao
     abstract fun wordsDao(): WordDao
+    abstract fun dailyContentDao(): DailyContentDao
 
     companion object {
         val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE words ADD COLUMN english TEXT")
+            }
+        }
+
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS `daily_content` (
+                        `id` INTEGER NOT NULL,
+                        `date` TEXT NOT NULL,
+                        `wordRid` INTEGER NOT NULL,
+                        `wordMeaning` TEXT NOT NULL,
+                        `proverbRid` INTEGER NOT NULL,
+                        `proverbMeaning` TEXT NOT NULL,
+                        PRIMARY KEY(`id`)
+                    )
+                    """.trimIndent()
+                )
             }
         }
 
@@ -55,7 +77,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "SwahiliLibrary"
                 )
-                    .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
                     .build()
                     .also { widgetInstance = it }
             }

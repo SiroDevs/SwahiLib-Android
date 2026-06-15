@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.swahilib.feature.dailies"
+    namespace = "com.swahilib.feature.daily_content"
 }
 
 dependencies {

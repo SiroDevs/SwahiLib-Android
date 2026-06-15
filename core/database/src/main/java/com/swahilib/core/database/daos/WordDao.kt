@@ -22,6 +22,10 @@ interface WordDao {
     @Query("SELECT * FROM words WHERE rid = :rid")
     fun getById(rid: String): Flow<WordEntity>
 
+    /** Direct (non-Flow) lookup by primary key, used for Word-of-the-Day. */
+    @Query("SELECT * FROM words WHERE rid = :rid LIMIT 1")
+    suspend fun getByRid(rid: Int): WordEntity?
+
     @Query("DELETE FROM words")
     fun delete()
 

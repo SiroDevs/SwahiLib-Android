@@ -116,13 +116,13 @@ fun HomeNavDrawer(
                     onClick = { navigateAndClose(Routes.HELP) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
-//                NavigationDrawerItem(
-//                    icon = { Icon(Icons.Default.VolunteerActivism, contentDescription = null) },
-//                    label = { Text("Changia SwahiLib") },
-//                    selected = false,
-//                    onClick = { navigateAndClose(Routes.DONATION) },
-//                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-//                )
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.VolunteerActivism, contentDescription = null) },
+                    label = { Text("Changia SwahiLib") },
+                    selected = false,
+                    onClick = { navigateAndClose(Routes.DONATION) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
 
                 Spacer(Modifier.weight(1f))
                 Text(

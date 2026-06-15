@@ -50,14 +50,15 @@ class DonationRepo @Inject constructor(
                     billingAddress = PesaPalBillingAddress(emailAddress = ApiConstants.DONOR_EMAIL),
                 ),
             )
-            val orderTrackingId = orderResponse.orderTrackingId
-            if (orderTrackingId.isNullOrBlank()) {
-                Log.e(TAG, "❌ Order submission failed: ${orderResponse.message}")
+
+            val redirectUrl = orderResponse.redirectUrl
+            if (redirectUrl.isNullOrBlank()) {
+                Log.e(TAG, "❌ Order submission failed — no redirect URL: ${orderResponse.message}")
                 return Result.failure(Exception("Imeshindwa kuwasilisha ombi la malipo"))
             }
 
-            Log.d(TAG, "✅ Donation submitted — tracking: $orderTrackingId")
-            Result.success(orderTrackingId)
+            Log.d(TAG, "✅ Order accepted — redirect URL: $redirectUrl")
+            Result.success(redirectUrl)
         } catch (e: Exception) {
             Log.e(TAG, "❌ Donation error: ${e.message}", e)
             Result.failure(e)

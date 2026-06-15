@@ -22,6 +22,7 @@ import kotlinx.coroutines.delay
 fun SplashScreen(
     navController: NavHostController,
     viewModel: SplashViewModel,
+    deepLinkRoute: String? = null,
 ) {
     val context = LocalContext.current
     val isReady by viewModel.isReady.collectAsState()
@@ -33,7 +34,8 @@ fun SplashScreen(
     LaunchedEffect(isReady) {
         if (isReady) {
             delay(3000)
-            navController.navigate(Routes.HOME) {
+            val destination = deepLinkRoute ?: Routes.HOME
+            navController.navigate(destination) {
                 popUpTo(Routes.SPLASH) { inclusive = true }
             }
         }

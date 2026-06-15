@@ -1,5 +1,9 @@
 package com.swahilib.core.common.utils
 
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
 object AppConstants {
     const val APP_TITLE = "SwahiLib"
     const val APP_TITLE2 = "Kamusi ya Kiswahili"
@@ -51,6 +55,10 @@ object NotifConstants {
     const val DEFAULT_MINUTE = 0
 }
 
+object DeepLinkConstants {
+    const val EXTRA_NAVIGATE_TO = "navigate_to"
+}
+
 object Routes {
     const val SPLASH = "splash"
     const val INIT = "init"
@@ -66,5 +74,14 @@ object Routes {
     const val DONATION = "donation"
     const val DAILY_WORD = "daily_word"
     const val DAILY_PROVERB = "daily_proverb"
-}
 
+    const val PAYMENT_WEBVIEW = "payment_webview/{redirectUrl}"
+
+    fun paymentWebView(redirectUrl: String): String {
+        val encoded = URLEncoder.encode(redirectUrl, StandardCharsets.UTF_8.toString())
+        return "payment_webview/$encoded"
+    }
+
+    fun decodeRedirectUrl(encoded: String): String =
+        URLDecoder.decode(encoded, StandardCharsets.UTF_8.toString())
+}
