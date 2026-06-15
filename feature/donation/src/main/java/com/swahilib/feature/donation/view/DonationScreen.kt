@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.feature.donation.DonationState
 import com.swahilib.feature.donation.DonationViewModel
 import kotlinx.coroutines.launch
@@ -63,12 +64,9 @@ fun DonationScreen(
 
     LaunchedEffect(state) {
         when (state) {
-            is DonationState.Success -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar("Asante kwa mchango wako! Tumeupokea 🎉")
-                }
-                viewModel.resetState()
-                navController.popBackStack()
+            is DonationState.ReadyToPay -> {
+                val redirectUrl = (state as DonationState.ReadyToPay).redirectUrl
+                navController.navigate(Routes.paymentWebView(redirectUrl))
             }
 
             is DonationState.Error -> {

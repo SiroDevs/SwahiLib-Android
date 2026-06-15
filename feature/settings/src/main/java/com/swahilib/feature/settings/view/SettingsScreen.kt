@@ -175,14 +175,14 @@ fun SettingsScreen(
             }
             HorizontalDivider()
 
-//            SettingsSectionTitle("Changia SwahiLib")
-//            ListItem(
-//                leadingContent = { Icon(Icons.Default.VolunteerActivism, contentDescription = null) },
-//                headlineContent  = { Text("Changa Hivi Sasa") },
-//                supportingContent = { Text("Tunahitaji mchango wako ili tuzidi kukuhudumia") },
-//                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
-//            )
-//            HorizontalDivider()
+            SettingsSectionTitle("Changia SwahiLib")
+            ListItem(
+                leadingContent = { Icon(Icons.Default.VolunteerActivism, contentDescription = null) },
+                headlineContent  = { Text("Changa Hivi Sasa") },
+                supportingContent = { Text("Tunahitaji mchango wako ili tuzidi kukuhudumia") },
+                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
+            )
+            HorizontalDivider()
 
             SettingsSectionTitle("Data")
             ListItem(
