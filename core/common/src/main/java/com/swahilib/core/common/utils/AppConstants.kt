@@ -14,9 +14,9 @@ object AppConstants {
 }
 
 object ApiConstants {
-    const val PESAPAL_BASE_URL = "https://pay.pesapal.com/v3/api/"
-    const val PESAPAL_AUTH  = "Auth/RequestToken"
-    const val PESAPAL_ORDER = "Transactions/SubmitOrderRequest"
+    const val PAYSTACK_BASE_URL = "https://api.paystack.co/"
+    const val PAYSTACK_INITIALIZE = "transaction/initialize"
+    const val PAYSTACK_CALLBACK_URL = "https://songlive.vercel.app/donation/callback"
     const val CALLBACK_URL = "https://swahilib.vercel.app/donation/callback"
     const val DONOR_EMAIL  = "donor@swahilib.app"
 }

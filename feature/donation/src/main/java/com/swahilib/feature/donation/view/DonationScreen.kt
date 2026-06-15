@@ -124,7 +124,7 @@ fun DonationScreen(
                 DonationHeaderCard()
 
                 Text(
-                    text = "Chagua kiasi (USD)",
+                    text = "Kiasi cha Mchango (USD)",
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 0.5.sp,
@@ -170,7 +170,7 @@ fun DonationScreen(
                 )
 
                 Text(
-                    text = "Malipo yanafanywa kwa usalama kupitia PesaPal",
+                    text = "Michango inashughulikiwa vyema kupitia Paystack",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
