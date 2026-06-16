@@ -102,7 +102,6 @@ dependencies {
     implementation(project(":core:ui"))
 
     // Feature modules
-    implementation(project(":feature:splash"))
     implementation(project(":feature:home"))
     implementation(project(":feature:advsearch"))
     implementation(project(":feature:word"))
