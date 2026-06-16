@@ -63,8 +63,8 @@ fun ConfirmDonationDialog(
         },
         text = {
             Text(
-                text = "Je, uko tayari kuendelea na mchango wako wa \$$displayAmount " +
-                    "ili kuunga mkono SwahiLib?",
+                text = "Je, uko tayari kuendelea na mchango wako wa KES $displayAmount " +
+                    "ili kuunga mkono mradi wa SwahiLib?",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
