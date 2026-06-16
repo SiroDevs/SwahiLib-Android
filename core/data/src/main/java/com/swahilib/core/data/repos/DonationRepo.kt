@@ -17,19 +17,18 @@ private const val TAG = "DonationRepo"
 @Singleton
 class DonationRepo @Inject constructor(
     private val paystackService: PaystackService,
-    @Named("paystack_secret_key") private val secretKey: String,
+    @Named("paystack_secret") private val secretKey: String,
 ) {
     suspend fun submitDonation(amountUsd: Double): Result<String> {
         return try {
             val amountInCents = (amountUsd * 100).roundToLong()
-            val reference = "SONGLIB-${UUID.randomUUID().toString().take(8).uppercase()}"
+            val reference = "SWAHILIB-${UUID.randomUUID().toString().take(8).uppercase()}"
 
             val response = paystackService.initializeTransaction(
                 bearer = "Bearer $secretKey",
                 body = PaystackInitializeRequest(
                     email = ApiConstants.DONOR_EMAIL,
                     amount = amountInCents,
-                    currency = "USD",
                     callbackUrl = ApiConstants.PAYSTACK_CALLBACK_URL,
                     metadata = PaystackMetadata(
                         customFields = listOf(

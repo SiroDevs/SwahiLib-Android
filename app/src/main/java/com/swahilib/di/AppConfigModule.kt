@@ -19,10 +19,6 @@ object AppConfigModule {
     fun provideSupabaseKey(): String = BuildConfig.SupabaseKey
 
     @Provides
-    @Named("paystack_secret_key")
-    fun providePaystackSecretKey(): String = BuildConfig.PaystackSecretKey
-
-    @Provides
-    @Named("pesapal_ipn_id")
-    fun providePesapalIpnId(): String = BuildConfig.PesapalIpnId
+    @Named("paystack_secret")
+    fun providePaystackSecret(): String = BuildConfig.PaystackSecret
 }

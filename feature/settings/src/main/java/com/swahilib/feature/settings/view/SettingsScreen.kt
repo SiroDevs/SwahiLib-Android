@@ -65,16 +65,20 @@ fun SettingsScreen(
     fun showTimePicker(initialH: Int, initialM: Int, onSet: (Int, Int) -> Unit) =
         TimePickerDialog(context, { _, h, m -> onSet(h, m) }, initialH, initialM, true).show()
 
+    fun navigateToSplash() {
+        navController.navigate(Routes.APP_START) {
+            popUpTo(0) { inclusive = true }
+            launchSingleTop = true
+        }
+    }
+
     if (showResetDialog) {
         ConfirmResetDialog(
             onDismiss = { showResetDialog = false },
             onConfirm = {
                 showResetDialog = false
                 viewModel.clearData()
-                navController.navigate(Routes.SPLASH) {
-                    popUpTo(0) { inclusive = true }
-                    launchSingleTop = true
-                }
+                navigateToSplash()
             }
         )
     }

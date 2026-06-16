@@ -60,6 +60,7 @@ object DeepLinkConstants {
 }
 
 object Routes {
+    const val APP_START = "app_start"
     const val HOME = "home"
     const val IDIOM = "idiom"
     const val PROVERB = "proverb"

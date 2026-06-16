@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun DonationHeaderCard() {
@@ -72,7 +74,7 @@ fun DonationHeaderCard() {
     }
 }
 
-private val PRESET_AMOUNTS = listOf(2, 5, 10, 25, 50, 99)
+private val PRESET_AMOUNTS = listOf(200, 500, 1000, 5000, 10000, 20000)
 
 @Composable
 fun PresetAmountGrid(
@@ -105,6 +107,8 @@ fun PresetAmountButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val formattedAmount = NumberFormat.getNumberInstance(Locale.US).format(amount)
+
     if (isSelected) {
         Button(
             onClick = onClick,
@@ -113,7 +117,7 @@ fun PresetAmountButton(
             contentPadding = PaddingValues(vertical = 14.dp),
         ) {
             Text(
-                text = "\$$amount",
+                text = "KES $formattedAmount",
                 style = MaterialTheme.typography.labelLarge.copy(
                     fontWeight = FontWeight.Bold,
                 ),
@@ -128,7 +132,7 @@ fun PresetAmountButton(
             contentPadding = PaddingValues(vertical = 14.dp),
         ) {
             Text(
-                text = "\$$amount",
+                text = "KES $formattedAmount",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
