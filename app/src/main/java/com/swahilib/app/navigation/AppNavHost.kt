@@ -23,7 +23,6 @@ import com.swahilib.core.database.model.WordEntity
 import com.swahilib.feature.advsearch.AdvSearchViewModel
 import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.settings.SettingsViewModel
-import com.swahilib.feature.splash.SplashViewModel
 import com.swahilib.feature.idiom.IdiomViewModel
 import com.swahilib.feature.proverb.ProverbViewModel
 import com.swahilib.feature.saying.SayingViewModel
@@ -31,7 +30,6 @@ import com.swahilib.feature.word.WordViewModel
 import com.swahilib.feature.donation.DonationViewModel
 import com.swahilib.feature.home.view.HomeScreen
 import com.swahilib.feature.advsearch.view.AdvSearchScreen
-import com.swahilib.feature.splash.view.SplashScreen
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.proverb.view.ProverbScreen
 import com.swahilib.feature.saying.view.SayingScreen
@@ -53,28 +51,18 @@ fun AppNavHost(
     prefsRepo: PrefsRepo,
     deepLinkRoute: String? = null,
 ) {
-    NavHost(navController = navController, startDestination = Routes.SPLASH) {
-
-        composable(Routes.SPLASH) {
-            val viewModel: SplashViewModel = hiltViewModel()
-            SplashScreen(
-                navController = navController,
-                viewModel = viewModel,
-                deepLinkRoute = deepLinkRoute
-            )
-        }
-
-        composable(Routes.INIT) {
-            LaunchedEffect(Unit) {
-                navController.navigate(Routes.HOME) {
-                    popUpTo(Routes.INIT) { inclusive = true }
-                }
-            }
-        }
-
+    NavHost(
+        navController = navController,
+        startDestination = Routes.HOME
+    ) {
         composable(Routes.HOME) {
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen(viewModel = viewModel, navController = navController, prefsRepo = prefsRepo)
+            HomeScreen(
+                viewModel = viewModel,
+                navController = navController,
+                prefsRepo = prefsRepo,
+                deepLinkRoute = deepLinkRoute
+            )
         }
 
         composable(Routes.IDIOM) {
@@ -151,8 +139,6 @@ fun AppNavHost(
             DonationScreen(navController = navController, viewModel = viewModel)
         }
 
-        // ── PesaPal hosted payment WebView ───────────────────────────────────
-        // The redirect_url from PesaPal is URL-encoded and passed as a path arg.
         composable(
             route = Routes.PAYMENT_WEBVIEW,
             arguments = listOf(

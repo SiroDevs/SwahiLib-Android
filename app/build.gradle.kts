@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 160
-        versionName = "1.0.16"
+        versionCode = 161
+        versionName = "1.0.161"
         minSdk = 26
         targetSdk = 37
 
@@ -34,9 +34,7 @@ android {
 
         buildConfigField("String", "SupabaseUrl", "\"${localProperties.getProperty("SUPABASE_URL")}\"")
         buildConfigField("String", "SupabaseKey", "\"${localProperties.getProperty("SUPABASE_ANON_KEY")}\"")
-        buildConfigField("String", "PesapalConsumerKey", "\"${localProperties.getProperty("PESAPAL_CONSUMER_KEY") ?: ""}\"")
-        buildConfigField("String", "PesapalConsumerSecret", "\"${localProperties.getProperty("PESAPAL_CONSUMER_SECRET") ?: ""}\"")
-        buildConfigField("String", "PesapalIpnId", "\"${localProperties.getProperty("PESAPAL_IPN_ID") ?: ""}\"")
+        buildConfigField("String", "PaystackSecret", "\"${localProperties.getProperty("PAYSTACK_SECRET_KEY") ?: ""}\"")
     }
 
     signingConfigs {
@@ -102,7 +100,6 @@ dependencies {
     implementation(project(":core:ui"))
 
     // Feature modules
-    implementation(project(":feature:splash"))
     implementation(project(":feature:home"))
     implementation(project(":feature:advsearch"))
     implementation(project(":feature:word"))
@@ -123,6 +120,7 @@ dependencies {
     implementation(libs.compose.hilt.navigation)
 
     // Activity
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 

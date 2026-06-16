@@ -1,23 +1,7 @@
-/*
- * Copyright 2026 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.swahilib.core.network.di
 
 import com.swahilib.core.common.utils.ApiConstants
-import com.swahilib.core.network.services.PesaPalService
+import com.swahilib.core.network.services.PaystackService
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -33,22 +17,6 @@ import javax.inject.Named
 @Module
 @Suppress("unused")
 object NetworkModule {
-    @Provides
-    @Reusable
-    fun providePesapalApiService(@Named("pesapalApi") retrofit: Retrofit): PesaPalService {
-        return retrofit.create(PesaPalService::class.java)
-    }
-
-    @Provides
-    @Named("pesapalApi")
-    @Reusable
-    fun providePesapalApi(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(ApiConstants.PESAPAL_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-    }
 
     @Provides
     @Reusable
@@ -61,5 +29,22 @@ object NetworkModule {
         builder.addInterceptor(loggingInterceptor)
 
         return builder.build()
+    }
+
+    @Provides
+    @Reusable
+    fun providePaystackApiService(@Named("paystackApi") retrofit: Retrofit): PaystackService {
+        return retrofit.create(PaystackService::class.java)
+    }
+
+    @Provides
+    @Named("paystackApi")
+    @Reusable
+    fun providePaystackApi(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(ApiConstants.PAYSTACK_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
     }
 }

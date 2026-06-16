@@ -19,14 +19,6 @@ object AppConfigModule {
     fun provideSupabaseKey(): String = BuildConfig.SupabaseKey
 
     @Provides
-    @Named("pesapal_consumer_key")
-    fun providePesapalConsumerKey(): String = BuildConfig.PesapalConsumerKey
-
-    @Provides
-    @Named("pesapal_consumer_secret")
-    fun providePesapalConsumerSectret(): String = BuildConfig.PesapalConsumerSecret
-
-    @Provides
-    @Named("pesapal_ipn_id")
-    fun providePesapalIpnId(): String = BuildConfig.PesapalIpnId
+    @Named("paystack_secret")
+    fun providePaystackSecret(): String = BuildConfig.PaystackSecret
 }

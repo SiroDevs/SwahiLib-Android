@@ -46,7 +46,7 @@ fun DonationBanner(
             modifier = Modifier.size(16.dp),
         )
         Text(
-            text = "Tunahitaji mchango wako ili tuzudi kukuhudumia. CHANGA HIVI SASA",
+            text = "Tunahitaji mchango wako ili tuzidi kukuhudumia. CHANGA HIVI SASA",
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.weight(1f),

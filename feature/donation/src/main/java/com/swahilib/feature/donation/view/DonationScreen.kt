@@ -40,7 +40,7 @@ import com.swahilib.feature.donation.DonationState
 import com.swahilib.feature.donation.DonationViewModel
 import kotlinx.coroutines.launch
 
-private const val DEFAULT_PRESET = 10
+private const val DEFAULT_PRESET = 1000
 
 @Composable
 fun DonationScreen(
@@ -124,7 +124,7 @@ fun DonationScreen(
                 DonationHeaderCard()
 
                 Text(
-                    text = "Chagua kiasi (USD)",
+                    text = "Kiasi cha Mchango (KES)",
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 0.5.sp,
@@ -150,9 +150,9 @@ fun DonationScreen(
                             if (filtered.isNotBlank()) selectedPreset = null
                         }
                     },
-                    label = { Text("Au weka kiasi chako (USD)") },
-                    placeholder = { Text("Mfano: 15.00") },
-                    prefix = { Text("$") },
+                    label = { Text("Au weka kiasi chako (KES)") },
+                    placeholder = { Text("Mfano: 1000") },
+                    prefix = { Text("KES") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
@@ -170,7 +170,7 @@ fun DonationScreen(
                 )
 
                 Text(
-                    text = "Malipo yanafanywa kwa usalama kupitia PesaPal",
+                    text = "Michango inashughulikiwa vyema kupitia Paystack",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
