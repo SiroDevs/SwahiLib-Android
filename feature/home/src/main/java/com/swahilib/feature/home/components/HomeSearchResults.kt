@@ -22,6 +22,7 @@ import com.swahilib.core.ui.components.listitems.IdiomItem
 import com.swahilib.core.ui.components.listitems.ProverbItem
 import com.swahilib.core.ui.components.listitems.SayingItem
 import com.swahilib.core.ui.components.listitems.WordItem
+import com.swahilib.core.ui.components.listitems.WordItemSkeleton
 import com.swahilib.feature.home.HomeViewModel
 
 @Composable
@@ -141,6 +142,21 @@ fun HomeSearchResults(
                 }
             }
         }
+
+        item { Spacer(Modifier.height(80.dp)) }
+    }
+}
+
+
+@Composable
+fun HomeSearchResultsSkeleton() {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 70.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        items(30) { WordItemSkeleton() }
 
         item { Spacer(Modifier.height(80.dp)) }
     }

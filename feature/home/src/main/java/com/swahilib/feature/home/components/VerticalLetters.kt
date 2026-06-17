@@ -2,10 +2,12 @@ package com.swahilib.feature.home.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.swahilib.core.ui.components.indicators.ShimmerBrush
 
 @Composable
 fun VerticalLetters(
@@ -68,8 +71,10 @@ fun LetterItem(
     isSelected: Boolean = false,
     onClick: () -> Unit = { },
 ) {
-    val bgColor = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.background
-    val textColor = if (isSelected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+    val bgColor =
+        if (isSelected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.background
+    val textColor =
+        if (isSelected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
 
     if (text.isEmpty()) {
         Box(modifier = Modifier.size(45.dp))
@@ -97,6 +102,39 @@ fun LetterItem(
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun VerticalLettersSkeleton() {
+    val brush = ShimmerBrush()
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .width(75.dp)
+                .padding(horizontal = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            items(20) { Surface(
+                    modifier = Modifier .size(60.dp),
+                    shape = RoundedCornerShape(15.dp),
+                    color = MaterialTheme.colorScheme.background,
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary
+                    ),
+                    shadowElevation = 5.dp
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize().width(55.dp).height(55.dp).background(brush)
+                    ) { }
+                }
             }
         }
     }

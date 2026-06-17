@@ -37,6 +37,7 @@ import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.home.components.HomeNavDrawer
+import com.swahilib.feature.home.components.HomeSkeleton
 import com.swahilib.feature.home.components.HomeTab
 import com.swahilib.feature.home.components.homeTabs
 import com.swahilib.feature.home.view.tabs.HomeHistory
@@ -154,7 +155,7 @@ fun HomeScreen(
                             message = (uiState as UiState.Error).message,
                             onRetry = { viewModel.fetchData() }
                         )
-                        UiState.Loading -> {}
+                        UiState.Loading -> HomeSkeleton()
                         else -> EmptyState()
                     }
                 } // Box
