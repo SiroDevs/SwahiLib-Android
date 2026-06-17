@@ -41,6 +41,7 @@ import com.swahilib.feature.donation.DonationViewModel
 import kotlinx.coroutines.launch
 
 private const val DEFAULT_PRESET = 1000
+private const val MINIMUM_DONATION = 100
 
 @Composable
 fun DonationScreen(
@@ -52,15 +53,29 @@ fun DonationScreen(
     var selectedPreset by remember { mutableStateOf<Int?>(DEFAULT_PRESET) }
     var customAmount by remember { mutableStateOf("") }
     var showConfirmDialog by remember { mutableStateOf(false) }
+    var showMinimumAmountError by remember { mutableStateOf(false) }
+
+    var donorName by remember { mutableStateOf("") }
+    var donorEmail by remember { mutableStateOf("") }
+    var isDonatingAnonymously by remember { mutableStateOf(false) }
+    var isDonorEmailError by remember { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    // Validate and get the active amount
     val activeAmount: Double? = when {
-        customAmount.isNotBlank() -> customAmount.toDoubleOrNull()
+        customAmount.isNotBlank() -> {
+            val amount = customAmount.toDoubleOrNull()
+            if (amount != null && amount >= MINIMUM_DONATION) amount else null
+        }
         selectedPreset != null -> selectedPreset!!.toDouble()
         else -> null
     }
+
+    // Check if custom amount is below minimum
+    val isCustomAmountBelowMinimum = customAmount.isNotBlank() &&
+        (customAmount.toDoubleOrNull() ?: 0.0) < MINIMUM_DONATION
 
     LaunchedEffect(state) {
         when (state) {
@@ -79,14 +94,27 @@ fun DonationScreen(
         }
     }
 
+    LaunchedEffect(showMinimumAmountError) {
+        if (showMinimumAmountError) {
+            scope.launch {
+                snackbarHostState.showSnackbar("Kiasi cha chini cha mchango ni KES $MINIMUM_DONATION")
+            }
+            showMinimumAmountError = false
+        }
+    }
+
     if (showConfirmDialog && activeAmount != null) {
         ConfirmDonationDialog(
             amount = activeAmount,
+            donorName = donorName.trim().takeIf { !isDonatingAnonymously && it.isNotBlank() },
             onConfirm = {
                 showConfirmDialog = false
                 viewModel.submitDonation(amountUsd = activeAmount)
             },
-            onDismiss = { showConfirmDialog = false },
+            onDismiss = {
+                showConfirmDialog = false
+                showMinimumAmountError = false
+            },
         )
     }
 
@@ -137,6 +165,7 @@ fun DonationScreen(
                     onPresetSelected = { amount ->
                         selectedPreset = amount
                         customAmount = ""
+                        showMinimumAmountError = false
                     },
                 )
 
@@ -147,25 +176,62 @@ fun DonationScreen(
                         val dotCount = filtered.count { it == '.' }
                         if (dotCount <= 1) {
                             customAmount = filtered
-                            if (filtered.isNotBlank()) selectedPreset = null
+                            if (filtered.isNotBlank()) {
+                                selectedPreset = null
+                                showMinimumAmountError = false
+                            }
                         }
                     },
                     label = { Text("Au weka kiasi chako (KES)") },
-                    placeholder = { Text("Mfano: 1000") },
+                    placeholder = { Text("Kiasi cha chini 100") },
                     prefix = { Text("KES") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    isError = isCustomAmountBelowMinimum,
+                    supportingText = {
+                        if (isCustomAmountBelowMinimum) {
+                            Text(
+                                text = "Kiasi cha chini ni KES $MINIMUM_DONATION",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                )
+
+                DonorIdentitySection(
+                    name = donorName,
+                    onNameChange = { donorName = it },
+                    email = donorEmail,
+                    onEmailChange = {
+                        donorEmail = it
+                        isDonorEmailError = false
+                    },
+                    isAnonymous = isDonatingAnonymously,
+                    onAnonymousToggle = { isDonatingAnonymously = it },
+                    isEmailError = isDonorEmailError,
                 )
 
                 Spacer(Modifier.height(4.dp))
 
                 DonateNowButton(
                     isLoading = state is DonationState.Loading,
-                    enabled = state !is DonationState.Loading && activeAmount != null && activeAmount > 0,
+                    enabled = state !is DonationState.Loading && activeAmount != null && activeAmount >= MINIMUM_DONATION,
                     onClick = {
-                        if (activeAmount != null && activeAmount > 0) showConfirmDialog = true
+                        when {
+                            activeAmount == null -> {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("Tafadhali weka kiasi cha mchango")
+                                }
+                            }
+                            activeAmount < MINIMUM_DONATION -> {
+                                showMinimumAmountError = true
+                            }
+                            else -> {
+                                showConfirmDialog = true
+                            }
+                        }
                     },
                 )
 

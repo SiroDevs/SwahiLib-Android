@@ -18,7 +18,7 @@ object ApiConstants {
     const val PAYSTACK_INITIALIZE = "transaction/initialize"
     const val PAYSTACK_CALLBACK_URL = "https://songlive.vercel.app/donation/callback"
     const val CALLBACK_URL = "https://swahilib.vercel.app/donation/callback"
-    const val DONOR_EMAIL  = "donor@swahilib.app"
+    const val DONOR_EMAIL  = "anonymous_donor@swahilib.app"
 }
 
 object PrefConstants {
