@@ -31,7 +31,6 @@ import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
-import com.swahilib.core.ui.components.indicators.LoadingState
 import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
@@ -128,7 +127,7 @@ fun ProverbScreen(
                     showDonation = showDonation,
                     onShowDonation = { navController.navigate(Routes.DONATION) },
                 )
-                ViewerState.Loading -> LoadingState(title = "Subiri kidogo ...", fileName = "opener-loading")
+                ViewerState.Loading -> {}
                 else -> EmptyState()
             }
         }

@@ -35,7 +35,6 @@ import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
-import com.swahilib.core.ui.components.indicators.LoadingState
 import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.home.components.HomeNavDrawer
 import com.swahilib.feature.home.components.HomeTab
@@ -155,7 +154,7 @@ fun HomeScreen(
                             message = (uiState as UiState.Error).message,
                             onRetry = { viewModel.fetchData() }
                         )
-                        UiState.Loading -> LoadingState(fileName = "circle-loader")
+                        UiState.Loading -> {}
                         else -> EmptyState()
                     }
                 } // Box
