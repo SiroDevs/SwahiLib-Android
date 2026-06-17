@@ -42,7 +42,7 @@ fun ConfirmDonationDialog(
     } else {
         String.format("%.2f", amount)
     }
-    val greeting = if (!donorName.isNullOrBlank()) "Asante, $donorName! " else ""
+    val greeting = if (!donorName.isNullOrBlank()) " $donorName! " else ""
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -56,7 +56,7 @@ fun ConfirmDonationDialog(
         },
         title = {
             Text(
-                text = "${greeting} kwa juhudi",
+                text = "Asante ${greeting} kwa juhudi",
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold,
                 ),

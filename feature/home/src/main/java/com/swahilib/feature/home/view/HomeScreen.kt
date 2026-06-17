@@ -155,7 +155,7 @@ fun HomeScreen(
                             message = (uiState as UiState.Error).message,
                             onRetry = { viewModel.fetchData() }
                         )
-                        UiState.Loading -> HomeSkeleton()
+                        is UiState.Loading -> HomeSkeleton()
                         else -> EmptyState()
                     }
                 } // Box
