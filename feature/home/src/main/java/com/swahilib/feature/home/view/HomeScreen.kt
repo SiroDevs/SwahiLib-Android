@@ -65,6 +65,22 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) { viewModel.fetchData() }
 
+    LaunchedEffect(deepLinkRoute, uiState) {
+        if (deepLinkRoute != null && uiState is UiState.Filtered) {
+            when {
+                deepLinkRoute.startsWith("swahilib://idiom/") -> {
+                    navController.navigate(Routes.DAILY_WORD)
+                }
+                deepLinkRoute.startsWith("swahilib://proverb/") -> {
+                    navController.navigate(Routes.DAILY_PROVERB)
+                }
+                else -> {
+                    navController.navigate(Routes.DAILY_WORD)
+                }
+            }
+        }
+    }
+
     LaunchedEffect(pagerState.currentPage) {
         viewModel.setSelectedTab(homeTabs[pagerState.currentPage])
     }
