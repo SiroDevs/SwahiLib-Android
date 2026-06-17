@@ -25,13 +25,21 @@ class DonationViewModel @Inject constructor(
     private val _state = MutableStateFlow<DonationState>(DonationState.Idle)
     val state: StateFlow<DonationState> = _state.asStateFlow()
 
-    fun submitDonation(amountUsd: Double) {
+    fun submitDonation(
+        amountUsd: Double,
+        donorName: String? = null,
+        donorEmail: String? = null,
+    ) {
         if (amountUsd <= 0) return
         _state.value = DonationState.Loading
 
         viewModelScope.launch {
             donationRepo
-                .submitDonation(amountUsd)
+                .submitDonation(
+                    amountUsd = amountUsd,
+                    donorName = donorName?.trim()?.takeIf { it.isNotBlank() },
+                    donorEmail = donorEmail?.trim()?.takeIf { it.isNotBlank() },
+                )
                 .onSuccess { redirectUrl ->
                     _state.value = DonationState.ReadyToPay(redirectUrl)
                 }

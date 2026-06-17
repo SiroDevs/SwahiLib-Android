@@ -19,31 +19,32 @@ class DonationRepo @Inject constructor(
     private val paystackService: PaystackService,
     @Named("paystack_secret") private val secretKey: String,
 ) {
-    suspend fun submitDonation(amountUsd: Double): Result<String> {
+    suspend fun submitDonation(
+        amountUsd: Double,
+        donorName: String? = null,
+        donorEmail: String? = null,
+    ): Result<String> {
         return try {
             val amountInCents = (amountUsd * 100).roundToLong()
             val reference = "SWAHILIB-${UUID.randomUUID().toString().take(8).uppercase()}"
 
+            val email = donorEmail?.takeIf { it.isNotBlank() } ?: ApiConstants.DONOR_EMAIL
+
+            val customFields = buildList {
+                add(PaystackCustomField(displayName = "App", variableName = "app", value = "SwahiLib"))
+                add(PaystackCustomField(displayName = "Reference", variableName = "reference", value = reference))
+                if (!donorName.isNullOrBlank()) {
+                    add(PaystackCustomField(displayName = "Donor Name", variableName = "donor_name", value = donorName))
+                }
+            }
+
             val response = paystackService.initializeTransaction(
                 bearer = "Bearer $secretKey",
                 body = PaystackInitializeRequest(
-                    email = ApiConstants.DONOR_EMAIL,
+                    email = email,
                     amount = amountInCents,
                     callbackUrl = ApiConstants.PAYSTACK_CALLBACK_URL,
-                    metadata = PaystackMetadata(
-                        customFields = listOf(
-                            PaystackCustomField(
-                                displayName = "App",
-                                variableName = "app",
-                                value = "SwahiLib",
-                            ),
-                            PaystackCustomField(
-                                displayName = "Reference",
-                                variableName = "reference",
-                                value = reference,
-                            ),
-                        )
-                    ),
+                    metadata = PaystackMetadata(customFields = customFields),
                 ),
             )
 

@@ -35,9 +35,9 @@ import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
-import com.swahilib.core.ui.components.indicators.LoadingState
 import com.swahilib.feature.home.HomeViewModel
 import com.swahilib.feature.home.components.HomeNavDrawer
+import com.swahilib.feature.home.components.HomeSkeleton
 import com.swahilib.feature.home.components.HomeTab
 import com.swahilib.feature.home.components.homeTabs
 import com.swahilib.feature.home.view.tabs.HomeHistory
@@ -64,6 +64,22 @@ fun HomeScreen(
     )
 
     LaunchedEffect(Unit) { viewModel.fetchData() }
+
+    LaunchedEffect(deepLinkRoute, uiState) {
+        if (deepLinkRoute != null && uiState is UiState.Filtered) {
+            when {
+                deepLinkRoute.startsWith("swahilib://idiom/") -> {
+                    navController.navigate(Routes.DAILY_WORD)
+                }
+                deepLinkRoute.startsWith("swahilib://proverb/") -> {
+                    navController.navigate(Routes.DAILY_PROVERB)
+                }
+                else -> {
+                    navController.navigate(Routes.DAILY_WORD)
+                }
+            }
+        }
+    }
 
     LaunchedEffect(pagerState.currentPage) {
         viewModel.setSelectedTab(homeTabs[pagerState.currentPage])
@@ -155,7 +171,7 @@ fun HomeScreen(
                             message = (uiState as UiState.Error).message,
                             onRetry = { viewModel.fetchData() }
                         )
-                        UiState.Loading -> LoadingState(fileName = "circle-loader")
+                        is UiState.Loading -> HomeSkeleton()
                         else -> EmptyState()
                     }
                 } // Box

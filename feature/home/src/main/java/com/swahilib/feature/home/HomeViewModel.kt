@@ -1,13 +1,19 @@
 package com.swahilib.feature.home
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.data.repos.HistoryRepo
 import com.swahilib.core.data.repos.IdiomRepo
+import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.data.repos.ProverbRepo
 import com.swahilib.core.data.repos.SayingRepo
 import com.swahilib.core.data.repos.WordRepo
+import com.swahilib.core.data.worker.SyncWorker
 import com.swahilib.core.database.model.HistoryEntity
 import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
@@ -16,6 +22,8 @@ import com.swahilib.core.database.model.WordEntity
 import com.swahilib.feature.home.components.ContentItem
 import com.swahilib.feature.home.components.HomeTab
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -33,23 +41,25 @@ class HomeViewModel @Inject constructor(
     private val sayingRepo: SayingRepo,
     private val wordRepo: WordRepo,
     private val historyRepo: HistoryRepo,
+    private val prefsRepo: PrefsRepo,
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _allIdioms    = MutableStateFlow<List<IdiomEntity>>(emptyList())
-    private val _allProverbs  = MutableStateFlow<List<ProverbEntity>>(emptyList())
-    private val _allSayings   = MutableStateFlow<List<SayingEntity>>(emptyList())
-    private val _allWords     = MutableStateFlow<List<WordEntity>>(emptyList())
+    private val _allIdioms = MutableStateFlow<List<IdiomEntity>>(emptyList())
+    private val _allProverbs = MutableStateFlow<List<ProverbEntity>>(emptyList())
+    private val _allSayings = MutableStateFlow<List<SayingEntity>>(emptyList())
+    private val _allWords = MutableStateFlow<List<WordEntity>>(emptyList())
 
-    private val _filteredIdioms   = MutableStateFlow<List<IdiomEntity>>(emptyList())
+    private val _filteredIdioms = MutableStateFlow<List<IdiomEntity>>(emptyList())
     private val _filteredProverbs = MutableStateFlow<List<ProverbEntity>>(emptyList())
-    private val _filteredSayings  = MutableStateFlow<List<SayingEntity>>(emptyList())
-    private val _filteredWords    = MutableStateFlow<List<WordEntity>>(emptyList())
-    val filteredIdioms:   StateFlow<List<IdiomEntity>>   get() = _filteredIdioms
+    private val _filteredSayings = MutableStateFlow<List<SayingEntity>>(emptyList())
+    private val _filteredWords = MutableStateFlow<List<WordEntity>>(emptyList())
+    val filteredIdioms: StateFlow<List<IdiomEntity>> get() = _filteredIdioms
     val filteredProverbs: StateFlow<List<ProverbEntity>> get() = _filteredProverbs
-    val filteredSayings:  StateFlow<List<SayingEntity>>  get() = _filteredSayings
-    val filteredWords:    StateFlow<List<WordEntity>>    get() = _filteredWords
+    val filteredSayings: StateFlow<List<SayingEntity>> get() = _filteredSayings
+    val filteredWords: StateFlow<List<WordEntity>> get() = _filteredWords
 
     val likedWords: StateFlow<List<WordEntity>>
         get() = _allWords.map { it.filter { w -> w.liked } }
@@ -70,26 +80,91 @@ class HomeViewModel @Inject constructor(
     private val _selectedTab = MutableStateFlow<HomeTab>(HomeTab.Search)
     val selectedTab: StateFlow<HomeTab> = _selectedTab.asStateFlow()
 
-    fun setSelectedTab(tab: HomeTab) { _selectedTab.value = tab }
+    private var dataFetched = false
+
+    fun setSelectedTab(tab: HomeTab) {
+        _selectedTab.value = tab
+    }
 
     fun fetchData(force: Boolean = false) {
-        if (!force && _uiState.value is UiState.Filtered) return
-        _uiState.tryEmit(UiState.Loading)
+        if (dataFetched && !force) return
+        dataFetched = true
+
         viewModelScope.launch {
-            _allIdioms.value   = idiomRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
-            _filteredIdioms.value = _allIdioms.value
+            _uiState.tryEmit(UiState.Loading)
+            loadFromDb()
 
-            _allProverbs.value = proverbRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
-            _filteredProverbs.value = _allProverbs.value
+            if (_allWords.value.isEmpty() && _allIdioms.value.isEmpty() &&
+                _allProverbs.value.isEmpty() && _allSayings.value.isEmpty()) {
+                observeInstallSyncWorker()
+            }
+        }
+    }
 
-            _allSayings.value  = sayingRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
-            _filteredSayings.value = _allSayings.value
+    private suspend fun loadFromDb() {
+        _uiState.tryEmit(UiState.Loading)
+        _allIdioms.value = idiomRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
+        _filteredIdioms.value = _allIdioms.value
 
-            _allWords.value    = wordRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
-            _filteredWords.value = _allWords.value
+        _allProverbs.value = proverbRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
+        _filteredProverbs.value = _allProverbs.value
 
-            _history.value = historyRepo.fetchLocalData().sortedByDescending { it.createdAt }
+        _allSayings.value = sayingRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
+        _filteredSayings.value = _allSayings.value
+
+        _allWords.value = wordRepo.fetchLocalData().sortedBy { it.title?.lowercase() }
+        _filteredWords.value = _allWords.value
+
+        _history.value = historyRepo.fetchLocalData().sortedByDescending { it.createdAt }
+
+        if (prefsRepo.isDataLoaded && _allWords.value.isNotEmpty()) {
             _uiState.tryEmit(UiState.Filtered)
+        } else if (!prefsRepo.isDataLoaded) {
+            _uiState.tryEmit(UiState.Loading)
+        } else {
+            _uiState.tryEmit(UiState.Filtered)
+        }
+    }
+
+    private fun observeInstallSyncWorker() {
+        viewModelScope.launch(Dispatchers.Main) {
+            _uiState.tryEmit(UiState.Loading)
+            try {
+                WorkManager.getInstance(context)
+                    .getWorkInfosByTagFlow(SyncWorker.TAG)
+                    .collect { workInfoList ->
+                        val info = workInfoList.firstOrNull() ?: return@collect
+                        when (info.state) {
+                            WorkInfo.State.SUCCEEDED -> {
+                                loadFromDb()
+                                return@collect
+                            }
+                            WorkInfo.State.FAILED,
+                            WorkInfo.State.CANCELLED -> {
+                                if (_allWords.value.isEmpty() && _allIdioms.value.isEmpty() &&
+                                    _allProverbs.value.isEmpty() && _allSayings.value.isEmpty()) {
+                                    _uiState.tryEmit(UiState.Filtered)
+                                } else {
+                                    _uiState.tryEmit(UiState.Error("Failed to load data"))
+                                }
+                                return@collect
+                            }
+                            WorkInfo.State.RUNNING,
+                            WorkInfo.State.ENQUEUED -> {
+                                _uiState.tryEmit(UiState.Loading)
+                            }
+                            else -> { /* other states */ }
+                        }
+                    }
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Worker observation error", e)
+                if (_allWords.value.isEmpty() && _allIdioms.value.isEmpty() &&
+                    _allProverbs.value.isEmpty() && _allSayings.value.isEmpty()) {
+                    _uiState.tryEmit(UiState.Filtered)
+                } else {
+                    _uiState.tryEmit(UiState.Error("Error loading data"))
+                }
+            }
         }
     }
 
@@ -102,39 +177,30 @@ class HomeViewModel @Inject constructor(
     fun filterData(query: String) {
         val q = query.lowercase().trim()
         if (q.isEmpty()) {
-            _filteredIdioms.value   = _allIdioms.value
+            _filteredIdioms.value = _allIdioms.value
             _filteredProverbs.value = _allProverbs.value
-            _filteredSayings.value  = _allSayings.value
-            _filteredWords.value    = _allWords.value
+            _filteredSayings.value = _allSayings.value
+            _filteredWords.value = _allWords.value
             return
         }
 
-        _filteredIdioms.value   = fuzzyRank(_allIdioms.value,   q) { it.title }
+        _filteredIdioms.value = fuzzyRank(_allIdioms.value, q) { it.title }
         _filteredProverbs.value = fuzzyRank(_allProverbs.value, q) { it.title }
-        _filteredSayings.value  = fuzzyRank(_allSayings.value,  q) { it.title }
-        _filteredWords.value    = fuzzyRank(_allWords.value,    q) { it.title }
+        _filteredSayings.value = fuzzyRank(_allSayings.value, q) { it.title }
+        _filteredWords.value = fuzzyRank(_allWords.value, q) { it.title }
     }
 
-    /**
-     * Ranks items by relevance to [query]:
-     *  0 – exact match
-     *  1 – starts with query
-     *  2 – contains query
-     *  3 – fuzzy (edit-distance ≤ max(1, query.length/3))
-     *
-     * Items with no match at all are excluded from results.
-     */
     private fun <T> fuzzyRank(items: List<T>, query: String, title: (T) -> String?): List<T> {
         val maxDist = max(1, query.length / 3)
         return items
             .mapNotNull { item ->
                 val t = title(item)?.lowercase() ?: return@mapNotNull null
                 val priority = when {
-                    t == query                    -> 0
-                    t.startsWith(query)           -> 1
-                    t.contains(query)             -> 2
+                    t == query -> 0
+                    t.startsWith(query) -> 1
+                    t.contains(query) -> 2
                     editDistance(t, query) <= maxDist -> 3
-                    else                          -> return@mapNotNull null
+                    else -> return@mapNotNull null
                 }
                 item to priority
             }
@@ -142,9 +208,6 @@ class HomeViewModel @Inject constructor(
             .map { it.first }
     }
 
-    /**
-     * Classic Levenshtein edit-distance (capped early for performance).
-     */
     private fun editDistance(a: String, b: String): Int {
         if (a == b) return 0
         if (a.isEmpty()) return b.length
@@ -170,7 +233,8 @@ class HomeViewModel @Inject constructor(
             val updated = word.copy(liked = !word.liked)
             wordRepo.updateWord(updated)
             _allWords.value = _allWords.value.map { if (it.rid == word.rid) updated else it }
-            _filteredWords.value = _filteredWords.value.map { if (it.rid == word.rid) updated else it }
+            _filteredWords.value =
+                _filteredWords.value.map { if (it.rid == word.rid) updated else it }
         }
     }
 
@@ -179,7 +243,8 @@ class HomeViewModel @Inject constructor(
             val updated = idiom.copy(liked = !idiom.liked)
             idiomRepo.updateIdiom(updated)
             _allIdioms.value = _allIdioms.value.map { if (it.rid == idiom.rid) updated else it }
-            _filteredIdioms.value = _filteredIdioms.value.map { if (it.rid == idiom.rid) updated else it }
+            _filteredIdioms.value =
+                _filteredIdioms.value.map { if (it.rid == idiom.rid) updated else it }
         }
     }
 
@@ -187,8 +252,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val updated = proverb.copy(liked = !proverb.liked)
             proverbRepo.updateProverb(updated)
-            _allProverbs.value = _allProverbs.value.map { if (it.rid == proverb.rid) updated else it }
-            _filteredProverbs.value = _filteredProverbs.value.map { if (it.rid == proverb.rid) updated else it }
+            _allProverbs.value =
+                _allProverbs.value.map { if (it.rid == proverb.rid) updated else it }
+            _filteredProverbs.value =
+                _filteredProverbs.value.map { if (it.rid == proverb.rid) updated else it }
         }
     }
 
@@ -197,7 +264,8 @@ class HomeViewModel @Inject constructor(
             val updated = saying.copy(liked = !saying.liked)
             sayingRepo.updateSaying(updated)
             _allSayings.value = _allSayings.value.map { if (it.rid == saying.rid) updated else it }
-            _filteredSayings.value = _filteredSayings.value.map { if (it.rid == saying.rid) updated else it }
+            _filteredSayings.value =
+                _filteredSayings.value.map { if (it.rid == saying.rid) updated else it }
         }
     }
 
@@ -215,11 +283,19 @@ class HomeViewModel @Inject constructor(
 
     fun resolveHistoryItem(historyEntity: HistoryEntity): ContentItem? {
         return when (historyEntity.type) {
-            "word"    -> _allWords.value.find { it.rid == historyEntity.item }?.let { ContentItem.Word(it) }
-            "idiom"   -> _allIdioms.value.find { it.rid == historyEntity.item }?.let { ContentItem.Idiom(it) }
-            "proverb" -> _allProverbs.value.find { it.rid == historyEntity.item }?.let { ContentItem.Proverb(it) }
-            "saying"  -> _allSayings.value.find { it.rid == historyEntity.item }?.let { ContentItem.Saying(it) }
-            else      -> null
+            "word" -> _allWords.value.find { it.rid == historyEntity.item }
+                ?.let { ContentItem.Word(it) }
+
+            "idiom" -> _allIdioms.value.find { it.rid == historyEntity.item }
+                ?.let { ContentItem.Idiom(it) }
+
+            "proverb" -> _allProverbs.value.find { it.rid == historyEntity.item }
+                ?.let { ContentItem.Proverb(it) }
+
+            "saying" -> _allSayings.value.find { it.rid == historyEntity.item }
+                ?.let { ContentItem.Saying(it) }
+
+            else -> null
         }
     }
 }

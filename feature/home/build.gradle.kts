@@ -11,4 +11,8 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(libs.androidx.foundation)
+
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 }

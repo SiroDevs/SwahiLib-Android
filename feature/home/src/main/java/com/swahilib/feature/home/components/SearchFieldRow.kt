@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.swahilib.core.ui.components.indicators.ShimmerBrush
 
 @Composable
 fun SearchFieldRow(
@@ -61,6 +62,29 @@ fun SearchFieldRow(
                 IconButton(onClick = onVoiceSearch) {
                     Icon(Icons.Filled.Mic, contentDescription = "Tafuta kwa Sauti")
                 }
+            }
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(12.dp)
+    )
+}
+
+
+@Composable
+fun SearchFieldSkeleton() {
+    val brush = ShimmerBrush()
+    OutlinedTextField(
+        value = "",
+        onValueChange = {},
+        modifier = Modifier
+            .fillMaxWidth().background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 5.dp, vertical = 5.dp)
+            .background(brush),
+        placeholder = { Text("") },
+        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+        trailingIcon = {
+            IconButton(onClick = {}) {
+                Icon(Icons.Filled.Mic, contentDescription = "")
             }
         },
         singleLine = true,

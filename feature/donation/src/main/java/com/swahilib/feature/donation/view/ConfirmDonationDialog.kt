@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ConfirmDonationDialog(
     amount: Double,
+    donorName: String? = null,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -41,6 +42,7 @@ fun ConfirmDonationDialog(
     } else {
         String.format("%.2f", amount)
     }
+    val greeting = if (!donorName.isNullOrBlank()) " $donorName! " else ""
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -54,7 +56,7 @@ fun ConfirmDonationDialog(
         },
         title = {
             Text(
-                text = "Uko Tayari na Mchango?",
+                text = "Asante ${greeting} kwa juhudi",
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold,
                 ),
@@ -64,7 +66,7 @@ fun ConfirmDonationDialog(
         text = {
             Text(
                 text = "Je, uko tayari kuendelea na mchango wako wa KES $displayAmount " +
-                    "ili kuunga mkono mradi wa SwahiLib?",
+                    "ili kuweza kuunga mkono mradi wa SwahiLib?",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
