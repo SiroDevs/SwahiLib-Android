@@ -31,26 +31,14 @@ class MainViewModel @Inject constructor(
             if (prefsRepo.installDate == 0L) {
                 prefsRepo.installDate = System.currentTimeMillis()
             }
-
-            when {
-                !prefsRepo.isDataLoaded -> {
-                    Log.d(TAG, "First install – scheduling install sync via WorkManager")
-                    SyncScheduler.scheduleInstallSync(context)
-                }
-                prefsRepo.needsDailySync() -> {
-                    Log.d(TAG, "Daily sync due – scheduling background sync via WorkManager")
-                    SyncScheduler.scheduleDailySync(context)
-                }
-                else -> {
-                    Log.d(TAG, "Data is fresh – no sync needed today")
-                }
-            }
+            Log.d(TAG, "Scheduling sync on launch")
+            SyncScheduler.scheduleOnLaunch(context)
 
             _isReady.value = true
         }
     }
 
     companion object {
-        private const val TAG = "SplashViewModel"
+        private const val TAG = "MainViewModel"
     }
 }
