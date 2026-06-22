@@ -18,9 +18,5 @@ data class SayingEntity(
     @PrimaryKey val rid: Int = 0,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "meaning") val meaning: String? = null,
-    @ColumnInfo(name = "views") val views: Int = 0,
-    @ColumnInfo(name = "likes") val likes: Int = 0,
     @ColumnInfo(name = "liked") val liked: Boolean = false,
-    @ColumnInfo(name = "createdAt") val createdAt: String? = null,
-    @ColumnInfo(name = "updatedAt") val updatedAt: String? = null,
 ) : Parcelable
