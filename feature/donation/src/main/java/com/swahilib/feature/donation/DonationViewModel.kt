@@ -34,9 +34,11 @@ class DonationViewModel @Inject constructor(
         _state.value = DonationState.Loading
 
         viewModelScope.launch {
+            val donationAmount = calculateDonationWithFee(amountUsd)
+
             donationRepo
                 .submitDonation(
-                    amountUsd = amountUsd,
+                    amountUsd = donationAmount.total,
                     donorName = donorName?.trim()?.takeIf { it.isNotBlank() },
                     donorEmail = donorEmail?.trim()?.takeIf { it.isNotBlank() },
                 )
@@ -51,7 +53,28 @@ class DonationViewModel @Inject constructor(
         }
     }
 
+    private fun calculateDonationWithFee(amountKes: Double): DonationAmount {
+        val fee = when {
+            amountKes in 1.0..1500.0 -> 20.0
+            amountKes in 1501.0..20000.0 -> 40.0
+            amountKes >= 20001.0 -> 60.0
+            else -> 0.0
+        }
+
+        return DonationAmount(
+            originalAmount = amountKes,
+            fee = fee,
+            total = amountKes + fee
+        )
+    }
+
     fun resetState() {
         _state.value = DonationState.Idle
     }
 }
+
+data class DonationAmount(
+    val originalAmount: Double,
+    val fee: Double,
+    val total: Double
+)
