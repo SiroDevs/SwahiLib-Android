@@ -13,8 +13,6 @@ dependencies {
     api(project(":core:common"))
     api(project(":core:database"))
 
-    implementation(platform(libs.jan.tennert.supabase.bom))
-    implementation(libs.jan.tennert.supabase.postgrest)
     implementation(libs.ktor.client.android)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.squareup.retrofit)

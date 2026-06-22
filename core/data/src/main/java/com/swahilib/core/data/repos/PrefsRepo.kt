@@ -1,10 +1,11 @@
 package com.swahilib.core.data.repos
 
 import android.content.Context
+import androidx.core.content.edit
 import com.swahilib.core.common.utils.NotifConstants
 import com.swahilib.core.common.utils.PrefConstants
+import com.swahilib.core.network.api.KamusiApi
 import dagger.hilt.android.qualifiers.ApplicationContext
-import androidx.core.content.edit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,10 +42,7 @@ class PrefsRepo @Inject constructor(
     fun hasTimeExceeded(hours: Int = 5): Boolean {
         val lastTime = lastAppOpenTime
         if (lastTime == 0L) return false
-        val currentTime = System.currentTimeMillis()
-        val timeDifference = currentTime - lastTime
-        val hoursInMillis = hours * 60 * 60 * 1000L
-        return timeDifference >= hoursInMillis
+        return System.currentTimeMillis() - lastTime >= hours * 60 * 60 * 1000L
     }
 
     fun updateAppOpenTime() { lastAppOpenTime = System.currentTimeMillis() }
@@ -66,10 +64,9 @@ class PrefsRepo @Inject constructor(
     fun shouldShowDonation(): Boolean {
         val now = System.currentTimeMillis()
         val oneDayMs = 24 * 60 * 60 * 1000L
-        val sixtyDaysMs = 60 * oneDayMs
         if (installDate == 0L || now - installDate < oneDayMs) return false
         val donated = donationDoneAt
-        return donated == 0L || now - donated > sixtyDaysMs
+        return donated == 0L || now - donated > 60 * oneDayMs
     }
 
     fun recordDonation() {
@@ -80,14 +77,6 @@ class PrefsRepo @Inject constructor(
     var lastSyncedAt: Long
         get() = prefs.getLong(PrefConstants.LAST_SYNCED_AT, 0L)
         set(value) = prefs.edit { putLong(PrefConstants.LAST_SYNCED_AT, value) }
-
-    fun needsDailySync(): Boolean {
-        val last = lastSyncedAt
-        if (last == 0L) return false
-        val elapsed = System.currentTimeMillis() - last
-        val oneDayMs = 24 * 60 * 60 * 1000L
-        return elapsed >= oneDayMs
-    }
 
     var wordNotifEnabled: Boolean
         get() = prefs.getBoolean(PrefConstants.NOTIF_WORD_ENABLED, true)
@@ -116,4 +105,14 @@ class PrefsRepo @Inject constructor(
     var notifBannerDismissed: Boolean
         get() = prefs.getBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, false)
         set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, value) }
+
+    fun getETag(endpoint: KamusiApi.Endpoint): String? =
+        prefs.getString(endpoint.prefKey, null)
+
+    fun setETag(endpoint: KamusiApi.Endpoint, etag: String) =
+        prefs.edit { putString(endpoint.prefKey, etag) }
+
+    fun clearETags() = prefs.edit {
+        KamusiApi.Endpoint.entries.forEach { remove(it.prefKey) }
+    }
 }

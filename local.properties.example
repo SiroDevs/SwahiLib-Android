@@ -7,6 +7,4 @@
 #Fri Apr 24 13:07:53 EAT 2026
 sdk.dir=/Users/sirodaves/Developer/Android/Sdk
 
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
 PAYSTACK_SECRET_KEY=

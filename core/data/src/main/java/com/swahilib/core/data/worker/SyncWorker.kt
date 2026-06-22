@@ -11,22 +11,12 @@ import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.data.repos.ProverbRepo
 import com.swahilib.core.data.repos.SayingRepo
 import com.swahilib.core.data.repos.WordRepo
+import com.swahilib.core.network.api.KamusiApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
-/**
- * Background worker that fetches all dictionary data from Supabase and
- * persists it to the local Room database.
- *
- * Enqueued in two scenarios:
- *  1. First install  – runs immediately, app proceeds to HOME straight away.
- *  2. Once per day   – re-syncs changes without blocking the UI.
- *
- * Uses @HiltWorker so all repo dependencies are injected by Hilt.
- * Register [HiltWorkerFactory] in [SwahiLibApp] (see app module changes).
- */
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
     @Assisted private val context: Context,
@@ -36,47 +26,62 @@ class SyncWorker @AssistedInject constructor(
     private val sayingRepo: SayingRepo,
     private val wordRepo: WordRepo,
     private val prefsRepo: PrefsRepo,
+    private val api: KamusiApi,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
         if (!NetworkUtils.isNetworkAvailable(context)) {
-            Log.w(TAG, "No network – retrying later")
-            // Retry: WorkManager will back-off and try again when network is available
-            return Result.retry()
+            Log.w(TAG, "⚠️ No network — skipping sync")
+            return Result.success()
         }
 
         return try {
-            Log.d(TAG, "▶ SyncWorker starting…")
+            Log.d(TAG, "▶ SyncWorker starting")
 
             coroutineScope {
-                val idioms   = async { idiomRepo.fetchRemoteData() }
-                val proverbs = async { proverbRepo.fetchRemoteData() }
-                val sayings  = async { sayingRepo.fetchRemoteData() }
-                val words    = async { wordRepo.fetchRemoteData() }
-
-                idioms.await()
-                proverbs.await()
-                sayings.await()
-                words.await()
+                KamusiApi.Endpoint.entries.map { endpoint ->
+                    async { syncEndpoint(endpoint) }
+                }.forEach { it.await() }
             }
 
             prefsRepo.isDataLoaded = true
             prefsRepo.lastSyncedAt = System.currentTimeMillis()
-            Log.d(TAG, "✅ SyncWorker completed successfully")
+            Log.d(TAG, "✅ SyncWorker done")
             Result.success()
 
         } catch (e: Exception) {
             Log.e(TAG, "❌ SyncWorker failed: ${e.message}", e)
-            // Retry up to WorkManager's default back-off limit
             Result.retry()
+        }
+    }
+
+    private suspend fun syncEndpoint(endpoint: KamusiApi.Endpoint) {
+        val storedETag = prefsRepo.getETag(endpoint)
+        val newETag = api.fetchETag(endpoint, storedETag)
+
+        if (newETag == null) {
+            Log.d(TAG, "⏭ ${endpoint.path} — no changes")
+            return
+        }
+
+        Log.d(TAG, "⬇ ${endpoint.path} changed — downloading")
+        val success = when (endpoint) {
+            KamusiApi.Endpoint.WORDS    -> wordRepo.fetchRemoteData().isSuccess
+            KamusiApi.Endpoint.IDIOMS   -> idiomRepo.fetchRemoteData().isSuccess
+            KamusiApi.Endpoint.PROVERBS -> proverbRepo.fetchRemoteData().isSuccess
+            KamusiApi.Endpoint.SAYINGS  -> sayingRepo.fetchRemoteData().isSuccess
+        }
+
+        if (success) {
+            prefsRepo.setETag(endpoint, newETag)
+            Log.d(TAG, "💾 ${endpoint.path} ETag saved: $newETag")
+        } else {
+            Log.w(TAG, "⚠️ ${endpoint.path} seed failed — ETag not saved, will retry next launch")
         }
     }
 
     companion object {
         const val TAG = "SyncWorker"
-        /** Unique name for the one-time daily sync request so duplicates are ignored. */
-        const val DAILY_SYNC_WORK_NAME = "swahilib_daily_sync"
-        /** Unique name for the first-install sync request. */
-        const val INSTALL_SYNC_WORK_NAME = "swahilib_install_sync"
+        const val SYNC_WORK_NAME = "swahilib_sync"
     }
 }

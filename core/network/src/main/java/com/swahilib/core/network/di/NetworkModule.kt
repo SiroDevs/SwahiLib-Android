@@ -1,6 +1,7 @@
 package com.swahilib.core.network.di
 
 import com.swahilib.core.common.utils.ApiConstants
+import com.swahilib.core.network.api.KamusiApi
 import com.swahilib.core.network.services.PaystackService
 import dagger.Module
 import dagger.Provides
@@ -12,6 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -47,4 +49,8 @@ object NetworkModule {
             .client(okHttpClient)
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideKamusiApi(client: OkHttpClient): KamusiApi = KamusiApi(client)
 }
