@@ -10,12 +10,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import com.swahilib.core.database.daos.SearchDao
 import com.swahilib.core.database.model.SearchEntity
-import io.github.jan.supabase.postgrest.Postgrest
 
 @Singleton
 class SearchRepo @Inject constructor(
     private val searchesDao: SearchDao,
-    private val supabase: Postgrest,
 ) {
     suspend fun fetchLocalData(): List<SearchEntity> {
         return withContext(Dispatchers.IO) {

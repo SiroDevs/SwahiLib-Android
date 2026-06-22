@@ -10,56 +10,32 @@ import com.swahilib.core.network.dtos.SayingDto
 import com.swahilib.core.network.dtos.WordDto
 
 object MapDtoToEntity {
-    fun mapToEntity(entity: IdiomDto): IdiomEntity {
-        return IdiomEntity(
-            rid = entity.rid,
-            title = entity.title,
-            meaning = entity.meaning,
-            views = entity.views,
-            likes = entity.likes,
-            createdAt = entity.createdAt,
-            updatedAt = entity.updatedAt,
-        )
-    }
+    fun mapToEntity(dto: WordDto) = WordEntity(
+        rid = dto.rid,
+        title = dto.title,
+        synonyms = dto.synonyms,
+        meaning = dto.meaning,
+        conjugation = dto.conjugation,
+        english = dto.english,
+    )
 
-    fun mapToEntity(entity: ProverbDto): ProverbEntity {
-        return ProverbEntity(
-            rid = entity.rid,
-            title = entity.title,
-            synonyms = entity.synonyms,
-            meaning = entity.meaning,
-            conjugation = entity.conjugation,
-            views = entity.views,
-            likes = entity.likes,
-            createdAt = entity.createdAt,
-            updatedAt = entity.updatedAt,
-        )
-    }
+    fun mapToEntity(dto: IdiomDto) = IdiomEntity(
+        rid = dto.rid,
+        title = dto.title,
+        meaning = dto.meaning,
+    )
 
-    fun mapToEntity(entity: SayingDto): SayingEntity {
-        return SayingEntity(
-            rid = entity.rid,
-            title = entity.title,
-            meaning = entity.meaning,
-            views = entity.views,
-            likes = entity.likes,
-            createdAt = entity.createdAt,
-            updatedAt = entity.updatedAt,
-        )
-    }
+    fun mapToEntity(dto: ProverbDto) = ProverbEntity(
+        rid = dto.rid,
+        title = dto.title,
+        synonyms = dto.synonyms,
+        meaning = dto.meaning,
+        conjugation = dto.conjugation,
+    )
 
-    fun mapToEntity(entity: WordDto): WordEntity {
-        return WordEntity(
-            rid = entity.rid,
-            title = entity.title,
-            synonyms = entity.synonyms,
-            meaning = entity.meaning,
-            conjugation = entity.conjugation,
-            views = entity.views,
-            likes = entity.likes,
-            createdAt = entity.createdAt,
-            updatedAt = entity.updatedAt,
-            english = entity.english,
-        )
-    }
+    fun mapToEntity(dto: SayingDto) = SayingEntity(
+        rid = dto.rid,
+        title = dto.title,
+        meaning = dto.meaning,
+    )
 }

@@ -17,7 +17,6 @@ ksp = "2.3.4"
 room = "2.8.4"
 squareup = "3.0.0"
 squareupOk = "5.3.2"
-supabase = "3.6.0"
 ktor = "3.5.0"
 kotlinx-serialization = "1.11.0"
 material3 = "1.4.0"
@@ -61,8 +60,6 @@ material3 = { group = "androidx.compose.material3", name = "material3", version.
 squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "squareup" }
 squareup-retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "squareup" }
 squareup-okhttp3-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "squareupOk" }
-jan-tennert-supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
-jan-tennert-supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie-compose" }

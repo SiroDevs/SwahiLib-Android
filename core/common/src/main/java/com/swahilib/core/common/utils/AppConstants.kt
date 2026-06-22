@@ -19,6 +19,7 @@ object ApiConstants {
     const val PAYSTACK_CALLBACK_URL = "https://songlive.vercel.app/donation/callback"
     const val CALLBACK_URL = "https://swahilib.vercel.app/donation/callback"
     const val DONOR_EMAIL  = "anonymous_donor@swahilib.app"
+    const val KAMUSI_API = "https://sir-o-libs.vercel.app/kamusi/"
 }
 
 object PrefConstants {
@@ -60,7 +61,6 @@ object DeepLinkConstants {
 }
 
 object Routes {
-    const val APP_START = "app_start"
     const val HOME = "home"
     const val IDIOM = "idiom"
     const val PROVERB = "proverb"

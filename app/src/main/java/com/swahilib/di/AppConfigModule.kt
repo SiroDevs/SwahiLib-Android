@@ -11,14 +11,6 @@ import javax.inject.Named
 @InstallIn(SingletonComponent::class)
 object AppConfigModule {
     @Provides
-    @Named("supabase_url")
-    fun provideSupabaseUrl(): String = BuildConfig.SupabaseUrl
-
-    @Provides
-    @Named("supabase_key")
-    fun provideSupabaseKey(): String = BuildConfig.SupabaseKey
-
-    @Provides
     @Named("paystack_secret")
     fun providePaystackSecret(): String = BuildConfig.PaystackSecret
 }

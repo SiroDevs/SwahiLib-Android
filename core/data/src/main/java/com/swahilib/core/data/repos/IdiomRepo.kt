@@ -3,9 +3,9 @@ package com.swahilib.core.data.repos
 import android.util.Log
 import com.swahilib.core.database.daos.IdiomDao
 import com.swahilib.core.database.model.IdiomEntity
+import com.swahilib.core.network.api.KamusiApi
 import com.swahilib.core.network.dtos.IdiomDto
 import com.swahilib.core.network.mapper.MapDtoToEntity
-import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -17,83 +17,36 @@ import javax.inject.Singleton
 @Singleton
 class IdiomRepo @Inject constructor(
     private val idiomsDao: IdiomDao,
-    private val supabase: Postgrest,
+    private val api: KamusiApi,
 ) {
-    suspend fun fetchRemoteData() {
-        try {
-            Log.d("TAG", "Fetching idioms")
-            val result = supabase["idioms"]
-                .select()
-                .decodeList<IdiomDto>()
-
-            if (result.isNotEmpty()) {
-                val idioms = result.map { MapDtoToEntity.mapToEntity(it) }
-                Log.d("TAG", "✅ ${idioms.size} idioms fetched")
-                saveIdioms(idioms)
-            } else {
-                Log.d("TAG", "⚠️ No idioms fetched from remote")
-            }
-        } catch (e: Exception) {
-            Log.e("TAG", "❌ Error fetching idioms: ${e.message}", e)
-        }
+    suspend fun fetchRemoteData(): Result<Int> = withContext(Dispatchers.IO) {
+        runCatching {
+            val dtos = api.fetchJson<IdiomDto>(KamusiApi.Endpoint.IDIOMS)
+                ?: return@runCatching 0
+            val entities = dtos.map(MapDtoToEntity::mapToEntity)
+            idiomsDao.insertAll(entities)
+            Log.d(TAG, "✅ ${entities.size} idioms seeded")
+            entities.size
+        }.onFailure { Log.e(TAG, "❌ fetchRemoteData failed: ${it.message}", it) }
     }
 
-    suspend fun saveIdioms(idioms: List<IdiomEntity>) {
-        if (idioms.isEmpty()) {
-            Log.d("TAG", "⚠️ No idioms to save")
-            return
-        }
-
-        try {
-            idiomsDao.insertAll(idioms)
-            Log.d("TAG", "✅ ${idioms.size} idioms saved successfully")
-        } catch (e: Exception) {
-            Log.e("TAG", "❌ Error saving idioms: ${e.message}", e)
-            throw e
-        }
+    suspend fun fetchLocalData(): List<IdiomEntity> = withContext(Dispatchers.IO) {
+        idiomsDao.getAll()?.first() ?: emptyList()
     }
 
-    suspend fun fetchLocalData(): List<IdiomEntity> {
-        return withContext(Dispatchers.IO) {
-            idiomsDao.getAll()?.first() ?: emptyList()
-        }
+    suspend fun saveIdiom(idiom: IdiomEntity) = withContext(Dispatchers.IO) {
+        idiomsDao.insert(idiom)
     }
 
-    suspend fun saveIdiom(idiom: IdiomEntity) {
-        withContext(Dispatchers.IO) {
-            idiomsDao.insert(idiom)
-        }
+    suspend fun updateIdiom(idiom: IdiomEntity) = withContext(Dispatchers.IO) {
+        runCatching { idiomsDao.update(idiom) }
+            .onFailure { Log.e(TAG, "updateIdiom: ${it.message}") }
     }
 
-    suspend fun updateIdiom(idiom: IdiomEntity) {
-        try {
-            withContext(Dispatchers.IO) {
-                idiomsDao.update(idiom)
-            }
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
-    }
+    fun getIdiomsByTitles(titles: List<String>): Flow<List<IdiomEntity>> =
+        idiomsDao.getIdiomsByTitles(titles)
 
-    suspend fun searchIdiomsByTitle(title: String?) {
-//        idiomsDao.searchIdiomByTitle(title)?.map { it.asDomainModel() }
-    }
+    suspend fun getIdiomById(idiomId: String): Flow<IdiomEntity> = flow {}
 
-    fun getIdiomsByTitles(titles: List<String>): Flow<List<IdiomEntity>> {
-        return idiomsDao.getIdiomsByTitles(titles)
-    }
-
-    suspend fun getIdiomById(idiomId: String): Flow<IdiomEntity> {
-        try {
-//            val idiomFlow = idiomsDao.getById(idiomId)
-//            return idiomFlow.map {
-//                it.asDomainModel()
-//            }
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
-        return flow {}
-    }
-
+    companion object { private const val TAG = "IdiomRepo" }
 }
-
