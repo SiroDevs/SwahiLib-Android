@@ -111,12 +111,12 @@ fun HomeScreen(
             },
             bottomBar = {
                 NavigationBar(containerColor = MaterialTheme.colorScheme.onPrimary) {
-                    homeTabs.forEach { tab ->
+                    homeTabs.forEach { homeTab ->
                         NavigationBarItem(
-                            icon = { Icon(tab.icon, contentDescription = tab.title) },
-                            label = { Text(tab.title) },
-                            selected = selectedTab == tab,
-                            onClick = { viewModel.setSelectedTab(tab) },
+                            icon = { Icon(homeTab.icon, contentDescription = homeTab.title) },
+                            label = { Text(homeTab.title) },
+                            selected = selectedTab == homeTab,
+                            onClick = { viewModel.setSelectedTab(homeTab) },
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = MaterialTheme.colorScheme.primary,
                                 selectedTextColor = MaterialTheme.colorScheme.primary,

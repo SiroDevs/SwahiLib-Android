@@ -11,8 +11,6 @@ activityCompose = "1.13.0"
 composeBom = "2026.05.00"
 compose = "1.11.1"
 composeMaterial = "1.7.8"
-hilt = "2.59.2"
-hiltNav = "1.3.0"
 ksp = "2.3.4"
 room = "2.8.4"
 squareup = "3.0.0"
@@ -25,8 +23,10 @@ sentry = "6.7.0"
 billing = "8.3.0"
 compiler = "3.2.0-alpha11"
 foundation = "1.11.1"
-workmanager = "2.11.2"
+hilt = "2.59.2"
+hiltNav = "1.3.0"
 hilt-work = "1.2.0"
+workmanager = "2.11.2"
 splashscreen = "1.0.1"
 
 [libraries]
@@ -79,6 +79,7 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 io-sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 # Convention plugin aliases (defined in build-logic)
 swahilib-android-library = { id = "swahilib.android.library", version = "unspecified" }
