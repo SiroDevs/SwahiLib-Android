@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.swahilib.hilt)
     alias(libs.plugins.devtools.ksp)
-    kotlin("plugin.serialization") version "2.1.21"
+    alias(libs.plugins.kotlin.serialization)
     id("kotlin-parcelize")
     alias(libs.plugins.io.sentry)
 }
@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 165
-        versionName = "1.0.165"
+        versionCode = 166
+        versionName = "1.0.166"
         minSdk = 26
         targetSdk = 37
 

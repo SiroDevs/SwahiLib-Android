@@ -34,8 +34,8 @@ sealed class ContentItem {
 }
 
 sealed class HomeTab(var title: String, var icon: ImageVector) {
-    object Search  : HomeTab("Tafuta", Icons.Default.Search)
-    object Likes   : HomeTab("Vipendwa", Icons.Default.Favorite)
+    object Search : HomeTab("Tafuta", Icons.Default.Search)
+    object Likes : HomeTab("Vipendwa", Icons.Default.Favorite)
     object History : HomeTab("Historia", Icons.Default.History)
 }
 

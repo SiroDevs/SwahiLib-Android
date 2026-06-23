@@ -1,3 +1,4 @@
+import com.swahilib.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -9,8 +10,8 @@ class HiltConventionPlugin : Plugin<Project> {
             pluginManager.apply("com.google.devtools.ksp")
 
             dependencies {
-                add("implementation", "com.google.dagger:hilt-android:2.57.2")
-                add("ksp", "com.google.dagger:hilt-compiler:2.57.2")
+                add("implementation", libs.findLibrary("hilt.android").get())
+                add("ksp", libs.findLibrary("hilt.compiler").get())
             }
         }
     }
