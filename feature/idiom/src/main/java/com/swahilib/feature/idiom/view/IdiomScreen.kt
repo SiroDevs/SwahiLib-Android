@@ -92,7 +92,7 @@ fun IdiomScreen(
                         idiom?.let {
                             viewModel.likeIdiom(it)
                             val msg = if (!isLiked) "Nahau imeongezwa kwa vipendwa"
-                            else "Nahau imeondolewa kwa vipendwa"
+                            else "Nahau imeondolewa kutoka kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {
@@ -107,7 +107,7 @@ fun IdiomScreen(
             )
         },
         floatingActionButton = {
-            if (viewerState == ViewerState.Loaded && shareData != null) {
+            if (viewerState == ViewerState.Loaded) {
                 ShareFab(onClick = requestShare)
             }
         },

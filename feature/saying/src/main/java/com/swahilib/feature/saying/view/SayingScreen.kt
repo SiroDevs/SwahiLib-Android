@@ -92,7 +92,7 @@ fun SayingScreen(
                         saying?.let {
                             viewModel.likeSaying(it)
                             val msg = if (!isLiked) "Msemo umeongezwa kwa vipendwa"
-                            else "Msemo umeondolewa kwa vipendwa"
+                            else "Msemo umeondolewa kutoka kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {
@@ -107,7 +107,7 @@ fun SayingScreen(
             )
         },
         floatingActionButton = {
-            if (viewerState == ViewerState.Loaded && shareData != null) {
+            if (viewerState == ViewerState.Loaded) {
                 ShareFab(onClick = requestShare)
             }
         },

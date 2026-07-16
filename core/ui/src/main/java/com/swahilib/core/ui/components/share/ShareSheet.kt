@@ -42,26 +42,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
-/**
- * All data needed to populate [ShareContentCard] and compose the text-share body.
- *
- * Both the text share and the image share render the same structure:
- *
- * ```
- * Neno la Kiswahili
- *
- * Chaa
- * Maana: Kikundi cha ...
- * English: farming Group
- *
- * Visawe (3): kikosi, kikundi
- *
- * Hisani: SwahiLib · Kamusi ya Kiswahili
- * ```
- *
- * [english] and [synonyms] are optional — idioms and sayings don't have either,
- * proverbs don't have [english] — so those lines are simply omitted when absent.
- */
 data class ShareData(
     val emoji: String,
     val headerLabel: String,
@@ -73,28 +53,23 @@ data class ShareData(
     val textToShare: String
         get() = buildString {
             append(headerLabel).append("\n\n")
-            append(title).append("\n")
+            append(title)
+            if (!english.isNullOrBlank()) {
+                append(" ($english)")
+            }
+            append("\n")
             append("Maana: ").append(meaning).append("\n")
             if (!english.isNullOrBlank()) {
                 append("English: ").append(english).append("\n")
             }
             if (synonyms.isNotEmpty()) {
-                append("\nVisawe (${synonyms.size}): ").append(synonyms.joinToString(", ")).append("\n")
+                append("\nVisawe (${synonyms.size}): ").append(synonyms.joinToString(", "))
+                    .append("\n")
             }
             append("\nHisani: SwahiLib · Kamusi ya Kiswahili")
         }
 }
 
-/**
- * Bottom sheet presenting a [ShareContentCard] preview with two share options:
- *  - "Maandishi" — plain text via system share sheet
- *  - "Picha" — the card itself, rendered as a PNG
- *
- * The image share captures ONLY the [ShareContentCard] (via a [androidx.compose.ui.graphics.layer.GraphicsLayer]
- * recorded off the card's own draw pass), not a screenshot of the whole screen —
- * so the shared image always matches the "Neno la Kiswahili / title / Maana: … /
- * English: … / Visawe (N): … / Hisani: …" format regardless of what's behind the sheet.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShareSheet(
@@ -125,7 +100,6 @@ fun ShareSheet(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
-            // Preview card — also the exact thing captured for the image share.
             ShareContentCard(
                 emoji = shareData.emoji,
                 headerLabel = shareData.headerLabel,
@@ -141,9 +115,6 @@ fun ShareSheet(
                         shape = RoundedCornerShape(20.dp),
                     )
                     .drawWithContent {
-                        // Record this card's draw output into its own layer so it
-                        // can be rasterised on demand, independent of the rest of
-                        // the screen behind the bottom sheet.
                         cardGraphicsLayer.record { this@drawWithContent.drawContent() }
                         drawLayer(cardGraphicsLayer)
                     },
@@ -155,7 +126,6 @@ fun ShareSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                // ── Text share ──
                 OutlinedButton(
                     onClick = {
                         scope.launch { sheetState.hide(); onDismiss() }
@@ -169,7 +139,6 @@ fun ShareSheet(
                     Text("Maandishi")
                 }
 
-                // ── Image share ──
                 Button(
                     onClick = {
                         if (capturing) return@Button
@@ -182,7 +151,9 @@ fun ShareSheet(
                                 ShareHelper.shareBitmap(
                                     context = context,
                                     bitmap = bitmap,
-                                    fileName = "swahilib_${shareData.title.take(20).replace(" ", "_")}.png",
+                                    fileName = "swahilib_${
+                                        shareData.title.take(20).replace(" ", "_")
+                                    }.png",
                                 )
                             } finally {
                                 capturing = false

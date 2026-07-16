@@ -95,7 +95,7 @@ fun ProverbScreen(
                         proverb?.let {
                             viewModel.likeProverb(it)
                             val msg = if (!isLiked) "Methali imeongezwa kwa vipendwa"
-                            else "Methali imeondolewa kwa vipendwa"
+                            else "Methali imeondolewa kutoka kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {

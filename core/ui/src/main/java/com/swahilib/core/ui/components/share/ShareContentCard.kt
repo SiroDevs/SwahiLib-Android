@@ -21,13 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/**
- * The card shown as a preview inside [ShareSheet] AND captured as the shareable image.
- *
- * Mirrors [ShareData.textToShare]'s structure exactly:
- * header label, title, "Maana:", optional "English:", optional "Visawe (N):",
- * and the "Hisani: SwahiLib · Kamusi ya Kiswahili" footer.
- */
 @Composable
 fun ShareContentCard(
     emoji: String,
@@ -40,7 +33,7 @@ fun ShareContentCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
@@ -63,11 +56,24 @@ fun ShareContentCard(
                 )
             }
 
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+
+                if (!english.isNullOrBlank()) {
+                    Text(
+                        text = english,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
+                    )
+                }
+            }
 
             HorizontalDivider(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
 
@@ -76,14 +82,6 @@ fun ShareContentCard(
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 17.sp),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
-
-            if (!english.isNullOrBlank()) {
-                Text(
-                    text = "English: $english",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
-                )
-            }
 
             if (synonyms.isNotEmpty()) {
                 Text(
@@ -96,8 +94,8 @@ fun ShareContentCard(
             Spacer(Modifier.height(2.dp))
 
             Text(
-                text = "Hisani: SwahiLib · Kamusi ya Kiswahili",
-                style = MaterialTheme.typography.labelSmall,
+                text = "SwahiLib · Kamusi ya Kiswahili",
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                 modifier = Modifier.align(Alignment.End),
             )

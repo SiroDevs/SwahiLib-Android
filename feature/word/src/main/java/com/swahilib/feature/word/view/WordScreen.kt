@@ -99,7 +99,7 @@ fun WordScreen(
                         word?.let {
                             viewModel.likeWord(it)
                             val msg = if (!isLiked) "Neno limeongezwa kwa vipendwa"
-                            else "Neno limeondolewa kwa vipendwa"
+                            else "Neno limeondolewa kutoka kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {
@@ -114,7 +114,7 @@ fun WordScreen(
             )
         },
         floatingActionButton = {
-            if (viewerState == ViewerState.Loaded && shareData != null) {
+            if (viewerState == ViewerState.Loaded) {
                 ShareFab(onClick = requestShare)
             }
         },
@@ -130,6 +130,7 @@ fun WordScreen(
                     message = (viewerState as ViewerState.Error).message,
                     onRetry = {},
                 )
+
                 ViewerState.Loaded -> WordView(
                     viewModel = viewModel,
                     title = title,
@@ -140,6 +141,7 @@ fun WordScreen(
                     showDonation = showDonation,
                     onShowDonation = { navController.navigate(Routes.DONATION) },
                 )
+
                 ViewerState.Loading -> {}
                 else -> EmptyState()
             }
@@ -158,7 +160,10 @@ fun WordScreen(
         }
 
         if (showShareSheet && shareData != null) {
-            ShareSheet(shareData = shareData, sheetState = shareSheetState, onDismiss = { showShareSheet = false })
+            ShareSheet(
+                shareData = shareData,
+                sheetState = shareSheetState,
+                onDismiss = { showShareSheet = false })
         }
     }
 }

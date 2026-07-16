@@ -99,6 +99,7 @@ fun WordView(
                     }
                 }
             }
+
             item {
                 DonationBanner(
                     show = showDonation,
