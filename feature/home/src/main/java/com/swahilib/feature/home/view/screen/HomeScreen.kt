@@ -1,19 +1,3 @@
-/*
- * Copyright 2026 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.swahilib.feature.home.view.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -24,7 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,12 +22,16 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -68,11 +59,33 @@ fun HomeScreen(
     navController: NavHostController,
     prefsRepo: PrefsRepo,
     deepLinkRoute: String? = null,
+    onDeepLinkConsumed: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val selectedTab by viewModel.selectedTab.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    // Only needed to decide whether the top-bar "clear" icon should show for
+    // the Likes / History tabs, and which confirm dialog + action it should fire.
+    val likedWords by viewModel.likedWords.collectAsState(initial = emptyList())
+    val likedIdioms by viewModel.likedIdioms.collectAsState(initial = emptyList())
+    val likedProverbs by viewModel.likedProverbs.collectAsState(initial = emptyList())
+    val likedSayings by viewModel.likedSayings.collectAsState(initial = emptyList())
+    val hasLikes = likedWords.isNotEmpty() || likedIdioms.isNotEmpty() ||
+        likedProverbs.isNotEmpty() || likedSayings.isNotEmpty()
+
+    val readingHistory by viewModel.history.collectAsState(initial = emptyList())
+    val searchHistory by viewModel.searchHistory.collectAsState(initial = emptyList())
+    val historySubTab by viewModel.historySubTab.collectAsState()
+    val hasHistoryItems = if (historySubTab == HomeViewModel.HistorySubTab.USOMAJI) {
+        readingHistory.isNotEmpty()
+    } else {
+        searchHistory.isNotEmpty()
+    }
+
+    var showClearLikesDialog by remember { mutableStateOf(false) }
+    var showClearHistoryDialog by remember { mutableStateOf(false) }
 
     val pagerState = rememberPagerState(
         initialPage = homeTabs.indexOf(selectedTab).coerceAtLeast(0),
@@ -83,17 +96,15 @@ fun HomeScreen(
 
     LaunchedEffect(deepLinkRoute, uiState) {
         if (deepLinkRoute != null && uiState is UiState.Filtered) {
-            when {
-                deepLinkRoute.startsWith("swahilib://idiom/") -> {
-                    navController.navigate(Routes.DAILY_WORD)
-                }
-                deepLinkRoute.startsWith("swahilib://proverb/") -> {
-                    navController.navigate(Routes.DAILY_PROVERB)
-                }
-                else -> {
-                    navController.navigate(Routes.DAILY_WORD)
-                }
+            when (deepLinkRoute) {
+                Routes.DAILY_PROVERB -> navController.navigate(Routes.DAILY_PROVERB)
+                Routes.DAILY_WORD -> navController.navigate(Routes.DAILY_WORD)
+                else -> navController.navigate(Routes.DAILY_WORD)
             }
+            // Consume it so a config change / recomposition doesn't re-navigate,
+            // and so pressing back from the daily screen lands on Home instead
+            // of bouncing straight back to the daily screen.
+            onDeepLinkConsumed()
         }
     }
 
@@ -119,6 +130,18 @@ fun HomeScreen(
                     showNavDrawer = true,
                     onNavIconClick = { scope.launch { drawerState.open() } },
                     actions = {
+                        when {
+                            selectedTab == HomeTab.Likes && hasLikes -> {
+                                IconButton(onClick = { showClearLikesDialog = true }) {
+                                    Icon(Icons.Default.DeleteSweep, contentDescription = "Futa Vipendwa")
+                                }
+                            }
+                            selectedTab == HomeTab.History && hasHistoryItems -> {
+                                IconButton(onClick = { showClearHistoryDialog = true }) {
+                                    Icon(Icons.Default.DeleteSweep, contentDescription = "Futa Historia")
+                                }
+                            }
+                        }
                         IconButton(onClick = { navController.navigate(Routes.SETTINGS) }) {
                             Icon(Icons.Default.Settings, contentDescription = "Settings")
                         }
@@ -193,5 +216,43 @@ fun HomeScreen(
                 } // Box
             } // Column
         }
+    }
+
+    if (showClearLikesDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearLikesDialog = false },
+            title = { Text("Futa Vipendwa") },
+            text = { Text("Je ungependa kufuta vipendwa vyako") },
+            confirmButton = {
+                Button(onClick = {
+                    viewModel.clearAllLikes()
+                    showClearLikesDialog = false
+                }) { Text("Ndio") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearLikesDialog = false }) { Text("Hapana") }
+            },
+        )
+    }
+
+    if (showClearHistoryDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearHistoryDialog = false },
+            title = { Text("Futa Historia") },
+            text = { Text("Je, Ungependa kufuta Historia yako?") },
+            confirmButton = {
+                Button(onClick = {
+                    if (historySubTab == HomeViewModel.HistorySubTab.USOMAJI) {
+                        viewModel.clearReadingHistory()
+                    } else {
+                        viewModel.clearSearchHistory()
+                    }
+                    showClearHistoryDialog = false
+                }) { Text("Ndio") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearHistoryDialog = false }) { Text("Hapana") }
+            },
+        )
     }
 }

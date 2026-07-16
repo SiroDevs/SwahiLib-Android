@@ -23,15 +23,19 @@ import androidx.compose.ui.unit.sp
 
 /**
  * The card shown as a preview inside [ShareSheet] AND captured as the shareable image.
- * Intentionally simple: emoji, type label, title, one meaning, branding footer.
- * No synonyms, no conjugation.
+ *
+ * Mirrors [ShareData.textToShare]'s structure exactly:
+ * header label, title, "Maana:", optional "English:", optional "Visawe (N):",
+ * and the "Hisani: SwahiLib · Kamusi ya Kiswahili" footer.
  */
 @Composable
 fun ShareContentCard(
     emoji: String,
-    typeLabel: String,
+    headerLabel: String,
     title: String,
     meaning: String,
+    english: String? = null,
+    synonyms: List<String> = emptyList(),
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -42,7 +46,7 @@ fun ShareContentCard(
     ) {
         Column(
             modifier = Modifier.padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -50,7 +54,7 @@ fun ShareContentCard(
             ) {
                 Text(text = emoji, fontSize = 22.sp)
                 Text(
-                    text = typeLabel.uppercase(),
+                    text = headerLabel.uppercase(),
                     style = MaterialTheme.typography.labelMedium.copy(
                         letterSpacing = 2.sp,
                         fontWeight = FontWeight.Bold,
@@ -68,15 +72,31 @@ fun ShareContentCard(
             HorizontalDivider(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
 
             Text(
-                text = meaning,
+                text = buildString { append("Maana: ").append(meaning) },
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 17.sp),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
 
+            if (!english.isNullOrBlank()) {
+                Text(
+                    text = "English: $english",
+                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
+                )
+            }
+
+            if (synonyms.isNotEmpty()) {
+                Text(
+                    text = "Visawe (${synonyms.size}): ${synonyms.joinToString(", ")}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
+                )
+            }
+
             Spacer(Modifier.height(2.dp))
 
             Text(
-                text = "SwahiLib · Kamusi ya Kiswahili",
+                text = "Hisani: SwahiLib · Kamusi ya Kiswahili",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                 modifier = Modifier.align(Alignment.End),

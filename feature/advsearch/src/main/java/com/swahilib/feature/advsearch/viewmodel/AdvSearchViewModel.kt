@@ -78,7 +78,7 @@ class AdvSearchViewModel @Inject constructor(
     fun searchBeginningOfTerms(query: String, sortOrder: SortOrder = SortOrder.AZ) {
         val q = query.lowercase().trim()
         _filteredWords.value    = _allWords.value.matchStart(q, sortOrder,
-            { listOfNotNull(it.title, it.meaning, it.synonyms, it.conjugation) }, { it.title }, { it.liked })
+            { listOfNotNull(it.title, it.meaning, it.synonyms, it.conjugation, it.english) }, { it.title }, { it.liked })
         _filteredIdioms.value   = _allIdioms.value.matchStart(q, sortOrder,
             { listOfNotNull(it.title, it.meaning) }, { it.title }, { it.liked })
         _filteredProverbs.value = _allProverbs.value.matchStart(q, sortOrder,
@@ -90,7 +90,7 @@ class AdvSearchViewModel @Inject constructor(
     fun searchMiddleOfTerms(query: String, sortOrder: SortOrder = SortOrder.AZ) {
         val q = query.lowercase().trim()
         _filteredWords.value    = _allWords.value.matchContains(q, sortOrder,
-            { listOfNotNull(it.title, it.meaning, it.synonyms, it.conjugation) }, { it.title }, { it.liked })
+            { listOfNotNull(it.title, it.meaning, it.synonyms, it.conjugation, it.english) }, { it.title }, { it.liked })
         _filteredIdioms.value   = _allIdioms.value.matchContains(q, sortOrder,
             { listOfNotNull(it.title, it.meaning) }, { it.title }, { it.liked })
         _filteredProverbs.value = _allProverbs.value.matchContains(q, sortOrder,
@@ -102,7 +102,7 @@ class AdvSearchViewModel @Inject constructor(
     fun searchEndOfTerms(query: String, sortOrder: SortOrder = SortOrder.AZ) {
         val q = query.lowercase().trim()
         _filteredWords.value    = _allWords.value.matchEnd(q, sortOrder,
-            { listOfNotNull(it.title, it.meaning, it.synonyms, it.conjugation) }, { it.title }, { it.liked })
+            { listOfNotNull(it.title, it.meaning, it.synonyms, it.conjugation, it.english) }, { it.title }, { it.liked })
         _filteredIdioms.value   = _allIdioms.value.matchEnd(q, sortOrder,
             { listOfNotNull(it.title, it.meaning) }, { it.title }, { it.liked })
         _filteredProverbs.value = _allProverbs.value.matchEnd(q, sortOrder,

@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -42,10 +43,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.feature.home.viewmodel.HomeViewModel
 import com.swahilib.feature.home.view.components.HomeSearchResults
 import com.swahilib.feature.home.view.components.SearchFieldRow
 import com.swahilib.feature.home.view.components.VerticalLetters
+import com.swahilib.feature.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -75,6 +76,16 @@ fun HomeSearch(
     val isAtTop by remember { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
     val showScrollToTop by remember { derivedStateOf { !isAtTop } }
 
+    val pendingSearchQuery by viewModel.pendingSearchQuery.collectAsState()
+    LaunchedEffect(pendingSearchQuery) {
+        pendingSearchQuery?.let { query ->
+            searchQuery = query
+            selectedLetter = ""
+            viewModel.filterData(query)
+            viewModel.consumePendingSearchQuery()
+        }
+    }
+
     val speechLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -100,7 +111,6 @@ fun HomeSearch(
     )
 
     Column(modifier = modifier.fillMaxSize()) {
-
         SearchFieldRow(
             query = searchQuery,
             placeholder = "Tafuta kwenye Kamusi ...",
@@ -130,7 +140,6 @@ fun HomeSearch(
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
-
             HomeSearchResults(
                 selectedType = selectedType,
                 words = words,
@@ -143,7 +152,6 @@ fun HomeSearch(
                 navController = navController,
                 onShowDonation = onShowDonation
             )
-
 
             VerticalLetters(
                 selectedLetter = selectedLetter,
