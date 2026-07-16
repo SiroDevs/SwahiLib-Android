@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.AppConstants
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.action.AppTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +34,7 @@ fun HelpScreen(navController: NavHostController) {
     var attachedUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var titleError by remember { mutableStateOf(false) }
     var descriptionError by remember { mutableStateOf(false) }
+    var showDonationPrompt by remember { mutableStateOf(false) }
 
     val pickMediaLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetMultipleContents()
@@ -178,6 +180,7 @@ fun HelpScreen(navController: NavHostController) {
                         }
                     }
                     context.startActivity(Intent.createChooser(intent, "Tuma barua pepe kupitia"))
+                    showDonationPrompt = true
                 },
                 modifier = Modifier.fillMaxWidth().height(52.dp),
                 shape = RoundedCornerShape(12.dp)
@@ -189,5 +192,22 @@ fun HelpScreen(navController: NavHostController) {
 
             Spacer(Modifier.height(8.dp))
         }
+    }
+
+    if (showDonationPrompt) {
+        AlertDialog(
+            onDismissRequest = { showDonationPrompt = false },
+            title = { Text("Asante!") },
+            text = { Text("Je ungependa kuchangia SwahiLib?\n\nMchango (Donation) wako utatusaidia pakubwa katika kazi hii ya kukuhudmia.") },
+            confirmButton = {
+                Button(onClick = {
+                    showDonationPrompt = false
+                    navController.navigate(Routes.DONATION)
+                }) { Text("NDIO") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDonationPrompt = false }) { Text("Baadaye") }
+            },
+        )
     }
 }

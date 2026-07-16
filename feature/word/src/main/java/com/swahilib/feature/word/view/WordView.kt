@@ -28,7 +28,7 @@ import com.swahilib.core.ui.components.donation.DonationBanner
 import com.swahilib.core.ui.components.general.CollapsingHeader
 import com.swahilib.core.ui.components.general.MeaningsView
 import com.swahilib.core.ui.components.listitems.SynonymItem
-import com.swahilib.feature.word.WordViewModel
+import com.swahilib.feature.word.viewmodel.WordViewModel
 
 @Composable
 fun WordView(

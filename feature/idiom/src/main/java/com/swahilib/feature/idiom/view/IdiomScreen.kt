@@ -35,7 +35,7 @@ import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.idiom.IdiomViewModel
+import com.swahilib.feature.idiom.viewmodel.IdiomViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

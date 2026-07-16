@@ -15,6 +15,11 @@
           <theme>@style/Theme.MainApp</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml">
+        <config>
+          <theme>@style/Theme.SwahiLib</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
@@ -23,11 +28,17 @@
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/app/navigation/AppNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/app/navigation/AppNavHost.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/di/AppConfigModule.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/DonationViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/DonationViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/ThemeRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/ThemeRepo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/swahilib/core/designsystem/theme/ThemeSelectorDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/swahilib/core/designsystem/theme/ThemeSelectorDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/SettingsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/SettingsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/view/SettingsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/swahilib/feature/settings/view/SettingsScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +118,7 @@
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/sirodaves/Developer/Android/Projects/SwahiLib-Android/feature&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/sirodaves/Developer/Android/Projects/SwahiLib&quot;,
     &quot;recommended.upgrade.do.not.ask.for.project&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
@@ -130,11 +141,11 @@
       <recent name="com.swahilib.core.data.repository" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="com.swahilib.widget" />
       <recent name="com.swahilib.core.network.services" />
       <recent name="com.swahilib.feature.home.components" />
       <recent name="com.swahilib.core.ui.components.action" />
       <recent name="com.swahilib.core.ui.components.listitems" />
-      <recent name="com.swahilib.core.di" />
     </key>
   </component>
   <component name="RunManager">

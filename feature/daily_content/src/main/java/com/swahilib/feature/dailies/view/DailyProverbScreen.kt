@@ -44,9 +44,9 @@ import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.daily_content.DailyContentViewModel
-import com.swahilib.feature.proverb.ProverbViewModel
-import com.swahilib.feature.proverb.view.ProverbScreen
+import com.swahilib.feature.dailies.viewmodel.DailyContentViewModel
+import com.swahilib.feature.proverb.viewmodel.ProverbViewModel
+import com.swahilib.feature.proverb.view.screen.ProverbScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

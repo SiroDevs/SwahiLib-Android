@@ -1,4 +1,20 @@
-package com.swahilib.feature.saying.view
+/*
+ * Copyright 2026 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.swahilib.feature.proverb.view.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -27,7 +43,7 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.ViewerState
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.database.model.SayingEntity
+import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
@@ -35,35 +51,38 @@ import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.saying.viewmodel.SayingViewModel
+import com.swahilib.feature.proverb.viewmodel.ProverbViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SayingScreen(
+fun ProverbScreen(
     navController: NavHostController,
-    viewModel: SayingViewModel,
-    saying: SayingEntity?,
+    viewModel: ProverbViewModel,
+    proverb: ProverbEntity?,
     prefsRepo: PrefsRepo,
 ) {
     val context = LocalContext.current
     val viewerState by viewModel.uiState.collectAsState()
     val title by viewModel.title.collectAsState()
     val meanings by viewModel.meanings.collectAsState()
+    val synonyms by viewModel.synonyms.collectAsState()
+    val explanations by viewModel.explanations.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     var showShareSheet by remember { mutableStateOf(false) }
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    LaunchedEffect(saying) { saying?.let { viewModel.loadSaying(it) } }
+    LaunchedEffect(proverb) { proverb?.let { viewModel.loadProverb(it) } }
 
     val shareData = remember(title, meanings) {
         if (title.isNotBlank() && meanings.isNotEmpty()) {
             ShareData(
-                emoji = "✨",
-                typeLabel = "Msemo",
+                emoji = "🌿",
+                typeLabel = "Methali",
                 title = title,
                 meaning = meanings.random().trim(),
+                textToShare = "\"$title\"\n\n${meanings.random().trim()}\n\n— SwahiLib · Kamusi ya Kiswahili",
             )
         } else null
     }
@@ -75,16 +94,16 @@ fun SayingScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Msemo wa Kiswahili",
+                title = "Methali ya Kiswahili",
                 tagline = "SwahiLib · Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
                 actions = {
                     IconButton(onClick = {
-                        saying?.let {
-                            viewModel.likeSaying(it)
-                            val msg = if (!isLiked) "Msemo umeongezwa kwa vipendwa"
-                            else "Msemo umeondolewa kwa vipendwa"
+                        proverb?.let {
+                            viewModel.likeProverb(it)
+                            val msg = if (!isLiked) "Methali imeongezwa kwa vipendwa"
+                            else "Methali imeondolewa kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {
@@ -115,9 +134,12 @@ fun SayingScreen(
                     message = (viewerState as ViewerState.Error).message,
                     onRetry = {},
                 )
-                ViewerState.Loaded -> SayingView(
+                ViewerState.Loaded -> ProverbDetails(
+                    viewModel = viewModel,
                     title = title,
                     meanings = meanings,
+                    synonyms = synonyms,
+                    explanations = explanations,
                     showDonation = showDonation,
                     onShowDonation = { navController.navigate(Routes.DONATION) },
                 )
