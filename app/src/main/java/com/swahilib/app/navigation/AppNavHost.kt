@@ -38,8 +38,8 @@ import com.swahilib.feature.howitworks.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
 import com.swahilib.feature.donation.view.screen.DonationScreen
 import com.swahilib.feature.donation.view.screen.PaymentWebViewScreen
-import com.swahilib.feature.daily_content.view.DailyWordScreen
-import com.swahilib.feature.daily_content.view.DailyProverbScreen
+import com.swahilib.feature.dailies.view.DailyWordScreen
+import com.swahilib.feature.dailies.view.DailyProverbScreen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)

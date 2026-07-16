@@ -41,11 +41,11 @@ fun CollapsingHeader(title: String, subtitle: String? = null) {
                     Spacer(Modifier.width(8.dp))
                     Text(
                         text = subtitle,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.headlineSmall.copy(fontStyle = FontStyle.Italic),
+                        color = MaterialTheme.colorScheme.primary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(bottom = 3.dp),
+                        modifier = Modifier.padding(top = 3.dp),
                     )
                 }
             }

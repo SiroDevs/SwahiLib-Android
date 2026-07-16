@@ -63,7 +63,7 @@ fun IdiomItem(
     Box(modifier = modifier.padding(start = if (showSidebar) 75.dp else 0.dp)) {
         DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
             DropdownMenuItem(
-                text = { Text(if (idiom.liked) "Ondoa Upendo" else "Penda") },
+                text = { Text(if (idiom.liked) "Ondoa kutoka kwa Vipendwa" else "Ongeza kwa Vipendwa") },
                 leadingIcon = {
                     Icon(
                         if (idiom.liked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,

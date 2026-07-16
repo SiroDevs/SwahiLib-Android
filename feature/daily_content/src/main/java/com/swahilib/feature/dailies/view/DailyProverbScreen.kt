@@ -1,4 +1,4 @@
-package com.swahilib.feature.daily_content.view
+package com.swahilib.feature.dailies.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
@@ -45,8 +46,8 @@ import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
 import com.swahilib.feature.dailies.viewmodel.DailyContentViewModel
-import com.swahilib.feature.proverb.viewmodel.ProverbViewModel
 import com.swahilib.feature.proverb.view.screen.ProverbScreen
+import com.swahilib.feature.proverb.viewmodel.ProverbViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,10 +79,9 @@ fun DailyProverbScreen(
         proverb?.let {
             ShareData(
                 emoji = "🌿",
-                typeLabel = "Methali",
+                headerLabel = "Methali ya Kiswahili",
                 title = it.title ?: "",
                 meaning = singleMeaning,
-                textToShare = "\"${it.title}\"\n\n$singleMeaning\n\n— SwahiLib · Kamusi ya Kiswahili",
             )
         }
     }
@@ -118,7 +118,7 @@ fun DailyProverbScreen(
                     // ── Notification reminder banner ──
                     NotificationReminderBanner(
                         prefsRepo = prefsRepo,
-                        onGoToSettings = { navController.navigate(com.swahilib.core.common.utils.Routes.SETTINGS) },
+                        onGoToSettings = { navController.navigate(Routes.SETTINGS) },
                         modifier = Modifier.padding(horizontal = 0.dp),
                     )
                     // ── Proverb hero card ──

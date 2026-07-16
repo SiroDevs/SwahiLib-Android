@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,7 +78,7 @@ fun WordItem(
     Box(modifier = modifier.padding(start = if (showSidebar) 75.dp else 0.dp)) {
         DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
             DropdownMenuItem(
-                text = { Text(if (word.liked) "Ondoa Upendo" else "Penda") },
+                text = { Text(if (word.liked) "Ondoa kutoka kwa Vipendwa" else "Ongeza kwa Vipendwa") },
                 leadingIcon = {
                     Icon(
                         if (word.liked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
@@ -127,17 +128,39 @@ fun WordItem(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = word.title ?: "",
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp
-                            ),
-                            modifier = Modifier.weight(1f)
-                        )
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = word.title ?: "",
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 18.sp
+                                ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+
+                            if (!word.english.isNullOrBlank()) {
+                                Spacer(Modifier.width(8.dp))
+
+                                Text(
+                                    text = word.english!!,
+                                    style = MaterialTheme.typography.titleSmall.copy(
+                                        fontStyle = FontStyle.Italic
+                                    ),
+                                    maxLines = 1,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.padding(top = 3.dp)
+                                )
+                            }
+                        }
+
                         if (word.liked) {
                             Icon(
-                                Icons.Filled.Favorite,
+                                imageVector = Icons.Filled.Favorite,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)

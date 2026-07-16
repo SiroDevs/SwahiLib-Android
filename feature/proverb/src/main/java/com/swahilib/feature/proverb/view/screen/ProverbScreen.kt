@@ -31,6 +31,7 @@ import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
+import com.swahilib.core.ui.components.share.MeaningPickerDialog
 import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
@@ -55,24 +56,31 @@ fun ProverbScreen(
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     var showShareSheet by remember { mutableStateOf(false) }
+    var showMeaningPicker by remember { mutableStateOf(false) }
+    var selectedMeaning by remember(title) { mutableStateOf<String?>(null) }
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(proverb) { proverb?.let { viewModel.loadProverb(it) } }
 
-    val shareData = remember(title, meanings) {
-        if (title.isNotBlank() && meanings.isNotEmpty()) {
+    val shareData = remember(title, selectedMeaning, meanings, synonyms) {
+        val meaning = selectedMeaning ?: meanings.singleOrNull()?.trim()
+        if (title.isNotBlank() && meaning != null) {
             ShareData(
                 emoji = "🌿",
-                typeLabel = "Methali",
+                headerLabel = "Methali ya Kiswahili",
                 title = title,
-                meaning = meanings.random().trim(),
-                textToShare = "\"$title\"\n\n${meanings.random().trim()}\n\n— SwahiLib · Kamusi ya Kiswahili",
+                meaning = meaning,
+                synonyms = synonyms.mapNotNull { it.title },
             )
         } else null
     }
 
+    val requestShare = {
+        if (meanings.size > 1) showMeaningPicker = true else showShareSheet = true
+    }
+
     if (viewerState == ViewerState.Loaded) {
-        ScreenshotReminderDialog(onShareClick = { showShareSheet = true })
+        ScreenshotReminderDialog(onShareClick = requestShare)
     }
 
     Scaffold(
@@ -103,7 +111,7 @@ fun ProverbScreen(
         },
         floatingActionButton = {
             if (viewerState == ViewerState.Loaded && shareData != null) {
-                ShareFab(onClick = { showShareSheet = true })
+                ShareFab(onClick = requestShare)
             }
         },
     ) { padding ->
@@ -130,6 +138,18 @@ fun ProverbScreen(
                 ViewerState.Loading -> {}
                 else -> EmptyState()
             }
+        }
+
+        if (showMeaningPicker) {
+            MeaningPickerDialog(
+                meanings = meanings,
+                onSelect = {
+                    selectedMeaning = it
+                    showMeaningPicker = false
+                    showShareSheet = true
+                },
+                onDismiss = { showMeaningPicker = false },
+            )
         }
 
         if (showShareSheet && shareData != null) {
