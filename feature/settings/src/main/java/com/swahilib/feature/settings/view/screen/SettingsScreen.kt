@@ -185,7 +185,7 @@ fun SettingsScreen(
             }
             HorizontalDivider()
 
-            SettingsSectionTitle("Changia SwahiLib")
+            SettingsSectionTitle("Donate to SwahiLib")
             ListItem(
                 leadingContent = {
                     Icon(
@@ -193,11 +193,10 @@ fun SettingsScreen(
                         contentDescription = null
                     )
                 },
-                headlineContent = { Text("Changa Hivi Sasa") },
-                supportingContent = { Text("Tunahitaji mchango wako ili tuzidi kukuhudumia") },
+                headlineContent = { Text("Donate Now") },
+                supportingContent = { Text("We need your support to continue serving you") },
                 modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
             )
-            HorizontalDivider()
 
             SettingsSectionTitle("Data")
             ListItem(

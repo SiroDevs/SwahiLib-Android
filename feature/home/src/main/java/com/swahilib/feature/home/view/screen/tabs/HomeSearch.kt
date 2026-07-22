@@ -185,7 +185,7 @@ fun HomeSearch(
                 }
 
                 ExtendedFloatingActionButton(
-                    onClick = { navController.navigate(Routes.ADVSEARCH) },
+                    onClick = { navController.navigate(Routes.ADVANCED_SEARCH) },
                     expanded = isAtTop,
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     icon = { Icon(Icons.Filled.ManageSearch, "Tafuta kwa Kina") },

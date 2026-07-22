@@ -59,7 +59,7 @@ fun DonationHeaderCard() {
                 modifier = Modifier.size(36.dp),
             )
             Text(
-                text = "Tunahitaji usaidizi wako",
+                text = "We need your support",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                 ),
@@ -67,10 +67,10 @@ fun DonationHeaderCard() {
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = "Mchango wako wowote — mdogo au mkubwa — " +
-                    "unasaidia SwahiLib kuendelea kukua na kukuhudumia wewe na wengine." +
-                    "\n\nMchango wako utatusaidia kuepuka kukuonyesha matangazo ya kibiashara" +
-                " na pia kuendelea kukudumisha server zetu wakati wote",
+                text = "Your donation — small or big — " +
+                    "will help SwahiLib to continue to grow and serve you and others." +
+                    "\n\nYour donation will help us to avoid showing adverts" +
+                    " and also maintaining our server all the time",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Center,
@@ -79,7 +79,7 @@ fun DonationHeaderCard() {
     }
 }
 
-private val PRESET_AMOUNTS = listOf(200, 500, 1000, 5000, 10000, 20000)
+private val PRESET_AMOUNTS = listOf(50, 100, 200, 500, 1000, 5000)
 
 @Composable
 fun PresetAmountGrid(
@@ -172,7 +172,7 @@ fun DonateNowButton(
                 modifier = Modifier.size(20.dp),
             )
             Text(
-                text = "  CHANGA SASA",
+                text = "  DONATE NOW",
                 style = MaterialTheme.typography.labelLarge.copy(
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp,
@@ -198,7 +198,7 @@ fun DonorIdentitySection(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
-            text = "Maelezo yako (sio lazima)",
+            text = "Your details (optional)",
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 0.5.sp,
@@ -216,7 +216,7 @@ fun DonorIdentitySection(
                 onCheckedChange = onAnonymousToggle,
             )
             Text(
-                text = "Changia bila kujitambulisha",
+                text = "Donate anonymously",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -226,8 +226,8 @@ fun DonorIdentitySection(
             OutlinedTextField(
                 value = name,
                 onValueChange = onNameChange,
-                label = { Text("Jina") },
-                placeholder = { Text("e.g. Mwangi Otieno") },
+                label = { Text("Name") },
+                placeholder = { Text("e.g. John Doe") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
@@ -240,8 +240,8 @@ fun DonorIdentitySection(
             OutlinedTextField(
                 value = email,
                 onValueChange = onEmailChange,
-                label = { Text("Barua pepe") },
-                placeholder = { Text("e.g. mwangi@otieno.com") },
+                label = { Text("Email") },
+                placeholder = { Text("e.g. john@example.com") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
@@ -250,7 +250,7 @@ fun DonorIdentitySection(
                 supportingText = {
                     if (isEmailError) {
                         Text(
-                            text = "Weka Barua Pepe sawa",
+                            text = "Enter a valid email address",
                             color = MaterialTheme.colorScheme.error,
                         )
                     }

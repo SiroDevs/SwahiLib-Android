@@ -45,7 +45,7 @@ fun PaymentWebViewScreen(
         topBar = {
             Column {
                 AppTopBar(
-                    title = "Kamilisha Mchango Wako",
+                    title = "Complete Your Donation",
                     showGoBack = true,
                     onNavIconClick = {
                         viewModel.resetState()

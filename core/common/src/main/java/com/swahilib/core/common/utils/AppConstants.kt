@@ -46,8 +46,8 @@ object PrefConstants {
 object NotifConstants {
     const val CHANNEL_WORD_ID = "swahilib_word_of_day"
     const val CHANNEL_PROVERB_ID = "swahilib_proverb_of_day"
-    const val CHANNEL_WORD_NAME = "Word of the Day"
-    const val CHANNEL_PROVERB_NAME = "Proverb of the Day"
+    const val CHANNEL_WORD_NAME = "Neno la Siku"
+    const val CHANNEL_PROVERB_NAME = "Methali ya Siku"
     const val NOTIF_WORD_ID = 1001
     const val NOTIF_PROVERB_ID = 1002
     const val WORK_WORD = "work_daily_word"
@@ -57,7 +57,7 @@ object NotifConstants {
 }
 
 object DeepLinkConstants {
-    const val EXTRA_NAVIGATE_TO = "navigate_to"
+    const val EXTRA_NAVIGATE_TO = "swahilib_daily_content_navigation"
 }
 
 object Routes {
@@ -67,7 +67,7 @@ object Routes {
     const val SAYING = "saying"
     const val WORD = "word"
     const val SETTINGS = "settings"
-    const val ADVSEARCH = "advsearch"
+    const val ADVANCED_SEARCH = "advanced_search"
     const val HOW_IT_WORKS = "how_it_works"
     const val HELP = "help"
     const val DONATION = "donation"

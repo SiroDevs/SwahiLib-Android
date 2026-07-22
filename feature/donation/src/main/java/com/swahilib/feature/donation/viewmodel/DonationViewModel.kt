@@ -55,10 +55,11 @@ class DonationViewModel @Inject constructor(
 
     private fun calculateDonationWithFee(amountKes: Double): DonationAmount {
         val fee = when {
-            amountKes in 1501.0..20000.0 -> 50.0
-            amountKes in 20001.0 ..100000.0 -> 75.0
+            amountKes in 200.0..1501.0 -> 20.0
+            amountKes in 1501.0..20000.0 -> 40.0
+            amountKes in 20001.0 ..100000.0 -> 60.0
             amountKes >= 100001.0 -> 200.0
-            else -> 25.0
+            else -> 0.0
         }
 
         return DonationAmount(

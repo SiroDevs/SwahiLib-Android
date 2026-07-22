@@ -1,5 +1,6 @@
 package com.swahilib.feature.donation.view.screen
 
+import android.util.Patterns
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,8 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.donation.viewmodel.DonationState
 import com.swahilib.feature.donation.viewmodel.DonationViewModel
 import com.swahilib.feature.donation.view.components.ConfirmDonationDialog
@@ -45,8 +46,8 @@ import com.swahilib.feature.donation.view.components.DonorIdentitySection
 import com.swahilib.feature.donation.view.components.PresetAmountGrid
 import kotlinx.coroutines.launch
 
-private const val DEFAULT_PRESET = 1000
-private const val MINIMUM_DONATION = 100
+private const val DEFAULT_PRESET = 500
+private const val MINIMUM_DONATION = 50
 
 @Composable
 fun DonationScreen(
@@ -68,7 +69,6 @@ fun DonationScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    // Validate and get the active amount
     val activeAmount: Double? = when {
         customAmount.isNotBlank() -> {
             val amount = customAmount.toDoubleOrNull()
@@ -78,7 +78,6 @@ fun DonationScreen(
         else -> null
     }
 
-    // Check if custom amount is below minimum
     val isCustomAmountBelowMinimum = customAmount.isNotBlank() &&
         (customAmount.toDoubleOrNull() ?: 0.0) < MINIMUM_DONATION
 
@@ -88,23 +87,12 @@ fun DonationScreen(
                 val redirectUrl = (state as DonationState.ReadyToPay).redirectUrl
                 navController.navigate(Routes.paymentWebView(redirectUrl))
             }
-
             is DonationState.Error -> {
                 val msg = (state as DonationState.Error).message
                 scope.launch { snackbarHostState.showSnackbar(msg) }
                 viewModel.resetState()
             }
-
             else -> {}
-        }
-    }
-
-    LaunchedEffect(showMinimumAmountError) {
-        if (showMinimumAmountError) {
-            scope.launch {
-                snackbarHostState.showSnackbar("Kiasi cha chini cha mchango ni KES $MINIMUM_DONATION")
-            }
-            showMinimumAmountError = false
         }
     }
 
@@ -114,7 +102,13 @@ fun DonationScreen(
             donorName = donorName.trim().takeIf { !isDonatingAnonymously && it.isNotBlank() },
             onConfirm = {
                 showConfirmDialog = false
-                viewModel.submitDonation(amountUsd = activeAmount)
+                viewModel.submitDonation(
+                    amountUsd = activeAmount,
+                    donorName = if (isDonatingAnonymously) null else donorName.trim()
+                        .takeIf { it.isNotBlank() },
+                    donorEmail = if (isDonatingAnonymously) null else donorEmail.trim()
+                        .takeIf { it.isNotBlank() },
+                )
             },
             onDismiss = {
                 showConfirmDialog = false
@@ -123,10 +117,19 @@ fun DonationScreen(
         )
     }
 
+    LaunchedEffect(showMinimumAmountError) {
+        if (showMinimumAmountError) {
+            scope.launch {
+                snackbarHostState.showSnackbar("Minimum donation amount is KES $MINIMUM_DONATION")
+            }
+            showMinimumAmountError = false
+        }
+    }
+
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Changia SwahiLib",
+                title = "Donate to SwahiLib",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
             )
@@ -157,7 +160,7 @@ fun DonationScreen(
                 DonationHeaderCard()
 
                 Text(
-                    text = "Kiasi cha Mchango (KES)",
+                    text = "Donation amount (KES)",
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 0.5.sp,
@@ -187,8 +190,8 @@ fun DonationScreen(
                             }
                         }
                     },
-                    label = { Text("Au weka kiasi chako (KES)") },
-                    placeholder = { Text("Kiasi cha chini 100") },
+                    label = { Text("Or input your amount (KES)") },
+                    placeholder = { Text("Minimum is 50") },
                     prefix = { Text("KES") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
@@ -198,7 +201,7 @@ fun DonationScreen(
                     supportingText = {
                         if (isCustomAmountBelowMinimum) {
                             Text(
-                                text = "Kiasi cha chini ni KES $MINIMUM_DONATION",
+                                text = "Minimum amount is KES $MINIMUM_DONATION",
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -227,12 +230,21 @@ fun DonationScreen(
                         when {
                             activeAmount == null -> {
                                 scope.launch {
-                                    snackbarHostState.showSnackbar("Tafadhali weka kiasi cha mchango")
+                                    snackbarHostState.showSnackbar("Please enter a donation amount")
                                 }
                             }
 
                             activeAmount < MINIMUM_DONATION -> {
                                 showMinimumAmountError = true
+                            }
+
+                            !isDonatingAnonymously && donorEmail.isNotBlank() && !isValidEmail(
+                                donorEmail
+                            ) -> {
+                                isDonorEmailError = true
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("Please enter a valid email address")
+                                }
                             }
 
                             else -> {
@@ -243,7 +255,7 @@ fun DonationScreen(
                 )
 
                 Text(
-                    text = "Michango inashughulikiwa vyema kupitia Paystack",
+                    text = "Donations are processed securely via Paystack",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -255,3 +267,6 @@ fun DonationScreen(
         }
     }
 }
+
+private fun isValidEmail(email: String): Boolean =
+    Patterns.EMAIL_ADDRESS.matcher(email).matches()

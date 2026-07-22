@@ -51,13 +51,13 @@ class DonationRepo @Inject constructor(
             val authUrl = response.data?.authorizationUrl
             if (!response.status || authUrl.isNullOrBlank()) {
                 Log.e(TAG, "❌ Paystack init failed: ${response.message}")
-                return Result.failure(Exception(response.message ?: "Imeshindwa kuanzisha malipo"))
+                return Result.failure(Exception(response.message ?: "Unable to initialize payment"))
             }
 
             Log.d(TAG, "✅ Paystack transaction initialized — URL: $authUrl")
             Result.success(authUrl)
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Hitilafu ya Mchango: ${e.message}", e)
+            Log.e(TAG, "❌ Donation error: ${e.message}", e)
             Result.failure(e)
         }
     }

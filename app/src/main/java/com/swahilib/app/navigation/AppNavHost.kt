@@ -121,7 +121,7 @@ fun AppNavHost(
             )
         }
 
-        composable(Routes.ADVSEARCH) {
+        composable(Routes.ADVANCED_SEARCH) {
             val viewModel: AdvSearchViewModel = hiltViewModel()
             AdvSearchScreen(
                 navController = navController,

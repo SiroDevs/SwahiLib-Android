@@ -118,7 +118,7 @@ fun HomeNavDrawer(
                 )
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.VolunteerActivism, contentDescription = null) },
-                    label = { Text("Changia SwahiLib") },
+                    label = { Text("Donate to SwahiLib") },
                     selected = false,
                     onClick = { navigateAndClose(Routes.DONATION) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)

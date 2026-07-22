@@ -42,7 +42,7 @@ fun ConfirmDonationDialog(
     } else {
         String.format("%.2f", amount)
     }
-    val greeting = if (!donorName.isNullOrBlank()) " $donorName! " else ""
+    val greeting = if (!donorName.isNullOrBlank()) "Thank you, $donorName! " else ""
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -56,7 +56,7 @@ fun ConfirmDonationDialog(
         },
         title = {
             Text(
-                text = "Asante ${greeting} kwa juhudi",
+                text = "$greeting for the effort",
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold,
                 ),
@@ -65,8 +65,7 @@ fun ConfirmDonationDialog(
         },
         text = {
             Text(
-                text = "Je, uko tayari kuendelea na mchango wako wa KES $displayAmount " +
-                    "ili kuweza kuunga mkono mradi wa SwahiLib?",
+                text = "Are you ready to proceed with your donation of KES $displayAmount to support SwahiLib?",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -78,7 +77,7 @@ fun ConfirmDonationDialog(
                 shape = RoundedCornerShape(10.dp),
             ) {
                 Text(
-                    text = "Ndio, Changa",
+                    text = "Yes, Donate",
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontWeight = FontWeight.Bold,
                     ),
@@ -87,7 +86,7 @@ fun ConfirmDonationDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Rudi Nyuma")
+                Text("Go Back")
             }
         },
     )
