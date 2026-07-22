@@ -59,7 +59,7 @@ fun HomeScreen(
     navController: NavHostController,
     prefsRepo: PrefsRepo,
     deepLinkRoute: String? = null,
-    onDeepLinkConsumed: () -> Unit = {},
+    onDeepLinkConsumed: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val selectedTab by viewModel.selectedTab.collectAsState()

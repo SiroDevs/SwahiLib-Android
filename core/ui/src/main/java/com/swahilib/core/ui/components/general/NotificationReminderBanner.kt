@@ -1,8 +1,6 @@
 package com.swahilib.core.ui.components.general
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -43,19 +41,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import com.swahilib.core.data.notifications.NotificationPermission
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.designsystem.theme.LightColors
 
 fun shouldShowNotifBanner(prefsRepo: PrefsRepo, context: android.content.Context): Boolean {
     if (prefsRepo.notifBannerDismissed) return false
-    val permDenied = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) != PackageManager.PERMISSION_GRANTED
-    } else false
-
+    val permDenied = !NotificationPermission.isGranted(context)
     val bothEnabled = prefsRepo.wordNotifEnabled && prefsRepo.proverbNotifEnabled
     return permDenied || !bothEnabled
 }
@@ -127,19 +119,15 @@ fun NotificationReminderBanner(
             ) {
                 Button(
                     onClick = {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            val permGranted = ContextCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.POST_NOTIFICATIONS
-                            ) == PackageManager.PERMISSION_GRANTED
-
-                            if (!permGranted) {
+                        when {
+                            NotificationPermission.isGranted(context) -> onGoToSettings()
+                            NotificationPermission.canRequestRuntimePermission() ->
                                 permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                            } else {
-                                onGoToSettings()
-                            }
-                        } else {
-                            onGoToSettings()
+                            else ->
+                                // No runtime dialog available (pre-Android 13, or the
+                                // permission was already permanently denied) - send the
+                                // user straight to the system notification settings.
+                                NotificationPermission.openAppNotificationSettings(context)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(

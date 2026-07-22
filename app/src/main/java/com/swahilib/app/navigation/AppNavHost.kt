@@ -49,6 +49,7 @@ fun AppNavHost(
     themeRepo: ThemeRepo,
     prefsRepo: PrefsRepo,
     deepLinkRoute: String? = null,
+    onDeepLinkConsumed: () -> Unit = {},
 ) {
     NavHost(
         navController = navController,
@@ -60,7 +61,8 @@ fun AppNavHost(
                 viewModel = viewModel,
                 navController = navController,
                 prefsRepo = prefsRepo,
-                deepLinkRoute = deepLinkRoute
+                deepLinkRoute = deepLinkRoute,
+                onDeepLinkConsumed = onDeepLinkConsumed
             )
         }
 

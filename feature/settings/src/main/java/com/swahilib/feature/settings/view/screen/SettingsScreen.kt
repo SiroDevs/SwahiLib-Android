@@ -1,6 +1,8 @@
 package com.swahilib.feature.settings.view.screen
 
 import android.app.TimePickerDialog
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.data.notifications.NotificationPermission
 import com.swahilib.core.data.repos.ThemeRepo
 import com.swahilib.core.designsystem.theme.ThemeSelectorDialog
 import com.swahilib.core.designsystem.theme.appThemeName
@@ -41,6 +44,8 @@ import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.settings.viewmodel.SettingsViewModel
 import com.swahilib.feature.settings.view.components.ConfirmResetDialog
 import com.swahilib.feature.settings.view.components.SettingsSectionTitle
+
+private enum class NotifToggle { NENO, METHALI }
 
 @Composable
 fun SettingsScreen(
@@ -64,6 +69,33 @@ fun SettingsScreen(
 
     fun showTimePicker(initialH: Int, initialM: Int, onSet: (Int, Int) -> Unit) =
         TimePickerDialog(context, { _, h, m -> onSet(h, m) }, initialH, initialM, true).show()
+
+    // Which switch is waiting on the outcome of a system permission prompt.
+    var pendingToggle by remember { mutableStateOf<NotifToggle?>(null) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        when (pendingToggle) {
+            NotifToggle.NENO -> viewModel.setNenoEnabled(granted)
+            NotifToggle.METHALI -> viewModel.setMethaliEnabled(granted)
+            null -> {}
+        }
+        pendingToggle = null
+    }
+
+    fun requestEnable(toggle: NotifToggle, enable: (Boolean) -> Unit) {
+        when {
+            NotificationPermission.isGranted(context) -> enable(true)
+            NotificationPermission.canRequestRuntimePermission() -> {
+                pendingToggle = toggle
+                permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+            else -> {
+                NotificationPermission.openAppNotificationSettings(context)
+            }
+        }
+    }
 
     if (showResetDialog) {
         ConfirmResetDialog(
@@ -128,7 +160,13 @@ fun SettingsScreen(
                 trailingContent = {
                     Switch(
                         checked = nenoEnabled,
-                        onCheckedChange = { viewModel.setNenoEnabled(it) })
+                        onCheckedChange = { checked ->
+                            if (checked) {
+                                requestEnable(NotifToggle.NENO) { viewModel.setNenoEnabled(it) }
+                            } else {
+                                viewModel.setNenoEnabled(false)
+                            }
+                        })
                 },
             )
             if (nenoEnabled) {
@@ -167,7 +205,13 @@ fun SettingsScreen(
                 trailingContent = {
                     Switch(
                         checked = methaliEnabled,
-                        onCheckedChange = { viewModel.setMethaliEnabled(it) })
+                        onCheckedChange = { checked ->
+                            if (checked) {
+                                requestEnable(NotifToggle.METHALI) { viewModel.setMethaliEnabled(it) }
+                            } else {
+                                viewModel.setMethaliEnabled(false)
+                            }
+                        })
                 },
             )
             if (methaliEnabled) {
