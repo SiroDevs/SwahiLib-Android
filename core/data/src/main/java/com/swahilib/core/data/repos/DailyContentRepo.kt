@@ -11,21 +11,6 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Single source of truth for "Neno la Siku" (Word of the Day) and
- * "Methali ya Siku" (Proverb of the Day).
- *
- * The first caller of the day (a [com.swahilib.core.data.notifications.DailyWordWorker]
- * / [com.swahilib.core.data.notifications.DailyProverbWorker], the
- * "Neno la Siku" / "Methali ya Siku" screens, or the home-screen widget)
- * generates and persists today's pick; everyone else for the rest of the
- * day reads back that exact same word, proverb, and chosen meaning.
- *
- * The widget can't take part in Hilt's dependency graph, so it calls
- * [DailyContentManager] directly with DAOs obtained from
- * `AppDatabase.getInstanceForWidget(context)`. This repo simply delegates
- * to the same shared logic for everything else.
- */
 @Singleton
 class DailyContentRepo @Inject constructor(
     private val dailyContentDao: DailyContentDao,

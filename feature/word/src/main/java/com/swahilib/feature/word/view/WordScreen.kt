@@ -31,11 +31,12 @@ import com.swahilib.core.database.model.WordEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
+import com.swahilib.core.ui.components.share.MeaningPickerDialog
 import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.word.WordViewModel
+import com.swahilib.feature.word.viewmodel.WordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,24 +57,34 @@ fun WordScreen(
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
     var showShareSheet by remember { mutableStateOf(false) }
+    var showMeaningPicker by remember { mutableStateOf(false) }
+    var selectedMeaning by remember(title) { mutableStateOf<String?>(null) }
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(word) { word?.let { viewModel.loadWord(it) } }
 
-    // Pick ONE random meaning for the share card; stable per load
-    val shareData = remember(title, meanings) {
-        if (title.isNotBlank() && meanings.isNotEmpty()) {
+    val shareData = remember(title, selectedMeaning, meanings, english, synonyms) {
+        val meaning = selectedMeaning ?: meanings.singleOrNull()?.trim()
+        if (title.isNotBlank() && meaning != null) {
             ShareData(
                 emoji = "📖",
-                typeLabel = "Neno",
+                headerLabel = "Neno la Kiswahili",
                 title = title,
-                meaning = meanings.random().trim(),
+                meaning = meaning,
+                english = english,
+                synonyms = synonyms.mapNotNull { it.title },
             )
         } else null
     }
 
+    // Word has more than one meaning: ask which one to share, otherwise there's
+    // only one option so go straight to the share sheet.
+    val requestShare = {
+        if (meanings.size > 1) showMeaningPicker = true else showShareSheet = true
+    }
+
     if (viewerState == ViewerState.Loaded) {
-        ScreenshotReminderDialog(onShareClick = { showShareSheet = true })
+        ScreenshotReminderDialog(onShareClick = requestShare)
     }
 
     Scaffold(
@@ -88,7 +99,7 @@ fun WordScreen(
                         word?.let {
                             viewModel.likeWord(it)
                             val msg = if (!isLiked) "Neno limeongezwa kwa vipendwa"
-                            else "Neno limeondolewa kwa vipendwa"
+                            else "Neno limeondolewa kutoka kwa vipendwa"
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     }) {
@@ -103,8 +114,8 @@ fun WordScreen(
             )
         },
         floatingActionButton = {
-            if (viewerState == ViewerState.Loaded && shareData != null) {
-                ShareFab(onClick = { showShareSheet = true })
+            if (viewerState == ViewerState.Loaded) {
+                ShareFab(onClick = requestShare)
             }
         },
     ) { padding ->
@@ -119,6 +130,7 @@ fun WordScreen(
                     message = (viewerState as ViewerState.Error).message,
                     onRetry = {},
                 )
+
                 ViewerState.Loaded -> WordView(
                     viewModel = viewModel,
                     title = title,
@@ -129,13 +141,29 @@ fun WordScreen(
                     showDonation = showDonation,
                     onShowDonation = { navController.navigate(Routes.DONATION) },
                 )
+
                 ViewerState.Loading -> {}
                 else -> EmptyState()
             }
         }
 
+        if (showMeaningPicker) {
+            MeaningPickerDialog(
+                meanings = meanings,
+                onSelect = {
+                    selectedMeaning = it
+                    showMeaningPicker = false
+                    showShareSheet = true
+                },
+                onDismiss = { showMeaningPicker = false },
+            )
+        }
+
         if (showShareSheet && shareData != null) {
-            ShareSheet(shareData = shareData, sheetState = shareSheetState, onDismiss = { showShareSheet = false })
+            ShareSheet(
+                shareData = shareData,
+                sheetState = shareSheetState,
+                onDismiss = { showShareSheet = false })
         }
     }
 }

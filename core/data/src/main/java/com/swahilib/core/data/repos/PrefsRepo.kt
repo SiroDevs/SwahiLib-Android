@@ -6,6 +6,9 @@ import com.swahilib.core.common.utils.NotifConstants
 import com.swahilib.core.common.utils.PrefConstants
 import com.swahilib.core.network.api.KamusiApi
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -105,6 +108,63 @@ class PrefsRepo @Inject constructor(
     var notifBannerDismissed: Boolean
         get() = prefs.getBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, false)
         set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, value) }
+
+    // ── Daily streak ──
+    // Tracks consecutive-day visits to the daily word / daily proverb screens,
+    // the same "did the user show up today" signal used to power the streak
+    // badge shown in-app and referenced in the daily reminder notifications.
+
+    var streakCount: Int
+        get() = prefs.getInt(PrefConstants.STREAK_COUNT, 0)
+        set(value) = prefs.edit { putInt(PrefConstants.STREAK_COUNT, value) }
+
+    var bestStreak: Int
+        get() = prefs.getInt(PrefConstants.STREAK_BEST, 0)
+        set(value) = prefs.edit { putInt(PrefConstants.STREAK_BEST, value) }
+
+    private var streakLastDate: String
+        get() = prefs.getString(PrefConstants.STREAK_LAST_DATE, "") ?: ""
+        set(value) = prefs.edit { putString(PrefConstants.STREAK_LAST_DATE, value) }
+
+    /**
+     * The streak as it would be displayed right now, without mutating anything.
+     * If the last recorded visit was before yesterday, the streak has already
+     * lapsed even though [streakCount] hasn't been reset yet - this is what
+     * lets the notification worker warn "don't break your streak" without
+     * incorrectly ticking it forward itself.
+     */
+    val currentStreak: Int
+        get() = when (streakLastDate) {
+            todayKey(), yesterdayKey() -> streakCount
+            else -> 0
+        }
+
+    /**
+     * Call when the user actually engages with the daily word/proverb (i.e. the
+     * behavior we want to build into a habit). Safe to call multiple times a
+     * day - only the first call per day advances the streak.
+     *
+     * Returns the resulting streak count so callers (e.g. DailyWordScreen) can
+     * show it immediately without a second read.
+     */
+    fun recordDailyVisit(): Int {
+        val today = todayKey()
+        if (streakLastDate == today) return streakCount
+
+        val newCount = if (streakLastDate == yesterdayKey()) streakCount + 1 else 1
+        streakCount = newCount
+        streakLastDate = today
+        if (newCount > bestStreak) bestStreak = newCount
+        return newCount
+    }
+
+    private fun dateKey(daysAgo: Int): String {
+        val cal = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -daysAgo) }
+        return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(cal.time)
+    }
+
+    private fun todayKey(): String = dateKey(0)
+    private fun yesterdayKey(): String = dateKey(1)
 
     fun getETag(endpoint: KamusiApi.Endpoint): String? =
         prefs.getString(endpoint.prefKey, null)

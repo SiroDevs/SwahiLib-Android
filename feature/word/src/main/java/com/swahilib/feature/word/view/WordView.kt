@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +27,7 @@ import com.swahilib.core.ui.components.donation.DonationBanner
 import com.swahilib.core.ui.components.general.CollapsingHeader
 import com.swahilib.core.ui.components.general.MeaningsView
 import com.swahilib.core.ui.components.listitems.SynonymItem
-import com.swahilib.feature.word.WordViewModel
+import com.swahilib.feature.word.viewmodel.WordViewModel
 
 @Composable
 fun WordView(
@@ -45,38 +44,13 @@ fun WordView(
     val scrollState = rememberLazyListState()
     Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         LazyColumn(state = scrollState) {
-            item { CollapsingHeader(title = title) }
+            item { CollapsingHeader(title = title, subtitle = english) }
             item {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     if (meanings.isNotEmpty()) MeaningsView(meanings = meanings)
-
-                    if (!english.isNullOrBlank()) {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                            )
-                        ) {
-                            Column(modifier = Modifier.padding(14.dp)) {
-                                Text(
-                                    text = "ENGLISH",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                    letterSpacing = 1.5.sp
-                                )
-                                Spacer(Modifier.height(6.dp))
-                                Text(
-                                    text = english,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer
-                                )
-                            }
-                        }
-                    }
 
                     if (conjugation.isNotEmpty()) {
                         Card(
@@ -125,6 +99,7 @@ fun WordView(
                     }
                 }
             }
+
             item {
                 DonationBanner(
                     show = showDonation,

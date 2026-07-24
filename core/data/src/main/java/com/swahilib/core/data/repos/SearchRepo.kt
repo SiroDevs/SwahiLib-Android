@@ -27,6 +27,12 @@ class SearchRepo @Inject constructor(
         }
     }
 
+    suspend fun clearAll() {
+        withContext(Dispatchers.IO) {
+            searchesDao.delete()
+        }
+    }
+
     suspend fun searchSearchsByTitle(title: String?) {
         //searchesDao.searchSearchByTitle(title)?.map { it.asDomainModel() }
     }

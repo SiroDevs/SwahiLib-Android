@@ -1,4 +1,4 @@
-package com.swahilib.feature.daily_content.view
+package com.swahilib.feature.dailies.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,17 +36,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.WordEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
+import com.swahilib.core.ui.components.general.StreakBadge
 import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.daily_content.DailyContentViewModel
-import com.swahilib.feature.word.WordViewModel
+import com.swahilib.feature.dailies.viewmodel.DailyContentViewModel
 import com.swahilib.feature.word.view.WordScreen
+import com.swahilib.feature.word.viewmodel.WordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +63,7 @@ fun DailyWordScreen(
     var loading by remember { mutableStateOf(true) }
     var showFullInfo by remember { mutableStateOf(false) }
     var showShareSheet by remember { mutableStateOf(false) }
+    var streak by remember { mutableStateOf(0) }
 
     val fullInfoSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -70,18 +73,21 @@ fun DailyWordScreen(
         word = dailyWord
         dailyMeaning = meaning
         loading = false
+        // Viewing the daily word is the habit we're trying to build, so this is
+        // where the streak actually advances (idempotent per calendar day).
+        if (dailyWord != null) streak = prefsRepo.recordDailyVisit()
     }
 
-    // Single meaning for this word, shared with the widget & notification
     val singleMeaning = dailyMeaning
 
     val shareData = remember(word, singleMeaning) {
         word?.let {
             ShareData(
                 emoji = "📖",
-                typeLabel = "Neno",
+                headerLabel = "Neno la Kiswahili",
                 title = it.title ?: "",
                 meaning = singleMeaning,
+                english = it.english?.takeIf { e -> e.isNotBlank() },
             )
         }
     }
@@ -118,9 +124,16 @@ fun DailyWordScreen(
                     // ── Notification reminder banner ──
                     NotificationReminderBanner(
                         prefsRepo = prefsRepo,
-                        onGoToSettings = { navController.navigate(com.swahilib.core.common.utils.Routes.SETTINGS) },
+                        onGoToSettings = { navController.navigate(Routes.SETTINGS) },
                         modifier = Modifier.padding(horizontal = 0.dp),
                     )
+
+                    // ── Streak badge ──
+                    StreakBadge(
+                        streakCount = streak,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                    )
+
                     // ── Hero card ──
                     Card(
                         modifier = Modifier.fillMaxWidth(),

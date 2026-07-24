@@ -19,10 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.data.repos.ThemeMode
 
-/**
- * A Material 3 dialog that lets the user pick a [ThemeMode].
- * Extracted from ThemeRepo so that :core:data stays UI-free.
- */
 @Composable
 fun ThemeSelectorDialog(
     current: ThemeMode,
@@ -65,6 +61,6 @@ fun ThemeSelectorDialog(
 
 fun appThemeName(mode: ThemeMode): String = when (mode) {
     ThemeMode.SYSTEM -> "Chaguo la Mfumo (System)"
-    ThemeMode.LIGHT  -> "Mandhari ya Nuru (Light Theme)"
-    ThemeMode.DARK   -> "Mandhari ya Giza (Dark Theme)"
+    ThemeMode.LIGHT -> "Mandhari ya Nuru (Light Theme)"
+    ThemeMode.DARK -> "Mandhari ya Giza (Dark Theme)"
 }

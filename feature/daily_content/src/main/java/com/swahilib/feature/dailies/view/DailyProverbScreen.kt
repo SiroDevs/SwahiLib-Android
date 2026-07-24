@@ -1,4 +1,4 @@
-package com.swahilib.feature.daily_content.view
+package com.swahilib.feature.dailies.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,17 +36,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
+import com.swahilib.core.ui.components.general.StreakBadge
 import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.daily_content.DailyContentViewModel
-import com.swahilib.feature.proverb.ProverbViewModel
-import com.swahilib.feature.proverb.view.ProverbScreen
+import com.swahilib.feature.dailies.viewmodel.DailyContentViewModel
+import com.swahilib.feature.proverb.view.screen.ProverbScreen
+import com.swahilib.feature.proverb.viewmodel.ProverbViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +63,7 @@ fun DailyProverbScreen(
     var loading by remember { mutableStateOf(true) }
     var showFullInfo by remember { mutableStateOf(false) }
     var showShareSheet by remember { mutableStateOf(false) }
+    var streak by remember { mutableStateOf(0) }
 
     val fullInfoSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -70,6 +73,9 @@ fun DailyProverbScreen(
         proverb = dailyProverb
         dailyMeaning = meaning
         loading = false
+        // Viewing the daily proverb also counts toward the same daily streak as
+        // the daily word - either one is the "showed up today" signal.
+        if (dailyProverb != null) streak = prefsRepo.recordDailyVisit()
     }
 
     val singleMeaning = dailyMeaning
@@ -78,10 +84,9 @@ fun DailyProverbScreen(
         proverb?.let {
             ShareData(
                 emoji = "🌿",
-                typeLabel = "Methali",
+                headerLabel = "Methali ya Kiswahili",
                 title = it.title ?: "",
                 meaning = singleMeaning,
-                textToShare = "\"${it.title}\"\n\n$singleMeaning\n\n— SwahiLib · Kamusi ya Kiswahili",
             )
         }
     }
@@ -118,9 +123,16 @@ fun DailyProverbScreen(
                     // ── Notification reminder banner ──
                     NotificationReminderBanner(
                         prefsRepo = prefsRepo,
-                        onGoToSettings = { navController.navigate(com.swahilib.core.common.utils.Routes.SETTINGS) },
+                        onGoToSettings = { navController.navigate(Routes.SETTINGS) },
                         modifier = Modifier.padding(horizontal = 0.dp),
                     )
+
+                    // ── Streak badge ──
+                    StreakBadge(
+                        streakCount = streak,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                    )
+
                     // ── Proverb hero card ──
                     Card(
                         modifier = Modifier.fillMaxWidth(),

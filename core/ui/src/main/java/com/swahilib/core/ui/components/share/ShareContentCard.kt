@@ -21,28 +21,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/**
- * The card shown as a preview inside [ShareSheet] AND captured as the shareable image.
- * Intentionally simple: emoji, type label, title, one meaning, branding footer.
- * No synonyms, no conjugation.
- */
 @Composable
 fun ShareContentCard(
     emoji: String,
-    typeLabel: String,
+    headerLabel: String,
     title: String,
     meaning: String,
+    english: String? = null,
+    synonyms: List<String> = emptyList(),
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
         Column(
             modifier = Modifier.padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -50,7 +47,7 @@ fun ShareContentCard(
             ) {
                 Text(text = emoji, fontSize = 22.sp)
                 Text(
-                    text = typeLabel.uppercase(),
+                    text = headerLabel.uppercase(),
                     style = MaterialTheme.typography.labelMedium.copy(
                         letterSpacing = 2.sp,
                         fontWeight = FontWeight.Bold,
@@ -59,25 +56,46 @@ fun ShareContentCard(
                 )
             }
 
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+
+                if (!english.isNullOrBlank()) {
+                    Text(
+                        text = english,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
+                    )
+                }
+            }
 
             HorizontalDivider(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
 
             Text(
-                text = meaning,
+                text = buildString { append("Maana: ").append(meaning) },
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 17.sp),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
+
+            if (synonyms.isNotEmpty()) {
+                Text(
+                    text = "Visawe (${synonyms.size}): ${synonyms.joinToString(", ")}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
+                )
+            }
 
             Spacer(Modifier.height(2.dp))
 
             Text(
                 text = "SwahiLib · Kamusi ya Kiswahili",
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                 modifier = Modifier.align(Alignment.End),
             )

@@ -48,7 +48,6 @@ class SyncWorker @AssistedInject constructor(
             prefsRepo.lastSyncedAt = System.currentTimeMillis()
             Log.d(TAG, "✅ SyncWorker done")
             Result.success()
-
         } catch (e: Exception) {
             Log.e(TAG, "❌ SyncWorker failed: ${e.message}", e)
             Result.retry()
@@ -66,10 +65,10 @@ class SyncWorker @AssistedInject constructor(
 
         Log.d(TAG, "⬇ ${endpoint.path} changed — downloading")
         val success = when (endpoint) {
-            KamusiApi.Endpoint.WORDS    -> wordRepo.fetchRemoteData().isSuccess
-            KamusiApi.Endpoint.IDIOMS   -> idiomRepo.fetchRemoteData().isSuccess
+            KamusiApi.Endpoint.WORDS -> wordRepo.fetchRemoteData().isSuccess
+            KamusiApi.Endpoint.IDIOMS -> idiomRepo.fetchRemoteData().isSuccess
             KamusiApi.Endpoint.PROVERBS -> proverbRepo.fetchRemoteData().isSuccess
-            KamusiApi.Endpoint.SAYINGS  -> sayingRepo.fetchRemoteData().isSuccess
+            KamusiApi.Endpoint.SAYINGS -> sayingRepo.fetchRemoteData().isSuccess
         }
 
         if (success) {

@@ -9,11 +9,6 @@ import javax.inject.Inject
 
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
-/**
- * HiltViewModel that holds the current [ThemeMode] selection and persists it
- * via [PrefsRepo]. Lives in :core:data because it only depends on prefs.
- * The Compose theme-picker dialog lives in :core:designsystem (ThemeSelectorDialog.kt).
- */
 @HiltViewModel
 class ThemeRepo @Inject constructor(
     private val prefs: PrefsRepo,

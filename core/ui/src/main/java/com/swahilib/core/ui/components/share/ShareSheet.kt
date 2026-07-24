@@ -33,31 +33,43 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
-/**
- * All data needed to populate [ShareContentCard] and compose the text-share body.
- */
 data class ShareData(
     val emoji: String,
-    val typeLabel: String,
+    val headerLabel: String,
     val title: String,
     val meaning: String,
-    val textToShare: String = "$title\n\n$meaning\n\n— SwahiLib · Kamusi ya Kiswahili",
-)
+    val english: String? = null,
+    val synonyms: List<String> = emptyList(),
+) {
+    val textToShare: String
+        get() = buildString {
+            append(headerLabel).append("\n\n")
+            append(title)
+            if (!english.isNullOrBlank()) {
+                append(" ($english)")
+            }
+            append("\n")
+            append("Maana: ").append(meaning).append("\n")
+            if (!english.isNullOrBlank()) {
+                append("English: ").append(english).append("\n")
+            }
+            if (synonyms.isNotEmpty()) {
+                append("\nVisawe (${synonyms.size}): ").append(synonyms.joinToString(", "))
+                    .append("\n")
+            }
+            append("\nHisani: SwahiLib · Kamusi ya Kiswahili")
+        }
+}
 
-/**
- * Bottom sheet presenting a [ShareContentCard] preview with two share options:
- *  - "Shiriki kama Maandishi" — plain text via system share sheet
- *  - "Shiriki kama Picha" — screenshot of the root window, shared as PNG
- *
- * No third-party capture library required; uses [ShareHelper.screenshotView] on
- * the Compose window's root [LocalView].
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShareSheet(
@@ -66,9 +78,9 @@ fun ShareSheet(
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
-    val rootView = LocalView.current
     val scope = rememberCoroutineScope()
     var capturing by remember { mutableStateOf(false) }
+    val cardGraphicsLayer = rememberGraphicsLayer()
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -88,19 +100,24 @@ fun ShareSheet(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
-            // Preview card
             ShareContentCard(
                 emoji = shareData.emoji,
-                typeLabel = shareData.typeLabel,
+                headerLabel = shareData.headerLabel,
                 title = shareData.title,
                 meaning = shareData.meaning,
+                english = shareData.english,
+                synonyms = shareData.synonyms,
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
                     .border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
                         shape = RoundedCornerShape(20.dp),
-                    ),
+                    )
+                    .drawWithContent {
+                        cardGraphicsLayer.record { this@drawWithContent.drawContent() }
+                        drawLayer(cardGraphicsLayer)
+                    },
             )
 
             Spacer(Modifier.height(4.dp))
@@ -109,7 +126,6 @@ fun ShareSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                // ── Text share ──
                 OutlinedButton(
                     onClick = {
                         scope.launch { sheetState.hide(); onDismiss() }
@@ -123,20 +139,21 @@ fun ShareSheet(
                     Text("Maandishi")
                 }
 
-                // ── Image share ──
                 Button(
                     onClick = {
                         if (capturing) return@Button
                         capturing = true
                         scope.launch {
                             try {
-                                val bitmap = ShareHelper.screenshotView(rootView)
+                                val bitmap = cardGraphicsLayer.toImageBitmap().asAndroidBitmap()
                                 sheetState.hide()
                                 onDismiss()
                                 ShareHelper.shareBitmap(
                                     context = context,
                                     bitmap = bitmap,
-                                    fileName = "swahilib_${shareData.title.take(20).replace(" ", "_")}.png",
+                                    fileName = "swahilib_${
+                                        shareData.title.take(20).replace(" ", "_")
+                                    }.png",
                                 )
                             } finally {
                                 capturing = false

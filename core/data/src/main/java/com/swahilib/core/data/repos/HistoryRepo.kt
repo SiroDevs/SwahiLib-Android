@@ -26,6 +26,12 @@ class HistoryRepo @Inject constructor(
             historiesDao.insert(history)
         }
     }
+
+    suspend fun clearAll() {
+        withContext(Dispatchers.IO) {
+            historiesDao.delete()
+        }
+    }
     suspend fun getHistoryById(historyId: String): Flow<HistoryEntity> {
         try {
 //            val historyFlow = historiesDao.getById(historyId)
