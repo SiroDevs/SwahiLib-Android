@@ -109,6 +109,11 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, false)
         set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, value) }
 
+    // ── Daily streak ──
+    // Tracks consecutive-day visits to the daily word / daily proverb screens,
+    // the same "did the user show up today" signal used to power the streak
+    // badge shown in-app and referenced in the daily reminder notifications.
+
     var streakCount: Int
         get() = prefs.getInt(PrefConstants.STREAK_COUNT, 0)
         set(value) = prefs.edit { putInt(PrefConstants.STREAK_COUNT, value) }
@@ -121,12 +126,27 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getString(PrefConstants.STREAK_LAST_DATE, "") ?: ""
         set(value) = prefs.edit { putString(PrefConstants.STREAK_LAST_DATE, value) }
 
+    /**
+     * The streak as it would be displayed right now, without mutating anything.
+     * If the last recorded visit was before yesterday, the streak has already
+     * lapsed even though [streakCount] hasn't been reset yet - this is what
+     * lets the notification worker warn "don't break your streak" without
+     * incorrectly ticking it forward itself.
+     */
     val currentStreak: Int
         get() = when (streakLastDate) {
             todayKey(), yesterdayKey() -> streakCount
             else -> 0
         }
 
+    /**
+     * Call when the user actually engages with the daily word/proverb (i.e. the
+     * behavior we want to build into a habit). Safe to call multiple times a
+     * day - only the first call per day advances the streak.
+     *
+     * Returns the resulting streak count so callers (e.g. DailyWordScreen) can
+     * show it immediately without a second read.
+     */
     fun recordDailyVisit(): Int {
         val today = todayKey()
         if (streakLastDate == today) return streakCount

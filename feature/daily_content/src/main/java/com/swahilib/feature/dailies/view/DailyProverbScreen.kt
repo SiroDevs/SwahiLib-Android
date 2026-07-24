@@ -173,11 +173,12 @@ fun DailyProverbScreen(
                         }
                     }
 
+                    // ── More info button ──
                     Button(
                         onClick = { showFullInfo = true },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                    ) { Text("Tazama Zaidi") }
+                    ) { Text("Tazama Maelezo Zaidi") }
                 }
             }
         }

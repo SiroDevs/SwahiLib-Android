@@ -41,7 +41,7 @@
         </activity>
 
         <receiver
-            android:name=".widget.SwahiLibWidgetReceiver"
+            android:name=".widget.WidgetReceiver"
             android:exported="true"
             android:label="SwahiLib">
             <intent-filter>

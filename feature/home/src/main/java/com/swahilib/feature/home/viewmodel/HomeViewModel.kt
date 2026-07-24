@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.swahilib.core.common.entity.UiState
+import com.swahilib.core.data.repos.DailyContentRepo
 import com.swahilib.core.data.repos.HistoryRepo
 import com.swahilib.core.data.repos.IdiomRepo
 import com.swahilib.core.data.repos.PrefsRepo
@@ -46,6 +47,7 @@ class HomeViewModel @Inject constructor(
     private val wordRepo: WordRepo,
     private val historyRepo: HistoryRepo,
     private val searchRepo: SearchRepo,
+    private val dailyContentRepo: DailyContentRepo,
     private val prefsRepo: PrefsRepo,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
@@ -84,6 +86,38 @@ class HomeViewModel @Inject constructor(
 
     private val _history = MutableStateFlow<List<HistoryEntity>>(emptyList())
     val history: StateFlow<List<HistoryEntity>> get() = _history
+
+    /** Word/proverb-of-the-day plus current streak, for the Home Search preview cards. */
+    data class DailyHighlights(
+        val word: WordEntity? = null,
+        val wordMeaning: String = "",
+        val proverb: ProverbEntity? = null,
+        val proverbMeaning: String = "",
+        val streak: Int = 0,
+    )
+
+    private val _dailyHighlights = MutableStateFlow(DailyHighlights())
+    val dailyHighlights: StateFlow<DailyHighlights> get() = _dailyHighlights
+
+    /**
+     * Loads today's word + proverb (same cached-per-day row the notifications,
+     * widget, and Daily Word/Proverb screens all read) along with the current
+     * streak, so Home Search can show a live preview without duplicating any
+     * of that selection logic.
+     */
+    fun loadDailyHighlights() {
+        viewModelScope.launch {
+            val (word, wordMeaning) = dailyContentRepo.getDailyWord()
+            val (proverb, proverbMeaning) = dailyContentRepo.getDailyProverb()
+            _dailyHighlights.value = DailyHighlights(
+                word = word,
+                wordMeaning = wordMeaning,
+                proverb = proverb,
+                proverbMeaning = proverbMeaning,
+                streak = prefsRepo.currentStreak,
+            )
+        }
+    }
 
     private val _searchHistory = MutableStateFlow<List<SearchEntity>>(emptyList())
     val searchHistory: StateFlow<List<SearchEntity>> get() = _searchHistory
