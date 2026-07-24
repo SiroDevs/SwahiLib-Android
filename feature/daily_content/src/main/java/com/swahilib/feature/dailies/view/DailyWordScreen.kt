@@ -41,6 +41,7 @@ import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.WordEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
+import com.swahilib.core.ui.components.general.StreakBadge
 import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
@@ -62,6 +63,7 @@ fun DailyWordScreen(
     var loading by remember { mutableStateOf(true) }
     var showFullInfo by remember { mutableStateOf(false) }
     var showShareSheet by remember { mutableStateOf(false) }
+    var streak by remember { mutableStateOf(0) }
 
     val fullInfoSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -71,6 +73,9 @@ fun DailyWordScreen(
         word = dailyWord
         dailyMeaning = meaning
         loading = false
+        // Viewing the daily word is the habit we're trying to build, so this is
+        // where the streak actually advances (idempotent per calendar day).
+        if (dailyWord != null) streak = prefsRepo.recordDailyVisit()
     }
 
     val singleMeaning = dailyMeaning
@@ -122,6 +127,13 @@ fun DailyWordScreen(
                         onGoToSettings = { navController.navigate(Routes.SETTINGS) },
                         modifier = Modifier.padding(horizontal = 0.dp),
                     )
+
+                    // ── Streak badge ──
+                    StreakBadge(
+                        streakCount = streak,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                    )
+
                     // ── Hero card ──
                     Card(
                         modifier = Modifier.fillMaxWidth(),
@@ -197,7 +209,7 @@ fun DailyWordScreen(
                         onClick = { showFullInfo = true },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                    ) { Text("Tazama Maelezo Zaidi") }
+                    ) { Text("Tazama Zaidi") }
                 }
             }
         }

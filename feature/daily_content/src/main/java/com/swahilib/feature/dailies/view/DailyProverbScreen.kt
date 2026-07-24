@@ -41,6 +41,7 @@ import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
+import com.swahilib.core.ui.components.general.StreakBadge
 import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
@@ -62,6 +63,7 @@ fun DailyProverbScreen(
     var loading by remember { mutableStateOf(true) }
     var showFullInfo by remember { mutableStateOf(false) }
     var showShareSheet by remember { mutableStateOf(false) }
+    var streak by remember { mutableStateOf(0) }
 
     val fullInfoSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -71,6 +73,9 @@ fun DailyProverbScreen(
         proverb = dailyProverb
         dailyMeaning = meaning
         loading = false
+        // Viewing the daily proverb also counts toward the same daily streak as
+        // the daily word - either one is the "showed up today" signal.
+        if (dailyProverb != null) streak = prefsRepo.recordDailyVisit()
     }
 
     val singleMeaning = dailyMeaning
@@ -121,6 +126,13 @@ fun DailyProverbScreen(
                         onGoToSettings = { navController.navigate(Routes.SETTINGS) },
                         modifier = Modifier.padding(horizontal = 0.dp),
                     )
+
+                    // ── Streak badge ──
+                    StreakBadge(
+                        streakCount = streak,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                    )
+
                     // ── Proverb hero card ──
                     Card(
                         modifier = Modifier.fillMaxWidth(),
@@ -161,12 +173,11 @@ fun DailyProverbScreen(
                         }
                     }
 
-                    // ── More info button ──
                     Button(
                         onClick = { showFullInfo = true },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                    ) { Text("Tazama Maelezo Zaidi") }
+                    ) { Text("Tazama Zaidi") }
                 }
             }
         }

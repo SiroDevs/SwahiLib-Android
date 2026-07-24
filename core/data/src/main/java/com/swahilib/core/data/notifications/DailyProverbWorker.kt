@@ -14,6 +14,7 @@ import com.swahilib.core.common.utils.DeepLinkConstants
 import com.swahilib.core.common.utils.NotifConstants
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.DailyContentRepo
+import com.swahilib.core.data.repos.PrefsRepo
 import dagger.assisted.Assisted
 import com.swahilib.core.common.R
 import dagger.assisted.AssistedInject
@@ -23,6 +24,7 @@ class DailyProverbWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
     private val dailyContentRepo: DailyContentRepo,
+    private val prefsRepo: PrefsRepo,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -50,6 +52,13 @@ class DailyProverbWorker @AssistedInject constructor(
 
         val displayMeaning = meaning.take(160)
 
+        val streak = prefsRepo.currentStreak
+        val bigText = if (streak > 1) {
+            "$displayMeaning\n\n🔥 Usivunje mfuatano wako wa siku $streak!"
+        } else {
+            displayMeaning
+        }
+
         val notification = NotificationCompat.Builder(context, NotifConstants.CHANNEL_PROVERB_ID)
             .setSmallIcon(R.drawable.ic_swahilib_notification)
             .setContentTitle("🌿 Methali ya Siku")
@@ -57,7 +66,7 @@ class DailyProverbWorker @AssistedInject constructor(
             .setStyle(
                 NotificationCompat.BigTextStyle()
                     .setBigContentTitle("🌿 ${proverb.title}")
-                    .bigText(displayMeaning)
+                    .bigText(bigText)
             )
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

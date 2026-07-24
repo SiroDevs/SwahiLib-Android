@@ -41,6 +41,10 @@ object PrefConstants {
     const val NOTIF_PROVERB_HOUR = "notif_proverb_hour"
     const val NOTIF_PROVERB_MINUTE = "notif_proverb_minute"
     const val NOTIF_BANNER_DISMISSED = "notif_banner_dismissed"
+
+    const val STREAK_COUNT = "streak_count"
+    const val STREAK_BEST = "streak_best"
+    const val STREAK_LAST_DATE = "streak_last_date"
 }
 
 object NotifConstants {

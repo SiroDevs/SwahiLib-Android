@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,12 +19,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.ManageSearch
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -63,6 +68,7 @@ fun HomeHistory(
 ) {
     val history by viewModel.history.collectAsState(initial = emptyList())
     val searches by viewModel.searchHistory.collectAsState(initial = emptyList())
+    val reviewSuggestions by viewModel.reviewSuggestions.collectAsState(initial = emptyList())
 
     var selectedChip by rememberSaveable { mutableStateOf(HistoryChip.USOMAJI) }
 
@@ -88,6 +94,15 @@ fun HomeHistory(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
+        if (reviewSuggestions.isNotEmpty()) {
+            item(key = "review_nudge") {
+                ReviewNudgeRow(
+                    suggestions = reviewSuggestions,
+                    onItemClick = { viewModel.requestSearch(it.title) },
+                )
+            }
+        }
+
         stickyHeader {
             LazyRow(
                 modifier = Modifier
@@ -254,6 +269,60 @@ private fun LazyListScope.searchesSection(
                         },
                         colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
                         modifier = Modifier.clickable { onItemClick(row.data) },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReviewNudgeRow(
+    suggestions: List<SearchEntity>,
+    onItemClick: (SearchEntity) -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp, horizontal = 5.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                .padding(vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(
+                text = "🔁 Kariri Uliyoyatafuta",
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
+            ) {
+                items(suggestions, key = { it.id }) { entry ->
+                    SuggestionChip(
+                        onClick = { onItemClick(entry) },
+                        label = { Text(entry.title) },
+                        icon = {
+                            Icon(
+                                Icons.Default.Refresh,
+                                contentDescription = null,
+                                modifier = Modifier.padding(0.dp),
+                            )
+                        },
+                        colors = SuggestionChipDefaults.suggestionChipColors(
+                            containerColor = MaterialTheme.colorScheme.background,
+                        ),
+                        border = SuggestionChipDefaults.suggestionChipBorder(
+                            enabled = true,
+                            borderColor = MaterialTheme.colorScheme.outlineVariant,
+                        ),
                     )
                 }
             }

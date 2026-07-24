@@ -14,6 +14,7 @@ import com.swahilib.core.common.utils.DeepLinkConstants
 import com.swahilib.core.common.utils.NotifConstants
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.DailyContentRepo
+import com.swahilib.core.data.repos.PrefsRepo
 import dagger.assisted.Assisted
 import com.swahilib.core.common.R
 import dagger.assisted.AssistedInject
@@ -23,6 +24,7 @@ class DailyWordWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
     private val dailyContentRepo: DailyContentRepo,
+    private val prefsRepo: PrefsRepo,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -50,11 +52,20 @@ class DailyWordWorker @AssistedInject constructor(
 
         val displayMeaning = meaning.take(120)
 
+        // Loss aversion nudge: a live streak is a much stronger reason to open
+        // the app than the word itself, so lead the expanded body with it.
+        val streak = prefsRepo.currentStreak
+        val bigText = if (streak > 1) {
+            "$displayMeaning\n\n🔥 Usivunje mfuatano wako wa siku $streak!"
+        } else {
+            displayMeaning
+        }
+
         val notification = NotificationCompat.Builder(context, NotifConstants.CHANNEL_WORD_ID)
             .setSmallIcon(R.drawable.ic_swahilib_notification)
             .setContentTitle("📖 Neno la Siku: ${word.title}")
             .setContentText(displayMeaning)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(displayMeaning))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(bigText))
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()

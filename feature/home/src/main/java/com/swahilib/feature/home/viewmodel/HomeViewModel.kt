@@ -88,6 +88,23 @@ class HomeViewModel @Inject constructor(
     private val _searchHistory = MutableStateFlow<List<SearchEntity>>(emptyList())
     val searchHistory: StateFlow<List<SearchEntity>> get() = _searchHistory
 
+    /**
+     * Lightweight spaced-repetition nudge: words the user searched for at least
+     * [REVIEW_MIN_AGE_MS] ago (so it's not just re-showing what they searched a
+     * minute ago) and hasn't searched again since. Surfacing real past lookups
+     * ties the nudge to something they actually needed, rather than a generic
+     * "come back" prompt.
+     */
+    val reviewSuggestions: StateFlow<List<SearchEntity>>
+        get() = _searchHistory.map { searches ->
+            val cutoff = System.currentTimeMillis() - REVIEW_MIN_AGE_MS
+            searches
+                .filter { (it.createdAt.toLongOrNull() ?: Long.MAX_VALUE) < cutoff }
+                .distinctBy { it.title.lowercase() }
+                .sortedByDescending { it.createdAt.toLongOrNull() ?: 0L }
+                .take(REVIEW_MAX_ITEMS)
+        }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
     private val _historySubTab = MutableStateFlow(HistorySubTab.USOMAJI)
     val historySubTab: StateFlow<HistorySubTab> = _historySubTab.asStateFlow()
     fun setHistorySubTab(tab: HistorySubTab) { _historySubTab.value = tab }
@@ -400,5 +417,10 @@ class HomeViewModel @Inject constructor(
 
             else -> null
         }
+    }
+
+    companion object {
+        private const val REVIEW_MIN_AGE_MS = 3 * 24 * 60 * 60 * 1000L // 3 days
+        private const val REVIEW_MAX_ITEMS = 8
     }
 }
