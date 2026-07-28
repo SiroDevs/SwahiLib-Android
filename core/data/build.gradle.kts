@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.swahilib.android.library)
     alias(libs.plugins.swahilib.hilt)
@@ -5,6 +7,17 @@ plugins {
 
 android {
     namespace = "com.swahilib.core.data"
+    buildFeatures { buildConfig = true }
+
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
+    }
+
+    defaultConfig {
+        buildConfigField("String", "PaystackSecret", "\"${localProperties.getProperty("PAYSTACK_SECRET_KEY") ?: ""}\"")
+    }
 }
 
 dependencies {

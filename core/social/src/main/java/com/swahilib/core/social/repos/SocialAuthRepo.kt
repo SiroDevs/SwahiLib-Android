@@ -41,10 +41,6 @@ class SocialAuthRepo @Inject constructor(
 
     val currentUserId: String? get() = supabase.auth.currentUserOrNull()?.id
 
-    /**
-     * Launches the Credential Manager Google Sign-In flow and exchanges the
-     * resulting ID token with Supabase Auth. Returns true on success.
-     */
     suspend fun signInWithGoogle(context: Context): Result<Unit> = runCatching {
         // Google needs the SHA-256 hash of the nonce; Supabase needs the raw value to verify
         // against that hash - see https://supabase.com/docs/guides/auth/social-login/auth-google
@@ -53,7 +49,7 @@ class SocialAuthRepo @Inject constructor(
 
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
+            .setServerClientId(BuildConfig.GoogleWebClientId)
             .setNonce(hashedNonce)
             .build()
 
