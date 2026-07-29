@@ -42,6 +42,7 @@ import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
+import com.swahilib.feature.home.view.components.DailyHighlightsDialog
 import com.swahilib.feature.home.viewmodel.HomeViewModel
 import com.swahilib.feature.home.view.components.HomeNavDrawer
 import com.swahilib.feature.home.view.components.HomeSkeleton
@@ -66,8 +67,6 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    // Only needed to decide whether the top-bar "clear" icon should show for
-    // the Likes / History tabs, and which confirm dialog + action it should fire.
     val likedWords by viewModel.likedWords.collectAsState(initial = emptyList())
     val likedIdioms by viewModel.likedIdioms.collectAsState(initial = emptyList())
     val likedProverbs by viewModel.likedProverbs.collectAsState(initial = emptyList())
@@ -86,6 +85,8 @@ fun HomeScreen(
 
     var showClearLikesDialog by remember { mutableStateOf(false) }
     var showClearHistoryDialog by remember { mutableStateOf(false) }
+    var showDailyDialog by remember { mutableStateOf(false) }
+    val dailyHighlights by viewModel.dailyHighlights.collectAsState()
 
     val pagerState = rememberPagerState(
         initialPage = homeTabs.indexOf(selectedTab).coerceAtLeast(0),
@@ -94,6 +95,14 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) { viewModel.fetchData() }
 
+    LaunchedEffect(Unit) {
+        viewModel.loadDailyHighlights()
+        if (prefsRepo.shouldShowDailyDialog()) {
+            showDailyDialog = true
+            prefsRepo.markDailyDialogShown()
+        }
+    }
+
     LaunchedEffect(deepLinkRoute, uiState) {
         if (deepLinkRoute != null && uiState is UiState.Filtered) {
             when (deepLinkRoute) {
@@ -101,9 +110,6 @@ fun HomeScreen(
                 Routes.DAILY_WORD -> navController.navigate(Routes.DAILY_WORD)
                 else -> navController.navigate(Routes.DAILY_WORD)
             }
-            // Consume it so a config change / recomposition doesn't re-navigate,
-            // and so pressing back from the daily screen lands on Home instead
-            // of bouncing straight back to the daily screen.
             onDeepLinkConsumed()
         }
     }
@@ -252,6 +258,21 @@ fun HomeScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showClearHistoryDialog = false }) { Text("Hapana") }
+            },
+        )
+    }
+
+    if (showDailyDialog) {
+        DailyHighlightsDialog(
+            highlights = dailyHighlights,
+            onDismiss = { showDailyDialog = false },
+            onWordClick = {
+                showDailyDialog = false
+                navController.navigate(Routes.DAILY_WORD)
+            },
+            onProverbClick = {
+                showDailyDialog = false
+                navController.navigate(Routes.DAILY_PROVERB)
             },
         )
     }

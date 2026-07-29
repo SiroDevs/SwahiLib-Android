@@ -11,12 +11,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -101,6 +105,17 @@ fun DailyWordScreen(
                 tagline = "SwahiLib · Kamusi ya Kiswahili",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(
+                                Routes.dailyContentHistory(Routes.DAILY_CONTENT_TYPE_WORD)
+                            )
+                        }
+                    ) {
+                        Icon(Icons.Default.History, contentDescription = "Historia ya Maneno ya Siku")
+                    }
+                },
             )
         },
         floatingActionButton = {

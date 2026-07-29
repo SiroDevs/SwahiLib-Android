@@ -102,21 +102,19 @@ class HomeViewModel @Inject constructor(
     /**
      * Loads today's word + proverb (same cached-per-day row the notifications,
      * widget, and Daily Word/Proverb screens all read) along with the current
-     * streak, so Home Search can show a live preview without duplicating any
-     * of that selection logic.
+     * streak. Suspend (not launched internally) so [com.swahilib.feature.home.view.screen.HomeScreen]
+     * can await it before deciding whether to pop the once-a-day highlights dialog.
      */
-    fun loadDailyHighlights() {
-        viewModelScope.launch {
-            val (word, wordMeaning) = dailyContentRepo.getDailyWord()
-            val (proverb, proverbMeaning) = dailyContentRepo.getDailyProverb()
-            _dailyHighlights.value = DailyHighlights(
-                word = word,
-                wordMeaning = wordMeaning,
-                proverb = proverb,
-                proverbMeaning = proverbMeaning,
-                streak = prefsRepo.currentStreak,
-            )
-        }
+    suspend fun loadDailyHighlights() {
+        val (word, wordMeaning) = dailyContentRepo.getDailyWord()
+        val (proverb, proverbMeaning) = dailyContentRepo.getDailyProverb()
+        _dailyHighlights.value = DailyHighlights(
+            word = word,
+            wordMeaning = wordMeaning,
+            proverb = proverb,
+            proverbMeaning = proverbMeaning,
+            streak = prefsRepo.currentStreak,
+        )
     }
 
     private val _searchHistory = MutableStateFlow<List<SearchEntity>>(emptyList())

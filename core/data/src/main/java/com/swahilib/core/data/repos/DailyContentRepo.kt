@@ -29,4 +29,29 @@ class DailyContentRepo @Inject constructor(
         val daily = DailyContentManager.getOrCreateToday(dailyContentDao, wordDao, proverbDao)
         daily.proverb to daily.entity.proverbMeaning
     }
+
+    /**
+     * Every past daily selection, most recent first, with the word/proverb
+     * resolved from their rids for display. Used by DailyContentHistoryScreen.
+     */
+    suspend fun getHistory(): List<DailyContentHistoryEntry> = withContext(Dispatchers.IO) {
+        dailyContentDao.getAll().map { entity ->
+            DailyContentHistoryEntry(
+                date = entity.date,
+                word = wordDao.getByRid(entity.wordRid),
+                wordMeaning = entity.wordMeaning,
+                proverb = proverbDao.getByRid(entity.proverbRid),
+                proverbMeaning = entity.proverbMeaning,
+            )
+        }
+    }
 }
+
+/** One resolved day of daily-content history, ready for display. */
+data class DailyContentHistoryEntry(
+    val date: String,
+    val word: WordEntity?,
+    val wordMeaning: String,
+    val proverb: ProverbEntity?,
+    val proverbMeaning: String,
+)

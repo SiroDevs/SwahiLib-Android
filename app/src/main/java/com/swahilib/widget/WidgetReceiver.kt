@@ -31,8 +31,6 @@ class WidgetReceiver : AppWidgetProvider() {
             val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 40)
             val isLarge   = minHeight >= 110
 
-            // Large widget shows the Proverb of the Day, small shows the Word of the Day —
-            // tapping either one should open that specific screen, not just Home.
             val targetRoute = if (isLarge) Routes.DAILY_PROVERB else Routes.DAILY_WORD
 
             val launchIntent = context.packageManager
@@ -49,12 +47,9 @@ class WidgetReceiver : AppWidgetProvider() {
             val db = AppDatabase.getInstanceForWidget(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                val views = RemoteViews(context.packageName, R.layout.widget_swahilib)
+                val views = RemoteViews(context.packageName, R.layout.widget_large)
                 views.setOnClickPendingIntent(R.id.widget_root, pendingIntent)
 
-                // Same source of truth as the notifications and the in-app
-                // "Neno la Siku" / "Methali ya Siku" screens — generated once
-                // per day and re-used everywhere.
                 val daily = DailyContentManager.getOrCreateToday(
                     dailyContentDao = db.dailyContentDao(),
                     wordDao = db.wordsDao(),
