@@ -12,23 +12,15 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.ManageSearch
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -47,13 +39,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.ui.components.general.StreakBadge
 import com.swahilib.feature.home.view.components.HomeSearchResults
 import com.swahilib.feature.home.view.components.SearchFieldRow
 import com.swahilib.feature.home.view.components.VerticalLetters
@@ -80,9 +69,6 @@ fun HomeSearch(
     val proverbs by viewModel.filteredProverbs.collectAsState(initial = emptyList())
     val sayings by viewModel.filteredSayings.collectAsState(initial = emptyList())
     val words by viewModel.filteredWords.collectAsState(initial = emptyList())
-    val dailyHighlights by viewModel.dailyHighlights.collectAsState()
-
-    LaunchedEffect(Unit) { viewModel.loadDailyHighlights() }
 
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -151,18 +137,6 @@ fun HomeSearch(
                     label = { Text(type) },
                 )
             }
-        }
-
-        AnimatedVisibility(
-            visible = searchQuery.isBlank() && selectedLetter.isBlank(),
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            DailyHighlightsRow(
-                highlights = dailyHighlights,
-                onWordClick = { navController.navigate(Routes.DAILY_WORD) },
-                onProverbClick = { navController.navigate(Routes.DAILY_PROVERB) },
-            )
         }
 
         Box(modifier = Modifier.fillMaxSize()) {

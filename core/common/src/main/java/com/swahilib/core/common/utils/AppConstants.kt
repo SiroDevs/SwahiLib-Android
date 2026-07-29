@@ -45,6 +45,8 @@ object PrefConstants {
     const val STREAK_COUNT = "streak_count"
     const val STREAK_BEST = "streak_best"
     const val STREAK_LAST_DATE = "streak_last_date"
+
+    const val DAILY_DIALOG_LAST_SHOWN = "daily_dialog_last_shown"
 }
 
 object NotifConstants {
@@ -77,6 +79,12 @@ object Routes {
     const val DONATION = "donation"
     const val DAILY_WORD = "daily_word"
     const val DAILY_PROVERB = "daily_proverb"
+
+    const val DAILY_CONTENT_TYPE_WORD = "word"
+    const val DAILY_CONTENT_TYPE_PROVERB = "proverb"
+    const val DAILY_CONTENT_HISTORY = "daily_content_history/{type}"
+
+    fun dailyContentHistory(type: String): String = "daily_content_history/$type"
 
     const val PAYMENT_WEBVIEW = "payment_webview/{redirectUrl}"
 

@@ -12,29 +12,21 @@ import java.util.Locale
 import java.util.TimeZone
 
 object DailyContentManager {
-
-    /** Result bundle with the resolved entities for convenience. */
     data class DailyContent(
         val entity: DailyContentEntity,
         val word: WordEntity?,
         val proverb: ProverbEntity?,
     )
 
-    /**
-     * Returns today's daily content, generating + persisting a fresh
-     * selection if none exists yet for [today].
-     */
     suspend fun getOrCreateToday(
         dailyContentDao: DailyContentDao,
         wordDao: WordDao,
         proverbDao: ProverbDao,
     ): DailyContent {
         val today = todayKey()
-        val existing = dailyContentDao.get()
+        val existing = dailyContentDao.getByDate(today)
 
-        val entity = if (existing != null && existing.date == today) {
-            existing
-        } else {
+        val entity = existing ?: run {
             val word = wordDao.getRandomWord()
             val proverb = proverbDao.getRandomProverb()
 
@@ -45,8 +37,8 @@ object DailyContentManager {
                 proverbRid = proverb?.rid ?: 0,
                 proverbMeaning = pickRandomMeaning(proverb?.meaning, "|", "#"),
             )
-            dailyContentDao.upsert(fresh)
-            fresh
+            dailyContentDao.insert(fresh)
+            dailyContentDao.getByDate(today) ?: fresh
         }
 
         val word = wordDao.getByRid(entity.wordRid)
@@ -54,7 +46,6 @@ object DailyContentManager {
         return DailyContent(entity = entity, word = word, proverb = proverb)
     }
 
-    /** Splits [meaning] on any of [delimiters] and returns one entry at random. */
     private fun pickRandomMeaning(meaning: String?, vararg delimiters: String): String =
         meaning
             ?.split(*delimiters)
@@ -63,7 +54,6 @@ object DailyContentManager {
             ?.randomOrNull()
             ?: ""
 
-    /** UTC-based yyyy-MM-dd key so the "day" rolls over consistently. */
     private fun todayKey(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply {
             timeZone = TimeZone.getDefault()

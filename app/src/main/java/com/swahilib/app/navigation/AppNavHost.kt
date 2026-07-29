@@ -29,6 +29,7 @@ import com.swahilib.feature.word.viewmodel.WordViewModel
 import com.swahilib.feature.donation.viewmodel.DonationViewModel
 import com.swahilib.feature.home.view.screen.HomeScreen
 import com.swahilib.feature.advsearch.view.screen.AdvSearchScreen
+import com.swahilib.feature.dailies.view.DailyContentHistory
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.proverb.view.screen.ProverbScreen
 import com.swahilib.feature.saying.view.SayingScreen
@@ -179,6 +180,17 @@ fun AppNavHost(
 
         composable(Routes.DAILY_PROVERB) {
             DailyProverbScreen(navController = navController, prefsRepo = prefsRepo)
+        }
+
+        composable(
+            route = Routes.DAILY_CONTENT_HISTORY,
+            arguments = listOf(
+                navArgument("type") { type = NavType.StringType }
+            ),
+        ) { backStackEntry ->
+            val type = backStackEntry.arguments?.getString("type")
+                ?: Routes.DAILY_CONTENT_TYPE_WORD
+            DailyContentHistory(navController = navController, type = type)
         }
     }
 }

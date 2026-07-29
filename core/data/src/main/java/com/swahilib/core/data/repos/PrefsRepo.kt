@@ -166,6 +166,14 @@ class PrefsRepo @Inject constructor(
     private fun todayKey(): String = dateKey(0)
     private fun yesterdayKey(): String = dateKey(1)
 
+    private var dailyDialogLastShownDate: String
+        get() = prefs.getString(PrefConstants.DAILY_DIALOG_LAST_SHOWN, "") ?: ""
+        set(value) = prefs.edit { putString(PrefConstants.DAILY_DIALOG_LAST_SHOWN, value) }
+
+    fun shouldShowDailyDialog(): Boolean = dailyDialogLastShownDate != todayKey()
+
+    fun markDailyDialogShown() { dailyDialogLastShownDate = todayKey() }
+
     fun getETag(endpoint: KamusiApi.Endpoint): String? =
         prefs.getString(endpoint.prefKey, null)
 
