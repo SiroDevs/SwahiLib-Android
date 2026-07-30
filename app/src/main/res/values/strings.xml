@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">SwahiLib</string>
-    <string name="widget_description">Neno la Siku au Methali ya Siku kwenye skrini yako ya nyumbani</string>
+    <string name="widget_small_description">Neno la Siku — dirisha dogo</string>
+    <string name="widget_medium_description">Neno la Siku — dirisha la kati</string>
+    <string name="widget_large_description">Neno la Siku — dirisha kubwa</string>
 </resources>

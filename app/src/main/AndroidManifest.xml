@@ -41,15 +41,39 @@
         </activity>
 
         <receiver
-            android:name=".widget.WidgetReceiver"
+            android:name=".widget.SwahiLibWidgetSmallReceiver"
             android:exported="true"
-            android:label="SwahiLib">
+            android:label="Neno la Siku (Ndogo)">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/swahilib_widget_info" />
+                android:resource="@xml/swahilib_widget_small_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.SwahiLibWidgetMediumReceiver"
+            android:exported="true"
+            android:label="Neno la Siku (Kati)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/swahilib_widget_medium_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.SwahiLibWidgetLargeReceiver"
+            android:exported="true"
+            android:label="Neno la Siku (Kubwa)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/swahilib_widget_large_info" />
         </receiver>
 
         <provider

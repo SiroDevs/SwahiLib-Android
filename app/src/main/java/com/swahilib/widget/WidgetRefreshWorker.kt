@@ -24,14 +24,20 @@ class WidgetRefreshWorker(
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
 
+    // No Hilt injection needed here - WidgetContentRenderer.render() already
+    // opens its own DB handle and is safe to call directly.
+    private val sizesByReceiver = mapOf(
+        SwahiLibWidgetSmallReceiver::class.java to WidgetSize.SMALL,
+        SwahiLibWidgetMediumReceiver::class.java to WidgetSize.MEDIUM,
+        SwahiLibWidgetLargeReceiver::class.java to WidgetSize.LARGE,
+    )
+
     override suspend fun doWork(): Result {
         val manager = AppWidgetManager.getInstance(applicationContext)
-        val ids = manager.getAppWidgetIds(
-            ComponentName(applicationContext, WidgetReceiver::class.java)
-        )
-        // No Hilt injection needed here - WidgetReceiver.updateWidget()
-        // already opens its own DB handle and is safe to call directly.
-        ids.forEach { id -> WidgetReceiver.updateWidget(applicationContext, manager, id) }
+        sizesByReceiver.forEach { (receiverClass, size) ->
+            val ids = manager.getAppWidgetIds(ComponentName(applicationContext, receiverClass))
+            ids.forEach { id -> WidgetContentRenderer.render(applicationContext, manager, id, size) }
+        }
         return Result.success()
     }
 }
