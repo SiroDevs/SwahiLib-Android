@@ -24,14 +24,24 @@ class WidgetRefreshWorker(
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
 
+    // No Hilt injection needed here - WidgetContentRenderer.render() already
+    // opens its own DB handle and is safe to call directly. `supportsBoth`
+    // is passed straight through to render()'s shape-resolution, so whatever
+    // shape the user last resized a widget to is preserved across this
+    // refresh - it isn't reset to a default.
+    private val supportsBothByReceiver = mapOf(
+        WidgetSmallReceiver::class.java to false,
+        WidgetFullReceiver::class.java to true,
+    )
+
     override suspend fun doWork(): Result {
         val manager = AppWidgetManager.getInstance(applicationContext)
-        val ids = manager.getAppWidgetIds(
-            ComponentName(applicationContext, WidgetReceiver::class.java)
-        )
-        // No Hilt injection needed here - WidgetReceiver.updateWidget()
-        // already opens its own DB handle and is safe to call directly.
-        ids.forEach { id -> WidgetReceiver.updateWidget(applicationContext, manager, id) }
+        supportsBothByReceiver.forEach { (receiverClass, supportsBoth) ->
+            val ids = manager.getAppWidgetIds(ComponentName(applicationContext, receiverClass))
+            ids.forEach { id ->
+                WidgetContentRenderer.render(applicationContext, manager, id, supportsBoth)
+            }
+        }
         return Result.success()
     }
 }

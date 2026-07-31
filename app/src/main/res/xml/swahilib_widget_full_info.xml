@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Word of the Day" + "Proverb of the Day" together, resizable across the full
+     range: 2x4 (both, wide) <-> 1x4 (word only, wide, height shrunk) <-> 2x2
+     (both, compact, width shrunk) <-> 1x2 (word only, compact, both shrunk).
+     See WidgetContentRenderer.resolveShape() for the size logic. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="110dp"
+    android:minHeight="40dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="2"
+    android:minResizeWidth="110dp"
+    android:minResizeHeight="40dp"
+    android:maxResizeWidth="250dp"
+    android:maxResizeHeight="110dp"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:updatePeriodMillis="0"
+    android:description="@string/widget_full_description"
+    android:previewLayout="@layout/widget_preview_full"
+    android:previewImage="@drawable/widget_preview_full_static" />

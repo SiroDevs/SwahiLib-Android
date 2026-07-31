@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SwahiLib</string>
-    <string name="widget_description">Neno la Siku au Methali ya Siku kwenye skrini yako ya nyumbani</string>
+    <string name="widget_neno_description">Neno la Siku — inabadilika kutoka 1x2 hadi 1x4</string>
+    <string name="widget_full_description">Neno na Methali ya Siku — inabadilika kutoka 1x2 hadi 2x4</string>
 </resources>

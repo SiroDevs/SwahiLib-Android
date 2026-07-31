@@ -41,15 +41,27 @@
         </activity>
 
         <receiver
-            android:name=".widget.WidgetReceiver"
+            android:name=".widget.WidgetSmallReceiver"
             android:exported="true"
-            android:label="SwahiLib">
+            android:label="Neno la Siku">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/swahilib_widget_info" />
+                android:resource="@xml/swahilib_widget_small_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.WidgetFullReceiver"
+            android:exported="true"
+            android:label="Neno na Methali ya Siku">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/swahilib_widget_full_info" />
         </receiver>
 
         <provider
