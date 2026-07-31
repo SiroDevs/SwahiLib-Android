@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Top-right corner only: the Neno row's content panel in the stacked 2x4 "both" widget. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:startColor="@color/widget_gradient_start"
+        android:endColor="@color/widget_gradient_end"
+        android:angle="0" />
+    <corners
+        android:topRightRadius="16dp"
+        android:topLeftRadius="0dp"
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="0dp" />
+</shape>

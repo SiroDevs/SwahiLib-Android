@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SwahiLib</string>
-    <string name="widget_small_description">Neno la Siku — dirisha dogo</string>
-    <string name="widget_medium_description">Neno la Siku — dirisha la kati</string>
-    <string name="widget_large_description">Neno la Siku — dirisha kubwa</string>
+    <string name="widget_neno_description">Neno la Siku — inabadilika kutoka 1x2 hadi 1x4</string>
+    <string name="widget_full_description">Neno na Methali ya Siku — inabadilika kutoka 1x2 hadi 2x4</string>
 </resources>

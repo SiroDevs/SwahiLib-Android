@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 1x2: a compact pill showing just today's word, no label - matches the
-     smallest of the three "Neno la Siku" mockups. -->
+<!-- "Word of the Day" only, resizable width-wise between 1x2 (compact pill) and
+     1x4 (wide, with meaning). Height is fixed at 1 row - see
+     WidgetContentRenderer.resolveShape() for the size logic. -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="110dp"
     android:minHeight="40dp"
-    android:targetCellWidth="2"
+    android:targetCellWidth="4"
     android:targetCellHeight="1"
+    android:minResizeWidth="110dp"
+    android:minResizeHeight="40dp"
     android:maxResizeWidth="250dp"
     android:maxResizeHeight="40dp"
     android:resizeMode="horizontal"
     android:widgetCategory="home_screen"
     android:updatePeriodMillis="0"
-    android:description="@string/widget_small_description"
+    android:description="@string/widget_neno_description"
     android:previewLayout="@layout/widget_preview_small" />
