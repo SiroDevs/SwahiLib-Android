@@ -105,10 +105,6 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getInt(PrefConstants.NOTIF_PROVERB_MINUTE, NotifConstants.DEFAULT_MINUTE)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_PROVERB_MINUTE, value) }
 
-    var notifBannerDismissed: Boolean
-        get() = prefs.getBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, false)
-        set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_BANNER_DISMISSED, value) }
-
     // ── Daily streak ──
     // Tracks consecutive-day visits to the daily word / daily proverb screens,
     // the same "did the user show up today" signal used to power the streak
@@ -165,6 +161,10 @@ class PrefsRepo @Inject constructor(
 
     private fun todayKey(): String = dateKey(0)
     private fun yesterdayKey(): String = dateKey(1)
+
+    // ── Daily highlights dialog ──
+    // Gates the "Leo" (today's word + proverb) dialog to at most once per
+    // calendar day, regardless of how many times the app is opened that day.
 
     private var dailyDialogLastShownDate: String
         get() = prefs.getString(PrefConstants.DAILY_DIALOG_LAST_SHOWN, "") ?: ""

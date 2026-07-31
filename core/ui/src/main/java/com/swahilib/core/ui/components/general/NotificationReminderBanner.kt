@@ -9,17 +9,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NotificationsOff
@@ -28,7 +25,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,16 +33,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.data.notifications.NotificationPermission
 import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.designsystem.theme.LightColors
+
+private object NotifBannerSessionState {
+    var dismissedThisSession = false
+}
 
 fun shouldShowNotifBanner(prefsRepo: PrefsRepo, context: android.content.Context): Boolean {
-    if (prefsRepo.notifBannerDismissed) return false
+    if (NotifBannerSessionState.dismissedThisSession) return false
     val permDenied = !NotificationPermission.isGranted(context)
     val bothEnabled = prefsRepo.wordNotifEnabled && prefsRepo.proverbNotifEnabled
     return permDenied || !bothEnabled
@@ -81,32 +79,32 @@ fun NotificationReminderBanner(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 5.dp, horizontal = 5.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .padding(vertical = 8.dp, horizontal = 8.dp)
+                .clip(RoundedCornerShape(18.dp))
                 .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                .padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+                .padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 Icon(
                     imageVector = Icons.Default.NotificationsOff,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(32.dp),
                 )
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "Arifa Zimelemazwa",
-                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                     Text(
                         text = "Wezesha Arifa (Notifications) za Neno la Siku na Methali ya Siku ili upate kujifunza kila asubuhi.",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -114,7 +112,7 @@ fun NotificationReminderBanner(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.End),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
@@ -135,20 +133,20 @@ fun NotificationReminderBanner(
                         contentColor = MaterialTheme.colorScheme.tertiary,
                     ),
                     modifier = Modifier
-                        .width(100.dp)
-                        .height(30.dp),
+                        .weight(1f)
+                        .height(44.dp),
                     contentPadding = PaddingValues(0.dp),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
                         "Wezesha",
-                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
                     )
                 }
 
                 Button(
                     onClick = {
-                        prefsRepo.notifBannerDismissed = true
+                        NotifBannerSessionState.dismissedThisSession = true
                         visible = false
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -156,14 +154,14 @@ fun NotificationReminderBanner(
                         contentColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.7f),
                     ),
                     modifier = Modifier
-                        .width(100.dp)
-                        .height(30.dp),
+                        .weight(1f)
+                        .height(44.dp),
                     contentPadding = PaddingValues(0.dp),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
                         "Baadaye",
-                        style = MaterialTheme.typography.labelSmall
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
