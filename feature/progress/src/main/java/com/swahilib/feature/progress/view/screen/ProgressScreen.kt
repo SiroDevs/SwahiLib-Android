@@ -144,7 +144,7 @@ fun ProgressScreen(
 
             Spacer(Modifier.height(20.dp))
             SectionHeader(
-                title = "Beji",
+                title = "Baji",
                 actionLabel = "Zote",
                 onAction = { navController.navigate(Routes.ACHIEVEMENTS) },
             )

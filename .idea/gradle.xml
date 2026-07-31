@@ -30,6 +30,7 @@
             <option value="$PROJECT_DIR$/core/data" />
             <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/designsystem" />
+            <option value="$PROJECT_DIR$/core/engagement" />
             <option value="$PROJECT_DIR$/core/network" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
@@ -40,6 +41,7 @@
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/howitworks" />
             <option value="$PROJECT_DIR$/feature/idiom" />
+            <option value="$PROJECT_DIR$/feature/progress" />
             <option value="$PROJECT_DIR$/feature/proverb" />
             <option value="$PROJECT_DIR$/feature/saying" />
             <option value="$PROJECT_DIR$/feature/settings" />

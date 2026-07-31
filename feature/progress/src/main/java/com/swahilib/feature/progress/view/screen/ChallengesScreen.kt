@@ -33,7 +33,7 @@ fun ChallengesScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Changamoto",
+                title = "Changamoto Zangu",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
             )
