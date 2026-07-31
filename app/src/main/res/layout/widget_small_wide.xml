@@ -17,12 +17,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="📖"
-            android:textSize="26sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="3dp"
             android:gravity="center"
             android:text="Neno\nla Siku"
             android:textColor="@color/white"
@@ -77,7 +77,7 @@
             android:id="@+id/widget_meaning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="2dp"
             android:text=""
             android:textColor="@color/widget_meaning_text"
             android:textSize="14sp"

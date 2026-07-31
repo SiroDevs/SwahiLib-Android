@@ -15,4 +15,5 @@
     android:widgetCategory="home_screen"
     android:updatePeriodMillis="0"
     android:description="@string/widget_neno_description"
-    android:previewLayout="@layout/widget_preview_small" />
+    android:previewLayout="@layout/widget_preview_small"
+    android:previewImage="@drawable/widget_preview_small_static" />

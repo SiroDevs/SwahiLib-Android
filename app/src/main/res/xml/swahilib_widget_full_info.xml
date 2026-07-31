@@ -16,4 +16,5 @@
     android:widgetCategory="home_screen"
     android:updatePeriodMillis="0"
     android:description="@string/widget_full_description"
-    android:previewLayout="@layout/widget_preview_full" />
+    android:previewLayout="@layout/widget_preview_full"
+    android:previewImage="@drawable/widget_preview_full_static" />
