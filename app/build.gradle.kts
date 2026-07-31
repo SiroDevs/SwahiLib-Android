@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 175
-        versionName = "1.0.175"
+        versionCode = 177
+        versionName = "1.0.177"
         minSdk = 26
         targetSdk = 37
 
@@ -94,6 +94,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:database"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:engagement"))
     implementation(project(":core:network"))
     implementation(project(":core:ui"))
 
@@ -109,6 +110,7 @@ dependencies {
     implementation(project(":feature:help"))
     implementation(project(":feature:donation"))
     implementation(project(":feature:daily_content"))
+    implementation(project(":feature:progress"))
 
     // Android Room
     implementation(libs.androidx.room.runtime)

@@ -24,9 +24,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FormatQuote
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.TrackChanges
 import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
@@ -97,6 +99,23 @@ fun HomeNavDrawer(
                     label = { Text("Methali ya Siku") },
                     selected = false,
                     onClick = { navigateAndClose(Routes.DAILY_PROVERB) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.EmojiEvents, contentDescription = null) },
+                    label = { Text("Maendeleo Yangu") },
+                    selected = false,
+                    onClick = { navigateAndClose(Routes.PROGRESS) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.TrackChanges, contentDescription = null) },
+                    label = { Text("Changamoto") },
+                    selected = false,
+                    onClick = { navigateAndClose(Routes.CHALLENGES) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
 

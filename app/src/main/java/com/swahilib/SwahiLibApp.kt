@@ -14,10 +14,6 @@ class SwahiLibApp : Application() {
 
     @Inject lateinit var prefsRepo: PrefsRepo
 
-    /**
-     * Injected by [WorkManagerModule] — includes the [HiltWorkerFactory]
-     * so @HiltWorker classes resolve their dependencies.
-     */
     @Inject lateinit var workManagerConfiguration: Configuration
 
     override fun onCreate() {
@@ -39,6 +35,18 @@ class SwahiLibApp : Application() {
             enabled = prefsRepo.proverbNotifEnabled,
             hour = prefsRepo.proverbNotifHour,
             minute = prefsRepo.proverbNotifMinute,
+        )
+        NotificationScheduler.scheduleDailyChallenge(
+            context = this,
+            enabled = prefsRepo.challengeNotifEnabled,
+            hour = prefsRepo.challengeNotifHour,
+            minute = prefsRepo.challengeNotifMinute,
+        )
+        NotificationScheduler.scheduleWeeklySummary(
+            context = this,
+            enabled = prefsRepo.weeklySummaryNotifEnabled,
+            hour = prefsRepo.weeklySummaryNotifHour,
+            minute = prefsRepo.weeklySummaryNotifMinute,
         )
     }
 }

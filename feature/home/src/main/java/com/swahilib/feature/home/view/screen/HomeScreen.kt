@@ -108,6 +108,10 @@ fun HomeScreen(
             when (deepLinkRoute) {
                 Routes.DAILY_PROVERB -> navController.navigate(Routes.DAILY_PROVERB)
                 Routes.DAILY_WORD -> navController.navigate(Routes.DAILY_WORD)
+                Routes.PROGRESS -> navController.navigate(Routes.PROGRESS)
+                Routes.CHALLENGES -> navController.navigate(Routes.CHALLENGES)
+                Routes.STATISTICS -> navController.navigate(Routes.STATISTICS)
+                Routes.ACHIEVEMENTS -> navController.navigate(Routes.ACHIEVEMENTS)
                 else -> navController.navigate(Routes.DAILY_WORD)
             }
             onDeepLinkConsumed()

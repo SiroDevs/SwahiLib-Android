@@ -41,6 +41,11 @@ import com.swahilib.feature.donation.view.screen.DonationScreen
 import com.swahilib.feature.donation.view.screen.PaymentWebViewScreen
 import com.swahilib.feature.dailies.view.DailyWordScreen
 import com.swahilib.feature.dailies.view.DailyProverbScreen
+import com.swahilib.feature.progress.view.screen.AchievementsScreen
+import com.swahilib.feature.progress.view.screen.ChallengesScreen
+import com.swahilib.feature.progress.view.screen.ProgressScreen
+import com.swahilib.feature.progress.view.screen.StatisticsScreen
+import com.swahilib.feature.progress.viewmodel.ProgressViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
@@ -191,6 +196,26 @@ fun AppNavHost(
             val type = backStackEntry.arguments?.getString("type")
                 ?: Routes.DAILY_CONTENT_TYPE_WORD
             DailyContentHistory(navController = navController, type = type)
+        }
+
+        composable(Routes.PROGRESS) {
+            val viewModel: ProgressViewModel = hiltViewModel()
+            ProgressScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable(Routes.STATISTICS) {
+            val viewModel: ProgressViewModel = hiltViewModel()
+            StatisticsScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable(Routes.ACHIEVEMENTS) {
+            val viewModel: ProgressViewModel = hiltViewModel()
+            AchievementsScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable(Routes.CHALLENGES) {
+            val viewModel: ProgressViewModel = hiltViewModel()
+            ChallengesScreen(navController = navController, viewModel = viewModel)
         }
     }
 }
