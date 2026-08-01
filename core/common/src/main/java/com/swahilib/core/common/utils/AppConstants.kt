@@ -9,13 +9,21 @@ object AppConstants {
     const val APP_TITLE2 = "Kamusi ya Kiswahili"
     const val APP_TAGLINE = "Kiswahili Kitukuzwe"
     const val APP_CREDITS = "© Siro Devs"
-    const val APP_LINK = "https://sirodevs.vercel.app/Swahilib"
+    const val APP_LINK = "https://linktr.ee/SwahilibApp"
     const val SUPPORT_EMAIL = "futuristicken@gmail.com"
 }
 
 object ApiConstants {
+    // The app must NEVER talk to Paystack directly with a secret key.
+    // This points at the server-side donation proxy (sirodevs.vercel.app),
+    // which holds the Paystack secret key server-side and forwards the
+    // initialize call — the app never sees a credential.
     const val DONATION_API_BASE_URL = "https://sirodevs.vercel.app/"
-    const val DONATION_INITIALIZE = "https://sirodevs.vercel.app/SwahiLib/donation"
+    const val DONATION_INITIALIZE = "SwahiLib/donation"
+    // Must match the callbackUrl registered for "swahilib" in the proxy's
+    // infrastructure/donation/app-registry.ts — that's what's actually sent
+    // to Paystack as callback_url, and this WebView only recognizes
+    // completion by matching against this exact prefix.
     const val DONATION_CALLBACK_URL = "https://sirodevs.vercel.app/SwahiLib/donation/callback"
     const val DONOR_EMAIL = "anonymous_donor@swahilib.app"
     const val KAMUSI_API = "https://swahilive.vercel.app/"
