@@ -32,7 +32,6 @@ This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed 
     * See **synonyms** for words and proverbs where available
 * 💾 **Offline-first** support using **Room Database**
 * 💉 **Dependency injection** powered by **Hilt**
-* 💫 **Smooth animations** with **Lottie**
 
 ## 🧰 Tech Stack
 
@@ -43,7 +42,6 @@ This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed 
 * Room for local database
 * Kotlinx Serialization
 * Retrofit & Ktor for HTTP networking
-* Lottie Compose for animations
 
 ## 🚀 Getting Started
 
@@ -90,7 +88,6 @@ Shift + F10
 | UI                   | Jetpack Compose (Material2 & Material3) |
 | DI                   | Hilt                                    |
 | Database             | Room                                    |
-| Animations           | Lottie Compose                          |
 | Networking           | Ktor, Retrofit, OkHttp                  |
 | Serialization        | kotlinx.serialization.json              |
 
