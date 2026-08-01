@@ -36,10 +36,10 @@ git pull origin stable
 
 ## Testing and Deployment
 
-- Build a release version of the app and push it to App Teaster for UAT.
+- Build a release version of the app for UAT.
 
 ```bash
-flutter build apk --flavor apptester -t lib/main.dart --no-tree-shake-icons
+./gradlew assembleRelease
 ```
 
 - Inform the reviewers via chat, mentioning the PR number.

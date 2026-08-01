@@ -2,7 +2,7 @@ package com.swahilib.core.network.di
 
 import com.swahilib.core.common.utils.ApiConstants
 import com.swahilib.core.network.api.KamusiApi
-import com.swahilib.core.network.services.PaystackService
+import com.swahilib.core.network.services.DonationApiService
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -35,16 +35,16 @@ object NetworkModule {
 
     @Provides
     @Reusable
-    fun providePaystackApiService(@Named("paystackApi") retrofit: Retrofit): PaystackService {
-        return retrofit.create(PaystackService::class.java)
+    fun provideDonationApiService(@Named("donationApi") retrofit: Retrofit): DonationApiService {
+        return retrofit.create(DonationApiService::class.java)
     }
 
     @Provides
-    @Named("paystackApi")
+    @Named("donationApi")
     @Reusable
-    fun providePaystackApi(okHttpClient: OkHttpClient): Retrofit {
+    fun provideDonationApi(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(ApiConstants.PAYSTACK_BASE_URL)
+            .baseUrl(ApiConstants.DONATION_API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

@@ -24,15 +24,13 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 175
-        versionName = "1.0.175"
+        versionCode = 177
+        versionName = "1.0.177"
         minSdk = 26
         targetSdk = 37
 
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "PaystackSecret", "\"${localProperties.getProperty("PAYSTACK_SECRET_KEY") ?: ""}\"")
     }
 
     signingConfigs {
@@ -121,9 +119,6 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-
-    // Monitoring
-    implementation(libs.android.billing)
     implementation(libs.androidx.concurrent.futures)
 
     // WorkManager — initialized in SwahiLibApp with Hilt-provided Configuration

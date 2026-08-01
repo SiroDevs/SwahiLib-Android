@@ -1,0 +1,11 @@
+SwahiLib is a Swahili dictionary and language reference app. Search words,
+idioms, sayings, and proverbs, view details such as synonyms where available,
+and keep using the app offline once content has synced.
+
+Features:
+* Search Swahili words, idioms, sayings, and proverbs
+* View synonyms and details for each entry
+* Offline-first: content is stored locally after the first sync
+* Daily word and daily proverb highlights, with optional reminders
+* Home screen widgets for the word/proverb of the day
+
