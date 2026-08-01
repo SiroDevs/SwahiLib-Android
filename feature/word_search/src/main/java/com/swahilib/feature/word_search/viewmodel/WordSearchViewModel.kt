@@ -1,4 +1,4 @@
-package com.swahilib.feature.wordsearch.viewmodel
+package com.swahilib.feature.word_search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

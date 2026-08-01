@@ -1,4 +1,4 @@
-package com.swahilib.feature.wordsearch.view
+package com.swahilib.feature.word_search.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -40,8 +39,8 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.games.model.WordSearchTheme
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.feature.wordsearch.viewmodel.WordSearchUiState
-import com.swahilib.feature.wordsearch.viewmodel.WordSearchViewModel
+import com.swahilib.feature.word_search.viewmodel.WordSearchUiState
+import com.swahilib.feature.word_search.viewmodel.WordSearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

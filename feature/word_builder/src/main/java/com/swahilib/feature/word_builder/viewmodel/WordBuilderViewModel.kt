@@ -1,4 +1,4 @@
-package com.swahilib.feature.wordbuilder.viewmodel
+package com.swahilib.feature.word_builder.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

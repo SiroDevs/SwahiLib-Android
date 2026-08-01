@@ -14,14 +14,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Brightness6
-import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FormatQuote
-import androidx.compose.material.icons.filled.InsertChart
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.NotificationsOff
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Summarize
-import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -144,21 +141,6 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            SettingsSectionTitle("Maendeleo")
-            ListItem(
-                leadingContent = { Icon(Icons.Default.EmojiEvents, contentDescription = null) },
-                headlineContent = { Text("Maendeleo Yangu") },
-                supportingContent = { Text("XP, mfuatano na beji") },
-                modifier = Modifier.clickable { navController.navigate(Routes.PROGRESS) },
-            )
-            ListItem(
-                leadingContent = { Icon(Icons.Default.InsertChart, contentDescription = null) },
-                headlineContent = { Text("Takwimu") },
-                supportingContent = { Text("Muda, usahihi, wiki hii") },
-                modifier = Modifier.clickable { navController.navigate(Routes.STATISTICS) },
-            )
-            HorizontalDivider()
-
             SettingsSectionTitle("Mwonekano")
             ListItem(
                 leadingContent = { Icon(Icons.Default.Brightness6, contentDescription = null) },
@@ -336,21 +318,6 @@ fun SettingsScreen(
                     },
                 )
             }
-            HorizontalDivider()
-
-            SettingsSectionTitle("Donate to SwahiLib")
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Default.VolunteerActivism,
-                        contentDescription = null
-                    )
-                },
-                headlineContent = { Text("Donate Now") },
-                supportingContent = { Text("We need your support to continue serving you") },
-                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
-            )
-
             SettingsSectionTitle("Data")
             ListItem(
                 headlineContent = {

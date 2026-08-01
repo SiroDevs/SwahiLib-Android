@@ -50,16 +50,16 @@ import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.feature.quiz.view.QuizScreen
 import com.swahilib.feature.quiz.viewmodel.QuizContentSource
 import com.swahilib.feature.quiz.viewmodel.QuizViewModel
-import com.swahilib.feature.wordbuilder.view.WordBuilderScreen
-import com.swahilib.feature.wordbuilder.viewmodel.WordBuilderViewModel
+import com.swahilib.feature.word_builder.view.WordBuilderScreen
+import com.swahilib.feature.word_builder.viewmodel.WordBuilderViewModel
 import com.swahilib.feature.sentence_builder.view.SentenceBuilderScreen
 import com.swahilib.feature.sentence_builder.viewmodel.SentenceBuilderViewModel
 import com.swahilib.feature.spelling.view.SpellingScreen
 import com.swahilib.feature.spelling.viewmodel.SpellingViewModel
 import com.swahilib.feature.crossword.view.CrosswordScreen
 import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
-import com.swahilib.feature.wordsearch.view.WordSearchScreen
-import com.swahilib.feature.wordsearch.viewmodel.WordSearchViewModel
+import com.swahilib.feature.word_search.view.WordSearchScreen
+import com.swahilib.feature.word_search.viewmodel.WordSearchViewModel
 import com.swahilib.core.games.model.WordSearchTheme
 import kotlinx.coroutines.launch
 

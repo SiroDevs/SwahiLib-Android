@@ -3,6 +3,7 @@ package com.swahilib.feature.progress.view.screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -77,7 +78,7 @@ fun ChallengesScreen(
 
             if (challenges.isEmpty()) {
                 Text(
-                    "Hakuna changamoto ya sasa. Fungua tena baadaye!",
+                    "Hamna changamoto ya sasa. Jaribu tena baadaye!",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

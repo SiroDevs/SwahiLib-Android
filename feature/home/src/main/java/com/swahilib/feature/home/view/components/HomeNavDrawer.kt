@@ -16,11 +16,14 @@
 
 package com.swahilib.feature.home.view.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
@@ -28,6 +31,8 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FormatQuote
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.InsertChart
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TrackChanges
 import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.DrawerState
@@ -42,10 +47,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.common.utils.AppConstants
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.ui.R
 import kotlinx.coroutines.launch
 
 @Composable
@@ -65,23 +72,37 @@ fun HomeNavDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(modifier = Modifier.width(300.dp)) {
-                Column(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 20.dp)
                 ) {
-                    Text(
-                        text = AppConstants.APP_TITLE,
-                        style = MaterialTheme.typography.headlineMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                    Image(
+                        painter = painterResource(id = R.drawable.app_icon),
+                        contentDescription = "AppIcon",
+                        modifier = Modifier.size(50.dp),
+                    )
+                    Column() {
+                        Text(
+                            text = AppConstants.APP_TITLE,
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
                         )
-                    )
-                    Text(
-                        text = AppConstants.APP_TAGLINE,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                        Row() {
+                            Text(
+                                text = "${AppConstants.APP_TAGLINE} · ",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = AppConstants.APP_CREDITS,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
                 }
 
                 HorizontalDivider()
@@ -113,14 +134,22 @@ fun HomeNavDrawer(
                 )
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.TrackChanges, contentDescription = null) },
-                    label = { Text("Changamoto") },
+                    label = { Text("Changamoto Zangu") },
                     selected = false,
                     onClick = { navigateAndClose(Routes.CHALLENGES) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.InsertChart, contentDescription = null) },
+                    label = { Text("Takwimu Zangu") },
+                    selected = false,
+                    onClick = { navigateAndClose(Routes.STATISTICS) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+//                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
+                Spacer(Modifier.weight(1f))
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.Info, contentDescription = null) },
                     label = { Text("Jinsi ya Kutumia") },
@@ -143,12 +172,13 @@ fun HomeNavDrawer(
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
 
-                Spacer(Modifier.weight(1f))
-                Text(
-                    text = AppConstants.APP_CREDITS,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(24.dp)
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.Settings, contentDescription = null) },
+                    label = { Text("Mipangilio") },
+                    selected = false,
+                    onClick = { navigateAndClose(Routes.SETTINGS) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
             }
         },
