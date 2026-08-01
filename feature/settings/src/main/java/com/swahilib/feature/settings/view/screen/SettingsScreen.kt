@@ -14,7 +14,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Brightness6
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FormatQuote
+import androidx.compose.material.icons.filled.InsertChart
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.NotificationsOff
 import androidx.compose.material.icons.filled.Schedule
@@ -40,8 +42,8 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.notifications.NotificationPermission
 import com.swahilib.core.data.repos.ThemeRepo
-import com.swahilib.core.designsystem.theme.ThemeSelectorDialog
-import com.swahilib.core.designsystem.theme.appThemeName
+import com.swahilib.core.design_system.theme.ThemeSelectorDialog
+import com.swahilib.core.design_system.theme.appThemeName
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.settings.viewmodel.SettingsViewModel
 import com.swahilib.feature.settings.view.components.ConfirmResetDialog
@@ -78,6 +80,7 @@ fun SettingsScreen(
     fun showTimePicker(initialH: Int, initialM: Int, onSet: (Int, Int) -> Unit) =
         TimePickerDialog(context, { _, h, m -> onSet(h, m) }, initialH, initialM, true).show()
 
+    // Which switch is waiting on the outcome of a system permission prompt.
     var pendingToggle by remember { mutableStateOf<NotifToggle?>(null) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -141,6 +144,21 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
+            SettingsSectionTitle("Maendeleo")
+            ListItem(
+                leadingContent = { Icon(Icons.Default.EmojiEvents, contentDescription = null) },
+                headlineContent = { Text("Maendeleo Yangu") },
+                supportingContent = { Text("XP, mfuatano na beji") },
+                modifier = Modifier.clickable { navController.navigate(Routes.PROGRESS) },
+            )
+            ListItem(
+                leadingContent = { Icon(Icons.Default.InsertChart, contentDescription = null) },
+                headlineContent = { Text("Takwimu") },
+                supportingContent = { Text("Muda, usahihi, wiki hii") },
+                modifier = Modifier.clickable { navController.navigate(Routes.STATISTICS) },
+            )
+            HorizontalDivider()
+
             SettingsSectionTitle("Mwonekano")
             ListItem(
                 leadingContent = { Icon(Icons.Default.Brightness6, contentDescription = null) },
@@ -319,6 +337,19 @@ fun SettingsScreen(
                 )
             }
             HorizontalDivider()
+
+            SettingsSectionTitle("Donate to SwahiLib")
+            ListItem(
+                leadingContent = {
+                    Icon(
+                        Icons.Default.VolunteerActivism,
+                        contentDescription = null
+                    )
+                },
+                headlineContent = { Text("Donate Now") },
+                supportingContent = { Text("We need your support to continue serving you") },
+                modifier = Modifier.clickable { navController.navigate(Routes.DONATION) },
+            )
 
             SettingsSectionTitle("Data")
             ListItem(

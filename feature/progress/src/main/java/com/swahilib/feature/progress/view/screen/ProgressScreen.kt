@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.StreakBadge
 import com.swahilib.feature.progress.view.components.ChallengeCard
@@ -111,8 +112,24 @@ fun ProgressScreen(
                 challenges.forEach { c ->
                     ChallengeCard(
                         challenge = c,
-                        onCompleteActivity = { activityId ->
-                            viewModel.completeActivity(c.id, activityId)
+                        onStartActivity = { activity ->
+                            when (activity.type) {
+                                ActivityType.VOCABULARY_QUIZ ->
+                                    navController.navigate(Routes.quiz(c.id, activity.id, c.difficulty.name))
+                                ActivityType.PROVERB_CHALLENGE ->
+                                    navController.navigate(Routes.quiz(c.id, activity.id, c.difficulty.name, source = "PROVERBS"))
+                                ActivityType.WORD_BUILDER ->
+                                    navController.navigate(Routes.wordBuilder(c.id, activity.id, c.difficulty.name))
+                                ActivityType.SENTENCE_BUILDER ->
+                                    navController.navigate(Routes.sentenceBuilder(c.id, activity.id, c.difficulty.name))
+                                ActivityType.SPELLING_CHALLENGE ->
+                                    navController.navigate(Routes.spelling(c.id, activity.id, c.difficulty.name))
+                                ActivityType.CROSSWORD ->
+                                    navController.navigate(Routes.crossword(c.id, activity.id, c.difficulty.name))
+                                ActivityType.WORD_SEARCH ->
+                                    navController.navigate(Routes.wordSearch(c.id, activity.id, c.difficulty.name))
+                                else -> viewModel.completeActivity(c.id, activity.id)
+                            }
                         },
                     )
                     Spacer(Modifier.height(12.dp))
@@ -144,7 +161,7 @@ fun ProgressScreen(
 
             Spacer(Modifier.height(20.dp))
             SectionHeader(
-                title = "Baji",
+                title = "Beji",
                 actionLabel = "Zote",
                 onAction = { navController.navigate(Routes.ACHIEVEMENTS) },
             )

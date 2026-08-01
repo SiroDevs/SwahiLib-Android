@@ -18,13 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.engagement.model.Challenge
+import com.swahilib.core.engagement.model.ChallengeActivity
 import com.swahilib.core.engagement.model.ChallengeScope
 
 @Composable
 fun ChallengeCard(
     challenge: Challenge,
     modifier: Modifier = Modifier,
-    onCompleteActivity: (activityId: String) -> Unit = {},
+    onStartActivity: (ChallengeActivity) -> Unit = {},
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -82,7 +83,7 @@ fun ChallengeCard(
                         )
                     }
                     if (!activity.completed && !challenge.completed) {
-                        FilledTonalButton(onClick = { onCompleteActivity(activity.id) }) {
+                        FilledTonalButton(onClick = { onStartActivity(activity) }) {
                             Text("Anza")
                         }
                     }

@@ -19,7 +19,7 @@ import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
-import com.swahilib.feature.advsearch.viewmodel.AdvSearchViewModel
+import com.swahilib.feature.advanced_search.viewmodel.AdvSearchViewModel
 import com.swahilib.feature.home.viewmodel.HomeViewModel
 import com.swahilib.feature.settings.viewmodel.SettingsViewModel
 import com.swahilib.feature.idiom.viewmodel.IdiomViewModel
@@ -28,7 +28,7 @@ import com.swahilib.feature.saying.viewmodel.SayingViewModel
 import com.swahilib.feature.word.viewmodel.WordViewModel
 import com.swahilib.feature.donation.viewmodel.DonationViewModel
 import com.swahilib.feature.home.view.screen.HomeScreen
-import com.swahilib.feature.advsearch.view.screen.AdvSearchScreen
+import com.swahilib.feature.advanced_search.view.screen.AdvSearchScreen
 import com.swahilib.feature.dailies.view.DailyContentHistory
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.proverb.view.screen.ProverbScreen
@@ -46,6 +46,21 @@ import com.swahilib.feature.progress.view.screen.ChallengesScreen
 import com.swahilib.feature.progress.view.screen.ProgressScreen
 import com.swahilib.feature.progress.view.screen.StatisticsScreen
 import com.swahilib.feature.progress.viewmodel.ProgressViewModel
+import com.swahilib.core.engagement.model.Difficulty
+import com.swahilib.feature.quiz.view.QuizScreen
+import com.swahilib.feature.quiz.viewmodel.QuizContentSource
+import com.swahilib.feature.quiz.viewmodel.QuizViewModel
+import com.swahilib.feature.wordbuilder.view.WordBuilderScreen
+import com.swahilib.feature.wordbuilder.viewmodel.WordBuilderViewModel
+import com.swahilib.feature.sentence_builder.view.SentenceBuilderScreen
+import com.swahilib.feature.sentence_builder.viewmodel.SentenceBuilderViewModel
+import com.swahilib.feature.spelling.view.SpellingScreen
+import com.swahilib.feature.spelling.viewmodel.SpellingViewModel
+import com.swahilib.feature.crossword.view.CrosswordScreen
+import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
+import com.swahilib.feature.wordsearch.view.WordSearchScreen
+import com.swahilib.feature.wordsearch.viewmodel.WordSearchViewModel
+import com.swahilib.core.games.model.WordSearchTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
@@ -216,6 +231,146 @@ fun AppNavHost(
         composable(Routes.CHALLENGES) {
             val viewModel: ProgressViewModel = hiltViewModel()
             ChallengesScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable(
+            route = Routes.QUIZ,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("activityId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("difficulty") { type = NavType.StringType; defaultValue = "BEGINNER" },
+                navArgument("source") { type = NavType.StringType; defaultValue = "WORDS" },
+            ),
+        ) { backStackEntry ->
+            val viewModel: QuizViewModel = hiltViewModel()
+            val difficulty = runCatching {
+                Difficulty.valueOf(backStackEntry.arguments?.getString("difficulty") ?: "BEGINNER")
+            }.getOrDefault(Difficulty.BEGINNER)
+            val source = runCatching {
+                QuizContentSource.valueOf(backStackEntry.arguments?.getString("source") ?: "WORDS")
+            }.getOrDefault(QuizContentSource.WORDS)
+            QuizScreen(
+                navController = navController,
+                viewModel = viewModel,
+                challengeId = backStackEntry.arguments?.getString("challengeId"),
+                activityId = backStackEntry.arguments?.getString("activityId"),
+                difficulty = difficulty,
+                source = source,
+            )
+        }
+
+        composable(
+            route = Routes.WORD_BUILDER,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("activityId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("difficulty") { type = NavType.StringType; defaultValue = "BEGINNER" },
+                navArgument("timed") { type = NavType.BoolType; defaultValue = false },
+                navArgument("endless") { type = NavType.BoolType; defaultValue = false },
+            ),
+        ) { backStackEntry ->
+            val viewModel: WordBuilderViewModel = hiltViewModel()
+            val difficulty = runCatching {
+                Difficulty.valueOf(backStackEntry.arguments?.getString("difficulty") ?: "BEGINNER")
+            }.getOrDefault(Difficulty.BEGINNER)
+            WordBuilderScreen(
+                navController = navController,
+                viewModel = viewModel,
+                challengeId = backStackEntry.arguments?.getString("challengeId"),
+                activityId = backStackEntry.arguments?.getString("activityId"),
+                difficulty = difficulty,
+                timedMode = backStackEntry.arguments?.getBoolean("timed") ?: false,
+                endless = backStackEntry.arguments?.getBoolean("endless") ?: false,
+            )
+        }
+
+        composable(
+            route = Routes.SENTENCE_BUILDER,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("activityId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("difficulty") { type = NavType.StringType; defaultValue = "BEGINNER" },
+            ),
+        ) { backStackEntry ->
+            val viewModel: SentenceBuilderViewModel = hiltViewModel()
+            val difficulty = runCatching {
+                Difficulty.valueOf(backStackEntry.arguments?.getString("difficulty") ?: "BEGINNER")
+            }.getOrDefault(Difficulty.BEGINNER)
+            SentenceBuilderScreen(
+                navController = navController,
+                viewModel = viewModel,
+                challengeId = backStackEntry.arguments?.getString("challengeId"),
+                activityId = backStackEntry.arguments?.getString("activityId"),
+                difficulty = difficulty,
+            )
+        }
+
+        composable(
+            route = Routes.SPELLING,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("activityId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("difficulty") { type = NavType.StringType; defaultValue = "BEGINNER" },
+            ),
+        ) { backStackEntry ->
+            val viewModel: SpellingViewModel = hiltViewModel()
+            val difficulty = runCatching {
+                Difficulty.valueOf(backStackEntry.arguments?.getString("difficulty") ?: "BEGINNER")
+            }.getOrDefault(Difficulty.BEGINNER)
+            SpellingScreen(
+                navController = navController,
+                viewModel = viewModel,
+                challengeId = backStackEntry.arguments?.getString("challengeId"),
+                activityId = backStackEntry.arguments?.getString("activityId"),
+                difficulty = difficulty,
+            )
+        }
+
+        composable(
+            route = Routes.CROSSWORD,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("activityId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("difficulty") { type = NavType.StringType; defaultValue = "BEGINNER" },
+            ),
+        ) { backStackEntry ->
+            val viewModel: CrosswordViewModel = hiltViewModel()
+            val difficulty = runCatching {
+                Difficulty.valueOf(backStackEntry.arguments?.getString("difficulty") ?: "BEGINNER")
+            }.getOrDefault(Difficulty.BEGINNER)
+            CrosswordScreen(
+                navController = navController,
+                viewModel = viewModel,
+                challengeId = backStackEntry.arguments?.getString("challengeId"),
+                activityId = backStackEntry.arguments?.getString("activityId"),
+                difficulty = difficulty,
+            )
+        }
+
+        composable(
+            route = Routes.WORD_SEARCH,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("activityId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("difficulty") { type = NavType.StringType; defaultValue = "BEGINNER" },
+                navArgument("theme") { type = NavType.StringType; defaultValue = "RANDOM" },
+            ),
+        ) { backStackEntry ->
+            val viewModel: WordSearchViewModel = hiltViewModel()
+            val difficulty = runCatching {
+                Difficulty.valueOf(backStackEntry.arguments?.getString("difficulty") ?: "BEGINNER")
+            }.getOrDefault(Difficulty.BEGINNER)
+            val theme = runCatching {
+                WordSearchTheme.valueOf(backStackEntry.arguments?.getString("theme") ?: "RANDOM")
+            }.getOrDefault(WordSearchTheme.RANDOM)
+            WordSearchScreen(
+                navController = navController,
+                viewModel = viewModel,
+                challengeId = backStackEntry.arguments?.getString("challengeId"),
+                activityId = backStackEntry.arguments?.getString("activityId"),
+                difficulty = difficulty,
+                theme = theme,
+            )
         }
     }
 }

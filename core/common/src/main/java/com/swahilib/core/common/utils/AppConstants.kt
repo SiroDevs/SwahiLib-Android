@@ -108,6 +108,55 @@ object Routes {
     const val ACHIEVEMENTS = "achievements"
     const val CHALLENGES = "challenges"
 
+    // ── Games (Sprint 2) ──
+    const val QUIZ = "quiz?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}&source={source}"
+
+    /** Quiz tied to a specific challenge activity - completing it marks that activity done. */
+    fun quiz(challengeId: String, activityId: String, difficulty: String, source: String = "WORDS"): String =
+        "quiz?challengeId=$challengeId&activityId=$activityId&difficulty=$difficulty&source=$source"
+
+    /** Freeplay quiz with no challenge attached - just awards XP directly. */
+    fun quizFreeplay(difficulty: String = "BEGINNER", source: String = "WORDS"): String =
+        "quiz?difficulty=$difficulty&source=$source"
+
+    const val WORD_BUILDER =
+        "wordbuilder?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}&timed={timed}&endless={endless}"
+
+    fun wordBuilder(challengeId: String, activityId: String, difficulty: String): String =
+        "wordbuilder?challengeId=$challengeId&activityId=$activityId&difficulty=$difficulty"
+
+    fun wordBuilderFreeplay(difficulty: String = "BEGINNER", timed: Boolean = false, endless: Boolean = false): String =
+        "wordbuilder?difficulty=$difficulty&timed=$timed&endless=$endless"
+
+    const val SENTENCE_BUILDER = "sentencebuilder?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}"
+
+    fun sentenceBuilder(challengeId: String, activityId: String, difficulty: String): String =
+        "sentencebuilder?challengeId=$challengeId&activityId=$activityId&difficulty=$difficulty"
+
+    fun sentenceBuilderFreeplay(difficulty: String = "BEGINNER"): String = "sentencebuilder?difficulty=$difficulty"
+
+    const val SPELLING = "spelling?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}"
+
+    fun spelling(challengeId: String, activityId: String, difficulty: String): String =
+        "spelling?challengeId=$challengeId&activityId=$activityId&difficulty=$difficulty"
+
+    fun spellingFreeplay(difficulty: String = "BEGINNER"): String = "spelling?difficulty=$difficulty"
+
+    const val CROSSWORD = "crossword?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}"
+
+    fun crossword(challengeId: String, activityId: String, difficulty: String): String =
+        "crossword?challengeId=$challengeId&activityId=$activityId&difficulty=$difficulty"
+
+    fun crosswordFreeplay(difficulty: String = "BEGINNER"): String = "crossword?difficulty=$difficulty"
+
+    const val WORD_SEARCH = "wordsearch?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}&theme={theme}"
+
+    fun wordSearch(challengeId: String, activityId: String, difficulty: String, theme: String = "RANDOM"): String =
+        "wordsearch?challengeId=$challengeId&activityId=$activityId&difficulty=$difficulty&theme=$theme"
+
+    fun wordSearchFreeplay(difficulty: String = "BEGINNER", theme: String = "RANDOM"): String =
+        "wordsearch?difficulty=$difficulty&theme=$theme"
+
     const val DAILY_CONTENT_TYPE_WORD = "word"
     const val DAILY_CONTENT_TYPE_PROVERB = "proverb"
     const val DAILY_CONTENT_HISTORY = "daily_content_history/{type}"

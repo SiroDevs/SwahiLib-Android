@@ -16,7 +16,7 @@ import com.swahilib.core.common.utils.DeepLinkConstants
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.data.repos.ThemeRepo
 import com.swahilib.core.data.repos.ThemeMode
-import com.swahilib.core.designsystem.theme.AppTheme
+import com.swahilib.core.design_system.theme.AppTheme
 import com.swahilib.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
