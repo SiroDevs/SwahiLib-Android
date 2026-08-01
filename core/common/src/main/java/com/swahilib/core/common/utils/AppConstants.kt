@@ -9,16 +9,15 @@ object AppConstants {
     const val APP_TITLE2 = "Kamusi ya Kiswahili"
     const val APP_TAGLINE = "Kiswahili Kitukuzwe"
     const val APP_CREDITS = "© Siro Devs"
-    const val APP_LINK = "https://linktr.ee/SwahilibApp"
+    const val APP_LINK = "https://sirodevs.vercel.app/Swahilib"
     const val SUPPORT_EMAIL = "futuristicken@gmail.com"
 }
 
 object ApiConstants {
-    const val PAYSTACK_BASE_URL = "https://api.paystack.co/"
-    const val PAYSTACK_INITIALIZE = "transaction/initialize"
-    const val PAYSTACK_CALLBACK_URL = "https://songlive.vercel.app/donation/callback"
-    const val CALLBACK_URL = "https://swahilib.vercel.app/donation/callback"
-    const val DONOR_EMAIL  = "anonymous_donor@swahilib.app"
+    const val DONATION_API_BASE_URL = "https://sirodevs.vercel.app/"
+    const val DONATION_INITIALIZE = "https://sirodevs.vercel.app/SwahiLib/donation"
+    const val DONATION_CALLBACK_URL = "https://sirodevs.vercel.app/SwahiLib/donation/callback"
+    const val DONOR_EMAIL = "anonymous_donor@swahilib.app"
     const val KAMUSI_API = "https://swahilive.vercel.app/"
 }
 

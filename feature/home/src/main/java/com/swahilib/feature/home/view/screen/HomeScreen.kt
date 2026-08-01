@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.UiState
+import com.swahilib.core.common.utils.AppConstants
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
@@ -130,8 +131,8 @@ fun HomeScreen(
         Scaffold(
             topBar = {
                 AppTopBar(
-                    title = "SwahiLib",
-                    tagline = "Kamusi ya Kiswahili",
+                    title = AppConstants.APP_TITLE,
+                    tagline = AppConstants.APP_TITLE2,
                     centered = true,
                     showNavDrawer = true,
                     onNavIconClick = { scope.launch { drawerState.open() } },
