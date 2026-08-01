@@ -61,7 +61,7 @@ key.properties
 **/*.jks
 keystore/
 google-services.json
-
+*.DS_Store
 keys*.json
 
 # Sentry Config File
