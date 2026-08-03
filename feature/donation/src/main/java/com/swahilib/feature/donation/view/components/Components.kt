@@ -79,7 +79,7 @@ fun DonationHeaderCard() {
     }
 }
 
-private val PRESET_AMOUNTS = listOf(50, 100, 200, 500, 1000, 5000)
+private val PRESET_AMOUNTS = listOf(100, 200, 500, 750, 1000, 2000)
 
 @Composable
 fun PresetAmountGrid(

@@ -13,14 +13,14 @@ This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed 
 ## ✨ Screenshots
 <table>
     <tr>
-        <td><img src="screenshots/image1.jpg" width="200px" /></td>
-        <td><img src="screenshots/image2.jpg" width="200px" /></td>
-        <td><img src="screenshots/image3.jpg" width="200px" /></td>
+        <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" width="200px" /></td>
+        <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" width="200px" /></td>
+        <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" width="200px" /></td>
     </tr>
 <tr>
-        <td><img src="screenshots/image4.jpg" width="200px" /></td>
-        <td><img src="screenshots/image5.jpg" width="200px" /></td>
-        <td><img src="screenshots/image1.jpg" width="200px" /></td>
+        <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg" width="200px" /></td>
+        <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg" width="200px" /></td>
+        <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" width="200px" /></td>
     </tr>
 </table>
 
@@ -32,7 +32,6 @@ This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed 
     * See **synonyms** for words and proverbs where available
 * 💾 **Offline-first** support using **Room Database**
 * 💉 **Dependency injection** powered by **Hilt**
-* 💫 **Smooth animations** with **Lottie**
 
 ## 🧰 Tech Stack
 
@@ -43,7 +42,6 @@ This version is built using **Jetpack Compose**, **Room**, **Hilt**, and backed 
 * Room for local database
 * Kotlinx Serialization
 * Retrofit & Ktor for HTTP networking
-* Lottie Compose for animations
 
 ## 🚀 Getting Started
 
@@ -90,10 +88,9 @@ Shift + F10
 | UI                   | Jetpack Compose (Material2 & Material3) |
 | DI                   | Hilt                                    |
 | Database             | Room                                    |
-| Animations           | Lottie Compose                          |
 | Networking           | Ktor, Retrofit, OkHttp                  |
 | Serialization        | kotlinx.serialization.json              |
 
 ## 🛠 License
 
-This project is open-source and available under the MIT License.
+This project is open-source and available under the [MIT License](LICENSE).

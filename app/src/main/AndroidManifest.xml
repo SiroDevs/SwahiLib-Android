@@ -75,10 +75,19 @@
         </provider>
 
         <meta-data android:name="io.sentry.dsn" android:value="https://5d37028f997b42e29ffd7286854acf72@o1365314.ingest.us.sentry.io/4504651527356416" />
-        <meta-data android:name="io.sentry.send-default-pii" android:value="true" />
+
+        <!--
+            These were previously all set to "true", which meant every crash
+            report shipped a screenshot, the full on-screen view hierarchy,
+            and personally identifiable info by default. That's a lot more
+            than typical crash diagnostics need. Turned off by default here —
+            re-enable individually only if you deliberately want that data.
+        -->
+        <meta-data android:name="io.sentry.send-default-pii" android:value="false" />
+        <meta-data android:name="io.sentry.attach-screenshot" android:value="false" />
+        <meta-data android:name="io.sentry.attach-view-hierarchy" android:value="false" />
+
         <meta-data android:name="io.sentry.traces.user-interaction.enable" android:value="true" />
-        <meta-data android:name="io.sentry.attach-screenshot" android:value="true" />
-        <meta-data android:name="io.sentry.attach-view-hierarchy" android:value="true" />
         <meta-data android:name="io.sentry.traces.sample-rate" android:value="1.0" />
         <meta-data android:name="io.sentry.logs.enabled" android:value="true" />
     </application>
