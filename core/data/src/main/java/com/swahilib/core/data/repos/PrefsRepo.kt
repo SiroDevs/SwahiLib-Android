@@ -105,6 +105,45 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getInt(PrefConstants.NOTIF_PROVERB_MINUTE, NotifConstants.DEFAULT_MINUTE)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_PROVERB_MINUTE, value) }
 
+    // ── Engagement notifications ──
+
+    var challengeNotifEnabled: Boolean
+        get() = prefs.getBoolean(PrefConstants.NOTIF_CHALLENGE_ENABLED, true)
+        set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_CHALLENGE_ENABLED, value) }
+
+    var challengeNotifHour: Int
+        get() = prefs.getInt(PrefConstants.NOTIF_CHALLENGE_HOUR, NotifConstants.DEFAULT_CHALLENGE_HOUR)
+        set(value) = prefs.edit { putInt(PrefConstants.NOTIF_CHALLENGE_HOUR, value) }
+
+    var challengeNotifMinute: Int
+        get() = prefs.getInt(PrefConstants.NOTIF_CHALLENGE_MINUTE, NotifConstants.DEFAULT_CHALLENGE_MINUTE)
+        set(value) = prefs.edit { putInt(PrefConstants.NOTIF_CHALLENGE_MINUTE, value) }
+
+    var weeklySummaryNotifEnabled: Boolean
+        get() = prefs.getBoolean(PrefConstants.NOTIF_WEEKLY_SUMMARY_ENABLED, true)
+        set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_WEEKLY_SUMMARY_ENABLED, value) }
+
+    var weeklySummaryNotifHour: Int
+        get() = prefs.getInt(PrefConstants.NOTIF_WEEKLY_SUMMARY_HOUR, NotifConstants.DEFAULT_SUMMARY_HOUR)
+        set(value) = prefs.edit { putInt(PrefConstants.NOTIF_WEEKLY_SUMMARY_HOUR, value) }
+
+    var weeklySummaryNotifMinute: Int
+        get() = prefs.getInt(PrefConstants.NOTIF_WEEKLY_SUMMARY_MINUTE, NotifConstants.DEFAULT_SUMMARY_MINUTE)
+        set(value) = prefs.edit { putInt(PrefConstants.NOTIF_WEEKLY_SUMMARY_MINUTE, value) }
+
+    /**
+     * Date-key of the last day we granted the daily-login reward. Callers
+     * pass this to RewardsEngine.grantDailyLogin() to keep the reward
+     * idempotent per calendar day.
+     */
+    var lastDailyLoginDate: String
+        get() = prefs.getString(PrefConstants.DAILY_LOGIN_LAST_DATE, "") ?: ""
+        set(value) = prefs.edit { putString(PrefConstants.DAILY_LOGIN_LAST_DATE, value) }
+
+    fun hasClaimedDailyLoginToday(): Boolean = lastDailyLoginDate == todayKey()
+
+    fun markDailyLoginClaimed() { lastDailyLoginDate = todayKey() }
+
     // ── Daily streak ──
     // Tracks consecutive-day visits to the daily word / daily proverb screens,
     // the same "did the user show up today" signal used to power the streak

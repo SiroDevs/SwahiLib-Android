@@ -4,10 +4,6 @@ plugins {
 
 android {
     namespace = "com.swahilib.feature.donation"
-
-    defaultConfig {
-        // Reads PesaPal keys injected from the app module via BuildConfig
-    }
 }
 
 dependencies {

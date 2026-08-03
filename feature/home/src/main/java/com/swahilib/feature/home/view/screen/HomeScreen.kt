@@ -9,6 +9,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.InsertChart
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -108,6 +110,10 @@ fun HomeScreen(
             when (deepLinkRoute) {
                 Routes.DAILY_PROVERB -> navController.navigate(Routes.DAILY_PROVERB)
                 Routes.DAILY_WORD -> navController.navigate(Routes.DAILY_WORD)
+                Routes.PROGRESS -> navController.navigate(Routes.PROGRESS)
+                Routes.CHALLENGES -> navController.navigate(Routes.CHALLENGES)
+                Routes.STATISTICS -> navController.navigate(Routes.STATISTICS)
+                Routes.ACHIEVEMENTS -> navController.navigate(Routes.ACHIEVEMENTS)
                 else -> navController.navigate(Routes.DAILY_WORD)
             }
             onDeepLinkConsumed()
@@ -148,8 +154,11 @@ fun HomeScreen(
                                 }
                             }
                         }
-                        IconButton(onClick = { navController.navigate(Routes.SETTINGS) }) {
-                            Icon(Icons.Default.Settings, contentDescription = "Settings")
+                        IconButton(onClick = { navController.navigate(Routes.PROGRESS) }) {
+                            Icon(Icons.Default.EmojiEvents, contentDescription = "Maendeleo")
+                        }
+                        IconButton(onClick = { navController.navigate(Routes.STATISTICS) }) {
+                            Icon(Icons.Default.InsertChart, contentDescription = "Takwimu")
                         }
                     }
                 )

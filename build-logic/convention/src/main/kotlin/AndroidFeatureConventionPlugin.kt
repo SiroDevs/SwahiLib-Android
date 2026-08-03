@@ -17,7 +17,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:common"))
-                "implementation"(project(":core:designsystem"))
+                "implementation"(project(":core:design_system"))
 
                 "implementation"(libs.findLibrary("androidx.compose.bom").get())
                 "implementation"(libs.findLibrary("androidx.activity.compose").get())
