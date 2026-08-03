@@ -21,9 +21,21 @@ import javax.inject.Singleton
 class AchievementEngine @Inject constructor(
     private val store: ProgressStore,
 ) {
+    companion object {
+        /** Every `StatisticsEngine.EventType` that represents an actual mini-game (excludes lookups/reads). */
+        private val GAME_TYPES = listOf(
+            "QUIZ", "WORD_BUILDER", "SENTENCE_BUILDER", "SPELLING", "CROSSWORD", "WORD_SEARCH", "PROVERB",
+        )
+    }
 
     suspend fun checkForUnlocks(progress: UserProgressEntity): List<Achievement> =
         evaluate(progress, streak = 0)
+
+    /** Called after any single game/quiz session completes, so unlocks show up immediately rather than waiting for the next app-open. */
+    suspend fun checkForUnlocksAfterActivity(): List<Achievement> {
+        val progress = store.loadOrInitProgress()
+        return evaluate(progress, streak = 0)
+    }
 
     suspend fun checkForUnlocksWithStreak(streak: Int): List<Achievement> {
         val progress = store.loadOrInitProgress()
@@ -47,10 +59,15 @@ class AchievementEngine @Inject constructor(
         progress: UserProgressEntity,
         streak: Int,
     ): List<Achievement> {
+        val counts = GameCounts(
+            playsByType = GAME_TYPES.associateWith { store.learningHistoryDao.countByType(it) },
+            perfectByType = GAME_TYPES.associateWith { store.learningHistoryDao.countPerfectByType(it) },
+        )
+
         val unlocked = mutableListOf<Achievement>()
         var coinDelta = 0
         for (def in AchievementCatalog.ALL) {
-            if (!predicate(def.id, progress, streak)) continue
+            if (!predicate(def.id, progress, streak, counts)) continue
             val record = AchievementRecordEntity(
                 achievementId = def.id,
                 unlockedAt = store.clock.now(),
@@ -77,6 +94,7 @@ class AchievementEngine @Inject constructor(
         id: String,
         progress: UserProgressEntity,
         streak: Int,
+        counts: GameCounts,
     ): Boolean = when (id) {
         AchievementCatalog.FIRST_STEPS -> progress.challengesCompleted >= 1
         AchievementCatalog.WEEK_WARRIOR -> streak >= 7
@@ -91,9 +109,25 @@ class AchievementEngine @Inject constructor(
         AchievementCatalog.LEVEL_5 -> progress.level >= 5
         AchievementCatalog.LEVEL_10 -> progress.level >= 10
         AchievementCatalog.LEVEL_25 -> progress.level >= 25
-        AchievementCatalog.QUIZ_SHARPSHOOTER -> false // opt-in, awarded explicitly on perfect quiz
+        AchievementCatalog.QUIZ_SHARPSHOOTER -> (counts.perfectByType["QUIZ"] ?: 0) >= 1
+        AchievementCatalog.VOCAB_APPRENTICE -> (counts.playsByType["QUIZ"] ?: 0) >= 10
+        AchievementCatalog.VOCAB_MASTER -> (counts.playsByType["QUIZ"] ?: 0) >= 50
+        AchievementCatalog.WORD_BUILDER_EXPERT -> (counts.playsByType["WORD_BUILDER"] ?: 0) >= 25
+        AchievementCatalog.SENTENCE_MASTER -> (counts.playsByType["SENTENCE_BUILDER"] ?: 0) >= 25
+        AchievementCatalog.CROSSWORD_CHAMPION -> (counts.playsByType["CROSSWORD"] ?: 0) >= 10
+        AchievementCatalog.WORD_SEARCH_WIZARD -> (counts.playsByType["WORD_SEARCH"] ?: 0) >= 15
+        AchievementCatalog.SPELLING_BEE_CHAMPION -> (counts.playsByType["SPELLING"] ?: 0) >= 25
+        AchievementCatalog.PROVERB_SAGE -> (counts.playsByType["PROVERB"] ?: 0) >= 20
+        AchievementCatalog.PERFECT_STREAK_5 -> counts.perfectByType.values.sum() >= 5
+        AchievementCatalog.GRAND_SLAM -> GAME_TYPES.all { (counts.perfectByType[it] ?: 0) >= 1 }
         else -> false
     }
+
+    /** Snapshot of per-activity-type play/perfect counts, fetched once per [evaluate] pass. */
+    private data class GameCounts(
+        val playsByType: Map<String, Int>,
+        val perfectByType: Map<String, Int>,
+    )
 
     /** Called by the quiz engine when a user gets 100% on a quiz. */
     suspend fun awardExplicit(id: String): Achievement? {

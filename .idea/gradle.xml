@@ -33,12 +33,14 @@
             <option value="$PROJECT_DIR$/core/engagement" />
             <option value="$PROJECT_DIR$/core/games" />
             <option value="$PROJECT_DIR$/core/network" />
+            <option value="$PROJECT_DIR$/core/social" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/advanced_search" />
             <option value="$PROJECT_DIR$/feature/crossword" />
             <option value="$PROJECT_DIR$/feature/daily_content" />
             <option value="$PROJECT_DIR$/feature/donation" />
+            <option value="$PROJECT_DIR$/feature/hangman" />
             <option value="$PROJECT_DIR$/feature/help" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/how_it_works" />

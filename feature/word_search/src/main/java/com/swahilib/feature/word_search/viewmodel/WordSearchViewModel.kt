@@ -31,7 +31,7 @@ sealed interface WordSearchUiState {
         val selectionStart: Pair<Int, Int>? = null,
         val lastMissed: Boolean = false,
     ) : WordSearchUiState
-    data class Finished(val result: WordSearchResult) : WordSearchUiState
+    data class Finished(val result: WordSearchResult, val unlockedAchievements: List<com.swahilib.core.engagement.model.Achievement> = emptyList()) : WordSearchUiState
 }
 
 @HiltViewModel
@@ -57,11 +57,15 @@ class WordSearchViewModel @Inject constructor(
         if (_uiState.value !is WordSearchUiState.Loading) return
         this.challengeId = challengeId
         this.activityId = activityId
-        this.difficulty = difficulty
         startedAtMs = System.currentTimeMillis()
 
         viewModelScope.launch {
-            val puzzle = generator.generate(difficulty = difficulty, theme = theme)
+            this@WordSearchViewModel.difficulty = if (challengeId == null) {
+                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.WORD_SEARCH)
+            } else {
+                difficulty
+            }
+            val puzzle = generator.generate(difficulty = this@WordSearchViewModel.difficulty, theme = theme)
             _uiState.value = if (puzzle.words.size < 2) {
                 WordSearchUiState.Empty
             } else {
@@ -118,7 +122,7 @@ class WordSearchViewModel @Inject constructor(
                 )
             }
 
-            engagementRepo.recordLearningEvent(
+            val unlocked = engagementRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.WORD_SEARCH,
                 title = "Tafuta Maneno",
                 score = result.foundWords,
@@ -127,7 +131,7 @@ class WordSearchViewModel @Inject constructor(
                 secondsSpent = secondsSpent,
             )
 
-            _uiState.value = WordSearchUiState.Finished(result.copy(xpEarned = xpEarnedThisSession))
+            _uiState.value = WordSearchUiState.Finished(result.copy(xpEarned = xpEarnedThisSession), unlocked)
         }
     }
 }

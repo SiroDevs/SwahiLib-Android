@@ -23,6 +23,7 @@ object RewardRules {
             ActivityType.SENTENCE_BUILDER -> 25
             ActivityType.PROVERB_CHALLENGE -> 25
             ActivityType.CROSSWORD -> 30
+            ActivityType.HANGMAN -> 20
             ActivityType.CUSTOM -> 10
         }
         return (base * difficultyMultiplier(difficulty)).toInt()
@@ -34,6 +35,7 @@ object RewardRules {
         ChallengeScope.WEEKLY -> activityXpTotal / 3
         ChallengeScope.MONTHLY -> activityXpTotal / 2
         ChallengeScope.PRACTICE -> 0
+        ChallengeScope.SEASONAL -> (activityXpTotal * 0.75f).toInt() // limited-time, so generous
     }
 
     fun challengeCompletionCoins(scope: ChallengeScope): Int = when (scope) {
@@ -41,6 +43,7 @@ object RewardRules {
         ChallengeScope.WEEKLY -> 25
         ChallengeScope.MONTHLY -> 100
         ChallengeScope.PRACTICE -> 0
+        ChallengeScope.SEASONAL -> 50
     }
 
     /** Daily-login coin drop that grows (capped) with streak length. */

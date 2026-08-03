@@ -29,18 +29,18 @@ import com.swahilib.feature.word.viewmodel.WordViewModel
 import com.swahilib.feature.donation.viewmodel.DonationViewModel
 import com.swahilib.feature.home.view.screen.HomeScreen
 import com.swahilib.feature.advanced_search.view.screen.AdvSearchScreen
-import com.swahilib.feature.dailies.view.DailyContentHistory
+import com.swahilib.feature.daily_content.view.DailyContentHistory
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.proverb.view.screen.ProverbScreen
 import com.swahilib.feature.saying.view.SayingScreen
 import com.swahilib.feature.word.view.WordScreen
 import com.swahilib.feature.settings.view.screen.SettingsScreen
-import com.swahilib.feature.howitworks.view.HowItWorksScreen
+import com.swahilib.feature.how_it_works.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
 import com.swahilib.feature.donation.view.screen.DonationScreen
 import com.swahilib.feature.donation.view.screen.PaymentWebViewScreen
-import com.swahilib.feature.dailies.view.DailyWordScreen
-import com.swahilib.feature.dailies.view.DailyProverbScreen
+import com.swahilib.feature.daily_content.view.DailyWordScreen
+import com.swahilib.feature.daily_content.view.DailyProverbScreen
 import com.swahilib.feature.progress.view.screen.AchievementsScreen
 import com.swahilib.feature.progress.view.screen.ChallengesScreen
 import com.swahilib.feature.progress.view.screen.ProgressScreen
@@ -60,6 +60,8 @@ import com.swahilib.feature.crossword.view.CrosswordScreen
 import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
 import com.swahilib.feature.word_search.view.WordSearchScreen
 import com.swahilib.feature.word_search.viewmodel.WordSearchViewModel
+import com.swahilib.feature.hangman.view.HangmanScreen
+import com.swahilib.feature.hangman.viewmodel.HangmanViewModel
 import com.swahilib.core.games.model.WordSearchTheme
 import kotlinx.coroutines.launch
 
@@ -370,6 +372,27 @@ fun AppNavHost(
                 activityId = backStackEntry.arguments?.getString("activityId"),
                 difficulty = difficulty,
                 theme = theme,
+            )
+        }
+
+        composable(
+            route = Routes.HANGMAN,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("activityId") { type = NavType.StringType; nullable = true; defaultValue = null },
+                navArgument("difficulty") { type = NavType.StringType; defaultValue = "BEGINNER" },
+            ),
+        ) { backStackEntry ->
+            val viewModel: HangmanViewModel = hiltViewModel()
+            val difficulty = runCatching {
+                Difficulty.valueOf(backStackEntry.arguments?.getString("difficulty") ?: "BEGINNER")
+            }.getOrDefault(Difficulty.BEGINNER)
+            HangmanScreen(
+                navController = navController,
+                viewModel = viewModel,
+                challengeId = backStackEntry.arguments?.getString("challengeId"),
+                activityId = backStackEntry.arguments?.getString("activityId"),
+                difficulty = difficulty,
             )
         }
     }

@@ -32,7 +32,7 @@ sealed interface SentenceUiState {
         val question: SentenceQuestion get() = questions[index]
         val picked: List<String> get() = pickedIndices.map { question.shuffledWords[it] }
     }
-    data class Finished(val result: SentenceResult) : SentenceUiState
+    data class Finished(val result: SentenceResult, val unlockedAchievements: List<com.swahilib.core.engagement.model.Achievement> = emptyList()) : SentenceUiState
 }
 
 @HiltViewModel
@@ -59,11 +59,15 @@ class SentenceBuilderViewModel @Inject constructor(
         if (_uiState.value !is SentenceUiState.Loading) return
         this.challengeId = challengeId
         this.activityId = activityId
-        this.difficulty = difficulty
         startedAtMs = System.currentTimeMillis()
 
         viewModelScope.launch {
-            val questions = generator.generate(difficulty, questionCount)
+            this@SentenceBuilderViewModel.difficulty = if (challengeId == null) {
+                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.SENTENCE_BUILDER)
+            } else {
+                difficulty
+            }
+            val questions = generator.generate(this@SentenceBuilderViewModel.difficulty, questionCount)
             _uiState.value = if (questions.isEmpty()) {
                 SentenceUiState.Empty
             } else {
@@ -126,7 +130,7 @@ class SentenceBuilderViewModel @Inject constructor(
                 )
             }
 
-            engagementRepo.recordLearningEvent(
+            val unlocked = engagementRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.SENTENCE_BUILDER,
                 title = "Panga Sentensi",
                 score = result.correctAnswers,
@@ -135,7 +139,7 @@ class SentenceBuilderViewModel @Inject constructor(
                 secondsSpent = secondsSpent,
             )
 
-            _uiState.value = SentenceUiState.Finished(result.copy(xpEarned = xpEarnedThisSession))
+            _uiState.value = SentenceUiState.Finished(result.copy(xpEarned = xpEarnedThisSession), unlocked)
         }
     }
 }

@@ -42,7 +42,7 @@ sealed interface WordBuilderUiState {
     ) : WordBuilderUiState {
         val assembled: String get() = pickedIndices.joinToString("") { word.scrambledLetters[it].toString() }
     }
-    data class Finished(val result: WordBuilderSessionResult) : WordBuilderUiState
+    data class Finished(val result: WordBuilderSessionResult, val unlockedAchievements: List<com.swahilib.core.engagement.model.Achievement> = emptyList()) : WordBuilderUiState
 }
 
 @HiltViewModel
@@ -75,18 +75,24 @@ class WordBuilderViewModel @Inject constructor(
         if (_uiState.value !is WordBuilderUiState.Loading) return
         this.challengeId = challengeId
         this.activityId = activityId
-        this.difficulty = difficulty
         this.timedMode = timedMode
         this.endless = endless
         startedAtMs = System.currentTimeMillis()
 
         viewModelScope.launch {
+            this@WordBuilderViewModel.difficulty = if (challengeId == null) {
+                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.WORD_BUILDER)
+            } else {
+                difficulty
+            }
+            val resolvedDifficulty = this@WordBuilderViewModel.difficulty
+
             if (endless) {
-                val first = generator.next(difficulty, usedRids)
+                val first = generator.next(resolvedDifficulty, usedRids)
                 _uiState.value = first?.let { toPlaying(it, 0, null) } ?: WordBuilderUiState.Empty
                 first?.let { usedRids.add(it.sourceWordRid) }
             } else {
-                val session = generator.session(difficulty, wordCount)
+                val session = generator.session(resolvedDifficulty, wordCount)
                 _uiState.value = session.firstOrNull()?.let { toPlaying(it, 0, session.size) } ?: WordBuilderUiState.Empty
                 session.firstOrNull()?.let { usedRids.add(it.sourceWordRid) }
                 pendingSession = session
@@ -224,7 +230,7 @@ class WordBuilderViewModel @Inject constructor(
                 )
             }
 
-            engagementRepo.recordLearningEvent(
+            val unlocked = engagementRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.WORD_BUILDER,
                 title = "Jenzi la Maneno",
                 score = result.correctWords,
@@ -233,7 +239,7 @@ class WordBuilderViewModel @Inject constructor(
                 secondsSpent = secondsSpent,
             )
 
-            _uiState.value = WordBuilderUiState.Finished(result.copy(xpEarned = xpEarnedThisSession))
+            _uiState.value = WordBuilderUiState.Finished(result.copy(xpEarned = xpEarnedThisSession), unlocked)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.swahilib.feature.dailies.viewmodel
+package com.swahilib.feature.daily_content.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

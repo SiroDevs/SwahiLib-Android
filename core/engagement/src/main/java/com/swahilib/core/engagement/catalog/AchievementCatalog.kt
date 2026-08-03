@@ -26,6 +26,18 @@ object AchievementCatalog {
     const val LEVEL_10 = "level_10"
     const val LEVEL_25 = "level_25"
 
+    // Sprint 3 - Advanced Achievements: per-game mastery + cross-game perfectionist badges.
+    const val VOCAB_APPRENTICE = "vocab_apprentice"
+    const val VOCAB_MASTER = "vocab_master"
+    const val WORD_BUILDER_EXPERT = "word_builder_expert"
+    const val SENTENCE_MASTER = "sentence_master"
+    const val CROSSWORD_CHAMPION = "crossword_champion"
+    const val WORD_SEARCH_WIZARD = "word_search_wizard"
+    const val SPELLING_BEE_CHAMPION = "spelling_bee_champion"
+    const val PROVERB_SAGE = "proverb_sage"
+    const val PERFECT_STREAK_5 = "perfect_streak_5"
+    const val GRAND_SLAM = "grand_slam"
+
     val ALL: List<Achievement> = listOf(
         Achievement(FIRST_STEPS, "Hatua za Kwanza", "Kamilisha changamoto yako ya kwanza",
             iconKey = "footprints", xpReward = 25, coinReward = 5),
@@ -55,6 +67,26 @@ object AchievementCatalog {
             iconKey = "medal", xpReward = 150, coinReward = 30),
         Achievement(LEVEL_25, "Ngazi ya 25", "Fikia ngazi ya 25",
             iconKey = "medal", xpReward = 500, coinReward = 100),
+        Achievement(VOCAB_APPRENTICE, "Mwanafunzi wa Msamiati", "Kamilisha majaribio 10 ya msamiati",
+            iconKey = "book", xpReward = 75, coinReward = 15),
+        Achievement(VOCAB_MASTER, "Bingwa wa Msamiati", "Kamilisha majaribio 50 ya msamiati",
+            iconKey = "book", xpReward = 300, coinReward = 75),
+        Achievement(WORD_BUILDER_EXPERT, "Mtaalamu wa Kujenga Maneno", "Kamilisha raundi 25 za Jenzi la Maneno",
+            iconKey = "puzzle", xpReward = 200, coinReward = 50),
+        Achievement(SENTENCE_MASTER, "Bingwa wa Sentensi", "Kamilisha raundi 25 za Kupanga Sentensi",
+            iconKey = "puzzle", xpReward = 200, coinReward = 50),
+        Achievement(CROSSWORD_CHAMPION, "Bingwa wa Msalaba wa Maneno", "Kamilisha misalaba 10 ya maneno",
+            iconKey = "grid", xpReward = 250, coinReward = 60),
+        Achievement(WORD_SEARCH_WIZARD, "Mchawi wa Kutafuta Maneno", "Kamilisha michezo 15 ya Kutafuta Maneno",
+            iconKey = "grid", xpReward = 200, coinReward = 50),
+        Achievement(SPELLING_BEE_CHAMPION, "Bingwa wa Tahajia", "Kamilisha raundi 25 za tahajia",
+            iconKey = "pencil", xpReward = 200, coinReward = 50),
+        Achievement(PROVERB_SAGE, "Mjuzi wa Methali", "Kamilisha changamoto 20 za methali",
+            iconKey = "scroll", xpReward = 250, coinReward = 60),
+        Achievement(PERFECT_STREAK_5, "Mkamilifu", "Pata alama kamili mara 5 katika michezo yoyote",
+            iconKey = "target", xpReward = 150, coinReward = 40),
+        Achievement(GRAND_SLAM, "Bingwa wa Michezo Yote", "Pata alama kamili angalau mara moja katika kila mchezo",
+            iconKey = "crown", xpReward = 750, coinReward = 150),
     )
 
     fun byId(id: String): Achievement? = ALL.firstOrNull { it.id == id }

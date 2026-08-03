@@ -40,12 +40,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.games.model.QuizAnswer
 import com.swahilib.core.games.model.QuizFormat
 import com.swahilib.core.games.model.QuizQuestion
 import com.swahilib.core.games.model.QuizResult
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.general.AchievementUnlockBanner
 import com.swahilib.feature.quiz.viewmodel.QuizContentSource
 import com.swahilib.feature.quiz.viewmodel.QuizUiState
 import com.swahilib.feature.quiz.viewmodel.QuizViewModel
@@ -87,6 +89,7 @@ fun QuizScreen(
                 )
                 is QuizUiState.Finished -> ResultState(
                     result = s.result,
+                    unlockedAchievements = s.unlockedAchievements,
                     onDone = { navController.popBackStack() },
                 )
             }
@@ -317,7 +320,7 @@ private fun FeedbackCard(correct: Boolean, explanation: String) {
 }
 
 @Composable
-private fun ResultState(result: QuizResult, onDone: () -> Unit) {
+private fun ResultState(result: QuizResult, unlockedAchievements: List<Achievement>, onDone: () -> Unit) {
     Column(
         Modifier
             .fillMaxSize()
@@ -354,6 +357,7 @@ private fun ResultState(result: QuizResult, onDone: () -> Unit) {
             }
         }
         Spacer(Modifier.height(24.dp))
+        AchievementUnlockBanner(unlockedAchievements, modifier = Modifier.padding(bottom = 16.dp))
         Button(onClick = onDone, modifier = Modifier.fillMaxWidth()) {
             Text("Sawa")
         }

@@ -1,4 +1,4 @@
-package com.swahilib.feature.dailies.view
+package com.swahilib.feature.daily_content.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,7 +50,7 @@ import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.dailies.viewmodel.DailyContentViewModel
+import com.swahilib.feature.daily_content.viewmodel.DailyContentViewModel
 import com.swahilib.feature.word.view.WordScreen
 import com.swahilib.feature.word.viewmodel.WordViewModel
 

@@ -1,4 +1,4 @@
-package com.swahilib.feature.howitworks.view
+package com.swahilib.feature.how_it_works.view
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable

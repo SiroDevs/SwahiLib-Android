@@ -97,6 +97,7 @@ dependencies {
     implementation(project(":core:engagement"))
     implementation(project(":core:games"))
     implementation(project(":core:network"))
+    implementation(project(":core:social"))
     implementation(project(":core:ui"))
 
     // Feature modules
@@ -118,6 +119,7 @@ dependencies {
     implementation(project(":feature:spelling"))
     implementation(project(":feature:crossword"))
     implementation(project(":feature:word_search"))
+    implementation(project(":feature:hangman"))
 
     // Android Room
     implementation(libs.androidx.room.runtime)

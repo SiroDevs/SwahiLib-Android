@@ -99,4 +99,5 @@ private fun labelFor(scope: ChallengeScope): String = when (scope) {
     ChallengeScope.WEEKLY -> "WIKI"
     ChallengeScope.MONTHLY -> "MWEZI"
     ChallengeScope.PRACTICE -> "MAZOEZI"
+    ChallengeScope.SEASONAL -> "TUKIO MAALUM"
 }

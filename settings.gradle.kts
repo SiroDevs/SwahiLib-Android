@@ -33,6 +33,7 @@ include(":core:design_system")
 include(":core:engagement")
 include(":core:games")
 include(":core:network")
+include(":core:social")
 include(":core:ui")
 
 // Feature modules
@@ -54,3 +55,4 @@ include(":feature:sentence_builder")
 include(":feature:spelling")
 include(":feature:crossword")
 include(":feature:word_search")
+include(":feature:hangman")

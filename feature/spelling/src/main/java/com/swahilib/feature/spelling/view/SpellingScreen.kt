@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.weight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -87,6 +88,10 @@ fun SpellingScreen(
                     Text("Wastani wa usahihi: ${(s.result.averageCredit * 100).toInt()}%", style = MaterialTheme.typography.bodyMedium)
                     Text("+${s.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(24.dp))
+                    com.swahilib.core.ui.components.general.AchievementUnlockBanner(
+                        s.unlockedAchievements,
+                        modifier = Modifier.padding(bottom = 16.dp),
+                    )
                     Button(onClick = { navController.popBackStack() }, modifier = Modifier.fillMaxWidth()) {
                         Text("Sawa")
                     }

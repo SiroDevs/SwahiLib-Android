@@ -128,6 +128,8 @@ fun ProgressScreen(
                                     navController.navigate(Routes.crossword(c.id, activity.id, c.difficulty.name))
                                 ActivityType.WORD_SEARCH ->
                                     navController.navigate(Routes.wordSearch(c.id, activity.id, c.difficulty.name))
+                                ActivityType.HANGMAN ->
+                                    navController.navigate(Routes.hangman(c.id, activity.id, c.difficulty.name))
                                 else -> viewModel.completeActivity(c.id, activity.id)
                             }
                         },

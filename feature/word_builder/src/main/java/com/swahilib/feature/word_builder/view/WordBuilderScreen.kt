@@ -94,6 +94,10 @@ fun WordBuilderScreen(
                     Text("${s.result.correctWords}/${s.result.totalWords} maneno sahihi", style = MaterialTheme.typography.titleMedium)
                     Text("+${s.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(24.dp))
+                    com.swahilib.core.ui.components.general.AchievementUnlockBanner(
+                        s.unlockedAchievements,
+                        modifier = Modifier.padding(bottom = 16.dp),
+                    )
                     Button(onClick = { navController.popBackStack() }, modifier = Modifier.fillMaxWidth()) {
                         Text("Sawa")
                     }

@@ -26,10 +26,48 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.engagement.engine.ActivityRecommendation
 import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.progress.view.components.ChallengeCard
 import com.swahilib.feature.progress.viewmodel.ProgressViewModel
+
+private fun routeAndTitleFor(type: String): Pair<String, String> = when (type) {
+    "QUIZ" -> Routes.quizFreeplay() to "Jaribio la Msamiati"
+    "WORD_BUILDER" -> Routes.wordBuilderFreeplay() to "Jenzi la Maneno"
+    "SENTENCE_BUILDER" -> Routes.sentenceBuilderFreeplay() to "Panga Sentensi"
+    "SPELLING" -> Routes.spellingFreeplay() to "Changamoto ya Tahajia"
+    "CROSSWORD" -> Routes.crosswordFreeplay() to "Msalaba wa Maneno"
+    "WORD_SEARCH" -> Routes.wordSearchFreeplay() to "Tafuta Maneno"
+    "PROVERB" -> Routes.quizFreeplay(source = "PROVERBS") to "Changamoto ya Methali"
+    "HANGMAN" -> Routes.hangmanFreeplay() to "Hangman"
+    else -> Routes.quizFreeplay() to "Jaribio la Msamiati"
+}
+
+@Composable
+private fun RecommendationRow(rec: ActivityRecommendation, onNavigate: (String) -> Unit) {
+    val (route, title) = routeAndTitleFor(rec.type)
+    androidx.compose.material3.Card(
+        onClick = { onNavigate(route) },
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(14.dp)) {
+            Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+            Text(
+                rec.reason,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            rec.recentAccuracy?.let { acc ->
+                Text(
+                    "Usahihi wa hivi karibuni: ${(acc * 100).toInt()}%",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun ChallengesScreen(
@@ -51,6 +89,7 @@ fun ChallengesScreen(
     }
 
     val challenges by viewModel.challenges.collectAsState()
+    val recommendations by viewModel.recommendations.collectAsState()
 
     Scaffold(
         topBar = {
@@ -75,6 +114,22 @@ fun ChallengesScreen(
                 Text("🎯 Jaribio la Haraka (Mazoezi)")
             }
             Spacer(Modifier.height(16.dp))
+
+            if (recommendations.isNotEmpty()) {
+                Text(
+                    "Kwa Ajili Yako",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                )
+                Spacer(Modifier.height(8.dp))
+                androidx.compose.foundation.layout.Column(
+                    verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp),
+                ) {
+                    recommendations.forEach { rec ->
+                        RecommendationRow(rec) { route -> navController.navigate(route) }
+                    }
+                }
+                Spacer(Modifier.height(20.dp))
+            }
 
             if (challenges.isEmpty()) {
                 Text(
@@ -113,6 +168,9 @@ fun ChallengesScreen(
                                 )
                                 ActivityType.WORD_SEARCH -> navController.navigate(
                                     Routes.wordSearch(c.id, activity.id, c.difficulty.name)
+                                )
+                                ActivityType.HANGMAN -> navController.navigate(
+                                    Routes.hangman(c.id, activity.id, c.difficulty.name)
                                 )
                                 else -> viewModel.completeActivity(c.id, activity.id)
                             }

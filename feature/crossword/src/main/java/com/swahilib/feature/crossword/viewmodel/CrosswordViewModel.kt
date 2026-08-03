@@ -28,7 +28,7 @@ sealed interface CrosswordUiState {
         val answers: Map<String, String> = emptyMap(),
         val checked: Boolean = false,
     ) : CrosswordUiState
-    data class Finished(val result: CrosswordResult) : CrosswordUiState
+    data class Finished(val result: CrosswordResult, val unlockedAchievements: List<com.swahilib.core.engagement.model.Achievement> = emptyList()) : CrosswordUiState
 }
 
 @HiltViewModel
@@ -49,11 +49,15 @@ class CrosswordViewModel @Inject constructor(
         if (_uiState.value !is CrosswordUiState.Loading) return
         this.challengeId = challengeId
         this.activityId = activityId
-        this.difficulty = difficulty
         startedAtMs = System.currentTimeMillis()
 
         viewModelScope.launch {
-            val puzzle = generator.generate(difficulty)
+            this@CrosswordViewModel.difficulty = if (challengeId == null) {
+                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.CROSSWORD)
+            } else {
+                difficulty
+            }
+            val puzzle = generator.generate(this@CrosswordViewModel.difficulty)
             _uiState.value = if (puzzle.entries.size < 2) CrosswordUiState.Empty else CrosswordUiState.Playing(puzzle)
         }
     }
@@ -94,7 +98,7 @@ class CrosswordViewModel @Inject constructor(
                 )
             }
 
-            engagementRepo.recordLearningEvent(
+            val unlocked = engagementRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.CROSSWORD,
                 title = "Msalaba wa Maneno",
                 score = result.correctEntries,
@@ -103,7 +107,7 @@ class CrosswordViewModel @Inject constructor(
                 secondsSpent = secondsSpent,
             )
 
-            _uiState.value = CrosswordUiState.Finished(result.copy(xpEarned = xpEarnedThisSession))
+            _uiState.value = CrosswordUiState.Finished(result.copy(xpEarned = xpEarnedThisSession), unlocked)
         }
     }
 }

@@ -34,7 +34,7 @@ sealed interface SpellingUiState {
         val hintText: String get() = question.answer.take(revealedLetters) +
             "_".repeat((question.answer.length - revealedLetters).coerceAtLeast(0))
     }
-    data class Finished(val result: SpellingResult) : SpellingUiState
+    data class Finished(val result: SpellingResult, val unlockedAchievements: List<com.swahilib.core.engagement.model.Achievement> = emptyList()) : SpellingUiState
 }
 
 @HiltViewModel
@@ -61,11 +61,15 @@ class SpellingViewModel @Inject constructor(
         if (_uiState.value !is SpellingUiState.Loading) return
         this.challengeId = challengeId
         this.activityId = activityId
-        this.difficulty = difficulty
         startedAtMs = System.currentTimeMillis()
 
         viewModelScope.launch {
-            val questions = generator.generate(difficulty, questionCount)
+            this@SpellingViewModel.difficulty = if (challengeId == null) {
+                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.SPELLING)
+            } else {
+                difficulty
+            }
+            val questions = generator.generate(this@SpellingViewModel.difficulty, questionCount)
             _uiState.value = if (questions.isEmpty()) SpellingUiState.Empty else SpellingUiState.Playing(questions, index = 0)
         }
     }
@@ -118,7 +122,7 @@ class SpellingViewModel @Inject constructor(
                 )
             }
 
-            engagementRepo.recordLearningEvent(
+            val unlocked = engagementRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.SPELLING,
                 title = "Changamoto ya Tahajia",
                 score = result.fullyCorrectCount,
@@ -127,7 +131,7 @@ class SpellingViewModel @Inject constructor(
                 secondsSpent = secondsSpent,
             )
 
-            _uiState.value = SpellingUiState.Finished(result.copy(xpEarned = xpEarnedThisSession))
+            _uiState.value = SpellingUiState.Finished(result.copy(xpEarned = xpEarnedThisSession), unlocked)
         }
     }
 }

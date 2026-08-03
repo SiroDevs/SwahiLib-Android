@@ -112,6 +112,7 @@ class StatisticsEngine @Inject constructor(
         WORD_SEARCH(gamePlayed = true, wordsLearned = 1),
         SENTENCE_BUILDER(gamePlayed = true, wordsLearned = 0),
         SPELLING(gamePlayed = true, wordsLearned = 1),
+        HANGMAN(gamePlayed = true, wordsLearned = 1),
         PROVERB(gamePlayed = false, wordsLearned = 0),
         WORD_LOOKUP(gamePlayed = false, wordsLearned = 1),
         DAILY_READ(gamePlayed = false, wordsLearned = 1),

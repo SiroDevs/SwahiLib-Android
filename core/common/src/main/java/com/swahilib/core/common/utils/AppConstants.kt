@@ -157,6 +157,13 @@ object Routes {
     fun wordSearchFreeplay(difficulty: String = "BEGINNER", theme: String = "RANDOM"): String =
         "wordsearch?difficulty=$difficulty&theme=$theme"
 
+    const val HANGMAN = "hangman?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}"
+
+    fun hangman(challengeId: String, activityId: String, difficulty: String): String =
+        "hangman?challengeId=$challengeId&activityId=$activityId&difficulty=$difficulty"
+
+    fun hangmanFreeplay(difficulty: String = "BEGINNER"): String = "hangman?difficulty=$difficulty"
+
     const val DAILY_CONTENT_TYPE_WORD = "word"
     const val DAILY_CONTENT_TYPE_PROVERB = "proverb"
     const val DAILY_CONTENT_HISTORY = "daily_content_history/{type}"

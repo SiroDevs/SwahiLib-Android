@@ -8,7 +8,7 @@ package com.swahilib.core.engagement.model
 
 enum class Difficulty { BEGINNER, INTERMEDIATE, ADVANCED }
 
-enum class ChallengeScope { DAILY, WEEKLY, MONTHLY, PRACTICE }
+enum class ChallengeScope { DAILY, WEEKLY, MONTHLY, PRACTICE, SEASONAL }
 
 /** Every learning activity that can appear inside a challenge. Adding a new
  *  game (Sprint 2+) means adding an entry here and a handler in ActivityRegistry. */
@@ -20,6 +20,7 @@ enum class ActivityType {
     SENTENCE_BUILDER,
     SPELLING_CHALLENGE,
     PROVERB_CHALLENGE,
+    HANGMAN,
     DAILY_READ,
     STREAK_VISIT,
     CUSTOM,

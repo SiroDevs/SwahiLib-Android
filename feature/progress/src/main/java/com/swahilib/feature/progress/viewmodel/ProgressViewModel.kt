@@ -3,6 +3,7 @@ package com.swahilib.feature.progress.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.data.repos.EngagementRepo
+import com.swahilib.core.engagement.engine.ActivityRecommendation
 import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.Challenge
 import com.swahilib.core.engagement.model.StatisticsSummary
@@ -31,12 +32,16 @@ class ProgressViewModel @Inject constructor(
     private val _achievements = MutableStateFlow<List<Achievement>>(emptyList())
     val achievements: StateFlow<List<Achievement>> = _achievements.asStateFlow()
 
+    private val _recommendations = MutableStateFlow<List<ActivityRecommendation>>(emptyList())
+    val recommendations: StateFlow<List<ActivityRecommendation>> = _recommendations.asStateFlow()
+
     fun refresh() {
         viewModelScope.launch {
             _progress.value = engagementRepo.currentProgress()
             _challenges.value = engagementRepo.activeChallenges()
             _stats.value = engagementRepo.statistics()
             _achievements.value = engagementRepo.achievementsWithStatus()
+            _recommendations.value = engagementRepo.recommendedActivities()
         }
     }
 

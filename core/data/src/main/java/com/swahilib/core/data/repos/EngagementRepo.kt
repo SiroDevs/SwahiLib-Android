@@ -1,13 +1,17 @@
 package com.swahilib.core.data.repos
 
 import com.swahilib.core.engagement.engine.AchievementEngine
+import com.swahilib.core.engagement.engine.ActivityRecommendation
 import com.swahilib.core.engagement.engine.ChallengeEngine
+import com.swahilib.core.engagement.engine.DifficultyEngine
+import com.swahilib.core.engagement.engine.RecommendationEngine
 import com.swahilib.core.engagement.engine.RewardsEngine
 import com.swahilib.core.engagement.engine.StatisticsEngine
 import com.swahilib.core.engagement.engine.XpEngine
 import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.AwardResult
 import com.swahilib.core.engagement.model.Challenge
+import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.engagement.model.StatisticsSummary
 import com.swahilib.core.engagement.model.UserProgress
 import com.swahilib.core.engagement.model.XpAward
@@ -30,6 +34,8 @@ class EngagementRepo @Inject constructor(
     private val challengeEngine: ChallengeEngine,
     private val achievementEngine: AchievementEngine,
     private val statisticsEngine: StatisticsEngine,
+    private val difficultyEngine: DifficultyEngine,
+    private val recommendationEngine: RecommendationEngine,
 ) {
 
     /**
@@ -46,6 +52,7 @@ class EngagementRepo @Inject constructor(
         challengeEngine.ensureDailyChallenge()
         challengeEngine.ensureWeeklyChallenge()
         challengeEngine.ensureMonthlyChallenge()
+        challengeEngine.ensureSeasonalChallenge()
 
         val streakAchievements = achievementEngine.checkForUnlocksWithStreak(streak)
 
@@ -88,6 +95,14 @@ class EngagementRepo @Inject constructor(
 
     suspend fun achievementsWithStatus(): List<Achievement> = achievementEngine.catalogWithStatus()
 
+    /** Recommended starting difficulty for a game type, based on recent accuracy. See [DifficultyEngine]. */
+    suspend fun recommendedDifficulty(type: StatisticsEngine.EventType): Difficulty =
+        difficultyEngine.recommend(type.name)
+
+    /** Personalized "what to play next" suggestions. See [RecommendationEngine]. */
+    suspend fun recommendedActivities(limit: Int = 3): List<ActivityRecommendation> =
+        recommendationEngine.recommendations(limit)
+
     suspend fun recordLearningEvent(
         type: StatisticsEngine.EventType,
         title: String,
@@ -96,15 +111,18 @@ class EngagementRepo @Inject constructor(
         maxScore: Int? = null,
         xpEarned: Int = 0,
         secondsSpent: Int = 0,
-    ) = statisticsEngine.recordEvent(
-        type = type,
-        title = title,
-        referenceId = referenceId,
-        score = score,
-        maxScore = maxScore,
-        xpEarned = xpEarned,
-        secondsSpent = secondsSpent,
-    )
+    ): List<Achievement> {
+        statisticsEngine.recordEvent(
+            type = type,
+            title = title,
+            referenceId = referenceId,
+            score = score,
+            maxScore = maxScore,
+            xpEarned = xpEarned,
+            secondsSpent = secondsSpent,
+        )
+        return achievementEngine.checkForUnlocksAfterActivity()
+    }
 
     data class DailyLoginOutcome(
         val streakDay: Int,

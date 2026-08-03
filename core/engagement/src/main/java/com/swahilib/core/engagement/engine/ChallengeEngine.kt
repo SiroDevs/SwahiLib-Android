@@ -57,6 +57,36 @@ class ChallengeEngine @Inject constructor(
         )
     }
 
+    /**
+     * Sprint 3 - Seasonal & Special Events. Returns null on an ordinary
+     * weekday with no active holiday - callers should treat that as "no
+     * seasonal challenge today", not an error.
+     */
+    suspend fun ensureSeasonalChallenge(): Challenge? {
+        val cal = java.util.Calendar.getInstance(store.clock.timeZone()).apply { timeInMillis = store.clock.now() }
+        val month = cal.get(java.util.Calendar.MONTH) + 1
+        val day = cal.get(java.util.Calendar.DAY_OF_MONTH)
+        val year = cal.get(java.util.Calendar.YEAR)
+        val isWeekend = cal.get(java.util.Calendar.DAY_OF_WEEK).let {
+            it == java.util.Calendar.SATURDAY || it == java.util.Calendar.SUNDAY
+        }
+
+        val holiday = com.swahilib.core.engagement.catalog.SeasonalEventCatalog.activeHoliday(month, day)
+        return when {
+            holiday != null -> {
+                val periodKey = "${holiday.id}_$year"
+                val template = ChallengeTemplates.holidayEvent(periodKey, holiday)
+                upsertFromTemplate(periodKey = periodKey, template = template, expiresAt = TimeKeys.endOfDay(store.clock))
+            }
+            isWeekend -> {
+                val periodKey = "${TimeKeys.weekKey(store.clock)}_weekend"
+                val template = ChallengeTemplates.weekendChallenge(periodKey)
+                upsertFromTemplate(periodKey = periodKey, template = template, expiresAt = TimeKeys.endOfWeek(store.clock))
+            }
+            else -> null
+        }
+    }
+
     suspend fun createPracticeSession(difficulty: Difficulty = Difficulty.BEGINNER): Challenge {
         val template = ChallengeTemplates.practice(difficulty)
         val id = "practice_${store.clock.now()}"
@@ -161,15 +191,34 @@ class ChallengeEngine @Inject constructor(
         val dailyKey = TimeKeys.today(store.clock)
         val weeklyKey = TimeKeys.weekKey(store.clock)
         val monthlyKey = TimeKeys.monthKey(store.clock)
+        val seasonalEntity = seasonalPeriodKeyForToday()?.let { store.challengeDao.getByPeriod(ChallengeScope.SEASONAL.name, it) }
         return listOfNotNull(
             store.challengeDao.getByPeriod(ChallengeScope.DAILY.name, dailyKey),
             store.challengeDao.getByPeriod(ChallengeScope.WEEKLY.name, weeklyKey),
             store.challengeDao.getByPeriod(ChallengeScope.MONTHLY.name, monthlyKey),
+            seasonalEntity,
         )
             .filter { it.expiresAt > now }
             .map { entity ->
                 toDomain(entity, store.challengeDao.getActivitiesFor(entity.id))
             }
+    }
+
+    /** Mirrors the periodKey logic in [ensureSeasonalChallenge] without creating anything - used to look up an already-created seasonal challenge. */
+    private fun seasonalPeriodKeyForToday(): String? {
+        val cal = java.util.Calendar.getInstance(store.clock.timeZone()).apply { timeInMillis = store.clock.now() }
+        val month = cal.get(java.util.Calendar.MONTH) + 1
+        val day = cal.get(java.util.Calendar.DAY_OF_MONTH)
+        val year = cal.get(java.util.Calendar.YEAR)
+        val isWeekend = cal.get(java.util.Calendar.DAY_OF_WEEK).let {
+            it == java.util.Calendar.SATURDAY || it == java.util.Calendar.SUNDAY
+        }
+        val holiday = com.swahilib.core.engagement.catalog.SeasonalEventCatalog.activeHoliday(month, day)
+        return when {
+            holiday != null -> "${holiday.id}_$year"
+            isWeekend -> "${TimeKeys.weekKey(store.clock)}_weekend"
+            else -> null
+        }
     }
 
     private suspend fun upsertFromTemplate(

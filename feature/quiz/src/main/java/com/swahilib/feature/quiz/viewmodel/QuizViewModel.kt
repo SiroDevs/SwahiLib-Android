@@ -6,6 +6,7 @@ import com.swahilib.core.data.repos.EngagementRepo
 import com.swahilib.core.engagement.engine.RewardRules
 import com.swahilib.core.engagement.engine.StatisticsEngine
 import com.swahilib.core.engagement.model.ActivityType
+import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.AwardResult
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.engagement.model.XpAward
@@ -39,7 +40,7 @@ sealed interface QuizUiState {
         val question: QuizQuestion get() = quizSet.questions[index]
         val progressLabel: String get() = "Swali ${index + 1}/${quizSet.questions.size}"
     }
-    data class Finished(val result: QuizResult, val activityAward: AwardResult?) : QuizUiState
+    data class Finished(val result: QuizResult, val activityAward: AwardResult?, val unlockedAchievements: List<Achievement> = emptyList()) : QuizUiState
 }
 
 @HiltViewModel
@@ -69,14 +70,21 @@ class QuizViewModel @Inject constructor(
         if (_uiState.value !is QuizUiState.Loading) return
         this.challengeId = challengeId
         this.activityId = activityId
-        this.difficulty = difficulty
         this.source = source
         startedAtMs = System.currentTimeMillis()
 
         viewModelScope.launch {
+            // Freeplay sessions adapt to recent accuracy; challenge sessions keep the challenge's fixed difficulty.
+            this@QuizViewModel.difficulty = if (challengeId == null) {
+                val eventType = if (source == QuizContentSource.PROVERBS) StatisticsEngine.EventType.PROVERB else StatisticsEngine.EventType.QUIZ
+                engagementRepo.recommendedDifficulty(eventType)
+            } else {
+                difficulty
+            }
+
             val set = when (source) {
-                QuizContentSource.WORDS -> quizGenerator.generate(difficulty = difficulty, questionCount = questionCount)
-                QuizContentSource.PROVERBS -> proverbQuizGenerator.generate(difficulty = difficulty, questionCount = questionCount)
+                QuizContentSource.WORDS -> quizGenerator.generate(difficulty = this@QuizViewModel.difficulty, questionCount = questionCount)
+                QuizContentSource.PROVERBS -> proverbQuizGenerator.generate(difficulty = this@QuizViewModel.difficulty, questionCount = questionCount)
             }
             _uiState.value = if (set.questions.isEmpty()) {
                 QuizUiState.Empty
@@ -150,7 +158,7 @@ class QuizViewModel @Inject constructor(
                 )
             }
 
-            engagementRepo.recordLearningEvent(
+            val unlocked = engagementRepo.recordLearningEvent(
                 type = eventType,
                 title = title,
                 score = result.correctAnswers,
@@ -164,6 +172,7 @@ class QuizViewModel @Inject constructor(
             _uiState.value = QuizUiState.Finished(
                 result = result.copy(xpEarned = xpEarnedThisSession),
                 activityAward = award,
+                unlockedAchievements = unlocked,
             )
         }
     }

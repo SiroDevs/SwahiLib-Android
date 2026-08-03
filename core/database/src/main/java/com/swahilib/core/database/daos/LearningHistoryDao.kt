@@ -21,6 +21,15 @@ interface LearningHistoryDao {
     @Query("SELECT COUNT(*) FROM learning_history WHERE type = :type")
     suspend fun countByType(type: String): Int
 
+    @Query("SELECT * FROM learning_history WHERE type = :type ORDER BY createdAt DESC LIMIT :limit")
+    suspend fun recentByType(type: String, limit: Int): List<LearningHistoryEntity>
+
+    @Query("SELECT COUNT(*) FROM learning_history WHERE type = :type AND maxScore > 0 AND score = maxScore")
+    suspend fun countPerfectByType(type: String): Int
+
+    @Query("SELECT DISTINCT type FROM learning_history WHERE maxScore > 0 AND score = maxScore")
+    suspend fun typesWithAtLeastOnePerfect(): List<String>
+
     @Query("SELECT COALESCE(SUM(secondsSpent), 0) FROM learning_history")
     suspend fun totalSeconds(): Long
 }

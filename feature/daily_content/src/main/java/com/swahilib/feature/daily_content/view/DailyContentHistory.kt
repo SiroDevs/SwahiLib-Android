@@ -1,4 +1,4 @@
-package com.swahilib.feature.dailies.view
+package com.swahilib.feature.daily_content.view
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,7 +24,7 @@ import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.DailyContentHistoryEntry
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState
-import com.swahilib.feature.dailies.viewmodel.DailyContentViewModel
+import com.swahilib.feature.daily_content.viewmodel.DailyContentViewModel
 
 private val SWAHILI_MONTHS = listOf(
     "Januari", "Februari", "Machi", "Aprili", "Mei", "Juni",

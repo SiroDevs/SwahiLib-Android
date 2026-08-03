@@ -121,6 +121,54 @@ object ChallengeTemplates {
         )
     }
 
+    /** Holiday event - richer activity set, boosted rewards handled via ChallengeScope.SEASONAL in RewardRules. */
+    fun holidayEvent(periodKey: String, event: com.swahilib.core.engagement.catalog.SeasonalEventDef, difficulty: Difficulty = Difficulty.INTERMEDIATE): ChallengeTemplate {
+        val activities = listOf(
+            ActivityType.VOCABULARY_QUIZ to "Jaribio maalum la sikukuu",
+            ActivityType.PROVERB_CHALLENGE to "Methali za sikukuu",
+            ActivityType.WORD_BUILDER to "Jenga maneno ya sherehe",
+        )
+        return ChallengeTemplate(
+            scope = ChallengeScope.SEASONAL,
+            title = "\uD83C\uDF89 ${event.title}",
+            description = event.description,
+            difficulty = difficulty,
+            activities = activities.mapIndexed { index, (type, title) ->
+                ChallengeActivity(
+                    id = activityId(periodKey, ChallengeScope.SEASONAL, index),
+                    type = type,
+                    title = title,
+                    estimatedSeconds = 150,
+                    xpReward = RewardRules.activityXp(type, difficulty),
+                )
+            },
+        )
+    }
+
+    /** Weekend Challenge - active Saturday/Sunday, keyed per ISO week so it's created once and stays put all weekend. */
+    fun weekendChallenge(periodKey: String, difficulty: Difficulty = Difficulty.INTERMEDIATE): ChallengeTemplate {
+        val activities = listOf(
+            ActivityType.CROSSWORD to "Msalaba wa wikendi",
+            ActivityType.WORD_SEARCH to "Tafuta maneno ya wikendi",
+            ActivityType.SENTENCE_BUILDER to "Panga sentensi za wikendi",
+        )
+        return ChallengeTemplate(
+            scope = ChallengeScope.SEASONAL,
+            title = "\uD83C\uDF1E Changamoto ya Wikendi",
+            description = "Changamoto maalum ya wikendi yenye zawadi za ziada!",
+            difficulty = difficulty,
+            activities = activities.mapIndexed { index, (type, title) ->
+                ChallengeActivity(
+                    id = activityId(periodKey, ChallengeScope.SEASONAL, index),
+                    type = type,
+                    title = title,
+                    estimatedSeconds = 180,
+                    xpReward = RewardRules.activityXp(type, difficulty),
+                )
+            },
+        )
+    }
+
     private fun practiceTitle(type: ActivityType): String = when (type) {
         ActivityType.VOCABULARY_QUIZ -> "Jaribio la maneno 5"
         ActivityType.WORD_BUILDER -> "Jenga maneno 3"
