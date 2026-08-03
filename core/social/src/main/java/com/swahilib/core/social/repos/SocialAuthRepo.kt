@@ -69,7 +69,7 @@ class SocialAuthRepo @Inject constructor(
         supabase.auth.signInWith(IDToken) {
             idToken = googleIdTokenCredential.idToken
             provider = Google
-            nonce = nonce
+//            nonce = nonce
         }
     }
 

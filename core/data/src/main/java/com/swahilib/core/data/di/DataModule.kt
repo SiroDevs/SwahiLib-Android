@@ -20,6 +20,8 @@ import com.swahilib.core.database.daos.ProverbDao
 import com.swahilib.core.database.daos.SayingDao
 import com.swahilib.core.database.daos.SearchDao
 import com.swahilib.core.database.daos.WordDao
+import com.swahilib.core.engagement.engine.DifficultyEngine
+import com.swahilib.core.engagement.engine.RecommendationEngine
 import com.swahilib.core.network.api.KamusiApi
 import dagger.Module
 import dagger.Provides
@@ -66,6 +68,8 @@ object DataModule {
         challengeEngine: ChallengeEngine,
         achievementEngine: AchievementEngine,
         statisticsEngine: StatisticsEngine,
+        difficultyEngine: DifficultyEngine,
+        recommendationEngine: RecommendationEngine,
     ): EngagementRepo = EngagementRepo(
         prefsRepo,
         xpEngine,
@@ -73,5 +77,7 @@ object DataModule {
         challengeEngine,
         achievementEngine,
         statisticsEngine,
+        difficultyEngine,
+        recommendationEngine,
     )
 }

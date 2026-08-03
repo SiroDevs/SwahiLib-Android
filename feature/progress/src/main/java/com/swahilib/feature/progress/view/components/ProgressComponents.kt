@@ -190,50 +190,6 @@ fun WeeklyActivityChart(days: List<DailyActivitySnapshot>, modifier: Modifier = 
     }
 }
 
-/** Compact card for the achievements grid. Locked badges are dimmed. */
-@Composable
-fun AchievementCard(achievement: Achievement, modifier: Modifier = Modifier) {
-    val alpha = if (achievement.unlocked) 1f else 0.4f
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = if (achievement.unlocked)
-                MaterialTheme.colorScheme.tertiaryContainer
-            else MaterialTheme.colorScheme.surfaceContainerHighest,
-        ),
-    ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Box(
-                Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(50))
-                    .background(MaterialTheme.colorScheme.surface),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(iconFor(achievement.iconKey), style = MaterialTheme.typography.titleLarge)
-            }
-            Spacer(Modifier.height(6.dp))
-            Text(
-                achievement.title,
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
-            )
-            Text(
-                achievement.description,
-                style = MaterialTheme.typography.labelSmall,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha),
-            )
-        }
-    }
-}
-
 private fun iconFor(iconKey: String): String = when (iconKey) {
     "flame" -> "🔥"
     "trophy" -> "🏆"
