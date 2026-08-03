@@ -75,11 +75,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/di/DataModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/di/DataModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/social/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core/social/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/social/src/main/java/com/swahilib/core/social/repos/SocialAuthRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/social/src/main/java/com/swahilib/core/social/repos/SocialAuthRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/progress/src/main/java/com/swahilib/feature/progress/view/components/ProgressComponents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/progress/src/main/java/com/swahilib/feature/progress/view/components/ProgressComponents.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/spelling/src/main/java/com/swahilib/feature/spelling/view/SpellingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/spelling/src/main/java/com/swahilib/feature/spelling/view/SpellingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
