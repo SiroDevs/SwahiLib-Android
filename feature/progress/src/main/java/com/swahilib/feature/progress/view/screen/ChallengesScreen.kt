@@ -26,48 +26,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.engagement.engine.ActivityRecommendation
-import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.progress.view.components.ChallengeCard
+import com.swahilib.feature.progress.view.components.RecommendationRow
+import com.swahilib.feature.progress.view.components.routeForChallengeActivity
 import com.swahilib.feature.progress.viewmodel.ProgressViewModel
-
-private fun routeAndTitleFor(type: String): Pair<String, String> = when (type) {
-    "QUIZ" -> Routes.quizFreeplay() to "Jaribio la Msamiati"
-    "WORD_BUILDER" -> Routes.wordBuilderFreeplay() to "Jenzi la Maneno"
-    "SENTENCE_BUILDER" -> Routes.sentenceBuilderFreeplay() to "Panga Sentensi"
-    "SPELLING" -> Routes.spellingFreeplay() to "Changamoto ya Tahajia"
-    "CROSSWORD" -> Routes.crosswordFreeplay() to "Msalaba wa Maneno"
-    "WORD_SEARCH" -> Routes.wordSearchFreeplay() to "Tafuta Maneno"
-    "PROVERB" -> Routes.quizFreeplay(source = "PROVERBS") to "Changamoto ya Methali"
-    "HANGMAN" -> Routes.hangmanFreeplay() to "Hangman"
-    else -> Routes.quizFreeplay() to "Jaribio la Msamiati"
-}
-
-@Composable
-private fun RecommendationRow(rec: ActivityRecommendation, onNavigate: (String) -> Unit) {
-    val (route, title) = routeAndTitleFor(rec.type)
-    androidx.compose.material3.Card(
-        onClick = { onNavigate(route) },
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Column(Modifier.padding(14.dp)) {
-            Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
-            Text(
-                rec.reason,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            rec.recentAccuracy?.let { acc ->
-                Text(
-                    "Usahihi wa hivi karibuni: ${(acc * 100).toInt()}%",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-        }
-    }
-}
 
 @Composable
 fun ChallengesScreen(
@@ -147,32 +110,11 @@ fun ChallengesScreen(
                     ChallengeCard(
                         challenge = c,
                         onStartActivity = { activity ->
-                            when (activity.type) {
-                                ActivityType.VOCABULARY_QUIZ -> navController.navigate(
-                                    Routes.quiz(c.id, activity.id, c.difficulty.name)
-                                )
-                                ActivityType.PROVERB_CHALLENGE -> navController.navigate(
-                                    Routes.quiz(c.id, activity.id, c.difficulty.name, source = "PROVERBS")
-                                )
-                                ActivityType.WORD_BUILDER -> navController.navigate(
-                                    Routes.wordBuilder(c.id, activity.id, c.difficulty.name)
-                                )
-                                ActivityType.SENTENCE_BUILDER -> navController.navigate(
-                                    Routes.sentenceBuilder(c.id, activity.id, c.difficulty.name)
-                                )
-                                ActivityType.SPELLING_CHALLENGE -> navController.navigate(
-                                    Routes.spelling(c.id, activity.id, c.difficulty.name)
-                                )
-                                ActivityType.CROSSWORD -> navController.navigate(
-                                    Routes.crossword(c.id, activity.id, c.difficulty.name)
-                                )
-                                ActivityType.WORD_SEARCH -> navController.navigate(
-                                    Routes.wordSearch(c.id, activity.id, c.difficulty.name)
-                                )
-                                ActivityType.HANGMAN -> navController.navigate(
-                                    Routes.hangman(c.id, activity.id, c.difficulty.name)
-                                )
-                                else -> viewModel.completeActivity(c.id, activity.id)
+                            val route = routeForChallengeActivity(c, activity)
+                            if (route != null) {
+                                navController.navigate(route)
+                            } else {
+                                viewModel.completeActivity(c.id, activity.id)
                             }
                         },
                     )

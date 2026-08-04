@@ -175,7 +175,7 @@ fun HomeNavDrawer(
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-                    label = { Text("Mipangilio") },
+                    label = { Text("Mipangilio ya SwahiLib") },
                     selected = false,
                     onClick = { navigateAndClose(Routes.SETTINGS) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)

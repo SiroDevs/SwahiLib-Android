@@ -107,7 +107,7 @@ fun PaymentWebViewScreen(
                             ): Boolean {
                                 val url = request?.url?.toString() ?: return false
 
-                                if (url.startsWith(ApiConstants.DONATION_CALLBACK_URL)) {
+                                if (url.startsWith(ApiConstants.PAYSTACK_CALLBACK_URL)) {
                                     val isCancelled = url.contains("cancelled=true", ignoreCase = true)
                                     val hasReference = url.contains("reference=", ignoreCase = true)
                                     onPaymentComplete(!isCancelled && hasReference)

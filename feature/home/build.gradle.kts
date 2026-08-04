@@ -10,6 +10,8 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
+    implementation(project(":core:engagement"))
+    implementation(project(":feature:progress"))
     implementation(libs.androidx.foundation)
 
     implementation(libs.androidx.work.runtime)

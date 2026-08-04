@@ -1,4 +1,4 @@
-package com.swahilib.navigation
+package com.swahilib.app.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable

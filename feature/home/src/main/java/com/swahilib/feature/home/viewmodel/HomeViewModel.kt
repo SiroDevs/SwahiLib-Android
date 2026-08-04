@@ -25,18 +25,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-/**
- * Thin orchestrator over five controllers, split by concern so each stays
- * readable on its own - the same pattern used for BibleLib's ReaderViewModel
- * refactor: [ContentController] (data loading + search/filter + likes),
- * [ReadingHistoryController] (items opened), [SearchHistoryController]
- * (search text + review nudge), [DailyHighlightsController] (word/proverb
- * of the day + streak), and [TabController] (bottom-nav/sub-tab state).
- *
- * HomeViewModel's public surface (StateFlow names, function signatures,
- * nested types) is intentionally unchanged from before this split, so none
- * of the Home screens/tabs that consume it needed to change.
- */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     idiomRepo: IdiomRepo,
@@ -75,7 +63,6 @@ class HomeViewModel @Inject constructor(
     private val searchHistoryController = SearchHistoryController(searchRepo, viewModelScope)
     private val tabController = TabController()
 
-    // ── Content / search / likes → ContentController ──
     val uiState: StateFlow<UiState> get() = content.uiState
     val filteredIdioms: StateFlow<List<IdiomEntity>> get() = content.filteredIdioms
     val filteredProverbs: StateFlow<List<ProverbEntity>> get() = content.filteredProverbs
@@ -86,7 +73,6 @@ class HomeViewModel @Inject constructor(
     val likedProverbs: StateFlow<List<ProverbEntity>> get() = content.likedProverbs
     val likedSayings: StateFlow<List<SayingEntity>> get() = content.likedSayings
 
-    /** Kicks off content loading and a reading-history refresh; cheap enough to call idempotently. */
     fun fetchData(force: Boolean = false) {
         content.fetchData(force)
         readingHistory.refreshHistory()

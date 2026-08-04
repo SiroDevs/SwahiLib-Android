@@ -17,6 +17,7 @@
 package com.swahilib.feature.home.view.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Search
@@ -37,10 +38,12 @@ sealed class HomeTab(var title: String, var icon: ImageVector) {
     object Search : HomeTab("Tafuta", Icons.Default.Search)
     object Likes : HomeTab("Vipendwa", Icons.Default.Favorite)
     object History : HomeTab("Historia", Icons.Default.History)
+    object Engagement : HomeTab("Maendeleo", Icons.Default.EmojiEvents)
 }
 
 val homeTabs = listOf(
     HomeTab.Search,
     HomeTab.Likes,
     HomeTab.History,
+    HomeTab.Engagement,
 )

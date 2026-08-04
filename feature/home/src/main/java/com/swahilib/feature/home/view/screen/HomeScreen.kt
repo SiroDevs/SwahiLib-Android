@@ -9,8 +9,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteSweep
-import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.InsertChart
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -50,6 +48,7 @@ import com.swahilib.feature.home.view.components.HomeNavDrawer
 import com.swahilib.feature.home.view.components.HomeSkeleton
 import com.swahilib.feature.home.view.components.HomeTab
 import com.swahilib.feature.home.view.components.homeTabs
+import com.swahilib.feature.home.view.screen.tabs.HomeEngagement
 import com.swahilib.feature.home.view.screen.tabs.HomeHistory
 import com.swahilib.feature.home.view.screen.tabs.HomeLikes
 import com.swahilib.feature.home.view.screen.tabs.HomeSearch
@@ -154,12 +153,6 @@ fun HomeScreen(
                                 }
                             }
                         }
-                        IconButton(onClick = { navController.navigate(Routes.PROGRESS) }) {
-                            Icon(Icons.Default.EmojiEvents, contentDescription = "Maendeleo")
-                        }
-                        IconButton(onClick = { navController.navigate(Routes.STATISTICS) }) {
-                            Icon(Icons.Default.InsertChart, contentDescription = "Takwimu")
-                        }
                     }
                 )
             },
@@ -216,6 +209,9 @@ fun HomeScreen(
                                     )
                                     HomeTab.History -> HomeHistory(
                                         viewModel = viewModel,
+                                        navController = navController,
+                                    )
+                                    HomeTab.Engagement -> HomeEngagement(
                                         navController = navController,
                                     )
                                 }

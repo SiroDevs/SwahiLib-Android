@@ -129,7 +129,7 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Mipangilio",
+                title = "Mipangilio ya SwahiLib",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() }
             )

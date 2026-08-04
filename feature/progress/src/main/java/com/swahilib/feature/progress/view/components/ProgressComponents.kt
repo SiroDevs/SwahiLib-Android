@@ -24,11 +24,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.DailyActivitySnapshot
 import com.swahilib.core.engagement.model.UserProgress
+
+/** Title + optional "see all" text action, used above every list section on the engagement screens. */
+@Composable
+fun SectionHeader(
+    title: String,
+    actionLabel: String? = null,
+    onAction: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(
+            title,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+        )
+        if (actionLabel != null) TextButton(onClick = onAction) { Text(actionLabel) }
+    }
+}
 
 /** Level chip + XP progress bar. Sits at the top of the dashboard. */
 @Composable

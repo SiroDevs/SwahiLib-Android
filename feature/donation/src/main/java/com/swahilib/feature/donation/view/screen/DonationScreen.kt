@@ -47,7 +47,7 @@ import com.swahilib.feature.donation.view.components.PresetAmountGrid
 import kotlinx.coroutines.launch
 
 private const val DEFAULT_PRESET = 500
-private const val MINIMUM_DONATION = 100
+private const val MINIMUM_DONATION = 50
 
 @Composable
 fun DonationScreen(
@@ -191,7 +191,7 @@ fun DonationScreen(
                         }
                     },
                     label = { Text("Or input your amount (KES)") },
-                    placeholder = { Text("Minimum is 100") },
+                    placeholder = { Text("Minimum is 50") },
                     prefix = { Text("KES") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
