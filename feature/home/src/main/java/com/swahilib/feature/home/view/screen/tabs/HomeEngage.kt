@@ -41,14 +41,12 @@ import com.swahilib.core.ui.components.progress.routeForChallengeActivity
 import com.swahilib.feature.home.viewmodel.HomeViewModel
 
 @Composable
-fun HomeEngagement(
+fun HomeEngage(
     navController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) { viewModel.refreshProgress() }
 
-    // Re-pull whenever Home resumes (e.g. returning from a game after completing an activity) -
-    // same pattern as ChallengesScreen, since this data is fetched once rather than observed live.
     val currentOnResume = rememberUpdatedState(viewModel::refreshProgress)
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {

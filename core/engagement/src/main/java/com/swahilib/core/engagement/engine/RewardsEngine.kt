@@ -6,20 +6,12 @@ import com.swahilib.core.engagement.model.XpSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Grants coins and multi-source login rewards. XP awards flow through
- * [XpEngine] so the ledger stays complete.
- *
- * `grantDailyLogin` is idempotent per calendar day - the caller (typically
- * MainViewModel on app resume) can call it every launch without worry.
- */
 @Singleton
 class RewardsEngine @Inject constructor(
     private val store: ProgressStore,
     private val xpEngine: XpEngine,
 ) {
 
-    /** Add [amount] coins to the user's balance. Refuses to go negative. */
     suspend fun grantCoins(amount: Int): Long {
         val progress = store.loadOrInitProgress()
         val next = (progress.coins + amount).coerceAtLeast(0)
@@ -27,7 +19,6 @@ class RewardsEngine @Inject constructor(
         return next
     }
 
-    /** Try to spend [amount] coins. Returns true iff there was enough. */
     suspend fun spendCoins(amount: Int): Boolean {
         val progress = store.loadOrInitProgress()
         if (progress.coins < amount) return false
@@ -35,13 +26,6 @@ class RewardsEngine @Inject constructor(
         return true
     }
 
-    /**
-     * Grants the daily-login XP + coin bonus and (if the caller has already
-     * ticked the streak forward for today) any streak-milestone bonus.
-     *
-     * Returns the underlying XP award result so callers can show a celebration.
-     * Returns null if the reward has already been granted today.
-     */
     suspend fun grantDailyLogin(streakDay: Int, alreadyClaimedToday: Boolean): AwardResult? {
         if (alreadyClaimedToday) return null
 

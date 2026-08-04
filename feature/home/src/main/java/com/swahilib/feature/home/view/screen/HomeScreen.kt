@@ -8,9 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.InsertChart
+import androidx.compose.material.icons.filled.TrackChanges
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -46,6 +47,7 @@ import com.swahilib.feature.home.view.components.HomeNavDrawer
 import com.swahilib.feature.home.view.components.HomeSkeleton
 import com.swahilib.feature.home.view.components.HomeTab
 import com.swahilib.feature.home.view.components.homeTabs
+import com.swahilib.feature.home.view.screen.tabs.HomeEngage
 import com.swahilib.feature.home.view.screen.tabs.HomeSearch
 import com.swahilib.feature.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
@@ -106,8 +108,6 @@ fun HomeScreen(
         if (idx >= 0 && pagerState.currentPage != idx) pagerState.animateScrollToPage(idx)
     }
 
-    // Picks up a query the standalone History screen handed back (e.g. tapping a search-history
-    // row or a review nudge), pre-filling Search - mirrors History's requestSearchOnHome() sender.
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     LaunchedEffect(currentBackStackEntry) {
         val handle = currentBackStackEntry?.savedStateHandle
@@ -131,11 +131,24 @@ fun HomeScreen(
                     showNavDrawer = true,
                     onNavIconClick = { scope.launch { drawerState.open() } },
                     actions = {
-                        IconButton(onClick = { navController.navigate(Routes.LIKES) }) {
-                            Icon(Icons.Default.Favorite, contentDescription = "Vipendwa")
-                        }
-                        IconButton(onClick = { navController.navigate(Routes.HISTORY) }) {
-                            Icon(Icons.Default.History, contentDescription = "Historia")
+                        when (selectedTab) {
+                            HomeTab.Search -> {
+                                IconButton(onClick = { navController.navigate(Routes.LIKES) }) {
+                                    Icon(Icons.Default.Favorite, contentDescription = "Vipendwa")
+                                }
+                                IconButton (onClick = { navController.navigate(Routes.HISTORY) }) {
+                                    Icon(Icons.Default.History, contentDescription = "Historia")
+                                }
+                            }
+
+                            HomeTab.Engage -> {
+                                IconButton (onClick = { navController.navigate(Routes.CHALLENGES) }) {
+                                    Icon(Icons.Default.TrackChanges, contentDescription = "Changamoto")
+                                }
+                                IconButton (onClick = { navController.navigate(Routes.STATISTICS) }) {
+                                    Icon(Icons.Default.InsertChart, contentDescription = "Takwimu")
+                                }
+                            }
                         }
                     }
                 )
@@ -157,21 +170,6 @@ fun HomeScreen(
                             )
                         )
                     }
-                    // ChemshaBongo isn't a swipeable page like the tabs above - it opens the
-                    // engagement dashboard as its own screen, so it just navigates on tap.
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.EmojiEvents, contentDescription = "ChemshaBongo") },
-                        label = { Text("ChemshaBongo") },
-                        selected = false,
-                        onClick = { navController.navigate(Routes.PROGRESS) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    )
                 }
             }
         ) { paddingValues ->
@@ -202,13 +200,20 @@ fun HomeScreen(
                                         prefsRepo = prefsRepo,
                                         onShowDonation = { navController.navigate(Routes.DONATION) },
                                     )
+
+                                    HomeTab.Engage -> HomeEngage(
+                                        viewModel = viewModel,
+                                        navController = navController,
+                                    )
                                 }
                             }
                         }
+
                         is UiState.Error -> ErrorState(
                             message = (uiState as UiState.Error).message,
                             onRetry = { viewModel.fetchData() }
                         )
+
                         is UiState.Loading -> HomeSkeleton()
                         else -> EmptyState()
                     }

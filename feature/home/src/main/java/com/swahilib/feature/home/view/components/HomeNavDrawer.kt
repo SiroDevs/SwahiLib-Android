@@ -125,30 +125,6 @@ fun HomeNavDrawer(
 
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Default.EmojiEvents, contentDescription = null) },
-                    label = { Text("ChemshaBongo") },
-                    selected = false,
-                    onClick = { navigateAndClose(Routes.PROGRESS) },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Default.TrackChanges, contentDescription = null) },
-                    label = { Text("Changamoto Zangu") },
-                    selected = false,
-                    onClick = { navigateAndClose(Routes.CHALLENGES) },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Default.InsertChart, contentDescription = null) },
-                    label = { Text("Takwimu Zangu") },
-                    selected = false,
-                    onClick = { navigateAndClose(Routes.STATISTICS) },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                )
-
-//                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
                 Spacer(Modifier.weight(1f))
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.Info, contentDescription = null) },
