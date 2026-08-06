@@ -9,7 +9,6 @@ import com.swahilib.core.network.mapper.MapDtoToEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,7 +45,14 @@ class IdiomRepo @Inject constructor(
     fun getIdiomsByTitles(titles: List<String>): Flow<List<IdiomEntity>> =
         idiomsDao.getIdiomsByTitles(titles)
 
-    suspend fun getIdiomById(idiomId: String): Flow<IdiomEntity> = flow {}
+    /** Direct lookup by primary key, e.g. to resolve a history row back to its idiom. */
+    suspend fun getIdiomByRid(rid: Int): IdiomEntity? = withContext(Dispatchers.IO) {
+        idiomsDao.getByRid(rid)
+    }
+
+    suspend fun clearAllLikes() = withContext(Dispatchers.IO) {
+        idiomsDao.clearAllLiked()
+    }
 
     companion object { private const val TAG = "IdiomRepo" }
 }

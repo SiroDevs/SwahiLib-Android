@@ -180,7 +180,7 @@ class SocialRepo @Inject constructor(
     suspend fun createFriendChallenge(opponentId: String, activityType: String, difficulty: String): Result<FriendChallenge> = runCatching {
         val uid = userId ?: error("Not signed in")
         val seed = Random.nextLong()
-        val dto = supabase.from("friend_challenges").insert(
+        val dto = supabase.from("challenges").insert(
             FriendChallengeDto(
                 challengerId = uid,
                 opponentId = opponentId,
@@ -200,7 +200,7 @@ class SocialRepo @Inject constructor(
 
     suspend fun myFriendChallenges(): List<FriendChallenge> {
         val uid = userId ?: return emptyList()
-        val challenges = supabase.from("friend_challenges").select {
+        val challenges = supabase.from("challenges").select {
             filter {
                 or {
                     eq("challenger_id", uid)
@@ -224,7 +224,7 @@ class SocialRepo @Inject constructor(
 
     suspend fun submitFriendChallengeScore(challengeId: String, score: Int, iAmChallenger: Boolean): Result<Unit> = runCatching {
         val field = if (iAmChallenger) "challenger_score" else "opponent_score"
-        supabase.from("friend_challenges").update(mapOf(field to score, "status" to "active")) {
+        supabase.from("challenges").update(mapOf(field to score, "status" to "active")) {
             filter { eq("id", challengeId) }
         }
     }
@@ -233,7 +233,7 @@ class SocialRepo @Inject constructor(
 
     suspend fun postAchievementUnlock(achievementId: String): Result<Unit> = runCatching {
         val uid = userId ?: error("Not signed in")
-        supabase.from("achievement_feed").insert(
+        supabase.from("achievements").insert(
             AchievementFeedDto(userId = uid, achievementId = achievementId),
         )
     }
@@ -242,7 +242,7 @@ class SocialRepo @Inject constructor(
         val friendIds = friends().filter { it.status == FriendshipStatus.ACCEPTED }.map { it.profile.userId }
         if (friendIds.isEmpty()) return emptyList()
 
-        val items = supabase.from("achievement_feed").select {
+        val items = supabase.from("achievements").select {
             filter { isIn("user_id", friendIds) }
             order("unlocked_at", order = Order.DESCENDING)
             limit(limit.toLong())

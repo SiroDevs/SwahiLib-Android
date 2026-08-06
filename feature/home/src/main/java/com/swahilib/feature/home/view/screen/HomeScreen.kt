@@ -8,10 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DeleteSweep
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,7 +21,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
@@ -43,15 +42,12 @@ import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.feature.home.view.components.DailyHighlightsDialog
-import com.swahilib.feature.home.viewmodel.HomeViewModel
 import com.swahilib.feature.home.view.components.HomeNavDrawer
 import com.swahilib.feature.home.view.components.HomeSkeleton
 import com.swahilib.feature.home.view.components.HomeTab
 import com.swahilib.feature.home.view.components.homeTabs
-import com.swahilib.feature.home.view.screen.tabs.HomeEngagement
-import com.swahilib.feature.home.view.screen.tabs.HomeHistory
-import com.swahilib.feature.home.view.screen.tabs.HomeLikes
 import com.swahilib.feature.home.view.screen.tabs.HomeSearch
+import com.swahilib.feature.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -68,24 +64,6 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    val likedWords by viewModel.likedWords.collectAsState(initial = emptyList())
-    val likedIdioms by viewModel.likedIdioms.collectAsState(initial = emptyList())
-    val likedProverbs by viewModel.likedProverbs.collectAsState(initial = emptyList())
-    val likedSayings by viewModel.likedSayings.collectAsState(initial = emptyList())
-    val hasLikes = likedWords.isNotEmpty() || likedIdioms.isNotEmpty() ||
-        likedProverbs.isNotEmpty() || likedSayings.isNotEmpty()
-
-    val readingHistory by viewModel.history.collectAsState(initial = emptyList())
-    val searchHistory by viewModel.searchHistory.collectAsState(initial = emptyList())
-    val historySubTab by viewModel.historySubTab.collectAsState()
-    val hasHistoryItems = if (historySubTab == HomeViewModel.HistorySubTab.USOMAJI) {
-        readingHistory.isNotEmpty()
-    } else {
-        searchHistory.isNotEmpty()
-    }
-
-    var showClearLikesDialog by remember { mutableStateOf(false) }
-    var showClearHistoryDialog by remember { mutableStateOf(false) }
     var showDailyDialog by remember { mutableStateOf(false) }
     val dailyHighlights by viewModel.dailyHighlights.collectAsState()
 
@@ -128,6 +106,18 @@ fun HomeScreen(
         if (idx >= 0 && pagerState.currentPage != idx) pagerState.animateScrollToPage(idx)
     }
 
+    // Picks up a query the standalone History screen handed back (e.g. tapping a search-history
+    // row or a review nudge), pre-filling Search - mirrors History's requestSearchOnHome() sender.
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    LaunchedEffect(currentBackStackEntry) {
+        val handle = currentBackStackEntry?.savedStateHandle
+        val pending = handle?.get<String>("pendingSearchQuery")
+        if (pending != null) {
+            viewModel.requestSearch(pending)
+            handle.remove<String>("pendingSearchQuery")
+        }
+    }
+
     HomeNavDrawer(
         drawerState = drawerState,
         onNavigate = { navController.navigate(it) }
@@ -141,17 +131,11 @@ fun HomeScreen(
                     showNavDrawer = true,
                     onNavIconClick = { scope.launch { drawerState.open() } },
                     actions = {
-                        when {
-                            selectedTab == HomeTab.Likes && hasLikes -> {
-                                IconButton(onClick = { showClearLikesDialog = true }) {
-                                    Icon(Icons.Default.DeleteSweep, contentDescription = "Futa Vipendwa")
-                                }
-                            }
-                            selectedTab == HomeTab.History && hasHistoryItems -> {
-                                IconButton(onClick = { showClearHistoryDialog = true }) {
-                                    Icon(Icons.Default.DeleteSweep, contentDescription = "Futa Historia")
-                                }
-                            }
+                        IconButton(onClick = { navController.navigate(Routes.LIKES) }) {
+                            Icon(Icons.Default.Favorite, contentDescription = "Vipendwa")
+                        }
+                        IconButton(onClick = { navController.navigate(Routes.HISTORY) }) {
+                            Icon(Icons.Default.History, contentDescription = "Historia")
                         }
                     }
                 )
@@ -173,6 +157,21 @@ fun HomeScreen(
                             )
                         )
                     }
+                    // ChemshaBongo isn't a swipeable page like the tabs above - it opens the
+                    // engagement dashboard as its own screen, so it just navigates on tap.
+                    NavigationBarItem(
+                        icon = { Icon(Icons.Default.EmojiEvents, contentDescription = "ChemshaBongo") },
+                        label = { Text("ChemshaBongo") },
+                        selected = false,
+                        onClick = { navController.navigate(Routes.PROGRESS) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                            indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    )
                 }
             }
         ) { paddingValues ->
@@ -203,17 +202,6 @@ fun HomeScreen(
                                         prefsRepo = prefsRepo,
                                         onShowDonation = { navController.navigate(Routes.DONATION) },
                                     )
-                                    HomeTab.Likes -> HomeLikes(
-                                        viewModel = viewModel,
-                                        navController = navController,
-                                    )
-                                    HomeTab.History -> HomeHistory(
-                                        viewModel = viewModel,
-                                        navController = navController,
-                                    )
-                                    HomeTab.Engagement -> HomeEngagement(
-                                        navController = navController,
-                                    )
                                 }
                             }
                         }
@@ -227,44 +215,6 @@ fun HomeScreen(
                 } // Box
             } // Column
         }
-    }
-
-    if (showClearLikesDialog) {
-        AlertDialog(
-            onDismissRequest = { showClearLikesDialog = false },
-            title = { Text("Futa Vipendwa") },
-            text = { Text("Je ungependa kufuta vipendwa vyako") },
-            confirmButton = {
-                Button(onClick = {
-                    viewModel.clearAllLikes()
-                    showClearLikesDialog = false
-                }) { Text("Ndio") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showClearLikesDialog = false }) { Text("Hapana") }
-            },
-        )
-    }
-
-    if (showClearHistoryDialog) {
-        AlertDialog(
-            onDismissRequest = { showClearHistoryDialog = false },
-            title = { Text("Futa Historia") },
-            text = { Text("Je, Ungependa kufuta Historia yako?") },
-            confirmButton = {
-                Button(onClick = {
-                    if (historySubTab == HomeViewModel.HistorySubTab.USOMAJI) {
-                        viewModel.clearReadingHistory()
-                    } else {
-                        viewModel.clearSearchHistory()
-                    }
-                    showClearHistoryDialog = false
-                }) { Text("Ndio") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showClearHistoryDialog = false }) { Text("Hapana") }
-            },
-        )
     }
 
     if (showDailyDialog) {

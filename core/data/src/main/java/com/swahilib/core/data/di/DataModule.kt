@@ -11,6 +11,7 @@ import com.swahilib.core.data.repos.SearchRepo
 import com.swahilib.core.data.repos.WordRepo
 import com.swahilib.core.engagement.engine.AchievementEngine
 import com.swahilib.core.engagement.engine.ChallengeEngine
+import com.swahilib.core.engagement.engine.ProgressStore
 import com.swahilib.core.engagement.engine.RewardsEngine
 import com.swahilib.core.engagement.engine.StatisticsEngine
 import com.swahilib.core.engagement.engine.XpEngine
@@ -63,6 +64,7 @@ object DataModule {
     @Provides @Singleton
     fun provideEngagementRepo(
         prefsRepo: PrefsRepo,
+        store: ProgressStore,
         xpEngine: XpEngine,
         rewardsEngine: RewardsEngine,
         challengeEngine: ChallengeEngine,
@@ -72,6 +74,7 @@ object DataModule {
         recommendationEngine: RecommendationEngine,
     ): EngagementRepo = EngagementRepo(
         prefsRepo,
+        store,
         xpEngine,
         rewardsEngine,
         challengeEngine,

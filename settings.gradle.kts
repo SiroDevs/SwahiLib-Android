@@ -38,6 +38,8 @@ include(":core:ui")
 
 // Feature modules
 include(":feature:home")
+include(":feature:likes")
+include(":feature:history")
 include(":feature:advanced_search")
 include(":feature:word")
 include(":feature:idiom")

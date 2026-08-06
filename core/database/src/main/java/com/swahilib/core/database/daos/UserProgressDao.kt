@@ -22,4 +22,7 @@ interface UserProgressDao {
 
     @Update
     suspend fun update(entity: UserProgressEntity)
+
+    @Query("DELETE FROM user_progress")
+    suspend fun deleteAll()
 }

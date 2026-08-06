@@ -35,6 +35,11 @@ import com.swahilib.feature.proverb.view.screen.ProverbScreen
 import com.swahilib.feature.saying.view.SayingScreen
 import com.swahilib.feature.word.view.WordScreen
 import com.swahilib.feature.settings.view.screen.SettingsScreen
+import com.swahilib.feature.settings.view.screen.AppearanceSettingsScreen
+import com.swahilib.feature.settings.view.screen.NotificationSettingsScreen
+import com.swahilib.feature.settings.view.screen.DataSettingsScreen
+import com.swahilib.feature.likes.view.LikesScreen
+import com.swahilib.feature.history.view.HistoryScreen
 import com.swahilib.feature.how_it_works.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
 import com.swahilib.feature.donation.view.screen.DonationScreen
@@ -138,12 +143,28 @@ fun AppNavHost(
         }
 
         composable(Routes.SETTINGS) {
+            SettingsScreen(navController = navController)
+        }
+
+        composable(Routes.SETTINGS_APPEARANCE) {
+            AppearanceSettingsScreen(navController = navController, themeRepo = themeRepo)
+        }
+
+        composable(Routes.SETTINGS_NOTIFICATIONS) {
             val viewModel: SettingsViewModel = hiltViewModel()
-            SettingsScreen(
-                navController = navController,
-                viewModel = viewModel,
-                themeRepo = themeRepo
-            )
+            NotificationSettingsScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable(Routes.SETTINGS_DATA) {
+            DataSettingsScreen(navController = navController)
+        }
+
+        composable(Routes.LIKES) {
+            LikesScreen(navController = navController)
+        }
+
+        composable(Routes.HISTORY) {
+            HistoryScreen(navController = navController)
         }
 
         composable(Routes.ADVANCED_SEARCH) {

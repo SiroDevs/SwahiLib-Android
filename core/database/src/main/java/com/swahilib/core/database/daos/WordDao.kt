@@ -29,6 +29,9 @@ interface WordDao {
     @Query("DELETE FROM words")
     fun delete()
 
+    @Query("UPDATE words SET liked = 0 WHERE liked = 1")
+    suspend fun clearAllLiked()
+
     /**
      * Exact-match-first search:
      *  Priority 0 – title exactly equals query

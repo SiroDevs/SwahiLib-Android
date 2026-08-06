@@ -17,7 +17,10 @@ if (keystorePropertiesFile.exists()) {
 }
 
 val localProperties = Properties()
-localProperties.load(project.rootProject.file("local.properties").inputStream())
+val localPropertiesFile = project.rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
 
 android {
     compileSdk = 37
@@ -102,6 +105,8 @@ dependencies {
 
     // Feature modules
     implementation(project(":feature:home"))
+    implementation(project(":feature:likes"))
+    implementation(project(":feature:history"))
     implementation(project(":feature:advanced_search"))
     implementation(project(":feature:word"))
     implementation(project(":feature:idiom"))

@@ -127,7 +127,7 @@ fun HomeNavDrawer(
 
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.EmojiEvents, contentDescription = null) },
-                    label = { Text("Maendeleo Yangu") },
+                    label = { Text("ChemshaBongo") },
                     selected = false,
                     onClick = { navigateAndClose(Routes.PROGRESS) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)

@@ -46,11 +46,15 @@ class SocialAuthRepo @Inject constructor(
      * resulting ID token with Supabase Auth. Returns true on success.
      */
     suspend fun signInWithGoogle(context: Context): Result<Unit> = runCatching {
-        val nonce = generateNonce()
+        // Google needs the SHA-256 hash of the nonce; Supabase needs the raw value to verify
+        // against that hash - see https://supabase.com/docs/guides/auth/social-login/auth-google
+        val rawNonce = generateNonce()
+        val hashedNonce = sha256Hex(rawNonce)
+
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
             .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-            .setNonce(nonce)
+            .setNonce(hashedNonce)
             .build()
 
         val request = GetCredentialRequest.Builder()
@@ -69,7 +73,7 @@ class SocialAuthRepo @Inject constructor(
         supabase.auth.signInWith(IDToken) {
             idToken = googleIdTokenCredential.idToken
             provider = Google
-//            nonce = nonce
+            nonce = rawNonce
         }
     }
 
@@ -81,5 +85,10 @@ class SocialAuthRepo @Inject constructor(
         val bytes = ByteArray(16)
         SecureRandom().nextBytes(bytes)
         return bytes.joinToString("") { "%02x".format(it) } + UUID.randomUUID().toString().take(8)
+    }
+
+    private fun sha256Hex(input: String): String {
+        val digest = java.security.MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
+        return digest.joinToString("") { "%02x".format(it) }
     }
 }

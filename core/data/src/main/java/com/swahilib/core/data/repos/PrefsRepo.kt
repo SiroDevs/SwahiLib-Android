@@ -193,6 +193,14 @@ class PrefsRepo @Inject constructor(
         return newCount
     }
 
+    /** Used by the "Futa ChemshaBongo" data-clearing action. */
+    fun resetStreaks() {
+        streakCount = 0
+        bestStreak = 0
+        streakLastDate = ""
+        lastDailyLoginDate = ""
+    }
+
     private fun dateKey(daysAgo: Int): String {
         val cal = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -daysAgo) }
         return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(cal.time)

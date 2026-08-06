@@ -20,4 +20,7 @@ interface DailyContentDao {
 
     @Query("SELECT * FROM daily_content ORDER BY date DESC")
     suspend fun getAll(): List<DailyContentEntity>
+
+    @Query("DELETE FROM daily_content")
+    suspend fun deleteAll()
 }

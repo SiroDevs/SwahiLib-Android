@@ -4,6 +4,7 @@ import com.swahilib.core.engagement.engine.AchievementEngine
 import com.swahilib.core.engagement.engine.ActivityRecommendation
 import com.swahilib.core.engagement.engine.ChallengeEngine
 import com.swahilib.core.engagement.engine.DifficultyEngine
+import com.swahilib.core.engagement.engine.ProgressStore
 import com.swahilib.core.engagement.engine.RecommendationEngine
 import com.swahilib.core.engagement.engine.RewardsEngine
 import com.swahilib.core.engagement.engine.StatisticsEngine
@@ -29,6 +30,7 @@ import javax.inject.Singleton
 @Singleton
 class EngagementRepo @Inject constructor(
     private val prefsRepo: PrefsRepo,
+    private val store: ProgressStore,
     private val xpEngine: XpEngine,
     private val rewardsEngine: RewardsEngine,
     private val challengeEngine: ChallengeEngine,
@@ -122,6 +124,12 @@ class EngagementRepo @Inject constructor(
             secondsSpent = secondsSpent,
         )
         return achievementEngine.checkForUnlocksAfterActivity()
+    }
+
+    /** Wipes all engagement data (XP, streaks, challenges, achievements, stats) - used by "Futa ChemshaBongo". */
+    suspend fun clearAllEngagementData() {
+        store.clearAll()
+        prefsRepo.resetStreaks()
     }
 
     data class DailyLoginOutcome(

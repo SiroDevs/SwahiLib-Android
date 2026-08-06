@@ -29,6 +29,9 @@ interface ProverbDao {
     @Query("DELETE FROM proverbs")
     fun delete()
 
+    @Query("UPDATE proverbs SET liked = 0 WHERE liked = 1")
+    suspend fun clearAllLiked()
+
     @Query("SELECT * FROM proverbs WHERE title LIKE '%' || :title || '%'")
     fun searchProverbByTitle(title: String?): Flow<List<ProverbEntity>>
 

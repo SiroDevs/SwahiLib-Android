@@ -54,4 +54,10 @@ interface ChallengeDao {
 
     @Query("DELETE FROM challenge_activities WHERE challengeId NOT IN (SELECT id FROM challenges)")
     suspend fun purgeOrphanActivities()
+
+    @Query("DELETE FROM challenges")
+    suspend fun deleteAllChallenges()
+
+    @Query("DELETE FROM challenge_activities")
+    suspend fun deleteAllActivities()
 }

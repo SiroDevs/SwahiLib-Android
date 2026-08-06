@@ -24,4 +24,7 @@ interface AchievementRecordDao {
 
     @Query("SELECT COUNT(*) FROM achievement_records")
     suspend fun count(): Int
+
+    @Query("DELETE FROM achievement_records")
+    suspend fun deleteAll()
 }

@@ -3,33 +3,12 @@ package com.swahilib.feature.settings.view.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-
-@Composable
-fun ConfirmResetDialog(
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text("Sawa")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Ghairi")
-            }
-        },
-        title = { Text("Weka upya data ya Kitumizi?") },
-        text = { Text("Je, una uhakika unataka kuweka upya kila kitu na kuanza upya?") }
-    )
-}
 
 @Composable
 fun SettingsSectionTitle(text: String) {

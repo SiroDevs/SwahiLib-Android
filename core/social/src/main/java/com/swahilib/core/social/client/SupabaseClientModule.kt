@@ -10,6 +10,8 @@ import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.realtime.Realtime
+import io.github.jan.supabase.serializer.KotlinXSerializer
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 /**
@@ -29,6 +31,10 @@ object SupabaseClientModule {
         supabaseUrl = BuildConfig.SUPABASE_URL,
         supabaseKey = BuildConfig.SUPABASE_ANON_KEY,
     ) {
+        // Our DTOs intentionally don't model every column (e.g. competitions.created_at,
+        // scores.updated_at) - without this, decoding a plain `select()` (which returns every
+        // column) would throw on any field we didn't bother mapping.
+        defaultSerializer = KotlinXSerializer(Json { ignoreUnknownKeys = true })
         install(Auth)
         install(Postgrest)
         install(Realtime)

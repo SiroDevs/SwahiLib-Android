@@ -32,4 +32,7 @@ interface LearningHistoryDao {
 
     @Query("SELECT COALESCE(SUM(secondsSpent), 0) FROM learning_history")
     suspend fun totalSeconds(): Long
+
+    @Query("DELETE FROM learning_history")
+    suspend fun deleteAll()
 }

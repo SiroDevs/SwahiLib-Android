@@ -11,7 +11,7 @@ data class ProfileDto(
     val level: Int = 1,
     @SerialName("total_xp") val totalXp: Int = 0,
     @SerialName("current_streak") val currentStreak: Int = 0,
-    @SerialName("friend_code") val friendCode: String,
+    @SerialName("friend_code") val friendCode: String = "",
     @SerialName("created_at") val createdAt: String? = null,
     @SerialName("updated_at") val updatedAt: String? = null,
 )

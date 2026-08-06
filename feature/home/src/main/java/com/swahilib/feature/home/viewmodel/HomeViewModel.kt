@@ -12,19 +12,23 @@ import com.swahilib.core.data.repos.ProverbRepo
 import com.swahilib.core.data.repos.SayingRepo
 import com.swahilib.core.data.repos.SearchRepo
 import com.swahilib.core.data.repos.WordRepo
-import com.swahilib.core.database.model.HistoryEntity
 import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
-import com.swahilib.core.database.model.SearchEntity
 import com.swahilib.core.database.model.WordEntity
-import com.swahilib.feature.home.view.components.ContentItem
 import com.swahilib.feature.home.view.components.HomeTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
+/**
+ * Owns Home's Tafuta (search) tab plus cross-cutting write-paths (recording what was viewed and
+ * searched) that other screens rely on. Likes and History used to be tabs here too, but now live
+ * in their own [com.swahilib.feature.likes]/[com.swahilib.feature.history] modules, each with an
+ * independent repo-backed ViewModel - this class only keeps the small "write" slice they still
+ * need indirectly (e.g. History handing a tapped row's query back to Search).
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     idiomRepo: IdiomRepo,
@@ -37,8 +41,6 @@ class HomeViewModel @Inject constructor(
     private val prefsRepo: PrefsRepo,
     @ApplicationContext context: Context,
 ) : ViewModel() {
-
-    enum class HistorySubTab { USOMAJI, UTAFUTAJI }
 
     /** Word/proverb-of-the-day plus current streak, for the daily highlights dialog. */
     data class DailyHighlights(
@@ -68,15 +70,8 @@ class HomeViewModel @Inject constructor(
     val filteredProverbs: StateFlow<List<ProverbEntity>> get() = content.filteredProverbs
     val filteredSayings: StateFlow<List<SayingEntity>> get() = content.filteredSayings
     val filteredWords: StateFlow<List<WordEntity>> get() = content.filteredWords
-    val likedWords: StateFlow<List<WordEntity>> get() = content.likedWords
-    val likedIdioms: StateFlow<List<IdiomEntity>> get() = content.likedIdioms
-    val likedProverbs: StateFlow<List<ProverbEntity>> get() = content.likedProverbs
-    val likedSayings: StateFlow<List<SayingEntity>> get() = content.likedSayings
 
-    fun fetchData(force: Boolean = false) {
-        content.fetchData(force)
-        readingHistory.refreshHistory()
-    }
+    fun fetchData(force: Boolean = false) = content.fetchData(force)
 
     fun filterData(query: String) {
         content.filterData(query)
@@ -91,27 +86,14 @@ class HomeViewModel @Inject constructor(
     fun likeIdiom(idiom: IdiomEntity) = content.likeIdiom(idiom)
     fun likeProverb(proverb: ProverbEntity) = content.likeProverb(proverb)
     fun likeSaying(saying: SayingEntity) = content.likeSaying(saying)
-    fun clearAllLikes() = content.clearAllLikes()
 
-    // ── Reading history → ReadingHistoryController ──
-    val history: StateFlow<List<HistoryEntity>> get() = readingHistory.history
-    fun refreshHistory() = readingHistory.refreshHistory()
-    fun clearReadingHistory() = readingHistory.clearReadingHistory()
+    /** Records a viewed item. Display/clearing of this history now lives in feature:history. */
     fun addToHistory(itemId: Int, type: String) = readingHistory.addToHistory(itemId, type)
 
-    /** Resolves a reading-history row back to the underlying content item, for display. */
-    fun resolveHistoryItem(historyEntity: HistoryEntity): ContentItem? =
-        content.findContentItem(historyEntity.type, historyEntity.item)
-
-    // ── Search history → SearchHistoryController ──
-    val searchHistory: StateFlow<List<SearchEntity>> get() = searchHistoryController.searchHistory
-    val reviewSuggestions: StateFlow<List<SearchEntity>> get() = searchHistoryController.reviewSuggestions
     val pendingSearchQuery: StateFlow<String?> get() = searchHistoryController.pendingSearchQuery
     fun consumePendingSearchQuery() = searchHistoryController.consumePendingSearchQuery()
-    fun refreshSearchHistory() = searchHistoryController.refreshSearchHistory()
-    fun clearSearchHistory() = searchHistoryController.clearSearchHistory()
 
-    /** Switches to the Search tab and pre-fills [query], e.g. from a tapped search-history row. */
+    /** Switches to the Search tab and pre-fills [query] - used when Home picks up a tapped row from History. */
     fun requestSearch(query: String) {
         searchHistoryController.setPendingQuery(query)
         tabController.setSelectedTab(HomeTab.Search)
@@ -120,8 +102,6 @@ class HomeViewModel @Inject constructor(
     // ── Tabs → TabController ──
     val selectedTab: StateFlow<HomeTab> get() = tabController.selectedTab
     fun setSelectedTab(tab: HomeTab) = tabController.setSelectedTab(tab)
-    val historySubTab: StateFlow<HistorySubTab> get() = tabController.historySubTab
-    fun setHistorySubTab(tab: HistorySubTab) = tabController.setHistorySubTab(tab)
 
     // ── Daily highlights → DailyHighlightsController ──
     val dailyHighlights: StateFlow<DailyHighlights> get() = dailyHighlightsController.dailyHighlights

@@ -15,7 +15,6 @@ import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
-import com.swahilib.feature.home.view.components.ContentItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,19 +58,6 @@ class ContentController(
     val filteredProverbs: StateFlow<List<ProverbEntity>> get() = _filteredProverbs
     val filteredSayings: StateFlow<List<SayingEntity>> get() = _filteredSayings
     val filteredWords: StateFlow<List<WordEntity>> get() = _filteredWords
-
-    val likedWords: StateFlow<List<WordEntity>>
-        get() = _allWords.map { it.filter { w -> w.liked } }
-            .stateIn(scope, SharingStarted.Lazily, emptyList())
-    val likedIdioms: StateFlow<List<IdiomEntity>>
-        get() = _allIdioms.map { it.filter { i -> i.liked } }
-            .stateIn(scope, SharingStarted.Lazily, emptyList())
-    val likedProverbs: StateFlow<List<ProverbEntity>>
-        get() = _allProverbs.map { it.filter { p -> p.liked } }
-            .stateIn(scope, SharingStarted.Lazily, emptyList())
-    val likedSayings: StateFlow<List<SayingEntity>>
-        get() = _allSayings.map { it.filter { s -> s.liked } }
-            .stateIn(scope, SharingStarted.Lazily, emptyList())
 
     private var dataFetched = false
 
@@ -152,29 +138,6 @@ class ContentController(
                     _uiState.tryEmit(UiState.Error("Error loading data"))
                 }
             }
-        }
-    }
-
-    fun clearAllLikes() {
-        scope.launch {
-            val words = _allWords.value.filter { it.liked }.map { it.copy(liked = false) }
-            val idioms = _allIdioms.value.filter { it.liked }.map { it.copy(liked = false) }
-            val proverbs = _allProverbs.value.filter { it.liked }.map { it.copy(liked = false) }
-            val sayings = _allSayings.value.filter { it.liked }.map { it.copy(liked = false) }
-
-            words.forEach { wordRepo.updateWord(it) }
-            idioms.forEach { idiomRepo.updateIdiom(it) }
-            proverbs.forEach { proverbRepo.updateProverb(it) }
-            sayings.forEach { sayingRepo.updateSaying(it) }
-
-            _allWords.value = _allWords.value.map { it.copy(liked = false) }
-            _allIdioms.value = _allIdioms.value.map { it.copy(liked = false) }
-            _allProverbs.value = _allProverbs.value.map { it.copy(liked = false) }
-            _allSayings.value = _allSayings.value.map { it.copy(liked = false) }
-            _filteredWords.value = _filteredWords.value.map { it.copy(liked = false) }
-            _filteredIdioms.value = _filteredIdioms.value.map { it.copy(liked = false) }
-            _filteredProverbs.value = _filteredProverbs.value.map { it.copy(liked = false) }
-            _filteredSayings.value = _filteredSayings.value.map { it.copy(liked = false) }
         }
     }
 
@@ -283,17 +246,6 @@ class ContentController(
             _allSayings.value = _allSayings.value.map { if (it.rid == saying.rid) updated else it }
             _filteredSayings.value =
                 _filteredSayings.value.map { if (it.rid == saying.rid) updated else it }
-        }
-    }
-
-    /** Looks up a content item by its history "type" tag + rid, for [ReadingHistoryController] rows. */
-    fun findContentItem(type: String, id: Int): ContentItem? {
-        return when (type) {
-            "word" -> _allWords.value.find { it.rid == id }?.let { ContentItem.Word(it) }
-            "idiom" -> _allIdioms.value.find { it.rid == id }?.let { ContentItem.Idiom(it) }
-            "proverb" -> _allProverbs.value.find { it.rid == id }?.let { ContentItem.Proverb(it) }
-            "saying" -> _allSayings.value.find { it.rid == id }?.let { ContentItem.Saying(it) }
-            else -> null
         }
     }
 }

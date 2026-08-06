@@ -28,4 +28,7 @@ interface DailyActivityDao {
 
     @Query("SELECT COUNT(*) FROM daily_activity WHERE visited = 1 AND date BETWEEN :from AND :to")
     suspend fun activeDaysBetween(from: String, to: String): Int
+
+    @Query("DELETE FROM daily_activity")
+    suspend fun deleteAll()
 }

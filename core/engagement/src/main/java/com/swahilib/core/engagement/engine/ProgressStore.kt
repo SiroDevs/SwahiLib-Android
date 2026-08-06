@@ -55,4 +55,15 @@ class ProgressStore(
         if (updated != current) dailyActivityDao.update(updated)
         return updated
     }
+
+    /** Wipes every engagement table (XP, progress, challenges, achievements, daily activity, learning history). */
+    suspend fun clearAll() {
+        xpEventDao.deleteAll()
+        userProgressDao.deleteAll()
+        challengeDao.deleteAllChallenges()
+        challengeDao.deleteAllActivities()
+        achievementRecordDao.deleteAll()
+        dailyActivityDao.deleteAll()
+        learningHistoryDao.deleteAll()
+    }
 }

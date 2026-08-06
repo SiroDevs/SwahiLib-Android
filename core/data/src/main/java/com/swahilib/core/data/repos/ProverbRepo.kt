@@ -49,5 +49,14 @@ class ProverbRepo @Inject constructor(
         proverbsDao.getRandomProverb()
     }
 
+    /** Direct lookup by primary key, e.g. to resolve a history row back to its proverb. */
+    suspend fun getProverbByRid(rid: Int): ProverbEntity? = withContext(Dispatchers.IO) {
+        proverbsDao.getByRid(rid)
+    }
+
+    suspend fun clearAllLikes() = withContext(Dispatchers.IO) {
+        proverbsDao.clearAllLiked()
+    }
+
     companion object { private const val TAG = "ProverbRepo" }
 }
