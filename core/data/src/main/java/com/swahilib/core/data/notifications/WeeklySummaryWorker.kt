@@ -26,13 +26,13 @@ import dagger.assisted.AssistedInject
 class WeeklySummaryWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
     private val prefsRepo: PrefsRepo,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        val stats = engagementRepo.statistics()
-        val progress = engagementRepo.currentProgress()
+        val stats = engageRepo.statistics()
+        val progress = engageRepo.currentProgress()
 
         if (stats.activeDaysThisWeek == 0 && progress.totalXp == 0L) return Result.success()
 

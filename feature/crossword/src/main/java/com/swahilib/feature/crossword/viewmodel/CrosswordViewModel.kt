@@ -34,7 +34,7 @@ sealed interface CrosswordUiState {
 @HiltViewModel
 class CrosswordViewModel @Inject constructor(
     private val generator: CrosswordGenerator,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CrosswordUiState>(CrosswordUiState.Loading)
@@ -53,7 +53,7 @@ class CrosswordViewModel @Inject constructor(
 
         viewModelScope.launch {
             this@CrosswordViewModel.difficulty = if (challengeId == null) {
-                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.CROSSWORD)
+                engageRepo.recommendedDifficulty(StatisticsEngine.EventType.CROSSWORD)
             } else {
                 difficulty
             }
@@ -85,10 +85,10 @@ class CrosswordViewModel @Inject constructor(
             var xpEarnedThisSession = result.xpEarned
 
             if (cId != null && aId != null) {
-                engagementRepo.markActivityComplete(cId, aId, secondsSpent)
+                engageRepo.markActivityComplete(cId, aId, secondsSpent)
                 xpEarnedThisSession = RewardRules.activityXp(ActivityType.CROSSWORD, difficulty)
             } else if (result.xpEarned > 0) {
-                engagementRepo.awardXp(
+                engageRepo.awardXp(
                     XpAward(
                         source = if (result.isPerfect) XpSource.PERFECT_QUIZ else XpSource.ACTIVITY_COMPLETE,
                         amount = result.xpEarned,
@@ -98,7 +98,7 @@ class CrosswordViewModel @Inject constructor(
                 )
             }
 
-            val unlocked = engagementRepo.recordLearningEvent(
+            val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.CROSSWORD,
                 title = "Msalaba wa Maneno",
                 score = result.correctEntries,

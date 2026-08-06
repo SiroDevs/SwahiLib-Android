@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProgressViewModel @Inject constructor(
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     private val _progress = MutableStateFlow<UserProgress?>(null)
@@ -37,17 +37,17 @@ class ProgressViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
-            _progress.value = engagementRepo.currentProgress()
-            _challenges.value = engagementRepo.activeChallenges()
-            _stats.value = engagementRepo.statistics()
-            _achievements.value = engagementRepo.achievementsWithStatus()
-            _recommendations.value = engagementRepo.recommendedActivities()
+            _progress.value = engageRepo.currentProgress()
+            _challenges.value = engageRepo.activeChallenges()
+            _stats.value = engageRepo.statistics()
+            _achievements.value = engageRepo.achievementsWithStatus()
+            _recommendations.value = engageRepo.recommendedActivities()
         }
     }
 
     fun completeActivity(challengeId: String, activityId: String, secondsSpent: Int = 0) {
         viewModelScope.launch {
-            engagementRepo.markActivityComplete(challengeId, activityId, secondsSpent)
+            engageRepo.markActivityComplete(challengeId, activityId, secondsSpent)
             refresh()
         }
     }

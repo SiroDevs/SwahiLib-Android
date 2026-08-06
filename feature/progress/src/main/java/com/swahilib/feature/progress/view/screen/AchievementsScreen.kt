@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.feature.progress.view.components.AchievementCard
+import com.swahilib.core.ui.components.progress.AchievementCard
 import com.swahilib.feature.progress.viewmodel.ProgressViewModel
 
 @Composable

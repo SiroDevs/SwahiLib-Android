@@ -23,7 +23,7 @@ class DataSettingsViewModel @Inject constructor(
     private val proverbRepo: ProverbRepo,
     private val sayingRepo: SayingRepo,
     private val dailyContentRepo: DailyContentRepo,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     /** "Futa Historia" - clears both reading (views) and search-text history. */
@@ -55,7 +55,7 @@ class DataSettingsViewModel @Inject constructor(
     /** "Futa ChemshaBongo" - clears XP, streaks, challenges, achievements and stats. */
     fun clearEngagement() {
         viewModelScope.launch {
-            engagementRepo.clearAllEngagementData()
+            engageRepo.clearAllEngagementData()
         }
     }
 
@@ -69,7 +69,7 @@ class DataSettingsViewModel @Inject constructor(
             proverbRepo.clearAllLikes()
             sayingRepo.clearAllLikes()
             dailyContentRepo.clearAll()
-            engagementRepo.clearAllEngagementData()
+            engageRepo.clearAllEngagementData()
         }
     }
 }

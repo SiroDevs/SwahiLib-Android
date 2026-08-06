@@ -48,7 +48,7 @@ sealed interface WordBuilderUiState {
 @HiltViewModel
 class WordBuilderViewModel @Inject constructor(
     private val generator: WordBuilderGenerator,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<WordBuilderUiState>(WordBuilderUiState.Loading)
@@ -81,7 +81,7 @@ class WordBuilderViewModel @Inject constructor(
 
         viewModelScope.launch {
             this@WordBuilderViewModel.difficulty = if (challengeId == null) {
-                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.WORD_BUILDER)
+                engageRepo.recommendedDifficulty(StatisticsEngine.EventType.WORD_BUILDER)
             } else {
                 difficulty
             }
@@ -217,10 +217,10 @@ class WordBuilderViewModel @Inject constructor(
             var xpEarnedThisSession = result.xpEarned
 
             if (cId != null && aId != null) {
-                engagementRepo.markActivityComplete(cId, aId, secondsSpent)
+                engageRepo.markActivityComplete(cId, aId, secondsSpent)
                 xpEarnedThisSession = RewardRules.activityXp(ActivityType.WORD_BUILDER, difficulty)
             } else if (result.xpEarned > 0) {
-                engagementRepo.awardXp(
+                engageRepo.awardXp(
                     XpAward(
                         source = if (result.isPerfect) XpSource.PERFECT_QUIZ else XpSource.ACTIVITY_COMPLETE,
                         amount = result.xpEarned,
@@ -230,7 +230,7 @@ class WordBuilderViewModel @Inject constructor(
                 )
             }
 
-            val unlocked = engagementRepo.recordLearningEvent(
+            val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.WORD_BUILDER,
                 title = "Jenzi la Maneno",
                 score = result.correctWords,

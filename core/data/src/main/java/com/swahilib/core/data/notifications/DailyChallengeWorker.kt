@@ -27,12 +27,12 @@ import dagger.assisted.AssistedInject
 class DailyChallengeWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
     private val prefsRepo: PrefsRepo,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        val challenge = engagementRepo.activeChallenges()
+        val challenge = engageRepo.activeChallenges()
             .firstOrNull { it.scope.name == "DAILY" }
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

@@ -31,36 +31,25 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.general.StreakBadge
-import com.swahilib.feature.progress.view.components.AchievementCard
-import com.swahilib.feature.progress.view.components.ChallengeCard
-import com.swahilib.feature.progress.view.components.RecommendationRow
-import com.swahilib.feature.progress.view.components.SectionHeader
-import com.swahilib.feature.progress.view.components.StatTile
-import com.swahilib.feature.progress.view.components.XpProgressCard
-import com.swahilib.feature.progress.view.components.routeForChallengeActivity
-import com.swahilib.feature.progress.viewmodel.ProgressViewModel
+import com.swahilib.core.ui.components.progress.AchievementCard
+import com.swahilib.core.ui.components.progress.ChallengeCard
+import com.swahilib.core.ui.components.progress.RecommendationRow
+import com.swahilib.core.ui.components.progress.SectionHeader
+import com.swahilib.core.ui.components.progress.StatTile
+import com.swahilib.core.ui.components.progress.XpProgressCard
+import com.swahilib.core.ui.components.progress.routeForChallengeActivity
+import com.swahilib.feature.home.viewmodel.HomeViewModel
 
-/**
- * "Maendeleo" home tab: the engagement hub (XP/streak, personalised recommendations, active
- * challenges, a badges preview, and a quick stats snippet) surfaced directly in Home, replacing
- * the old top-bar shortcut icons that pushed [Routes.PROGRESS]/[Routes.STATISTICS] as separate
- * screens. "Zote"/"Zaidi" actions still deep-dive into the full Challenges/Achievements/
- * Statistics screens via [navController] for anything that needs more room.
- *
- * Uses its own [ProgressViewModel] - a separate Hilt view model from
- * [com.swahilib.feature.home.viewmodel.HomeViewModel], since engagement data is a distinct
- * domain from the search/likes/history content the rest of this module manages.
- */
 @Composable
 fun HomeEngagement(
     navController: NavHostController,
-    viewModel: ProgressViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(Unit) { viewModel.refresh() }
+    LaunchedEffect(Unit) { viewModel.refreshProgress() }
 
     // Re-pull whenever Home resumes (e.g. returning from a game after completing an activity) -
     // same pattern as ChallengesScreen, since this data is fetched once rather than observed live.
-    val currentOnResume = rememberUpdatedState(viewModel::refresh)
+    val currentOnResume = rememberUpdatedState(viewModel::refreshProgress)
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.data.repos.DailyContentRepo
+import com.swahilib.core.data.repos.EngagementRepo
 import com.swahilib.core.data.repos.HistoryRepo
 import com.swahilib.core.data.repos.IdiomRepo
 import com.swahilib.core.data.repos.PrefsRepo
@@ -16,19 +17,20 @@ import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.engagement.engine.ActivityRecommendation
+import com.swahilib.core.engagement.model.Achievement
+import com.swahilib.core.engagement.model.Challenge
+import com.swahilib.core.engagement.model.StatisticsSummary
+import com.swahilib.core.engagement.model.UserProgress
 import com.swahilib.feature.home.view.components.HomeTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Owns Home's Tafuta (search) tab plus cross-cutting write-paths (recording what was viewed and
- * searched) that other screens rely on. Likes and History used to be tabs here too, but now live
- * in their own [com.swahilib.feature.likes]/[com.swahilib.feature.history] modules, each with an
- * independent repo-backed ViewModel - this class only keeps the small "write" slice they still
- * need indirectly (e.g. History handing a tapped row's query back to Search).
- */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     idiomRepo: IdiomRepo,
@@ -39,6 +41,7 @@ class HomeViewModel @Inject constructor(
     searchRepo: SearchRepo,
     dailyContentRepo: DailyContentRepo,
     private val prefsRepo: PrefsRepo,
+    private val engageRepo: EngagementRepo,
     @ApplicationContext context: Context,
 ) : ViewModel() {
 
@@ -71,6 +74,21 @@ class HomeViewModel @Inject constructor(
     val filteredSayings: StateFlow<List<SayingEntity>> get() = content.filteredSayings
     val filteredWords: StateFlow<List<WordEntity>> get() = content.filteredWords
 
+    private val _progress = MutableStateFlow<UserProgress?>(null)
+    val progress: StateFlow<UserProgress?> = _progress.asStateFlow()
+
+    private val _challenges = MutableStateFlow<List<Challenge>>(emptyList())
+    val challenges: StateFlow<List<Challenge>> = _challenges.asStateFlow()
+
+    private val _stats = MutableStateFlow<StatisticsSummary?>(null)
+    val stats: StateFlow<StatisticsSummary?> = _stats.asStateFlow()
+
+    private val _achievements = MutableStateFlow<List<Achievement>>(emptyList())
+    val achievements: StateFlow<List<Achievement>> = _achievements.asStateFlow()
+
+    private val _recommendations = MutableStateFlow<List<ActivityRecommendation>>(emptyList())
+    val recommendations: StateFlow<List<ActivityRecommendation>> = _recommendations.asStateFlow()
+
     fun fetchData(force: Boolean = false) = content.fetchData(force)
 
     fun filterData(query: String) {
@@ -81,7 +99,24 @@ class HomeViewModel @Inject constructor(
             searchHistoryController.trackSearch(query)
         }
     }
+    
+    fun refreshProgress() {
+        viewModelScope.launch {
+            _progress.value = engageRepo.currentProgress()
+            _challenges.value = engageRepo.activeChallenges()
+            _stats.value = engageRepo.statistics()
+            _achievements.value = engageRepo.achievementsWithStatus()
+            _recommendations.value = engageRepo.recommendedActivities()
+        }
+    }
 
+    fun completeActivity(challengeId: String, activityId: String, secondsSpent: Int = 0) {
+        viewModelScope.launch {
+            engageRepo.markActivityComplete(challengeId, activityId, secondsSpent)
+            refreshProgress()
+        }
+    }
+    
     fun likeWord(word: WordEntity) = content.likeWord(word)
     fun likeIdiom(idiom: IdiomEntity) = content.likeIdiom(idiom)
     fun likeProverb(proverb: ProverbEntity) = content.likeProverb(proverb)

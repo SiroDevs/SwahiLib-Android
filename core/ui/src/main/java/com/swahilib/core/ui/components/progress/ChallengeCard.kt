@@ -1,4 +1,4 @@
-package com.swahilib.feature.progress.view.components
+package com.swahilib.core.ui.components.progress
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

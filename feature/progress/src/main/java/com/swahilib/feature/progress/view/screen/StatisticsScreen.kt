@@ -24,8 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.feature.progress.view.components.StatTile
-import com.swahilib.feature.progress.view.components.WeeklyActivityChart
+import com.swahilib.core.ui.components.progress.StatTile
+import com.swahilib.core.ui.components.progress.WeeklyActivityChart
 import com.swahilib.feature.progress.viewmodel.ProgressViewModel
 
 @Composable

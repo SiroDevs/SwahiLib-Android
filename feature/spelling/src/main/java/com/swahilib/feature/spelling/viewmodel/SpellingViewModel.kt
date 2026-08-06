@@ -40,7 +40,7 @@ sealed interface SpellingUiState {
 @HiltViewModel
 class SpellingViewModel @Inject constructor(
     private val generator: SpellingGenerator,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<SpellingUiState>(SpellingUiState.Loading)
@@ -65,7 +65,7 @@ class SpellingViewModel @Inject constructor(
 
         viewModelScope.launch {
             this@SpellingViewModel.difficulty = if (challengeId == null) {
-                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.SPELLING)
+                engageRepo.recommendedDifficulty(StatisticsEngine.EventType.SPELLING)
             } else {
                 difficulty
             }
@@ -109,10 +109,10 @@ class SpellingViewModel @Inject constructor(
             var xpEarnedThisSession = result.xpEarned
 
             if (cId != null && aId != null) {
-                engagementRepo.markActivityComplete(cId, aId, secondsSpent)
+                engageRepo.markActivityComplete(cId, aId, secondsSpent)
                 xpEarnedThisSession = RewardRules.activityXp(ActivityType.SPELLING_CHALLENGE, difficulty)
             } else if (result.xpEarned > 0) {
-                engagementRepo.awardXp(
+                engageRepo.awardXp(
                     XpAward(
                         source = if (result.isPerfect) XpSource.PERFECT_QUIZ else XpSource.ACTIVITY_COMPLETE,
                         amount = result.xpEarned,
@@ -122,7 +122,7 @@ class SpellingViewModel @Inject constructor(
                 )
             }
 
-            val unlocked = engagementRepo.recordLearningEvent(
+            val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.SPELLING,
                 title = "Changamoto ya Tahajia",
                 score = result.fullyCorrectCount,

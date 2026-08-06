@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
 import com.swahilib.feature.sentence_builder.viewmodel.SentenceBuilderViewModel
 import com.swahilib.feature.sentence_builder.viewmodel.SentenceUiState
 
@@ -86,7 +87,7 @@ fun SentenceBuilderScreen(
                     Text("${s.result.correctAnswers}/${s.result.totalQuestions} sahihi", style = MaterialTheme.typography.titleMedium)
                     Text("+${s.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(24.dp))
-                    com.swahilib.core.ui.components.general.AchievementUnlockBanner(
+                    AchievementUnlockBanner(
                         s.unlockedAchievements,
                         modifier = Modifier.padding(bottom = 16.dp),
                     )

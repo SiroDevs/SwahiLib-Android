@@ -38,7 +38,7 @@ sealed interface SentenceUiState {
 @HiltViewModel
 class SentenceBuilderViewModel @Inject constructor(
     private val generator: SentenceBuilderGenerator,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<SentenceUiState>(SentenceUiState.Loading)
@@ -63,7 +63,7 @@ class SentenceBuilderViewModel @Inject constructor(
 
         viewModelScope.launch {
             this@SentenceBuilderViewModel.difficulty = if (challengeId == null) {
-                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.SENTENCE_BUILDER)
+                engageRepo.recommendedDifficulty(StatisticsEngine.EventType.SENTENCE_BUILDER)
             } else {
                 difficulty
             }
@@ -117,10 +117,10 @@ class SentenceBuilderViewModel @Inject constructor(
             var xpEarnedThisSession = result.xpEarned
 
             if (cId != null && aId != null) {
-                engagementRepo.markActivityComplete(cId, aId, secondsSpent)
+                engageRepo.markActivityComplete(cId, aId, secondsSpent)
                 xpEarnedThisSession = RewardRules.activityXp(ActivityType.SENTENCE_BUILDER, difficulty)
             } else if (result.xpEarned > 0) {
-                engagementRepo.awardXp(
+                engageRepo.awardXp(
                     XpAward(
                         source = if (result.isPerfect) XpSource.PERFECT_QUIZ else XpSource.ACTIVITY_COMPLETE,
                         amount = result.xpEarned,
@@ -130,7 +130,7 @@ class SentenceBuilderViewModel @Inject constructor(
                 )
             }
 
-            val unlocked = engagementRepo.recordLearningEvent(
+            val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.SENTENCE_BUILDER,
                 title = "Panga Sentensi",
                 score = result.correctAnswers,

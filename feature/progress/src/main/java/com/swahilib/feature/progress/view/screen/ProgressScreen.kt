@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -26,12 +25,12 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.StreakBadge
-import com.swahilib.feature.progress.view.components.AchievementCard
-import com.swahilib.feature.progress.view.components.ChallengeCard
-import com.swahilib.feature.progress.view.components.SectionHeader
-import com.swahilib.feature.progress.view.components.StatTile
-import com.swahilib.feature.progress.view.components.XpProgressCard
-import com.swahilib.feature.progress.view.components.routeForChallengeActivity
+import com.swahilib.core.ui.components.progress.AchievementCard
+import com.swahilib.core.ui.components.progress.ChallengeCard
+import com.swahilib.core.ui.components.progress.SectionHeader
+import com.swahilib.core.ui.components.progress.StatTile
+import com.swahilib.core.ui.components.progress.XpProgressCard
+import com.swahilib.core.ui.components.progress.routeForChallengeActivity
 import com.swahilib.feature.progress.viewmodel.ProgressViewModel
 
 @Composable

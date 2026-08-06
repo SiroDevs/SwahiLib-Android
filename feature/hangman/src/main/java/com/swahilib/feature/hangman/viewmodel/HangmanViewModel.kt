@@ -33,7 +33,7 @@ sealed interface HangmanUiState {
 @HiltViewModel
 class HangmanViewModel @Inject constructor(
     private val generator: HangmanGenerator,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HangmanUiState>(HangmanUiState.Loading)
@@ -52,7 +52,7 @@ class HangmanViewModel @Inject constructor(
 
         viewModelScope.launch {
             this@HangmanViewModel.difficulty = if (challengeId == null) {
-                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.HANGMAN)
+                engageRepo.recommendedDifficulty(StatisticsEngine.EventType.HANGMAN)
             } else {
                 difficulty
             }
@@ -90,10 +90,10 @@ class HangmanViewModel @Inject constructor(
             var xpEarnedThisSession = result.xpEarned
 
             if (cId != null && aId != null) {
-                engagementRepo.markActivityComplete(cId, aId, secondsSpent)
+                engageRepo.markActivityComplete(cId, aId, secondsSpent)
                 xpEarnedThisSession = RewardRules.activityXp(ActivityType.HANGMAN, difficulty)
             } else if (result.xpEarned > 0) {
-                engagementRepo.awardXp(
+                engageRepo.awardXp(
                     XpAward(
                         source = if (result.isPerfect) XpSource.PERFECT_QUIZ else XpSource.ACTIVITY_COMPLETE,
                         amount = result.xpEarned,
@@ -103,7 +103,7 @@ class HangmanViewModel @Inject constructor(
                 )
             }
 
-            val unlocked = engagementRepo.recordLearningEvent(
+            val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.HANGMAN,
                 title = "Mchezo wa Hangman",
                 score = result.wonWords,

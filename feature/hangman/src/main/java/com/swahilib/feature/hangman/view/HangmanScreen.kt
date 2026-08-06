@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.core.ui.components.general.AchievementUnlockBanner
+import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
 import com.swahilib.feature.hangman.viewmodel.HangmanUiState
 import com.swahilib.feature.hangman.viewmodel.HangmanViewModel
 

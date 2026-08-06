@@ -1,4 +1,4 @@
-package com.swahilib.feature.progress.view.components
+package com.swahilib.core.ui.components.progress
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -47,7 +47,7 @@ import com.swahilib.core.games.model.QuizFormat
 import com.swahilib.core.games.model.QuizQuestion
 import com.swahilib.core.games.model.QuizResult
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.core.ui.components.general.AchievementUnlockBanner
+import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
 import com.swahilib.feature.quiz.viewmodel.QuizContentSource
 import com.swahilib.feature.quiz.viewmodel.QuizUiState
 import com.swahilib.feature.quiz.viewmodel.QuizViewModel

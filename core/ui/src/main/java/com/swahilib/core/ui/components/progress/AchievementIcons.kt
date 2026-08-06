@@ -1,4 +1,4 @@
-package com.swahilib.core.ui.components.general
+package com.swahilib.core.ui.components.progress
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Article

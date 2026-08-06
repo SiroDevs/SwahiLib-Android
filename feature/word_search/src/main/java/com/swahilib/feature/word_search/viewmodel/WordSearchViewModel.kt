@@ -37,7 +37,7 @@ sealed interface WordSearchUiState {
 @HiltViewModel
 class WordSearchViewModel @Inject constructor(
     private val generator: WordSearchGenerator,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<WordSearchUiState>(WordSearchUiState.Loading)
@@ -61,7 +61,7 @@ class WordSearchViewModel @Inject constructor(
 
         viewModelScope.launch {
             this@WordSearchViewModel.difficulty = if (challengeId == null) {
-                engagementRepo.recommendedDifficulty(StatisticsEngine.EventType.WORD_SEARCH)
+                engageRepo.recommendedDifficulty(StatisticsEngine.EventType.WORD_SEARCH)
             } else {
                 difficulty
             }
@@ -109,10 +109,10 @@ class WordSearchViewModel @Inject constructor(
             var xpEarnedThisSession = result.xpEarned
 
             if (cId != null && aId != null) {
-                engagementRepo.markActivityComplete(cId, aId, secondsSpent)
+                engageRepo.markActivityComplete(cId, aId, secondsSpent)
                 xpEarnedThisSession = RewardRules.activityXp(ActivityType.WORD_SEARCH, difficulty)
             } else if (result.xpEarned > 0) {
-                engagementRepo.awardXp(
+                engageRepo.awardXp(
                     XpAward(
                         source = if (result.isPerfect) XpSource.PERFECT_QUIZ else XpSource.ACTIVITY_COMPLETE,
                         amount = result.xpEarned,
@@ -122,7 +122,7 @@ class WordSearchViewModel @Inject constructor(
                 )
             }
 
-            val unlocked = engagementRepo.recordLearningEvent(
+            val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.WORD_SEARCH,
                 title = "Tafuta Maneno",
                 score = result.foundWords,

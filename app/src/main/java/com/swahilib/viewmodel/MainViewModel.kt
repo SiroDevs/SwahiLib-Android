@@ -34,7 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val prefsRepo: PrefsRepo,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
     private val _isReady = MutableStateFlow(false)
@@ -55,7 +55,7 @@ class MainViewModel @Inject constructor(
             Log.d(TAG, "Scheduling sync on launch")
             SyncScheduler.scheduleOnLaunch(context)
 
-            runCatching { engagementRepo.onAppOpen() }
+            runCatching { engageRepo.onAppOpen() }
                 .onSuccess { _lastLoginOutcome.value = it }
                 .onFailure { Log.e(TAG, "onAppOpen failed: ${it.message}", it) }
 

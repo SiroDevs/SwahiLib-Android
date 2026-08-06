@@ -3,6 +3,7 @@ package com.swahilib.feature.settings.view.screen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.NotificationsActive
@@ -42,7 +43,7 @@ fun SettingsScreen(navController: NavHostController) {
             ListItem(
                 leadingContent = { Icon(Icons.Default.Palette, contentDescription = null) },
                 headlineContent = { Text("Mwonekano") },
-                supportingContent = { Text("Mandhari ya programu") },
+                supportingContent = { Text("Mandhari ya Kitumizi") },
                 trailingContent = { Icon(Icons.Default.ChevronRight, contentDescription = null) },
                 modifier = Modifier.clickable { navController.navigate(Routes.SETTINGS_APPEARANCE) },
             )
@@ -50,7 +51,7 @@ fun SettingsScreen(navController: NavHostController) {
 
             ListItem(
                 leadingContent = { Icon(Icons.Default.NotificationsActive, contentDescription = null) },
-                headlineContent = { Text("Arifa") },
+                headlineContent = { Text("Arifa (Notifications)") },
                 supportingContent = { Text("Neno, methali, changamoto na muhtasari wa wiki") },
                 trailingContent = { Icon(Icons.Default.ChevronRight, contentDescription = null) },
                 modifier = Modifier.clickable { navController.navigate(Routes.SETTINGS_NOTIFICATIONS) },

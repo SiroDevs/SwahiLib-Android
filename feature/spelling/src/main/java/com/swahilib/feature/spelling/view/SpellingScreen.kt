@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
 import com.swahilib.feature.spelling.viewmodel.SpellingUiState
 import com.swahilib.feature.spelling.viewmodel.SpellingViewModel
 
@@ -87,7 +88,7 @@ fun SpellingScreen(
                     Text("Wastani wa usahihi: ${(s.result.averageCredit * 100).toInt()}%", style = MaterialTheme.typography.bodyMedium)
                     Text("+${s.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(24.dp))
-                    com.swahilib.core.ui.components.general.AchievementUnlockBanner(
+                    AchievementUnlockBanner(
                         s.unlockedAchievements,
                         modifier = Modifier.padding(bottom = 16.dp),
                     )

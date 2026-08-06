@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.first
 class SocialSyncWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
     private val authRepo: SocialAuthRepo,
     private val socialRepo: SocialRepo,
 ) : CoroutineWorker(context, params) {
@@ -34,14 +34,14 @@ class SocialSyncWorker @AssistedInject constructor(
         if (!signedIn) return Result.success()
 
         return runCatching {
-            val progress = engagementRepo.currentProgress()
+            val progress = engageRepo.currentProgress()
             socialRepo.syncProgress(
                 level = progress.level,
                 totalXp = progress.totalXp.toInt(),
                 currentStreak = progress.currentStreak,
             )
 
-            val unlocked = engagementRepo.achievementsWithStatus().filter { it.unlockedAt != null }
+            val unlocked = engageRepo.achievementsWithStatus().filter { it.unlockedAt != null }
             unlocked.forEach { achievement -> socialRepo.postAchievementUnlock(achievement.id) }
 
             Result.success()

@@ -27,9 +27,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.feature.progress.view.components.ChallengeCard
-import com.swahilib.feature.progress.view.components.RecommendationRow
-import com.swahilib.feature.progress.view.components.routeForChallengeActivity
+import com.swahilib.core.ui.components.progress.ChallengeCard
+import com.swahilib.core.ui.components.progress.RecommendationRow
+import com.swahilib.core.ui.components.progress.routeForChallengeActivity
 import com.swahilib.feature.progress.viewmodel.ProgressViewModel
 
 @Composable

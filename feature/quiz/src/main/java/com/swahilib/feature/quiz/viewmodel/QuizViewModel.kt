@@ -47,7 +47,7 @@ sealed interface QuizUiState {
 class QuizViewModel @Inject constructor(
     private val quizGenerator: QuizGenerator,
     private val proverbQuizGenerator: ProverbQuizGenerator,
-    private val engagementRepo: EngagementRepo,
+    private val engageRepo: EngagementRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<QuizUiState>(QuizUiState.Loading)
@@ -77,7 +77,7 @@ class QuizViewModel @Inject constructor(
             // Freeplay sessions adapt to recent accuracy; challenge sessions keep the challenge's fixed difficulty.
             this@QuizViewModel.difficulty = if (challengeId == null) {
                 val eventType = if (source == QuizContentSource.PROVERBS) StatisticsEngine.EventType.PROVERB else StatisticsEngine.EventType.QUIZ
-                engagementRepo.recommendedDifficulty(eventType)
+                engageRepo.recommendedDifficulty(eventType)
             } else {
                 difficulty
             }
@@ -143,12 +143,12 @@ class QuizViewModel @Inject constructor(
             if (cId != null && aId != null) {
                 // Challenge mode: fixed XP already tuned per-activity by RewardRules;
                 // markActivityComplete awards it and handles challenge-completion bonus.
-                val completion = engagementRepo.markActivityComplete(cId, aId, secondsSpent)
+                val completion = engageRepo.markActivityComplete(cId, aId, secondsSpent)
                 award = completion?.activityAward
                 xpEarnedThisSession = RewardRules.activityXp(activityType, difficulty)
             } else {
                 // Freeplay: XP scales with how many questions were answered correctly.
-                award = engagementRepo.awardXp(
+                award = engageRepo.awardXp(
                     XpAward(
                         source = if (result.isPerfect) XpSource.PERFECT_QUIZ else XpSource.ACTIVITY_COMPLETE,
                         amount = result.xpEarned,
@@ -158,7 +158,7 @@ class QuizViewModel @Inject constructor(
                 )
             }
 
-            val unlocked = engagementRepo.recordLearningEvent(
+            val unlocked = engageRepo.recordLearningEvent(
                 type = eventType,
                 title = title,
                 score = result.correctAnswers,

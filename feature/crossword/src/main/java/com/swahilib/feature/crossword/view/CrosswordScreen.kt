@@ -37,6 +37,7 @@ import com.swahilib.core.games.model.CrosswordDirection
 import com.swahilib.core.games.model.CrosswordEntry
 import com.swahilib.core.games.model.CrosswordPuzzle
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
 import com.swahilib.feature.crossword.viewmodel.CrosswordUiState
 import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
 
@@ -90,7 +91,7 @@ fun CrosswordScreen(
                     Text("${s.result.correctEntries}/${s.result.totalEntries} sahihi", style = MaterialTheme.typography.titleMedium)
                     Text("+${s.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(24.dp))
-                    com.swahilib.core.ui.components.general.AchievementUnlockBanner(
+                    AchievementUnlockBanner(
                         s.unlockedAchievements,
                         modifier = Modifier.padding(bottom = 16.dp),
                     )
