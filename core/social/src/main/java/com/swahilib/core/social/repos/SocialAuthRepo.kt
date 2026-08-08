@@ -19,17 +19,6 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Handles account creation/sign-in via Google (through Credential Manager,
- * matching the pattern already used for SongLib), exchanged with Supabase
- * Auth. Community features are entirely opt-in - the rest of the app works
- * fully offline without ever calling this.
- *
- * NOTE: written against supabase-kt's auth-kt API surface from memory (no
- * network access to verify against current docs in this environment) -
- * double check `IDToken`/`Google` provider usage against the installed
- * version before relying on it.
- */
 @Singleton
 class SocialAuthRepo @Inject constructor(
     private val supabase: SupabaseClient,
@@ -42,8 +31,6 @@ class SocialAuthRepo @Inject constructor(
     val currentUserId: String? get() = supabase.auth.currentUserOrNull()?.id
 
     suspend fun signInWithGoogle(context: Context): Result<Unit> = runCatching {
-        // Google needs the SHA-256 hash of the nonce; Supabase needs the raw value to verify
-        // against that hash - see https://supabase.com/docs/guides/auth/social-login/auth-google
         val rawNonce = generateNonce()
         val hashedNonce = sha256Hex(rawNonce)
 

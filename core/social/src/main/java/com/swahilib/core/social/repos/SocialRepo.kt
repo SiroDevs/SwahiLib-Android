@@ -19,22 +19,10 @@ import io.github.jan.supabase.postgrest.query.Order
 import kotlin.random.Random
 import javax.inject.Inject
 
-/**
- * All reads/writes against the Supabase tables in docs/supabase_schema.sql.
- * Every function assumes the caller already checked [SocialAuthRepo.isSignedIn]
- * - none of this is on the hot path for the offline single-player app.
- *
- * NOTE: written against postgrest-kt's query DSL from memory (no network
- * access to verify in this environment) - double check `from(...)`, filter
- * builders, and decode calls against the installed version before relying
- * on this in production.
- */
 class SocialRepo @Inject constructor(
     private val supabase: SupabaseClient,
 ) {
     private val userId: String? get() = supabase.auth.currentUserOrNull()?.id
-
-    // ── Profile ─────────────────────────────────────────────────────────
 
     suspend fun ensureProfile(displayName: String): SocialProfile? {
         val uid = userId ?: return null
