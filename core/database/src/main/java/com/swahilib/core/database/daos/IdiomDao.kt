@@ -22,8 +22,15 @@ interface IdiomDao {
     @Query("SELECT * FROM idioms WHERE rid = :rid")
     fun getById(rid: String): Flow<IdiomEntity>
 
+    /** Direct (non-Flow) lookup by primary key, used to resolve history rows. */
+    @Query("SELECT * FROM idioms WHERE rid = :rid LIMIT 1")
+    suspend fun getByRid(rid: Int): IdiomEntity?
+
     @Query("DELETE FROM idioms")
     fun delete()
+
+    @Query("UPDATE idioms SET liked = 0 WHERE liked = 1")
+    suspend fun clearAllLiked()
 
     @Query("SELECT * FROM idioms WHERE title LIKE '%' || :title || '%'")
     fun searchIdiomByTitle(title: String?): Flow<List<IdiomEntity>>

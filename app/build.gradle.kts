@@ -17,20 +17,25 @@ if (keystorePropertiesFile.exists()) {
 }
 
 val localProperties = Properties()
-localProperties.load(project.rootProject.file("local.properties").inputStream())
+val localPropertiesFile = project.rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
 
 android {
     compileSdk = 37
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 177
-        versionName = "1.0.177"
+        versionCode = 180
+        versionName = "1.0.180"
         minSdk = 26
         targetSdk = 37
 
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "PaystackSecret", "\"${localProperties.getProperty("PAYSTACK_SECRET_KEY") ?: ""}\"")
     }
 
     signingConfigs {
@@ -91,22 +96,35 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":core:database"))
-    implementation(project(":core:designsystem"))
+    implementation(project(":core:design_system"))
+    implementation(project(":core:engagement"))
+    implementation(project(":core:games"))
     implementation(project(":core:network"))
+    implementation(project(":core:social"))
     implementation(project(":core:ui"))
 
     // Feature modules
     implementation(project(":feature:home"))
-    implementation(project(":feature:advsearch"))
+    implementation(project(":feature:likes"))
+    implementation(project(":feature:history"))
+    implementation(project(":feature:advanced_search"))
     implementation(project(":feature:word"))
     implementation(project(":feature:idiom"))
     implementation(project(":feature:proverb"))
     implementation(project(":feature:saying"))
     implementation(project(":feature:settings"))
-    implementation(project(":feature:howitworks"))
+    implementation(project(":feature:how_it_works"))
     implementation(project(":feature:help"))
     implementation(project(":feature:donation"))
     implementation(project(":feature:daily_content"))
+    implementation(project(":feature:progress"))
+    implementation(project(":feature:quiz"))
+    implementation(project(":feature:word_builder"))
+    implementation(project(":feature:sentence_builder"))
+    implementation(project(":feature:spelling"))
+    implementation(project(":feature:crossword"))
+    implementation(project(":feature:word_search"))
+    implementation(project(":feature:hangman"))
 
     // Android Room
     implementation(libs.androidx.room.runtime)
@@ -119,6 +137,9 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // Monitoring
+    implementation(libs.android.billing)
     implementation(libs.androidx.concurrent.futures)
 
     // WorkManager — initialized in SwahiLibApp with Hilt-provided Configuration

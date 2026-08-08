@@ -45,6 +45,11 @@ class DailyContentRepo @Inject constructor(
             )
         }
     }
+
+    /** Wipes the daily word/proverb selection history (does not touch the word/proverb dictionary itself). */
+    suspend fun clearAll() = withContext(Dispatchers.IO) {
+        dailyContentDao.deleteAll()
+    }
 }
 
 /** One resolved day of daily-content history, ready for display. */

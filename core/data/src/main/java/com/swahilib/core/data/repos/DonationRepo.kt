@@ -5,9 +5,10 @@ import com.swahilib.core.common.utils.ApiConstants
 import com.swahilib.core.network.dtos.PaystackCustomField
 import com.swahilib.core.network.dtos.PaystackInitializeRequest
 import com.swahilib.core.network.dtos.PaystackMetadata
-import com.swahilib.core.network.services.DonationApiService
+import com.swahilib.core.network.services.PaystackService
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.math.roundToLong
 
@@ -15,7 +16,8 @@ private const val TAG = "DonationRepo"
 
 @Singleton
 class DonationRepo @Inject constructor(
-    private val donationApiService: DonationApiService,
+    private val paystackService: PaystackService,
+    @Named("paystack_secret") private val secretKey: String,
 ) {
     suspend fun submitDonation(
         amountUsd: Double,
@@ -36,11 +38,12 @@ class DonationRepo @Inject constructor(
                 }
             }
 
-            val response = donationApiService.initializeTransaction(
+            val response = paystackService.initializeTransaction(
+                bearer = "Bearer $secretKey",
                 body = PaystackInitializeRequest(
                     email = email,
                     amount = amountInCents,
-                    callbackUrl = ApiConstants.DONATION_CALLBACK_URL,
+                    callbackUrl = ApiConstants.PAYSTACK_CALLBACK_URL,
                     metadata = PaystackMetadata(customFields = customFields),
                 ),
             )

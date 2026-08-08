@@ -47,7 +47,7 @@ import com.swahilib.feature.donation.view.components.PresetAmountGrid
 import kotlinx.coroutines.launch
 
 private const val DEFAULT_PRESET = 500
-private const val MINIMUM_DONATION = 50
+private const val MINIMUM_DONATION = 100
 
 @Composable
 fun DonationScreen(

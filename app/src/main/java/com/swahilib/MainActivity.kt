@@ -8,14 +8,15 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.swahilib.navigation.AppNavHost
+import com.swahilib.app.navigation.AppNavHost
 import com.swahilib.core.common.utils.DeepLinkConstants
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.data.repos.ThemeRepo
 import com.swahilib.core.data.repos.ThemeMode
-import com.swahilib.core.designsystem.theme.AppTheme
+import com.swahilib.core.design_system.theme.AppTheme
 import com.swahilib.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

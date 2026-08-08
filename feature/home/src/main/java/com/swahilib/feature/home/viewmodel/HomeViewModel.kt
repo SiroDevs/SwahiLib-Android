@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.data.repos.DailyContentRepo
+import com.swahilib.core.data.repos.EngagementRepo
 import com.swahilib.core.data.repos.HistoryRepo
 import com.swahilib.core.data.repos.IdiomRepo
 import com.swahilib.core.data.repos.PrefsRepo
@@ -12,31 +13,24 @@ import com.swahilib.core.data.repos.ProverbRepo
 import com.swahilib.core.data.repos.SayingRepo
 import com.swahilib.core.data.repos.SearchRepo
 import com.swahilib.core.data.repos.WordRepo
-import com.swahilib.core.database.model.HistoryEntity
 import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
-import com.swahilib.core.database.model.SearchEntity
 import com.swahilib.core.database.model.WordEntity
-import com.swahilib.feature.home.view.components.ContentItem
+import com.swahilib.core.engagement.engine.ActivityRecommendation
+import com.swahilib.core.engagement.model.Achievement
+import com.swahilib.core.engagement.model.Challenge
+import com.swahilib.core.engagement.model.StatisticsSummary
+import com.swahilib.core.engagement.model.UserProgress
 import com.swahilib.feature.home.view.components.HomeTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Thin orchestrator over five controllers, split by concern so each stays
- * readable on its own - the same pattern used for BibleLib's ReaderViewModel
- * refactor: [ContentController] (data loading + search/filter + likes),
- * [ReadingHistoryController] (items opened), [SearchHistoryController]
- * (search text + review nudge), [DailyHighlightsController] (word/proverb
- * of the day + streak), and [TabController] (bottom-nav/sub-tab state).
- *
- * HomeViewModel's public surface (StateFlow names, function signatures,
- * nested types) is intentionally unchanged from before this split, so none
- * of the Home screens/tabs that consume it needed to change.
- */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     idiomRepo: IdiomRepo,
@@ -47,10 +41,9 @@ class HomeViewModel @Inject constructor(
     searchRepo: SearchRepo,
     dailyContentRepo: DailyContentRepo,
     private val prefsRepo: PrefsRepo,
+    private val engageRepo: EngagementRepo,
     @ApplicationContext context: Context,
 ) : ViewModel() {
-
-    enum class HistorySubTab { USOMAJI, UTAFUTAJI }
 
     /** Word/proverb-of-the-day plus current streak, for the daily highlights dialog. */
     data class DailyHighlights(
@@ -75,22 +68,28 @@ class HomeViewModel @Inject constructor(
     private val searchHistoryController = SearchHistoryController(searchRepo, viewModelScope)
     private val tabController = TabController()
 
-    // ── Content / search / likes → ContentController ──
     val uiState: StateFlow<UiState> get() = content.uiState
     val filteredIdioms: StateFlow<List<IdiomEntity>> get() = content.filteredIdioms
     val filteredProverbs: StateFlow<List<ProverbEntity>> get() = content.filteredProverbs
     val filteredSayings: StateFlow<List<SayingEntity>> get() = content.filteredSayings
     val filteredWords: StateFlow<List<WordEntity>> get() = content.filteredWords
-    val likedWords: StateFlow<List<WordEntity>> get() = content.likedWords
-    val likedIdioms: StateFlow<List<IdiomEntity>> get() = content.likedIdioms
-    val likedProverbs: StateFlow<List<ProverbEntity>> get() = content.likedProverbs
-    val likedSayings: StateFlow<List<SayingEntity>> get() = content.likedSayings
 
-    /** Kicks off content loading and a reading-history refresh; cheap enough to call idempotently. */
-    fun fetchData(force: Boolean = false) {
-        content.fetchData(force)
-        readingHistory.refreshHistory()
-    }
+    private val _progress = MutableStateFlow<UserProgress?>(null)
+    val progress: StateFlow<UserProgress?> = _progress.asStateFlow()
+
+    private val _challenges = MutableStateFlow<List<Challenge>>(emptyList())
+    val challenges: StateFlow<List<Challenge>> = _challenges.asStateFlow()
+
+    private val _stats = MutableStateFlow<StatisticsSummary?>(null)
+    val stats: StateFlow<StatisticsSummary?> = _stats.asStateFlow()
+
+    private val _achievements = MutableStateFlow<List<Achievement>>(emptyList())
+    val achievements: StateFlow<List<Achievement>> = _achievements.asStateFlow()
+
+    private val _recommendations = MutableStateFlow<List<ActivityRecommendation>>(emptyList())
+    val recommendations: StateFlow<List<ActivityRecommendation>> = _recommendations.asStateFlow()
+
+    fun fetchData(force: Boolean = false) = content.fetchData(force)
 
     fun filterData(query: String) {
         content.filterData(query)
@@ -100,32 +99,36 @@ class HomeViewModel @Inject constructor(
             searchHistoryController.trackSearch(query)
         }
     }
+    
+    fun refreshProgress() {
+        viewModelScope.launch {
+            _progress.value = engageRepo.currentProgress()
+            _challenges.value = engageRepo.activeChallenges()
+            _stats.value = engageRepo.statistics()
+            _achievements.value = engageRepo.achievementsWithStatus()
+            _recommendations.value = engageRepo.recommendedActivities()
+        }
+    }
 
+    fun completeActivity(challengeId: String, activityId: String, secondsSpent: Int = 0) {
+        viewModelScope.launch {
+            engageRepo.markActivityComplete(challengeId, activityId, secondsSpent)
+            refreshProgress()
+        }
+    }
+    
     fun likeWord(word: WordEntity) = content.likeWord(word)
     fun likeIdiom(idiom: IdiomEntity) = content.likeIdiom(idiom)
     fun likeProverb(proverb: ProverbEntity) = content.likeProverb(proverb)
     fun likeSaying(saying: SayingEntity) = content.likeSaying(saying)
-    fun clearAllLikes() = content.clearAllLikes()
 
-    // ── Reading history → ReadingHistoryController ──
-    val history: StateFlow<List<HistoryEntity>> get() = readingHistory.history
-    fun refreshHistory() = readingHistory.refreshHistory()
-    fun clearReadingHistory() = readingHistory.clearReadingHistory()
+    /** Records a viewed item. Display/clearing of this history now lives in feature:history. */
     fun addToHistory(itemId: Int, type: String) = readingHistory.addToHistory(itemId, type)
 
-    /** Resolves a reading-history row back to the underlying content item, for display. */
-    fun resolveHistoryItem(historyEntity: HistoryEntity): ContentItem? =
-        content.findContentItem(historyEntity.type, historyEntity.item)
-
-    // ── Search history → SearchHistoryController ──
-    val searchHistory: StateFlow<List<SearchEntity>> get() = searchHistoryController.searchHistory
-    val reviewSuggestions: StateFlow<List<SearchEntity>> get() = searchHistoryController.reviewSuggestions
     val pendingSearchQuery: StateFlow<String?> get() = searchHistoryController.pendingSearchQuery
     fun consumePendingSearchQuery() = searchHistoryController.consumePendingSearchQuery()
-    fun refreshSearchHistory() = searchHistoryController.refreshSearchHistory()
-    fun clearSearchHistory() = searchHistoryController.clearSearchHistory()
 
-    /** Switches to the Search tab and pre-fills [query], e.g. from a tapped search-history row. */
+    /** Switches to the Search tab and pre-fills [query] - used when Home picks up a tapped row from History. */
     fun requestSearch(query: String) {
         searchHistoryController.setPendingQuery(query)
         tabController.setSelectedTab(HomeTab.Search)
@@ -134,8 +137,6 @@ class HomeViewModel @Inject constructor(
     // ── Tabs → TabController ──
     val selectedTab: StateFlow<HomeTab> get() = tabController.selectedTab
     fun setSelectedTab(tab: HomeTab) = tabController.setSelectedTab(tab)
-    val historySubTab: StateFlow<HistorySubTab> get() = tabController.historySubTab
-    fun setHistorySubTab(tab: HistorySubTab) = tabController.setHistorySubTab(tab)
 
     // ── Daily highlights → DailyHighlightsController ──
     val dailyHighlights: StateFlow<DailyHighlights> get() = dailyHighlightsController.dailyHighlights

@@ -6,44 +6,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
- * Owns what the user has searched for: the debounced history save, the
- * derived spaced-repetition "review this again" nudge, and the pending
- * query used to hand a tapped history row back to the Search tab.
+ * Owns what the user has searched for: the debounced history save, and the pending query used to
+ * hand a tapped History row back to the Search tab. Display/grouping/clearing of search history,
+ * and the "review this again" nudge, now live in the standalone feature:history module.
  */
 class SearchHistoryController(
     private val searchRepo: SearchRepo,
     private val scope: CoroutineScope,
 ) {
-    private val _searchHistory = MutableStateFlow<List<SearchEntity>>(emptyList())
-    val searchHistory: StateFlow<List<SearchEntity>> get() = _searchHistory
-
-    /**
-     * Lightweight spaced-repetition nudge: words the user searched for at least
-     * [REVIEW_MIN_AGE_MS] ago (so it's not just re-showing what they searched a
-     * minute ago) and hasn't searched again since. Surfacing real past lookups
-     * ties the nudge to something they actually needed, rather than a generic
-     * "come back" prompt.
-     */
-    val reviewSuggestions: StateFlow<List<SearchEntity>>
-        get() = _searchHistory.map { searches ->
-            val cutoff = System.currentTimeMillis() - REVIEW_MIN_AGE_MS
-            searches
-                .filter { (it.createdAt.toLongOrNull() ?: Long.MAX_VALUE) < cutoff }
-                .distinctBy { it.title.lowercase() }
-                .sortedByDescending { it.createdAt.toLongOrNull() ?: 0L }
-                .take(REVIEW_MAX_ITEMS)
-        }.stateIn(scope, SharingStarted.Lazily, emptyList())
-
-    // Set when a search-history entry is tapped, so HomeSearch can pick it up,
-    // pre-fill the field, run the search, then consume it.
+    // Set when a search-history entry is tapped (in feature:history) and handed back via
+    // Home's savedStateHandle bridge, so HomeSearch can pick it up, pre-fill the field, run
+    // the search, then consume it.
     private val _pendingSearchQuery = MutableStateFlow<String?>(null)
     val pendingSearchQuery: StateFlow<String?> = _pendingSearchQuery.asStateFlow()
     fun consumePendingSearchQuery() { _pendingSearchQuery.value = null }
@@ -61,29 +39,9 @@ class SearchHistoryController(
             searchRepo.saveSearch(
                 SearchEntity(title = trimmed, createdAt = System.currentTimeMillis().toString())
             )
-            refreshSearchHistory()
         }
     }
 
     /** Cancels any pending debounced save, e.g. when the query is cleared. */
     fun cancelTracking() { searchTrackingJob?.cancel() }
-
-    fun refreshSearchHistory() {
-        scope.launch {
-            _searchHistory.value = searchRepo.fetchLocalData()
-                .sortedByDescending { it.createdAt.toLongOrNull() ?: 0L }
-        }
-    }
-
-    fun clearSearchHistory() {
-        scope.launch {
-            searchRepo.clearAll()
-            _searchHistory.value = emptyList()
-        }
-    }
-
-    companion object {
-        private const val REVIEW_MIN_AGE_MS = 3 * 24 * 60 * 60 * 1000L // 3 days
-        private const val REVIEW_MAX_ITEMS = 8
-    }
 }

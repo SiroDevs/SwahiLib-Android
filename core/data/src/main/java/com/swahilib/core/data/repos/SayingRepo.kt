@@ -9,7 +9,6 @@ import com.swahilib.core.network.mapper.MapDtoToEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,7 +45,14 @@ class SayingRepo @Inject constructor(
     fun getSayingsByTitles(titles: List<String>): Flow<List<SayingEntity>> =
         sayingsDao.getSayingsByTitles(titles)
 
-    suspend fun getSayingById(sayingId: String): Flow<SayingEntity> = flow {}
+    /** Direct lookup by primary key, e.g. to resolve a history row back to its saying. */
+    suspend fun getSayingByRid(rid: Int): SayingEntity? = withContext(Dispatchers.IO) {
+        sayingsDao.getByRid(rid)
+    }
+
+    suspend fun clearAllLikes() = withContext(Dispatchers.IO) {
+        sayingsDao.clearAllLiked()
+    }
 
     companion object { private const val TAG = "SayingRepo" }
 }
