@@ -58,7 +58,7 @@ fun CrosswordScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Msalaba wa Maneno",
+                title = "CrossWord",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
             )

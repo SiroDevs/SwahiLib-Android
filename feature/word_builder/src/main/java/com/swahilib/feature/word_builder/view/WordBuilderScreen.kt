@@ -61,7 +61,7 @@ fun WordBuilderScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Jenzi la Maneno",
+                title = "Jenga Maneno",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
             )
@@ -71,7 +71,7 @@ fun WordBuilderScreen(
             when (val s = state) {
                 is WordBuilderUiState.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
                 is WordBuilderUiState.Empty -> Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
-                    Text("Hakuna maneno ya kutosha kwa sasa.", style = MaterialTheme.typography.bodyLarge)
+                    Text("Hamna maneno ya kutosha kwa sasa.", style = MaterialTheme.typography.bodyLarge)
                 }
                 is WordBuilderUiState.Playing -> PlayingContent(
                     state = s,

@@ -51,7 +51,7 @@ object ChallengeTemplates {
         val activities = listOf(
             ActivityType.VOCABULARY_QUIZ to "Kamilisha jaribio 3 la msamiati",
             ActivityType.WORD_BUILDER to "Jenga maneno 15",
-            ActivityType.SENTENCE_BUILDER to "Panga sentensi 10",
+            ActivityType.SENTENCE_BUILDER to "Jenga Sentensi 10",
             ActivityType.CROSSWORD to "Kamilisha msalaba mmoja",
         )
         return ChallengeTemplate(
@@ -76,7 +76,7 @@ object ChallengeTemplates {
             ActivityType.VOCABULARY_QUIZ to "Kamilisha majaribio 12",
             ActivityType.WORD_SEARCH to "Kamilisha michezo 6 ya kutafuta maneno",
             ActivityType.CROSSWORD to "Kamilisha misalaba 4",
-            ActivityType.SENTENCE_BUILDER to "Panga sentensi 40",
+            ActivityType.SENTENCE_BUILDER to "Jenga Sentensi 40",
             ActivityType.PROVERB_CHALLENGE to "Kamilisha changamoto 10 za methali",
         )
         return ChallengeTemplate(
@@ -150,7 +150,7 @@ object ChallengeTemplates {
         val activities = listOf(
             ActivityType.CROSSWORD to "Msalaba wa wikendi",
             ActivityType.WORD_SEARCH to "Tafuta maneno ya wikendi",
-            ActivityType.SENTENCE_BUILDER to "Panga sentensi za wikendi",
+            ActivityType.SENTENCE_BUILDER to "Jenga Sentensi za wikendi",
         )
         return ChallengeTemplate(
             scope = ChallengeScope.SEASONAL,

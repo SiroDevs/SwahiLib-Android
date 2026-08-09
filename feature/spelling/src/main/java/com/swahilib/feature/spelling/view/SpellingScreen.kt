@@ -54,7 +54,7 @@ fun SpellingScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Changamoto ya Tahajia",
+                title = "Tahajia (Spellcheck)",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
             )
@@ -128,7 +128,7 @@ private fun PlayingContent(
 
         if (state.revealedLetters > 0) {
             Text(
-                "Kidokezo: ${state.hintText}",
+                text = "${state.hintText[0].uppercaseChar()}${state.hintText.drop(1)} ni?",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.tertiary,
             )
@@ -149,7 +149,7 @@ private fun PlayingContent(
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedButton(onClick = onHint, modifier = Modifier.weight(1f)) { Text("Kidokezo") }
                 Button(onClick = { onSubmit(typed) }, enabled = typed.isNotBlank(), modifier = Modifier.weight(1f)) {
-                    Text("Tuma")
+                    Text("Wasilisha")
                 }
             }
         } else {

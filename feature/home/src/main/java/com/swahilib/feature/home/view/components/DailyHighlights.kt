@@ -16,13 +16,13 @@
 
 package com.swahilib.feature.home.view.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -32,9 +32,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.swahilib.core.ui.components.general.StreakBadge
 import com.swahilib.feature.home.viewmodel.HomeViewModel
@@ -56,24 +58,19 @@ fun DailyHighlightsDialog(
                     .fillMaxWidth()
                     .padding(20.dp),
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = "Leo Kwenye SwahiLib",
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    )
-                    StreakBadge(streakCount = highlights.streak)
-                }
+                Text(
+                    text = "Leo Kwenye SwahiLib",
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                )
+                StreakBadge(streakCount = highlights.streak)
 
                 Spacer(Modifier.height(16.dp))
 
                 DailyHighlightItem(
                     emoji = "📖",
                     label = "Neno la Siku",
-                    title = highlights.word?.title ?: "…",
+                    title = highlights.word?.title ?: "...",
+                    english = highlights.word?.english,
                     meaning = highlights.wordMeaning,
                     onClick = onWordClick,
                 )
@@ -83,7 +80,7 @@ fun DailyHighlightsDialog(
                 DailyHighlightItem(
                     emoji = "🌿",
                     label = "Methali ya Siku",
-                    title = highlights.proverb?.title ?: "…",
+                    title = highlights.proverb?.title ?: "...",
                     meaning = highlights.proverbMeaning,
                     onClick = onProverbClick,
                 )
@@ -105,6 +102,7 @@ private fun DailyHighlightItem(
     emoji: String,
     label: String,
     title: String,
+    english: String? = null,
     meaning: String,
     onClick: () -> Unit,
 ) {
@@ -115,11 +113,33 @@ private fun DailyHighlightItem(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
-            Text(
-                text = "$emoji $label",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
-            )
+
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "$emoji $label",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
+                )
+
+                if (english.isNullOrBlank()) {
+                    Spacer(Modifier.width(8.dp))
+
+                    Text(
+                        text = english!!,
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            fontStyle = FontStyle.Italic
+                        ),
+                        maxLines = 1,
+                        color = MaterialTheme.colorScheme.primary,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(top = 3.dp)
+                    )
+                }
+            }
+
             Spacer(Modifier.height(4.dp))
             Text(
                 text = title,

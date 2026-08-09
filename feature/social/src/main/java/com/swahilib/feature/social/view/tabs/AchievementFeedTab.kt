@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.engagement.catalog.AchievementCatalog
 import com.swahilib.core.social.model.AchievementFeedItem
-import com.swahilib.core.ui.components.general.achievementIconFor
 import com.swahilib.core.ui.components.indicators.EmptyState
+import com.swahilib.core.ui.components.progress.achievementIconFor
 
 fun LazyListScope.achievementFeedTab(items: List<AchievementFeedItem>) {
     if (items.isEmpty()) {

@@ -17,10 +17,10 @@ val challengeableActivityTypes = listOf(
 
 fun titleFor(type: ActivityType): String = when (type) {
     ActivityType.VOCABULARY_QUIZ -> "Jaribio la Msamiati"
-    ActivityType.WORD_BUILDER -> "Jenzi la Maneno"
-    ActivityType.SENTENCE_BUILDER -> "Panga Sentensi"
-    ActivityType.SPELLING_CHALLENGE -> "Changamoto ya Tahajia"
-    ActivityType.CROSSWORD -> "Msalaba wa Maneno"
+    ActivityType.WORD_BUILDER -> "Jenga Maneno"
+    ActivityType.SENTENCE_BUILDER -> "Jenga Sentensi"
+    ActivityType.SPELLING_CHALLENGE -> "Tahajia (Spellcheck)"
+    ActivityType.CROSSWORD -> "CrossWord"
     ActivityType.WORD_SEARCH -> "Tafuta Maneno"
     ActivityType.PROVERB_CHALLENGE -> "Changamoto ya Methali"
     ActivityType.HANGMAN -> "Hangman"

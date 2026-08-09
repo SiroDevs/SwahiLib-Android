@@ -124,7 +124,7 @@ class SpellingViewModel @Inject constructor(
 
             val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.SPELLING,
-                title = "Changamoto ya Tahajia",
+                title = "Tahajia (Spellcheck)",
                 score = result.fullyCorrectCount,
                 maxScore = result.totalQuestions,
                 xpEarned = xpEarnedThisSession,

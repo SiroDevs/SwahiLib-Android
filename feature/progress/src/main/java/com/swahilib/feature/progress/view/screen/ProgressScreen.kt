@@ -48,7 +48,7 @@ fun ProgressScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Maendeleo Yangu",
+                title = "Maendeleo Yangu (Progress)",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
             )

@@ -16,16 +16,6 @@ import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.engagement.model.Challenge
 import com.swahilib.core.engagement.model.ChallengeActivity
 
-/**
- * Maps a challenge activity to the route that plays it, or null when the activity has no
- * dedicated game screen (DAILY_READ, STREAK_VISIT, CUSTOM) and should just be marked complete
- * directly instead of navigating.
- *
- * Shared by every place that starts a challenge activity (Progress, Challenges, and the Home
- * engagement tab) specifically so a new [ActivityType] only needs a branch added *here* once -
- * this `when` has no `else`, so the compiler forces the update. Three separate copies of this
- * mapping is exactly how the SEASONAL/HANGMAN exhaustiveness gaps happened last sprint.
- */
 fun routeForChallengeActivity(challenge: Challenge, activity: ChallengeActivity): String? =
     when (activity.type) {
         ActivityType.VOCABULARY_QUIZ ->
@@ -47,20 +37,18 @@ fun routeForChallengeActivity(challenge: Challenge, activity: ChallengeActivity)
         ActivityType.DAILY_READ, ActivityType.STREAK_VISIT, ActivityType.CUSTOM -> null
     }
 
-/** Freeplay route + display title for a recommended activity type (raw string from the engine). */
 fun routeAndTitleFor(type: String): Pair<String, String> = when (type) {
     "QUIZ" -> Routes.quizFreeplay() to "Jaribio la Msamiati"
-    "WORD_BUILDER" -> Routes.wordBuilderFreeplay() to "Jenzi la Maneno"
-    "SENTENCE_BUILDER" -> Routes.sentenceBuilderFreeplay() to "Panga Sentensi"
-    "SPELLING" -> Routes.spellingFreeplay() to "Changamoto ya Tahajia"
-    "CROSSWORD" -> Routes.crosswordFreeplay() to "Msalaba wa Maneno"
+    "WORD_BUILDER" -> Routes.wordBuilderFreeplay() to "Jenga Maneno"
+    "SENTENCE_BUILDER" -> Routes.sentenceBuilderFreeplay() to "Jenga Sentensi"
+    "SPELLING" -> Routes.spellingFreeplay() to "Tahajia (Spellcheck)"
+    "CROSSWORD" -> Routes.crosswordFreeplay() to "CrossWord"
     "WORD_SEARCH" -> Routes.wordSearchFreeplay() to "Tafuta Maneno"
     "PROVERB" -> Routes.quizFreeplay(source = "PROVERBS") to "Changamoto ya Methali"
     "HANGMAN" -> Routes.hangmanFreeplay() to "Hangman"
     else -> Routes.quizFreeplay() to "Jaribio la Msamiati"
 }
 
-/** One row on the "Kwa Ajili Yako" recommendation list - reused by Challenges and the Home tab. */
 @Composable
 fun RecommendationRow(rec: ActivityRecommendation, onNavigate: (String) -> Unit) {
     val (route, title) = routeAndTitleFor(rec.type)
