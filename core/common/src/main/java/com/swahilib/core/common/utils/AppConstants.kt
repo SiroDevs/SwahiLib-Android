@@ -102,6 +102,7 @@ object Routes {
     const val LIKES = "likes"
     const val HISTORY = "history"
     const val AUTH_SIGN_IN = "auth_sign_in"
+    const val SOCIAL = "social"
     const val ADVANCED_SEARCH = "advanced_search"
     const val HOW_IT_WORKS = "how_it_works"
     const val HELP = "help"

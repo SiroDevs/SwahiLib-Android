@@ -211,8 +211,21 @@ class SocialRepo @Inject constructor(
     }
 
     suspend fun submitFriendChallengeScore(challengeId: String, score: Int, iAmChallenger: Boolean): Result<Unit> = runCatching {
+        val current = supabase.from("challenges").select {
+            filter { eq("id", challengeId) }
+        }.decodeSingle<FriendChallengeDto>()
+
+        val otherScoreAlreadyIn = if (iAmChallenger) current.opponentScore != null else current.challengerScore != null
         val field = if (iAmChallenger) "challenger_score" else "opponent_score"
-        supabase.from("challenges").update(mapOf(field to score, "status" to "active")) {
+        val newStatus = if (otherScoreAlreadyIn) "completed" else "active"
+
+        supabase.from("challenges").update(mapOf(field to score, "status" to newStatus)) {
+            filter { eq("id", challengeId) }
+        }
+    }
+
+    suspend fun declineFriendChallenge(challengeId: String): Result<Unit> = runCatching {
+        supabase.from("challenges").update(mapOf("status" to "declined")) {
             filter { eq("id", challengeId) }
         }
     }

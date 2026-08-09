@@ -107,6 +107,7 @@ dependencies {
     implementation(project(":feature:likes"))
     implementation(project(":feature:history"))
     implementation(project(":feature:auth"))
+    implementation(project(":feature:social"))
     implementation(project(":feature:advanced_search"))
     implementation(project(":feature:word"))
     implementation(project(":feature:idiom"))
