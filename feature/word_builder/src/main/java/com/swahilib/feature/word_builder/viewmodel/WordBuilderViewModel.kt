@@ -232,7 +232,7 @@ class WordBuilderViewModel @Inject constructor(
 
             val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.WORD_BUILDER,
-                title = "Jenzi la Maneno",
+                title = "Jenga Maneno",
                 score = result.correctWords,
                 maxScore = result.totalWords,
                 xpEarned = xpEarnedThisSession,

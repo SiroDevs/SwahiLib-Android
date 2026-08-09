@@ -100,7 +100,7 @@ class CrosswordViewModel @Inject constructor(
 
             val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.CROSSWORD,
-                title = "Msalaba wa Maneno",
+                title = "CrossWord",
                 score = result.correctEntries,
                 maxScore = result.totalEntries,
                 xpEarned = xpEarnedThisSession,
