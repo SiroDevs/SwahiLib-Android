@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -46,7 +47,6 @@ fun SignInScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    // Already signed in (or just finished signing in) - hand straight off to the Social hub.
     LaunchedEffect(isSignedIn) {
         if (isSignedIn) {
             navController.navigate(Routes.SOCIAL) {
@@ -86,7 +86,7 @@ fun SignInScreen(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "Ingia na akaunti yako ya Google ili kushindana na marafiki na kuona nafasi " +
+                "Ingia kupitia Google ili kushindana na marafiki na kuona nafasi " +
                     "yako kwenye ubao wa vinara.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
