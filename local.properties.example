@@ -1,19 +1,4 @@
-# Copy this file to "local.properties" (same folder) and fill in real values.
-# local.properties is gitignored - never commit real keys.
-
-# Path to your Android SDK (Android Studio usually fills this in for you).
-sdk.dir=/path/to/Android/sdk
-
-# Required for :app to build at all.
 PAYSTACK_SECRET_KEY=
 
-# Required for feature:auth / feature:social (core:social) - see docs/supabase_schema.sql
-# for the tables these point at. Get these from your Supabase project's
-# Settings -> API page.
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
-
-# From Google Cloud Console -> APIs & Services -> Credentials -> your Web
-# OAuth client ID (used for Credential Manager Google Sign-In, see
-# SocialAuthRepo.kt). This is the *Web* client ID, not the Android one.
-GOOGLE_WEB_CLIENT_ID=

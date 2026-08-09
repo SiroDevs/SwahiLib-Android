@@ -12,29 +12,17 @@ import com.swahilib.core.social.model.FriendChallengeStatus
 import com.swahilib.core.social.model.FriendshipStatus
 import com.swahilib.core.social.model.SocialProfile
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
 import kotlin.random.Random
 import javax.inject.Inject
 
-/**
- * All reads/writes against the Supabase tables in docs/supabase_schema.sql.
- * Every function assumes the caller already checked [SocialAuthRepo.isSignedIn]
- * - none of this is on the hot path for the offline single-player app.
- *
- * NOTE: written against postgrest-kt's query DSL from memory (no network
- * access to verify in this environment) - double check `from(...)`, filter
- * builders, and decode calls against the installed version before relying
- * on this in production.
- */
 class SocialRepo @Inject constructor(
     private val supabase: SupabaseClient,
+    private val authRepo: SocialAuthRepo,
 ) {
-    private val userId: String? get() = supabase.auth.currentUserOrNull()?.id
-
-    // ── Profile ─────────────────────────────────────────────────────────
+    private val userId: String? get() = authRepo.currentUserId
 
     suspend fun ensureProfile(displayName: String): SocialProfile? {
         val uid = userId ?: return null
@@ -223,8 +211,21 @@ class SocialRepo @Inject constructor(
     }
 
     suspend fun submitFriendChallengeScore(challengeId: String, score: Int, iAmChallenger: Boolean): Result<Unit> = runCatching {
+        val current = supabase.from("challenges").select {
+            filter { eq("id", challengeId) }
+        }.decodeSingle<FriendChallengeDto>()
+
+        val otherScoreAlreadyIn = if (iAmChallenger) current.opponentScore != null else current.challengerScore != null
         val field = if (iAmChallenger) "challenger_score" else "opponent_score"
-        supabase.from("challenges").update(mapOf(field to score, "status" to "active")) {
+        val newStatus = if (otherScoreAlreadyIn) "completed" else "active"
+
+        supabase.from("challenges").update(mapOf(field to score, "status" to newStatus)) {
+            filter { eq("id", challengeId) }
+        }
+    }
+
+    suspend fun declineFriendChallenge(challengeId: String): Result<Unit> = runCatching {
+        supabase.from("challenges").update(mapOf("status" to "declined")) {
             filter { eq("id", challengeId) }
         }
     }

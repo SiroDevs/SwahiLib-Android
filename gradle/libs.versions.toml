@@ -28,11 +28,12 @@ hiltNav = "1.3.0"
 hilt-work = "1.2.0"
 workmanager = "2.11.2"
 splashscreen = "1.0.1"
-# NOTE: picked at authoring time - this sandbox has no network access to verify
-# against Maven Central, so please confirm these are still current before building.
 supabase = "3.1.3"
 credentials = "1.5.0"
 googleid = "1.1.1"
+googleServices = "4.4.4"
+firebaseBom = "34.17.0"
+firebaseAuth = "10.0.0-beta03"
 
 [libraries]
 androidx-concurrent-futures = { module = "androidx.concurrent:concurrent-futures", version.ref = "concurrentFutures" }
@@ -81,8 +82,13 @@ supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
 supabase-realtime = { module = "io.github.jan-tennert.supabase:realtime-kt" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
+google-identity-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 androidx-credentials-play-services = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 google-id = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebaseAuth" }
+#firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -92,6 +98,7 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 io-sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 # Convention plugin aliases (defined in build-logic)

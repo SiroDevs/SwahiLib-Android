@@ -6,4 +6,5 @@ plugins {
     alias(libs.plugins.dagger.hilt) apply false
     alias(libs.plugins.devtools.ksp) apply false
     alias(libs.plugins.io.sentry) apply false
+    alias(libs.plugins.google.services) apply false
 }

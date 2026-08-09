@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     id("kotlin-parcelize")
     alias(libs.plugins.io.sentry)
+    alias(libs.plugins.google.services)
 }
 
 val keystoreProperties = Properties()
@@ -34,9 +35,7 @@ android {
 
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "PaystackSecret", "\"${localProperties.getProperty("PAYSTACK_SECRET_KEY") ?: ""}\"")
-    }
+}
 
     signingConfigs {
         create("release") {
@@ -107,6 +106,8 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:likes"))
     implementation(project(":feature:history"))
+    implementation(project(":feature:auth"))
+    implementation(project(":feature:social"))
     implementation(project(":feature:advanced_search"))
     implementation(project(":feature:word"))
     implementation(project(":feature:idiom"))
@@ -146,6 +147,15 @@ dependencies {
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
+
+    // Google Sign-In (Credential Manager)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.google.identity.googleid)
+
+    // Firebase Auth
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
 
     // Testing
     testImplementation(libs.junit)

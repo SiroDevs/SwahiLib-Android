@@ -6,54 +6,45 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.swahilib.core.social.BuildConfig
-import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.Google
-import io.github.jan.supabase.auth.providers.builtin.IDToken
-import io.github.jan.supabase.auth.status.SessionStatus
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import java.security.SecureRandom
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Handles account creation/sign-in via Google (through Credential Manager,
- * matching the pattern already used for SongLib), exchanged with Supabase
- * Auth. Community features are entirely opt-in - the rest of the app works
- * fully offline without ever calling this.
- *
- * NOTE: written against supabase-kt's auth-kt API surface from memory (no
- * network access to verify against current docs in this environment) -
- * double check `IDToken`/`Google` provider usage against the installed
- * version before relying on it.
+ * Handles Google Sign-In (still via Credential Manager, same as before) but now exchanges the
+ * resulting ID token with Firebase Auth instead of Supabase Auth directly. Firebase becomes the
+ * actual identity/session provider; Supabase trusts Firebase's JWTs via Third-Party Auth (see
+ * SupabaseClient.kt for the required Supabase Dashboard + Firebase custom-claim setup this
+ * depends on - none of that can be done from this file).
  */
 @Singleton
 class SocialAuthRepo @Inject constructor(
-    private val supabase: SupabaseClient,
+    private val firebaseAuth: FirebaseAuth,
 ) {
 
-    val sessionStatus: Flow<SessionStatus> get() = supabase.auth.sessionStatus
+    val isSignedIn: Flow<Boolean> = callbackFlow {
+        val listener = FirebaseAuth.AuthStateListener { auth -> trySend(auth.currentUser != null) }
+        firebaseAuth.addAuthStateListener(listener)
+        awaitClose { firebaseAuth.removeAuthStateListener(listener) }
+    }
 
-    val isSignedIn: Flow<Boolean> get() = sessionStatus.map { it is SessionStatus.Authenticated }
+    val currentUserId: String? get() = firebaseAuth.currentUser?.uid
 
-    val currentUserId: String? get() = supabase.auth.currentUserOrNull()?.id
-
-    /**
-     * Launches the Credential Manager Google Sign-In flow and exchanges the
-     * resulting ID token with Supabase Auth. Returns true on success.
-     */
-    suspend fun signInWithGoogle(context: Context): Result<Unit> = runCatching {
-        // Google needs the SHA-256 hash of the nonce; Supabase needs the raw value to verify
-        // against that hash - see https://supabase.com/docs/guides/auth/social-login/auth-google
+    suspend fun signInWithGoogle(context: Context): Result<String?> = runCatching {
         val rawNonce = generateNonce()
         val hashedNonce = sha256Hex(rawNonce)
 
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
+            .setServerClientId(BuildConfig.GoogleWebClientId)
             .setNonce(hashedNonce)
             .build()
 
@@ -70,16 +61,19 @@ class SocialAuthRepo @Inject constructor(
 
         val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
 
-        supabase.auth.signInWith(IDToken) {
-            idToken = googleIdTokenCredential.idToken
-            provider = Google
-            nonce = rawNonce
-        }
+        val firebaseCredential = GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
+        firebaseAuth.signInWithCredential(firebaseCredential).await()
+
+        googleIdTokenCredential.displayName
     }
 
     suspend fun signOut() {
-        supabase.auth.signOut()
+        firebaseAuth.signOut()
     }
+
+    /** Current Firebase ID token, handed to Supabase on every request - see SupabaseClient.kt. */
+    suspend fun supabaseAccessToken(): String? =
+        firebaseAuth.currentUser?.getIdToken(false)?.await()?.token
 
     private fun generateNonce(): String {
         val bytes = ByteArray(16)

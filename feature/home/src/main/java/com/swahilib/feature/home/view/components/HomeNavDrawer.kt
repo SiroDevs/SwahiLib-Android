@@ -27,13 +27,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
-import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FormatQuote
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.InsertChart
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.TrackChanges
 import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
@@ -120,6 +118,13 @@ fun HomeNavDrawer(
                     label = { Text("Methali ya Siku") },
                     selected = false,
                     onClick = { navigateAndClose(Routes.DAILY_PROVERB) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.Groups, contentDescription = null) },
+                    label = { Text("Jumuiya") },
+                    selected = false,
+                    onClick = { navigateAndClose(Routes.AUTH_SIGN_IN) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
 

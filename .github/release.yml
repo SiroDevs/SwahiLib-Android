@@ -1,0 +1,115 @@
+name: Release to Play Store
+
+# Fires whenever `stable` gets new commits — i.e. when `develop` is merged into it,
+# whether that's a fast-forward push, a merge commit, or a merged PR.
+on:
+  push:
+    branches:
+      - stable
+
+permissions:
+  contents: write   # needed to create the tag + GitHub Release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # app/build.gradle.kts already carries the source of truth for the version,
+      # e.g. versionName = "1.0.870" -> tag v1.0.870, apk SwahiLib-v1.0.870.apk
+      - name: Derive version + tag
+        id: version
+        run: |
+          VERSION_NAME=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
+          VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K[0-9]+' app/build.gradle.kts)
+          TAG="v${VERSION_NAME}"
+          echo "versionName=${VERSION_NAME}" >> "$GITHUB_OUTPUT"
+          echo "versionCode=${VERSION_CODE}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "apkName=SwahiLib-${TAG}.apk" >> "$GITHUB_OUTPUT"
+          echo "Resolved tag: ${TAG} (versionCode ${VERSION_CODE})"
+
+      - name: Fail if tag already exists
+        run: |
+          if git ls-remote --tags origin | grep -q "refs/tags/${{ steps.version.outputs.tag }}$"; then
+            echo "::error::Tag ${{ steps.version.outputs.tag }} already exists. Bump versionCode/versionName in app/build.gradle.kts before merging to stable."
+            exit 1
+          fi
+
+      # local.properties isn't committed; recreate what the build needs.
+      # NOTE: app/build.gradle.kts loads this file unconditionally (no exists() guard),
+      # so it must exist before ANY Gradle task runs, even a clean/lint task.
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=${ANDROID_SDK_ROOT}" > local.properties
+          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> local.properties
+          echo "PAYSTACK_SECRET_KEY=${{ secrets.PAYSTACK_SECRET_KEY }}" >> local.properties
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> local.properties
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> local.properties
+
+      # Recreate the signing keystore + key.properties from secrets.
+      # storeFile is read by app/build.gradle.kts via `file(it as String)`, which resolves
+      # relative to the app/ module directory (not the repo root) — so it must be
+      # "../keystore/release.jks" to point back at <root>/keystore/release.jks.
+      - name: Set up signing config
+        run: |
+          mkdir -p keystore
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore/release.jks
+          cat > keystore/key.properties <<EOF
+          storeFile=../keystore/release.jks
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          EOF
+
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+
+      - name: Build release AAB + APK
+        run: ./gradlew bundleRelease assembleRelease --stacktrace
+
+      - name: Locate build outputs
+        id: outputs
+        run: |
+          AAB_PATH=$(find app/build/outputs/bundle/release -name "*.aab" | head -n 1)
+          APK_PATH=$(find app/build/outputs/apk/release -name "*.apk" ! -name "*unsigned*" | head -n 1)
+          echo "aabPath=${AAB_PATH}" >> "$GITHUB_OUTPUT"
+          echo "apkPath=${APK_PATH}" >> "$GITHUB_OUTPUT"
+
+      - name: Rename APK to the release tag
+        run: |
+          mkdir -p release-assets
+          cp "${{ steps.outputs.outputs.apkPath }}" "release-assets/${{ steps.version.outputs.apkName }}"
+
+      - name: Upload AAB to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+          packageName: com.swahilib
+          releaseFiles: ${{ steps.outputs.outputs.aabPath }}
+          track: production
+          status: completed
+
+      - name: Create GitHub Release with tagged APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          target_commitish: stable
+          generate_release_notes: true
+          files: release-assets/${{ steps.version.outputs.apkName }}
+
+      - name: Clean up signing material
+        if: always()
+        run: rm -rf keystore local.properties
