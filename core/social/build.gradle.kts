@@ -38,6 +38,14 @@ dependencies {
     implementation(libs.androidx.credentials.play.services)
     implementation(libs.google.id)
 
+    // Firebase Auth - see client/SupabaseClient.kt for why this replaced Supabase's own Auth
+    // module. Aliases confirmed against app/build.gradle.kts, which already wires these.
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    // Bridges FirebaseAuth's Task<T> APIs (e.g. getIdToken()) to suspend/.await() - not
+    // referenced elsewhere in the project's catalog yet, so pinned directly here for now.
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
+
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)

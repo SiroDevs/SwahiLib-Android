@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class HomeTab(var title: String, var icon: ImageVector) {
     object Search : HomeTab("Tafuta", Icons.Default.Search)
-    object Engage : HomeTab("ChemshaBongo", Icons.Default.EmojiEvents)
+    object Engage : HomeTab("Chemsha Bongo", Icons.Default.EmojiEvents)
 }
 
 val homeTabs = listOf(

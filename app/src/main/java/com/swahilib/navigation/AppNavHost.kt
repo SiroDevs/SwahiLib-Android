@@ -40,6 +40,7 @@ import com.swahilib.feature.settings.view.screen.NotificationSettingsScreen
 import com.swahilib.feature.settings.view.screen.DataSettingsScreen
 import com.swahilib.feature.likes.view.LikesScreen
 import com.swahilib.feature.history.view.HistoryScreen
+import com.swahilib.feature.auth.view.SignInScreen
 import com.swahilib.feature.how_it_works.view.HowItWorksScreen
 import com.swahilib.feature.help.view.HelpScreen
 import com.swahilib.feature.donation.view.screen.DonationScreen
@@ -165,6 +166,10 @@ fun AppNavHost(
 
         composable(Routes.HISTORY) {
             HistoryScreen(navController = navController)
+        }
+
+        composable(Routes.AUTH_SIGN_IN) {
+            SignInScreen(navController = navController)
         }
 
         composable(Routes.ADVANCED_SEARCH) {

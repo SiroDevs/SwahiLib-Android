@@ -202,7 +202,6 @@ fun HomeScreen(
                                     )
 
                                     HomeTab.Engage -> HomeEngage(
-                                        viewModel = viewModel,
                                         navController = navController,
                                     )
                                 }

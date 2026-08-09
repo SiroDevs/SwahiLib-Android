@@ -42,9 +42,11 @@
             <option value="$PROJECT_DIR$/feature/donation" />
             <option value="$PROJECT_DIR$/feature/hangman" />
             <option value="$PROJECT_DIR$/feature/help" />
+            <option value="$PROJECT_DIR$/feature/history" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/how_it_works" />
             <option value="$PROJECT_DIR$/feature/idiom" />
+            <option value="$PROJECT_DIR$/feature/likes" />
             <option value="$PROJECT_DIR$/feature/progress" />
             <option value="$PROJECT_DIR$/feature/proverb" />
             <option value="$PROJECT_DIR$/feature/quiz" />

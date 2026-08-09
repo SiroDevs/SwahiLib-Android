@@ -12,7 +12,6 @@ import com.swahilib.core.social.model.FriendChallengeStatus
 import com.swahilib.core.social.model.FriendshipStatus
 import com.swahilib.core.social.model.SocialProfile
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
@@ -21,8 +20,9 @@ import javax.inject.Inject
 
 class SocialRepo @Inject constructor(
     private val supabase: SupabaseClient,
+    private val authRepo: SocialAuthRepo,
 ) {
-    private val userId: String? get() = supabase.auth.currentUserOrNull()?.id
+    private val userId: String? get() = authRepo.currentUserId
 
     suspend fun ensureProfile(displayName: String): SocialProfile? {
         val uid = userId ?: return null

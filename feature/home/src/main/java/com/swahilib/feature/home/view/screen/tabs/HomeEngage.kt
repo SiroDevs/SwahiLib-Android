@@ -4,203 +4,155 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Sort
+import androidx.compose.material.icons.filled.AccessibilityNew
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Extension
+import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.ManageSearch
+import androidx.compose.material.icons.filled.Quiz
+import androidx.compose.material.icons.filled.Spellcheck
+import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.ui.components.general.StreakBadge
-import com.swahilib.core.ui.components.progress.AchievementCard
-import com.swahilib.core.ui.components.progress.ChallengeCard
-import com.swahilib.core.ui.components.progress.RecommendationRow
-import com.swahilib.core.ui.components.progress.SectionHeader
-import com.swahilib.core.ui.components.progress.StatTile
-import com.swahilib.core.ui.components.progress.XpProgressCard
-import com.swahilib.core.ui.components.progress.routeForChallengeActivity
-import com.swahilib.feature.home.viewmodel.HomeViewModel
 
+private data class GameTile(val title: String, val icon: ImageVector, val route: String)
+
+private val gameTiles = listOf(
+    GameTile("Jaribio la Msamiati", Icons.Default.Quiz, Routes.quizFreeplay()),
+    GameTile("Jenzi la Maneno", Icons.Default.Extension, Routes.wordBuilderFreeplay()),
+    GameTile("Panga Sentensi", Icons.AutoMirrored.Filled.Sort, Routes.sentenceBuilderFreeplay()),
+    GameTile("Changamoto ya Tahajia", Icons.Default.Spellcheck, Routes.spellingFreeplay()),
+    GameTile("Msalaba wa Maneno", Icons.Default.GridView, Routes.crosswordFreeplay()),
+    GameTile("Tafuta Maneno", Icons.Default.ManageSearch, Routes.wordSearchFreeplay()),
+    GameTile("Hangman", Icons.Default.AccessibilityNew, Routes.hangmanFreeplay()),
+)
+
+/**
+ * "Chemsha Bongo" home tab: a gateway to every engagement activity - the 7 games above, and
+ * Maendeleo (progress: XP, streak, challenges, achievements, stats) as a distinct card at the
+ * bottom rather than another same-sized tile, since it's a summary/destination rather than a
+ * game itself.
+ */
 @Composable
-fun HomeEngage(
-    navController: NavHostController,
-    viewModel: HomeViewModel = hiltViewModel(),
-) {
-    LaunchedEffect(Unit) { viewModel.refreshProgress() }
-
-    val currentOnResume = rememberUpdatedState(viewModel::refreshProgress)
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) currentOnResume.value()
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-    }
-
-    val progress by viewModel.progress.collectAsState()
-    val challenges by viewModel.challenges.collectAsState()
-    val stats by viewModel.stats.collectAsState()
-    val achievements by viewModel.achievements.collectAsState()
-    val recommendations by viewModel.recommendations.collectAsState()
-
+fun HomeEngage(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
     ) {
-        progress?.let {
-            XpProgressCard(it)
+        gameTiles.chunked(2).forEach { row ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                row.forEach { tile ->
+                    GameTileCard(
+                        tile = tile,
+                        modifier = Modifier.weight(1f),
+                        onClick = { navController.navigate(tile.route) },
+                    )
+                }
+                if (row.size == 1) Spacer(Modifier.weight(1f))
+            }
             Spacer(Modifier.height(12.dp))
-            StreakBadge(streakCount = it.currentStreak)
-            if (it.currentStreak > 1) Spacer(Modifier.height(12.dp))
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            StatTile(
-                label = "Ngazi",
-                value = progress?.level?.toString() ?: "1",
-                icon = "🎖️",
-                modifier = Modifier.weight(1f),
-            )
-            StatTile(
-                label = "Mfuatano bora",
-                value = progress?.bestStreak?.toString() ?: "0",
-                icon = "🔥",
-                modifier = Modifier.weight(1f),
-            )
-        }
-        Spacer(Modifier.height(12.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            StatTile(
-                label = "Changamoto",
-                value = progress?.challengesCompleted?.toString() ?: "0",
-                icon = "🎯",
-                modifier = Modifier.weight(1f),
-            )
-            StatTile(
-                label = "Shughuli",
-                value = progress?.activitiesCompleted?.toString() ?: "0",
-                icon = "✅",
-                modifier = Modifier.weight(1f),
-            )
-        }
-        Spacer(Modifier.height(20.dp))
-
-        OutlinedButton(
-            onClick = { navController.navigate(Routes.quizFreeplay()) },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text("🎯 Jaribio la Haraka (Mazoezi)")
-        }
-        Spacer(Modifier.height(20.dp))
-
-        if (recommendations.isNotEmpty()) {
-            SectionHeader(title = "Kwa Ajili Yako")
-            Spacer(Modifier.height(8.dp))
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                recommendations.forEach { rec ->
-                    RecommendationRow(rec) { route -> navController.navigate(route) }
-                }
-            }
-            Spacer(Modifier.height(20.dp))
-        }
-
-        SectionHeader(
-            title = "Changamoto Zinazoendelea",
-            actionLabel = "Zote",
-            onAction = { navController.navigate(Routes.CHALLENGES) },
-        )
-        Spacer(Modifier.height(8.dp))
-        if (challenges.isEmpty()) {
-            Text(
-                "Hakuna changamoto ya sasa. Rudi kesho!",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        } else {
-            challenges.forEach { c ->
-                ChallengeCard(
-                    challenge = c,
-                    onStartActivity = { activity ->
-                        val route = routeForChallengeActivity(c, activity)
-                        if (route != null) {
-                            navController.navigate(route)
-                        } else {
-                            viewModel.completeActivity(c.id, activity.id)
-                        }
-                    },
-                )
-                Spacer(Modifier.height(12.dp))
-            }
         }
 
         Spacer(Modifier.height(8.dp))
-        SectionHeader(
-            title = "Beji",
-            actionLabel = "Zote",
-            onAction = { navController.navigate(Routes.ACHIEVEMENTS) },
-        )
-        Spacer(Modifier.height(8.dp))
-        if (achievements.isEmpty()) {
-            Text(
-                "Beji zitaonekana hapa unapoendelea kujifunza.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        } else {
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                items(
-                    achievements.sortedByDescending { it.unlocked }.take(6),
-                    key = { it.id },
-                ) { achievement ->
-                    AchievementCard(achievement, modifier = Modifier.width(130.dp))
-                }
-            }
-        }
-
-        Spacer(Modifier.height(20.dp))
-        SectionHeader(
-            title = "Takwimu",
-            actionLabel = "Zaidi",
-            onAction = { navController.navigate(Routes.STATISTICS) },
-        )
-        Spacer(Modifier.height(8.dp))
-        val minutes = (stats?.totalLearningSeconds ?: 0L) / 60
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            StatTile(
-                label = "Maneno",
-                value = stats?.wordsLearned?.toString() ?: "0",
-                icon = "📚",
-                modifier = Modifier.weight(1f),
-            )
-            StatTile(
-                label = "Dakika",
-                value = minutes.toString(),
-                icon = "⏱️",
-                modifier = Modifier.weight(1f),
-            )
-        }
+        ProgressGatewayCard(onClick = { navController.navigate(Routes.PROGRESS) })
         Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun GameTileCard(tile: GameTile, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = modifier.aspectRatio(1f),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Icon(
+                tile.icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(36.dp),
+            )
+            Spacer(Modifier.height(10.dp))
+            Text(
+                tile.title,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProgressGatewayCard(onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                Icons.Default.TrendingUp,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(32.dp),
+            )
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(
+                    "Maendeleo Yangu",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+                Text(
+                    "Alama, mfuatano, changamoto, beji na takwimu zako",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
+            Icon(
+                Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+        }
     }
 }
