@@ -7,6 +7,7 @@ import com.swahilib.core.database.daos.AchievementRecordDao
 import com.swahilib.core.database.daos.ChallengeDao
 import com.swahilib.core.database.daos.DailyActivityDao
 import com.swahilib.core.database.daos.DailyContentDao
+import com.swahilib.core.database.daos.GameProgressDao
 import com.swahilib.core.database.daos.HistoryDao
 import com.swahilib.core.database.daos.IdiomDao
 import com.swahilib.core.database.daos.LearningHistoryDao
@@ -48,4 +49,5 @@ object DatabaseModule {
     @Provides fun provideChallengeDao(db: AppDatabase): ChallengeDao = db.challengeDao()
     @Provides fun provideDailyActivityDao(db: AppDatabase): DailyActivityDao = db.dailyActivityDao()
     @Provides fun provideLearningHistoryDao(db: AppDatabase): LearningHistoryDao = db.learningHistoryDao()
+    @Provides fun provideGameProgressDao(db: AppDatabase): GameProgressDao = db.gameProgressDao()
 }

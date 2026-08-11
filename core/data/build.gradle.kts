@@ -25,6 +25,7 @@ dependencies {
     api(project(":core:database"))
     api(project(":core:engagement"))
     api(project(":core:network"))
+    api(project(":core:games"))
 
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.core.ktx)

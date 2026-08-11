@@ -1,5 +1,11 @@
 package com.swahilib.feature.word_builder.view
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,20 +16,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +46,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
+import com.swahilib.core.games.model.ScrambledWord
+import com.swahilib.core.games.model.WordBuilderRoundResult
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.game.GameExitDialog
+import com.swahilib.core.ui.components.game.GameLevelUiModel
+import com.swahilib.core.ui.components.game.GameRestartDialog
+import com.swahilib.core.ui.components.game.GameTopBar
+import com.swahilib.core.ui.components.game.LevelCarousel
+import com.swahilib.core.ui.components.game.StepTimerBar
 import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
 import com.swahilib.feature.word_builder.viewmodel.WordBuilderUiState
 import com.swahilib.feature.word_builder.viewmodel.WordBuilderViewModel
@@ -57,14 +80,35 @@ fun WordBuilderScreen(
         )
     }
     val state by viewModel.uiState.collectAsState()
+    var showRestart by remember { mutableStateOf(false) }
+    var showExit by remember { mutableStateOf(false) }
+    val isPlaying = state is WordBuilderUiState.Playing
+    BackHandler(enabled = isPlaying) { showExit = true }
+
+    if (showRestart) {
+        GameRestartDialog(onConfirm = { showRestart = false; viewModel.restart() }, onDismiss = { showRestart = false })
+    }
+    if (showExit) {
+        GameExitDialog(
+            onGoBackDiscard = { showExit = false; viewModel.discardAndExit { navController.popBackStack() } },
+            onSaveAndGoBack = { showExit = false; viewModel.saveAndExit { navController.popBackStack() } },
+            onCancel = { showExit = false },
+        )
+    }
 
     Scaffold(
         topBar = {
-            AppTopBar(
-                title = "Jenga Maneno",
-                showGoBack = true,
-                onNavIconClick = { navController.popBackStack() },
-            )
+            when (val s = state) {
+                is WordBuilderUiState.Playing -> GameTopBar(
+                    title = "Jenga Maneno",
+                    level = s.level,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
+                    onBack = { showExit = true },
+                    onRefresh = { showRestart = true },
+                )
+                else -> AppTopBar(title = "Jenga Maneno", showGoBack = true, onNavIconClick = { navController.popBackStack() })
+            }
         },
     ) { padding ->
         Box(Modifier.fillMaxSize().padding(padding)) {
@@ -73,38 +117,38 @@ fun WordBuilderScreen(
                 is WordBuilderUiState.Empty -> Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
                     Text("Hamna maneno ya kutosha kwa sasa.", style = MaterialTheme.typography.bodyLarge)
                 }
-                is WordBuilderUiState.Playing -> PlayingContent(
-                    state = s,
-                    onPick = viewModel::pickLetter,
-                    onClear = viewModel::clearPicks,
-                    onHint = viewModel::useHint,
-                    onSubmit = viewModel::submit,
-                    onNext = viewModel::next,
-                    onStopEndless = viewModel::stopEndless,
-                )
-                is WordBuilderUiState.Finished -> Column(
-                    Modifier.fillMaxSize().padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
+                is WordBuilderUiState.LevelSelect -> LevelSelectContent(s.previousPoints, s.levels, viewModel::chooseLevel)
+                is WordBuilderUiState.Playing -> AnimatedContent(
+                    targetState = s.roundIndex,
+                    transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(160)) },
+                    label = "wordBuilderRound",
                 ) {
-                    Text(
-                        if (s.result.isPerfect) "🎉 Kamili Bila Kidokezo!" else "Umemaliza!",
-                        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                    PlayingContent(
+                        state = s,
+                        onPick = viewModel::pickLetter,
+                        onClear = viewModel::clearPicks,
+                        onHint = viewModel::useHint,
+                        onSubmit = viewModel::submit,
                     )
-                    Spacer(Modifier.height(16.dp))
-                    Text("${s.result.correctWords}/${s.result.totalWords} maneno sahihi", style = MaterialTheme.typography.titleMedium)
-                    Text("+${s.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
-                    Spacer(Modifier.height(24.dp))
-                    AchievementUnlockBanner(
-                        s.unlockedAchievements,
-                        modifier = Modifier.padding(bottom = 16.dp),
-                    )
-                    Button(onClick = { navController.popBackStack() }, modifier = Modifier.fillMaxWidth()) {
-                        Text("Sawa")
-                    }
                 }
+                is WordBuilderUiState.Finished -> FinishedContent(
+                    state = s,
+                    onPlayAgain = { viewModel.backToLevelSelect() },
+                    onDone = { navController.popBackStack() },
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun LevelSelectContent(previousPoints: Int, levels: List<GameLevelUiModel>, onLevelTap: (GameLevelUiModel) -> Unit) {
+    Column(Modifier.fillMaxSize().padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Chagua Kiwango", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold))
+        Spacer(Modifier.height(4.dp))
+        Text("Jumla ya alama: $previousPoints", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Spacer(Modifier.height(24.dp))
+        LevelCarousel(levels = levels, onLevelTap = onLevelTap)
     }
 }
 
@@ -115,24 +159,15 @@ private fun PlayingContent(
     onClear: () -> Unit,
     onHint: () -> Unit,
     onSubmit: () -> Unit,
-    onNext: () -> Unit,
-    onStopEndless: () -> Unit,
 ) {
     Column(Modifier.fillMaxSize().padding(20.dp)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(
-                if (state.totalRounds != null) "Neno ${state.roundIndex + 1}/${state.totalRounds}" else "Neno #${state.roundIndex + 1}",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            state.secondsRemaining?.let { seconds ->
-                Text(
-                    "⏱ ${seconds}s",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = if (seconds <= 10) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
+        StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal)
+        Spacer(Modifier.height(16.dp))
+        Text(
+            "Neno ${state.roundIndex + 1}/${state.totalRounds}",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+        )
         Spacer(Modifier.height(8.dp))
         if (state.word.hint.isNotBlank()) {
             Text(
@@ -143,7 +178,6 @@ private fun PlayingContent(
         }
         Spacer(Modifier.height(24.dp))
 
-        // Assembled word slots
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
             modifier = Modifier.fillMaxWidth(),
@@ -157,54 +191,24 @@ private fun PlayingContent(
         }
         Spacer(Modifier.height(24.dp))
 
-        // Scrambled letter tiles
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-        ) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
             state.word.scrambledLetters.forEachIndexed { index, letter ->
                 val used = index in state.pickedIndices
-                LetterTile(
-                    letter = letter,
-                    used = used,
-                    enabled = state.feedback == null && !used,
-                    onClick = { onPick(index) },
-                )
+                LetterTile(letter = letter, used = used, enabled = !state.locked && !used, onClick = { onPick(index) })
             }
         }
         Spacer(Modifier.height(20.dp))
 
-        if (state.feedback == null) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedButton(onClick = onClear, modifier = Modifier.weight(1f)) { Text("Futa") }
-                OutlinedButton(onClick = onHint, modifier = Modifier.weight(1f)) { Text("Kidokezo") }
-            }
-            Spacer(Modifier.height(12.dp))
-            Button(
-                onClick = onSubmit,
-                enabled = state.assembled.length == state.word.answer.length,
-                modifier = Modifier.fillMaxWidth(),
-            ) { Text("Tuma") }
-            if (state.endless) {
-                Spacer(Modifier.height(8.dp))
-                TextButton(onClick = onStopEndless, modifier = Modifier.fillMaxWidth()) { Text("Maliza Mchezo") }
-            }
-        } else {
-            val correct = state.feedback == true
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = if (correct) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.errorContainer,
-                ),
-            ) {
-                Text(
-                    if (correct) "Sahihi! 🎉" else "Jibu sahihi lilikuwa \"${state.word.answer}\"",
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
-            Spacer(Modifier.height(16.dp))
-            Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) { Text("Endelea") }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            OutlinedButton(onClick = onClear, enabled = !state.locked, modifier = Modifier.weight(1f)) { Text("Futa") }
+            OutlinedButton(onClick = onHint, enabled = !state.locked, modifier = Modifier.weight(1f)) { Text("Kidokezo") }
         }
+        Spacer(Modifier.height(12.dp))
+        Button(
+            onClick = onSubmit,
+            enabled = !state.locked && state.assembled.length == state.word.answer.length,
+            modifier = Modifier.fillMaxWidth(),
+        ) { Text("Tuma") }
     }
 }
 
@@ -224,6 +228,56 @@ private fun LetterTile(letter: Char, used: Boolean, enabled: Boolean, onClick: (
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 color = if (used) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f) else MaterialTheme.colorScheme.onPrimaryContainer,
             )
+        }
+    }
+}
+
+@Composable
+private fun FinishedContent(state: WordBuilderUiState.Finished, onPlayAgain: () -> Unit, onDone: () -> Unit) {
+    Column(Modifier.fillMaxSize().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            if (state.result.isPerfect) "\ud83c\udf89 Kamili Bila Kidokezo!" else "Umemaliza!",
+            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+        )
+        Spacer(Modifier.height(12.dp))
+        Text("${state.result.correctWords}/${state.result.totalWords} maneno sahihi", style = MaterialTheme.typography.titleMedium)
+        Text("+${state.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+        if (state.level != null) {
+            Text("+${state.pointsEarned} alama - Kiwango ${state.level}", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
+        }
+        Spacer(Modifier.height(16.dp))
+        AchievementUnlockBanner(state.unlockedAchievements, modifier = Modifier.padding(bottom = 8.dp))
+
+        Text("Majibu", style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 4.dp))
+        LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(state.rounds) { (word, result) -> WordReviewRow(word, result) }
+        }
+
+        Spacer(Modifier.height(12.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            if (state.level != null) {
+                Button(onClick = onPlayAgain, modifier = Modifier.weight(1f)) { Text("Viwango") }
+            }
+            Button(onClick = onDone, modifier = Modifier.weight(1f)) { Text("Sawa") }
+        }
+    }
+}
+
+@Composable
+private fun WordReviewRow(word: ScrambledWord, result: WordBuilderRoundResult) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = if (result.correct) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.errorContainer,
+        ),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(12.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Icon(if (result.correct) Icons.Default.CheckCircle else Icons.Default.Close, contentDescription = null)
+            Spacer(Modifier.width(8.dp))
+            Column {
+                Text(word.answer.uppercase(), style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+                if (word.hint.isNotBlank()) Text(word.hint, style = MaterialTheme.typography.bodySmall)
+            }
         }
     }
 }

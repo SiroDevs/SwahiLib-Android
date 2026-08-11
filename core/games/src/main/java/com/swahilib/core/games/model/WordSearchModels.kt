@@ -6,6 +6,7 @@ enum class WordSearchDirection(val dRow: Int, val dCol: Int) {
     HORIZONTAL(0, 1),
     VERTICAL(1, 0),
     DIAGONAL_DOWN(1, 1),
+    DIAGONAL_UP(-1, 1),
 }
 
 data class PlacedWord(

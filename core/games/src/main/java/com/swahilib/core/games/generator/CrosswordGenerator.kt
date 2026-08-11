@@ -74,8 +74,8 @@ class CrosswordGenerator @Inject constructor(
 
         fun fits(candidate: Candidate, row: Int, col: Int, direction: CrosswordDirection): Boolean {
             for (i in candidate.answer.indices) {
-                val r = if (direction == CrosswordDirection.DOWN) row + i else row
-                val c = if (direction == CrosswordDirection.ACROSS) col + i else col
+                val r = row + i * direction.dRow
+                val c = col + i * direction.dCol
                 val existing = plane[r to c]
                 if (existing != null && existing != candidate.answer[i]) return false
             }
@@ -84,8 +84,8 @@ class CrosswordGenerator @Inject constructor(
 
         fun commit(candidate: Candidate, row: Int, col: Int, direction: CrosswordDirection) {
             for (i in candidate.answer.indices) {
-                val r = if (direction == CrosswordDirection.DOWN) row + i else row
-                val c = if (direction == CrosswordDirection.ACROSS) col + i else col
+                val r = row + i * direction.dRow
+                val c = col + i * direction.dCol
                 plane[r to c] = candidate.answer[i]
             }
             placed.add(Placed(candidate, row, col, direction))
@@ -102,16 +102,20 @@ class CrosswordGenerator @Inject constructor(
             outer@ for (existing in placed) {
                 for ((existingIndex, existingChar) in existing.candidate.answer.withIndex()) {
                     val matchIndex = candidate.answer.indices.firstOrNull { candidate.answer[it] == existingChar } ?: continue
-                    val newDirection = if (existing.direction == CrosswordDirection.ACROSS) CrosswordDirection.DOWN else CrosswordDirection.ACROSS
-                    val existingR = if (existing.direction == CrosswordDirection.DOWN) existing.row + existingIndex else existing.row
-                    val existingC = if (existing.direction == CrosswordDirection.ACROSS) existing.col + existingIndex else existing.col
-                    val newRow = if (newDirection == CrosswordDirection.DOWN) existingR - matchIndex else existingR
-                    val newCol = if (newDirection == CrosswordDirection.ACROSS) existingC - matchIndex else existingC
+                    val existingR = existing.row + existingIndex * existing.direction.dRow
+                    val existingC = existing.col + existingIndex * existing.direction.dCol
 
-                    if (fits(candidate, newRow, newCol, newDirection)) {
-                        commit(candidate, newRow, newCol, newDirection)
-                        placedThisOne = true
-                        break@outer
+                    // Try every direction that isn't a straight repeat of the word it's crossing,
+                    // including the diagonals, so diagonal entries get a real chance to place too.
+                    for (newDirection in CrosswordDirection.entries) {
+                        if (newDirection == existing.direction) continue
+                        val newRow = existingR - matchIndex * newDirection.dRow
+                        val newCol = existingC - matchIndex * newDirection.dCol
+                        if (fits(candidate, newRow, newCol, newDirection)) {
+                            commit(candidate, newRow, newCol, newDirection)
+                            placedThisOne = true
+                            break@outer
+                        }
                     }
                 }
             }

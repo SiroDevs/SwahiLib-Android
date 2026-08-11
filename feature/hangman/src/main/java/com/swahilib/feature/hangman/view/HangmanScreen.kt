@@ -1,5 +1,14 @@
 package com.swahilib.feature.hangman.view
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,11 +19,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,13 +38,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
+import com.swahilib.core.games.model.HangmanRound
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.game.GameExitDialog
+import com.swahilib.core.ui.components.game.GameRestartDialog
+import com.swahilib.core.ui.components.game.GameTopBar
+import com.swahilib.core.ui.components.game.LevelCarousel
+import com.swahilib.core.ui.components.game.StepTimerBar
 import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
 import com.swahilib.feature.hangman.viewmodel.HangmanUiState
 import com.swahilib.feature.hangman.viewmodel.HangmanViewModel
@@ -48,10 +74,36 @@ fun HangmanScreen(
         viewModel.start(challengeId = challengeId, activityId = activityId, difficulty = difficulty)
     }
     val state by viewModel.uiState.collectAsState()
+    var showRestart by remember { mutableStateOf(false) }
+    var showExit by remember { mutableStateOf(false) }
+
+    val isPlaying = state is HangmanUiState.Playing
+    BackHandler(enabled = isPlaying) { showExit = true }
+
+    if (showRestart) {
+        GameRestartDialog(onConfirm = { showRestart = false; viewModel.restart() }, onDismiss = { showRestart = false })
+    }
+    if (showExit) {
+        GameExitDialog(
+            onGoBackDiscard = { showExit = false; viewModel.discardAndExit { navController.popBackStack() } },
+            onSaveAndGoBack = { showExit = false; viewModel.saveAndExit { navController.popBackStack() } },
+            onCancel = { showExit = false },
+        )
+    }
 
     Scaffold(
         topBar = {
-            AppTopBar(title = "Hangman", showGoBack = true, onNavIconClick = { navController.popBackStack() })
+            when (val s = state) {
+                is HangmanUiState.Playing -> GameTopBar(
+                    title = "Hangman",
+                    level = s.level,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
+                    onBack = { showExit = true },
+                    onRefresh = { showRestart = true },
+                )
+                else -> AppTopBar(title = "Hangman", showGoBack = true, onNavIconClick = { navController.popBackStack() })
+            }
         },
     ) { padding ->
         Box(Modifier.fillMaxSize().padding(padding)) {
@@ -62,34 +114,48 @@ fun HangmanScreen(
                 is HangmanUiState.Empty -> Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
                     Text("Hakuna maneno ya kutosha kwa sasa.", style = MaterialTheme.typography.bodyLarge)
                 }
-                is HangmanUiState.Playing -> PlayingContent(s, onGuess = viewModel::guess, onNext = viewModel::next)
-                is HangmanUiState.Finished -> Column(
-                    Modifier.fillMaxSize().padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
+                is HangmanUiState.LevelSelect -> LevelSelectContent(
+                    previousPoints = s.previousPoints,
+                    levels = s.levels,
+                    onLevelTap = viewModel::chooseLevel,
+                )
+                is HangmanUiState.Playing -> AnimatedContent(
+                    targetState = s.index,
+                    transitionSpec = {
+                        (slideInHorizontally(tween(280)) { it } + fadeIn()) togetherWith
+                            (slideOutHorizontally(tween(280)) { -it } + fadeOut())
+                    },
+                    label = "hangmanRound",
                 ) {
-                    Text(
-                        if (s.result.isPerfect) "🎉 Umeshinda Yote!" else "Umemaliza!",
-                        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    Text("${s.result.wonWords}/${s.result.totalWords} umeshinda", style = MaterialTheme.typography.titleMedium)
-                    Text("+${s.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
-                    Spacer(Modifier.height(24.dp))
-                    AchievementUnlockBanner(s.unlockedAchievements, modifier = Modifier.padding(bottom = 16.dp))
-                    Button(onClick = { navController.popBackStack() }, modifier = Modifier.fillMaxWidth()) {
-                        Text("Sawa")
-                    }
+                    PlayingContent(s, onGuess = viewModel::guess)
                 }
+                is HangmanUiState.Finished -> FinishedContent(
+                    state = s,
+                    onPlayAgain = { viewModel.backToLevelSelect() },
+                    onDone = { navController.popBackStack() },
+                )
             }
         }
     }
 }
 
 @Composable
-private fun PlayingContent(state: HangmanUiState.Playing, onGuess: (Char) -> Unit, onNext: () -> Unit) {
+private fun LevelSelectContent(previousPoints: Int, levels: List<com.swahilib.core.ui.components.game.GameLevelUiModel>, onLevelTap: (com.swahilib.core.ui.components.game.GameLevelUiModel) -> Unit) {
+    Column(Modifier.fillMaxSize().padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Chagua Kiwango", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold))
+        Spacer(Modifier.height(4.dp))
+        Text("Jumla ya alama: $previousPoints", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Spacer(Modifier.height(24.dp))
+        LevelCarousel(levels = levels, onLevelTap = { onLevelTap(it) })
+    }
+}
+
+@Composable
+private fun PlayingContent(state: HangmanUiState.Playing, onGuess: (Char) -> Unit) {
     val round = state.round
     Column(Modifier.fillMaxSize().padding(20.dp)) {
+        StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal)
+        Spacer(Modifier.height(16.dp))
         Text(
             "Neno ${state.index + 1}/${state.rounds.size}",
             style = MaterialTheme.typography.labelLarge,
@@ -112,36 +178,17 @@ private fun PlayingContent(state: HangmanUiState.Playing, onGuess: (Char) -> Uni
                 round.displayWord,
                 modifier = Modifier.fillMaxWidth().padding(20.dp),
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                textAlign = TextAlign.Center,
             )
         }
         Spacer(Modifier.height(24.dp))
 
-        if (!round.isOver) {
-            LetterGrid(guessed = round.guessedLetters, answer = round.answer, onGuess = onGuess)
-        } else {
-            val won = round.isWon
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = if (won) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.errorContainer,
-                ),
-            ) {
-                Text(
-                    if (won) "Umeshinda! 🎉" else "Umepoteza. Jibu lilikuwa \"${round.answer}\"",
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
-            Spacer(Modifier.height(16.dp))
-            Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
-                Text(if (state.index + 1 >= state.rounds.size) "Maliza" else "Endelea")
-            }
-        }
+        LetterGrid(guessed = round.guessedLetters, answer = round.answer, enabled = !round.isOver, onGuess = onGuess)
     }
 }
 
 @Composable
-private fun LetterGrid(guessed: Set<Char>, answer: String, onGuess: (Char) -> Unit) {
+private fun LetterGrid(guessed: Set<Char>, answer: String, enabled: Boolean, onGuess: (Char) -> Unit) {
     val rows = ALPHABET.chunked(7)
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         rows.forEach { row ->
@@ -150,8 +197,8 @@ private fun LetterGrid(guessed: Set<Char>, answer: String, onGuess: (Char) -> Un
                     val used = letter in guessed
                     val correct = used && letter in answer
                     Card(
-                        onClick = { if (!used) onGuess(letter) },
-                        enabled = !used,
+                        onClick = { if (!used && enabled) onGuess(letter) },
+                        enabled = !used && enabled,
                         colors = CardDefaults.cardColors(
                             containerColor = when {
                                 !used -> MaterialTheme.colorScheme.primaryContainer
@@ -165,6 +212,74 @@ private fun LetterGrid(guessed: Set<Char>, answer: String, onGuess: (Char) -> Un
                             Text(letter.toString(), style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold))
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun FinishedContent(state: HangmanUiState.Finished, onPlayAgain: () -> Unit, onDone: () -> Unit) {
+    Column(Modifier.fillMaxSize().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(8.dp))
+        Text(
+            if (state.result.isPerfect) "\ud83c\udf89 Umeshinda Yote!" else "Umemaliza!",
+            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+        )
+        Spacer(Modifier.height(12.dp))
+        Text("${state.result.wonWords}/${state.result.totalWords} umeshinda", style = MaterialTheme.typography.titleMedium)
+        Text("+${state.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+        if (state.level != null) {
+            Text("+${state.pointsEarned} alama - Kiwango ${state.level}", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
+        }
+        AnimatedVisibility(visible = state.leveledUp) {
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
+                modifier = Modifier.padding(top = 12.dp),
+            ) {
+                Text("Kiwango kipya kimefunguliwa!", modifier = Modifier.padding(12.dp), style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+        Spacer(Modifier.height(16.dp))
+        AchievementUnlockBanner(state.unlockedAchievements, modifier = Modifier.padding(bottom = 8.dp))
+
+        Text("Majibu", style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 4.dp))
+        LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(state.rounds) { round -> RoundReviewRow(round) }
+        }
+
+        Spacer(Modifier.height(12.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            if (state.level != null) {
+                Button(onClick = onPlayAgain, modifier = Modifier.weight(1f)) {
+                    Text("Viwango")
+                }
+            }
+            Button(onClick = onDone, modifier = Modifier.weight(1f)) {
+                Text("Sawa")
+            }
+        }
+    }
+}
+
+@Composable
+private fun RoundReviewRow(round: HangmanRound) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = if (round.isWon) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.errorContainer,
+        ),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(12.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = if (round.isWon) Icons.Default.CheckCircle else Icons.Default.Close,
+                contentDescription = null,
+            )
+            Spacer(Modifier.width(8.dp))
+            Column {
+                Text(round.answer, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+                if (round.hint.isNotBlank()) {
+                    Text(round.hint, style = MaterialTheme.typography.bodySmall)
                 }
             }
         }

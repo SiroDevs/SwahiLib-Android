@@ -28,8 +28,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 180
-        versionName = "1.0.180"
+        versionCode = 181
+        versionName = "1.0.181"
         minSdk = 26
         targetSdk = 37
 
@@ -39,10 +39,10 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storePassword = keystoreProperties["storePassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
+            keyAlias = keystoreProperties["KEY_ALIAS"] as String
+            keyPassword = keystoreProperties["KEY_PASSWORD"] as String
+            storePassword = keystoreProperties["KEYSTORE_PASSWORD"] as String
+            storeFile = keystoreProperties["STORE_FILE"]?.let { file(it as String) }
         }
     }
 

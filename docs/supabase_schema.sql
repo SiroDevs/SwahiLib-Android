@@ -47,9 +47,6 @@ create policy "friendships_insert_own" on public.friendships
 create policy "friendships_update_participant" on public.friendships
     for update using (auth.uid() = requester_id or auth.uid() = addressee_id);
 
--- ── Weekly Competitions ─────────────────────────────────────────────────
--- One row per ISO week (period_key e.g. "2026-W31"), created lazily by the
--- app the first time a signed-in user opens the leaderboard that week.
 create table if not exists public.competitions (
     id uuid primary key default gen_random_uuid(),
     period_key text unique not null,

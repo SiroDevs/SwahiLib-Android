@@ -2,6 +2,7 @@ package com.swahilib.core.data.di
 
 import android.content.Context
 import com.swahilib.core.data.repos.EngagementRepo
+import com.swahilib.core.data.repos.GameProgressRepo
 import com.swahilib.core.data.repos.HistoryRepo
 import com.swahilib.core.data.repos.IdiomRepo
 import com.swahilib.core.data.repos.PrefsRepo
@@ -16,6 +17,7 @@ import com.swahilib.core.engagement.engine.RewardsEngine
 import com.swahilib.core.engagement.engine.StatisticsEngine
 import com.swahilib.core.engagement.engine.XpEngine
 import com.swahilib.core.database.daos.HistoryDao
+import com.swahilib.core.database.daos.GameProgressDao
 import com.swahilib.core.database.daos.IdiomDao
 import com.swahilib.core.database.daos.ProverbDao
 import com.swahilib.core.database.daos.SayingDao
@@ -60,6 +62,10 @@ object DataModule {
     @Provides @Singleton
     fun provideSearchRepo(searchDao: SearchDao): SearchRepo =
         SearchRepo(searchDao)
+
+    @Provides @Singleton
+    fun provideGameProgressRepo(gameProgressDao: GameProgressDao): GameProgressRepo =
+        GameProgressRepo(gameProgressDao)
 
     @Provides @Singleton
     fun provideEngagementRepo(

@@ -1,5 +1,7 @@
 package com.swahilib.core.games.model
 
+import kotlinx.serialization.Serializable
+
 /**
  * Sprint 2 - Word Builder. User reconstructs a Swahili word from its
  * scrambled letters. Supports hints (each hint reveals the next correct
@@ -14,6 +16,7 @@ data class ScrambledWord(
     val sourceWordRid: Int,
 )
 
+@Serializable
 data class WordBuilderRoundResult(
     val wordId: String,
     val correct: Boolean,

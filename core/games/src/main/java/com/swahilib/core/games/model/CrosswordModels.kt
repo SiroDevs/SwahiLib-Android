@@ -1,6 +1,16 @@
 package com.swahilib.core.games.model
 
-enum class CrosswordDirection { ACROSS, DOWN }
+/**
+ * A placement direction as a (row, col) step vector, so the generator and
+ * renderer can treat every direction - including diagonals - uniformly
+ * instead of branching on ACROSS/DOWN everywhere.
+ */
+enum class CrosswordDirection(val dRow: Int, val dCol: Int) {
+    ACROSS(0, 1),
+    DOWN(1, 0),
+    DIAGONAL_DOWN_RIGHT(1, 1),
+    DIAGONAL_DOWN_LEFT(1, -1),
+}
 
 data class CrosswordEntry(
     val id: String,

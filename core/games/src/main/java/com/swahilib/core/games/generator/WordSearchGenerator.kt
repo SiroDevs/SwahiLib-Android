@@ -23,6 +23,8 @@ class WordSearchGenerator @Inject constructor(
         theme: WordSearchTheme = WordSearchTheme.RANDOM,
         wordCount: Int = 8,
         seed: Long = System.currentTimeMillis(),
+        /** Easy levels draw filler letters only from the pool of letters the target words actually need, cutting visual noise. */
+        easyFillerPool: Boolean = false,
     ): WordSearchPuzzle {
         val random = Random(seed)
         val gridSize = when (difficulty) {
@@ -30,10 +32,8 @@ class WordSearchGenerator @Inject constructor(
             Difficulty.INTERMEDIATE -> 12
             Difficulty.ADVANCED -> 14
         }
-        val allowedDirections = when (difficulty) {
-            Difficulty.BEGINNER -> listOf(WordSearchDirection.HORIZONTAL, WordSearchDirection.VERTICAL)
-            else -> WordSearchDirection.entries
-        }
+        // Diagonals are available at every difficulty now.
+        val allowedDirections = WordSearchDirection.entries
 
         val candidates = sourceWords(theme, gridSize, random)
         if (candidates.isEmpty()) {
@@ -52,10 +52,16 @@ class WordSearchGenerator @Inject constructor(
             }
         }
 
-        // Fill remaining blanks with random letters so the puzzle doesn't reveal word shapes.
+        // Fill remaining blanks. Easy levels restrict fillers to letters the puzzle
+        // actually needs, so every visible letter is "relevant" and less overwhelming.
+        val fillerPool = if (easyFillerPool) {
+            placed.flatMap { it.word.toList() }.distinct().joinToString("").ifEmpty { fillerLetters }
+        } else {
+            fillerLetters
+        }
         for (r in 0 until gridSize) {
             for (c in 0 until gridSize) {
-                if (grid[r][c] == ' ') grid[r][c] = fillerLetters[random.nextInt(fillerLetters.length)]
+                if (grid[r][c] == ' ') grid[r][c] = fillerPool[random.nextInt(fillerPool.length)]
             }
         }
 
@@ -84,13 +90,23 @@ class WordSearchGenerator @Inject constructor(
         random: Random,
         maxAttempts: Int = 60,
     ): Triple<Int, Int, WordSearchDirection>? {
+        val len = word.length
+
+        // Generalized bounds for a start index stepping by `d` over (len-1) steps,
+        // keeping every cell in [0, gridSize-1] - handles negative d (e.g. DIAGONAL_UP) too.
+        fun startRange(d: Int): IntRange {
+            val lo = maxOf(0, -d * (len - 1))
+            val hi = minOf(gridSize - 1, gridSize - 1 - d * (len - 1))
+            return if (lo > hi) IntRange.EMPTY else lo..hi
+        }
+
         repeat(maxAttempts) {
             val direction = allowedDirections.random(random)
-            val maxRow = gridSize - (direction.dRow * (word.length - 1))
-            val maxCol = gridSize - (direction.dCol * (word.length - 1))
-            if (maxRow <= 0 || maxCol <= 0) return@repeat
-            val row = random.nextInt(maxRow)
-            val col = random.nextInt(maxCol)
+            val rowRange = startRange(direction.dRow)
+            val colRange = startRange(direction.dCol)
+            if (rowRange.isEmpty() || colRange.isEmpty()) return@repeat
+            val row = random.nextInt(rowRange.first, rowRange.last + 1)
+            val col = random.nextInt(colRange.first, colRange.last + 1)
 
             var fits = true
             for (i in word.indices) {

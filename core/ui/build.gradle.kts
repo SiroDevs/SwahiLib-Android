@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.swahilib.android.library.compose)
+    alias(libs.plugins.swahilib.hilt)
 }
 
 android {

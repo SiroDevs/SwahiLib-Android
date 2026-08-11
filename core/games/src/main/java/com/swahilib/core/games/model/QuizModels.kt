@@ -1,6 +1,7 @@
 package com.swahilib.core.games.model
 
 import com.swahilib.core.engagement.model.Difficulty
+import kotlinx.serialization.Serializable
 
 /**
  * Sprint 2 - Quiz Engine domain models. Pure Kotlin, no Room/Compose deps,
@@ -58,6 +59,7 @@ data class QuizSet(
 )
 
 /** One user answer, captured as it's submitted during play. */
+@Serializable
 data class QuizAnswer(
     val questionId: String,
     val selectedOptionIds: Set<String> = emptySet(),

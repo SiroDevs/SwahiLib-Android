@@ -10,6 +10,7 @@ import com.swahilib.core.database.daos.AchievementRecordDao
 import com.swahilib.core.database.daos.ChallengeDao
 import com.swahilib.core.database.daos.DailyActivityDao
 import com.swahilib.core.database.daos.DailyContentDao
+import com.swahilib.core.database.daos.GameProgressDao
 import com.swahilib.core.database.daos.HistoryDao
 import com.swahilib.core.database.daos.IdiomDao
 import com.swahilib.core.database.daos.LearningHistoryDao
@@ -24,6 +25,8 @@ import com.swahilib.core.database.model.ChallengeActivityEntity
 import com.swahilib.core.database.model.ChallengeEntity
 import com.swahilib.core.database.model.DailyActivityEntity
 import com.swahilib.core.database.model.DailyContentEntity
+import com.swahilib.core.database.model.GameLevelProgressEntity
+import com.swahilib.core.database.model.GameSessionStateEntity
 import com.swahilib.core.database.model.HistoryEntity
 import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.LearningHistoryEntity
@@ -50,8 +53,10 @@ import com.swahilib.core.database.model.XpEventEntity
         ChallengeActivityEntity::class,
         DailyActivityEntity::class,
         LearningHistoryEntity::class,
+        GameLevelProgressEntity::class,
+        GameSessionStateEntity::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -68,6 +73,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun challengeDao(): ChallengeDao
     abstract fun dailyActivityDao(): DailyActivityDao
     abstract fun learningHistoryDao(): LearningHistoryDao
+    abstract fun gameProgressDao(): GameProgressDao
 
     companion object {
         val MIGRATION_2_3 = object : Migration(2, 3) {
@@ -226,7 +232,37 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        val ALL_MIGRATIONS = arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS `game_level_progress` (
+                        `gameType` TEXT NOT NULL,
+                        `highestUnlockedLevel` INTEGER NOT NULL,
+                        `totalPoints` INTEGER NOT NULL,
+                        `updatedAt` INTEGER NOT NULL,
+                        PRIMARY KEY(`gameType`)
+                    )
+                    """.trimIndent()
+                )
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS `game_session_state` (
+                        `gameType` TEXT NOT NULL,
+                        `level` INTEGER NOT NULL,
+                        `contentSeed` INTEGER NOT NULL,
+                        `stepIndex` INTEGER NOT NULL,
+                        `livePoints` INTEGER NOT NULL,
+                        `snapshotJson` TEXT NOT NULL,
+                        `updatedAt` INTEGER NOT NULL,
+                        PRIMARY KEY(`gameType`)
+                    )
+                    """.trimIndent()
+                )
+            }
+        }
+
+        val ALL_MIGRATIONS = arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
 
         @Volatile private var widgetInstance: AppDatabase? = null
 

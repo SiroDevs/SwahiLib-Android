@@ -1,5 +1,7 @@
 package com.swahilib.core.games.model
 
+import kotlinx.serialization.Serializable
+
 data class SpellingQuestion(
     val id: String,
     val clue: String,
@@ -7,6 +9,7 @@ data class SpellingQuestion(
     val sourceRid: Int,
 )
 
+@Serializable
 data class SpellingRoundResult(
     val questionId: String,
     val typed: String,
