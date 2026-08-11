@@ -14,12 +14,6 @@ import com.swahilib.core.engagement.time.TimeKeys
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Generates and mutates challenges. Idempotent per (scope, periodKey), so
- * calling `ensureDailyChallenge()` on every app open is safe. Completion is
- * handled through [markActivityComplete] which will auto-fire the challenge
- * completion reward once every activity is done.
- */
 @Singleton
 class ChallengeEngine @Inject constructor(
     private val store: ProgressStore,
@@ -57,11 +51,6 @@ class ChallengeEngine @Inject constructor(
         )
     }
 
-    /**
-     * Sprint 3 - Seasonal & Special Events. Returns null on an ordinary
-     * weekday with no active holiday - callers should treat that as "no
-     * seasonal challenge today", not an error.
-     */
     suspend fun ensureSeasonalChallenge(): Challenge? {
         val cal = java.util.Calendar.getInstance(store.clock.timeZone()).apply { timeInMillis = store.clock.now() }
         val month = cal.get(java.util.Calendar.MONTH) + 1
@@ -115,14 +104,6 @@ class ChallengeEngine @Inject constructor(
         return toDomain(entity, activities)
     }
 
-    /**
-     * Marks a single activity in a challenge as complete, awards XP for it,
-     * and - if every activity in the challenge is now done - fires the
-     * challenge-completion bonus exactly once.
-     *
-     * Returns null if the challenge or activity can't be found, or if the
-     * activity was already completed (idempotent second-call safety).
-     */
     suspend fun markActivityComplete(
         challengeId: String,
         activityId: String,
@@ -204,7 +185,6 @@ class ChallengeEngine @Inject constructor(
             }
     }
 
-    /** Mirrors the periodKey logic in [ensureSeasonalChallenge] without creating anything - used to look up an already-created seasonal challenge. */
     private fun seasonalPeriodKeyForToday(): String? {
         val cal = java.util.Calendar.getInstance(store.clock.timeZone()).apply { timeInMillis = store.clock.now() }
         val month = cal.get(java.util.Calendar.MONTH) + 1

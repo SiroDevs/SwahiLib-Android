@@ -9,8 +9,6 @@ import com.swahilib.core.games.model.SpellingRoundResult
 import kotlin.math.max
 
 object SpellingScorer {
-
-    /** Minimum similarity to earn any partial credit at all (below this = 0). */
     private const val PARTIAL_CREDIT_FLOOR = 0.5f
     private const val HINT_PENALTY_PER_LETTER = 0.15f
 
@@ -57,7 +55,6 @@ object SpellingScorer {
         )
     }
 
-    /** Standard iterative Levenshtein edit distance. */
     private fun levenshtein(a: String, b: String): Int {
         if (a == b) return 0
         if (a.isEmpty()) return b.length

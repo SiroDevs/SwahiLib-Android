@@ -22,7 +22,6 @@ interface SayingDao {
     @Query("SELECT * FROM sayings WHERE rid = :rid")
     fun getById(rid: String): Flow<SayingEntity>
 
-    /** Direct (non-Flow) lookup by primary key, used to resolve history rows. */
     @Query("SELECT * FROM sayings WHERE rid = :rid LIMIT 1")
     suspend fun getByRid(rid: Int): SayingEntity?
 

@@ -51,7 +51,6 @@ class WordRepo @Inject constructor(
         wordsDao.getRandomWord()
     }
 
-    /** Direct lookup by primary key, e.g. to resolve a history row back to its word. */
     suspend fun getWordByRid(rid: Int): WordEntity? = withContext(Dispatchers.IO) {
         wordsDao.getByRid(rid)
     }

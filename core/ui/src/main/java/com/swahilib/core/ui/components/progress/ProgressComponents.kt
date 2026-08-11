@@ -1,19 +1,3 @@
-/*
- * Copyright 2026 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.swahilib.core.ui.components.progress
 
 import androidx.compose.foundation.background
@@ -46,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.swahilib.core.engagement.model.DailyActivitySnapshot
 import com.swahilib.core.engagement.model.UserProgress
 
-/** Title + optional "see all" text action, used above every list section on the engagement screens. */
 @Composable
 fun SectionHeader(
     title: String,
@@ -66,7 +49,6 @@ fun SectionHeader(
     }
 }
 
-/** Level chip + XP progress bar. Sits at the top of the dashboard. */
 @Composable
 fun XpProgressCard(progress: UserProgress, modifier: Modifier = Modifier) {
     Card(
@@ -141,7 +123,6 @@ fun ProgressBar(
     }
 }
 
-/** Small 2-line stat tile used in a 2x2 grid on the dashboard. */
 @Composable
 fun StatTile(
     label: String,
@@ -178,7 +159,6 @@ fun StatTile(
     }
 }
 
-/** Bar chart of the last-7-day XP counts. Auto-normalizes to the tallest bar. */
 @Composable
 fun WeeklyActivityChart(days: List<DailyActivitySnapshot>, modifier: Modifier = Modifier) {
     val max = (days.maxOfOrNull { it.xpEarned }?.takeIf { it > 0 } ?: 1L).toFloat()

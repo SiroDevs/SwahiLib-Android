@@ -1,10 +1,5 @@
 package com.swahilib.core.games.model
 
-/**
- * Sprint 2 - Sentence Builder. Source sentences are proverbs (`methali`) -
- * they're already grammatically complete Swahili sentences with a `meaning`
- * field ready-made for the "explanation on incorrect answer" requirement.
- */
 data class SentenceQuestion(
     val id: String,
     val shuffledWords: List<String>,

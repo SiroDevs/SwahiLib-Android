@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserProgressDao {
-
     @Query("SELECT * FROM user_progress WHERE id = 0 LIMIT 1")
     suspend fun get(): UserProgressEntity?
 

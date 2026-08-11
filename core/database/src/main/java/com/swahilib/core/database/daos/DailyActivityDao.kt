@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DailyActivityDao {
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIfMissing(entity: DailyActivityEntity): Long
 

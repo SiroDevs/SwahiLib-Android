@@ -19,14 +19,6 @@ import com.swahilib.core.engagement.model.XpAward
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Feature-facing facade over the engagement engines. Screens and their view
- * models depend on this instead of on each engine directly, so we can move
- * the reward math around without touching UI code.
- *
- * Streak state still lives in [PrefsRepo] (existing SharedPref-backed
- * counters). This repo merges the two sources into a single [UserProgress].
- */
 @Singleton
 class EngagementRepo @Inject constructor(
     private val prefsRepo: PrefsRepo,
@@ -39,15 +31,6 @@ class EngagementRepo @Inject constructor(
     private val difficultyEngine: DifficultyEngine,
     private val recommendationEngine: RecommendationEngine,
 ) {
-
-    /**
-     * Runs the once-per-launch bootstrap:
-     *  - ticks the streak if the user hasn't visited today,
-     *  - generates the daily / weekly / monthly challenges if missing,
-     *  - grants the daily-login reward if it hasn't been claimed yet.
-     *
-     * Safe to call every app resume; each step is idempotent.
-     */
     suspend fun onAppOpen(): DailyLoginOutcome {
         val streak = prefsRepo.recordDailyVisit()
 
@@ -97,11 +80,9 @@ class EngagementRepo @Inject constructor(
 
     suspend fun achievementsWithStatus(): List<Achievement> = achievementEngine.catalogWithStatus()
 
-    /** Recommended starting difficulty for a game type, based on recent accuracy. See [DifficultyEngine]. */
     suspend fun recommendedDifficulty(type: StatisticsEngine.EventType): Difficulty =
         difficultyEngine.recommend(type.name)
 
-    /** Personalized "what to play next" suggestions. See [RecommendationEngine]. */
     suspend fun recommendedActivities(limit: Int = 3): List<ActivityRecommendation> =
         recommendationEngine.recommendations(limit)
 

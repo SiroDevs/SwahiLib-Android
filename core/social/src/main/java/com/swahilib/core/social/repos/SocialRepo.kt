@@ -1,16 +1,16 @@
 package com.swahilib.core.social.repos
 
-import com.swahilib.core.social.dto.AchievementFeedDto
-import com.swahilib.core.social.dto.FriendChallengeDto
-import com.swahilib.core.social.dto.FriendshipDto
-import com.swahilib.core.social.dto.LeaderboardEntry
-import com.swahilib.core.social.dto.ProfileDto
-import com.swahilib.core.social.model.AchievementFeedItem
-import com.swahilib.core.social.model.Friend
-import com.swahilib.core.social.model.FriendChallenge
-import com.swahilib.core.social.model.FriendChallengeStatus
-import com.swahilib.core.social.model.FriendshipStatus
-import com.swahilib.core.social.model.SocialProfile
+import com.swahilib.core.social.dtos.AchievementFeedDto
+import com.swahilib.core.social.dtos.FriendChallengeDto
+import com.swahilib.core.social.dtos.FriendshipDto
+import com.swahilib.core.social.dtos.LeaderboardEntry
+import com.swahilib.core.social.dtos.ProfileDto
+import com.swahilib.core.social.models.AchievementFeedItem
+import com.swahilib.core.social.models.Friend
+import com.swahilib.core.social.models.FriendChallenge
+import com.swahilib.core.social.models.FriendChallengeStatus
+import com.swahilib.core.social.models.FriendshipStatus
+import com.swahilib.core.social.models.SocialProfile
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
@@ -52,7 +52,6 @@ class SocialRepo @Inject constructor(
         }.decodeSingleOrNull<ProfileDto>()?.toDomain()
     }
 
-    /** Pushes the latest local snapshot (from ProgressStore) up to Supabase. Called by SocialSyncWorker. */
     suspend fun syncProgress(level: Int, totalXp: Int, currentStreak: Int) {
         val uid = userId ?: return
         supabase.from("profiles").update(
@@ -61,8 +60,6 @@ class SocialRepo @Inject constructor(
             filter { eq("id", uid) }
         }
     }
-
-    // ── Leaderboard ─────────────────────────────────────────────────────
 
     suspend fun globalLeaderboard(limit: Int = 50): List<LeaderboardEntry> {
         val uid = userId
@@ -110,8 +107,6 @@ class SocialRepo @Inject constructor(
         }
     }
 
-    // ── Friends ─────────────────────────────────────────────────────────
-
     suspend fun friends(): List<Friend> {
         val uid = userId ?: return emptyList()
         val friendships = supabase.from("friendships").select {
@@ -141,7 +136,6 @@ class SocialRepo @Inject constructor(
         }
     }
 
-    /** Looks up a user by their shareable friend code and sends a request. */
     suspend fun sendFriendRequest(friendCode: String): Result<Unit> = runCatching {
         val uid = userId ?: error("Not signed in")
         val target = supabase.from("profiles").select {
@@ -162,8 +156,6 @@ class SocialRepo @Inject constructor(
             filter { eq("id", friendshipId) }
         }
     }
-
-    // ── Friend Challenges ───────────────────────────────────────────────
 
     suspend fun createFriendChallenge(opponentId: String, activityType: String, difficulty: String): Result<FriendChallenge> = runCatching {
         val uid = userId ?: error("Not signed in")
@@ -230,8 +222,6 @@ class SocialRepo @Inject constructor(
         }
     }
 
-    // ── Achievement Feed ────────────────────────────────────────────────
-
     suspend fun postAchievementUnlock(achievementId: String): Result<Unit> = runCatching {
         val uid = userId ?: error("Not signed in")
         supabase.from("achievements").insert(
@@ -265,7 +255,7 @@ class SocialRepo @Inject constructor(
     }
 
     private fun generateFriendCode(): String {
-        val chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789" // no O/0/I/1 to avoid ambiguity
+        val chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
         return (1..6).map { chars.random() }.joinToString("")
     }
 

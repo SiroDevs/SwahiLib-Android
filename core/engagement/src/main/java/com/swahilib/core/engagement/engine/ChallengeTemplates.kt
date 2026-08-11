@@ -6,12 +6,6 @@ import com.swahilib.core.engagement.model.ChallengeScope
 import com.swahilib.core.engagement.model.Difficulty
 import java.util.UUID
 
-/**
- * Pure functions that generate the *shape* of a challenge (title + activity
- * list). ChallengeEngine turns these into persisted rows, adds an XP reward,
- * and wires up expiry. Sprint 2 games plug in by extending [ActivityType] and
- * writing a template here; nothing else in Sprint 1 needs to change.
- */
 data class ChallengeTemplate(
     val scope: ChallengeScope,
     val title: String,
@@ -33,7 +27,7 @@ object ChallengeTemplates {
         return ChallengeTemplate(
             scope = ChallengeScope.DAILY,
             title = "Changamoto ya Leo",
-            description = "Kamilisha shughuli tatu fupi ndani ya dakika tano.",
+            description = "Kamilisha shughuli 3 fupi ndani ya dakika 5.",
             difficulty = difficulty,
             activities = types.mapIndexed { index, (type, title) ->
                 ChallengeActivity(
@@ -57,7 +51,7 @@ object ChallengeTemplates {
         return ChallengeTemplate(
             scope = ChallengeScope.WEEKLY,
             title = "Changamoto ya Wiki",
-            description = "Kamilisha shughuli nne ndani ya wiki.",
+            description = "Kamilisha shughuli 4 ndani ya wiki.",
             difficulty = Difficulty.INTERMEDIATE,
             activities = activities.mapIndexed { index, (type, title) ->
                 ChallengeActivity(
@@ -74,7 +68,7 @@ object ChallengeTemplates {
     fun monthly(periodKey: String): ChallengeTemplate {
         val activities = listOf(
             ActivityType.VOCABULARY_QUIZ to "Kamilisha majaribio 12",
-            ActivityType.WORD_SEARCH to "Kamilisha michezo 6 ya kutafuta maneno",
+            ActivityType.SUDOKU to "Kamilisha michezo 6 ya kutafuta maneno",
             ActivityType.CROSSWORD to "Kamilisha misalaba 4",
             ActivityType.SENTENCE_BUILDER to "Jenga Sentensi 40",
             ActivityType.PROVERB_CHALLENGE to "Kamilisha changamoto 10 za methali",
@@ -82,7 +76,7 @@ object ChallengeTemplates {
         return ChallengeTemplate(
             scope = ChallengeScope.MONTHLY,
             title = "Changamoto ya Mwezi",
-            description = "Ongeza umahiri wako wa Kiswahili kwa shughuli tano kubwa.",
+            description = "Ongeza umahiri wako wa Kiswahili kwa shughuli 5 kubwa.",
             difficulty = Difficulty.ADVANCED,
             activities = activities.mapIndexed { index, (type, title) ->
                 ChallengeActivity(
@@ -96,7 +90,6 @@ object ChallengeTemplates {
         )
     }
 
-    /** Ad-hoc practice session; no expiry, not indexed to a period. */
     fun practice(difficulty: Difficulty = Difficulty.BEGINNER): ChallengeTemplate {
         val id = UUID.randomUUID().toString().take(8)
         val activities = listOf(
@@ -121,7 +114,6 @@ object ChallengeTemplates {
         )
     }
 
-    /** Holiday event - richer activity set, boosted rewards handled via ChallengeScope.SEASONAL in RewardRules. */
     fun holidayEvent(periodKey: String, event: com.swahilib.core.engagement.catalog.SeasonalEventDef, difficulty: Difficulty = Difficulty.INTERMEDIATE): ChallengeTemplate {
         val activities = listOf(
             ActivityType.VOCABULARY_QUIZ to "Jaribio maalum la sikukuu",
@@ -145,11 +137,10 @@ object ChallengeTemplates {
         )
     }
 
-    /** Weekend Challenge - active Saturday/Sunday, keyed per ISO week so it's created once and stays put all weekend. */
     fun weekendChallenge(periodKey: String, difficulty: Difficulty = Difficulty.INTERMEDIATE): ChallengeTemplate {
         val activities = listOf(
             ActivityType.CROSSWORD to "Msalaba wa wikendi",
-            ActivityType.WORD_SEARCH to "Tafuta maneno ya wikendi",
+            ActivityType.SUDOKU to "Tafuta maneno ya wikendi",
             ActivityType.SENTENCE_BUILDER to "Jenga Sentensi za wikendi",
         )
         return ChallengeTemplate(

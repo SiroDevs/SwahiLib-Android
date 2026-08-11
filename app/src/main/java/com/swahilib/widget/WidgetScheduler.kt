@@ -7,14 +7,6 @@ import androidx.work.WorkManager
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
-/**
- * Schedules [WidgetRefreshWorker] to run once a day at 01:00, well clear of the
- * midnight day-rollover so `DailyContentManager.getOrCreateToday()` always
- * resolves to the new day's content by the time this fires - the same
- * initial-delay-until-a-fixed-clock-time approach `NotificationScheduler` uses
- * for the word/proverb notifications, so all three (notification, widget,
- * in-app screens) end up showing the same item at the same time.
- */
 object WidgetScheduler {
 
     private const val WORK_NAME = "widget_daily_refresh"

@@ -1,6 +1,11 @@
 package com.swahilib.core.games.model
 
-enum class CrosswordDirection { ACROSS, DOWN }
+enum class CrosswordDirection(val dRow: Int, val dCol: Int) {
+    ACROSS(0, 1),
+    DOWN(1, 0),
+    DIAGONAL_DOWN_RIGHT(1, 1),
+    DIAGONAL_DOWN_LEFT(1, -1),
+}
 
 data class CrosswordEntry(
     val id: String,
@@ -12,18 +17,17 @@ data class CrosswordEntry(
     val clue: String,
 )
 
-/** A single grid cell. Null means "not part of the puzzle" (a black square). */
 data class CrosswordCell(
     val row: Int,
     val col: Int,
     val letter: Char,
-    val number: Int? = null, // set only on cells that start an entry
+    val number: Int? = null,
 )
 
 data class CrosswordPuzzle(
     val rows: Int,
     val cols: Int,
-    val cells: Map<Pair<Int, Int>, CrosswordCell>, // sparse - absent = black square
+    val cells: Map<Pair<Int, Int>, CrosswordCell>,
     val entries: List<CrosswordEntry>,
 )
 

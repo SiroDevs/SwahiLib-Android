@@ -5,10 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-/**
- * One row per calendar day, accumulating engagement counters. StatisticsEngine
- * reads this table to build the weekly-activity chart on the dashboard.
- */
 @Keep
 @Entity(tableName = "daily_activity")
 data class DailyActivityEntity(

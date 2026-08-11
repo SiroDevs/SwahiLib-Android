@@ -30,7 +30,7 @@ fun routeForChallengeActivity(challenge: Challenge, activity: ChallengeActivity)
             Routes.spelling(challenge.id, activity.id, challenge.difficulty.name)
         ActivityType.CROSSWORD ->
             Routes.crossword(challenge.id, activity.id, challenge.difficulty.name)
-        ActivityType.WORD_SEARCH ->
+        ActivityType.SUDOKU ->
             Routes.wordSearch(challenge.id, activity.id, challenge.difficulty.name)
         ActivityType.HANGMAN ->
             Routes.hangman(challenge.id, activity.id, challenge.difficulty.name)
@@ -43,7 +43,7 @@ fun routeAndTitleFor(type: String): Pair<String, String> = when (type) {
     "SENTENCE_BUILDER" -> Routes.sentenceBuilderFreeplay() to "Jenga Sentensi"
     "SPELLING" -> Routes.spellingFreeplay() to "Tahajia (Spellcheck)"
     "CROSSWORD" -> Routes.crosswordFreeplay() to "CrossWord"
-    "WORD_SEARCH" -> Routes.wordSearchFreeplay() to "Tafuta Maneno"
+    "SUDOKU" -> Routes.wordSearchFreeplay() to "Tafuta Maneno"
     "PROVERB" -> Routes.quizFreeplay(source = "PROVERBS") to "Changamoto ya Methali"
     "HANGMAN" -> Routes.hangmanFreeplay() to "Hangman"
     else -> Routes.quizFreeplay() to "Jaribio la Msamiati"

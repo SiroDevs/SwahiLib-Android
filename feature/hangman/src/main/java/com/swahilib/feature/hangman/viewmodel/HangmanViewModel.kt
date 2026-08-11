@@ -3,6 +3,7 @@ package com.swahilib.feature.hangman.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.data.repos.EngagementRepo
+import com.swahilib.core.data.repos.GameProgressRepo
 import com.swahilib.core.engagement.engine.RewardRules
 import com.swahilib.core.engagement.engine.StatisticsEngine
 import com.swahilib.core.engagement.model.Achievement
@@ -10,31 +11,38 @@ import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.engagement.model.XpAward
 import com.swahilib.core.engagement.model.XpSource
+import com.swahilib.core.games.engine.GameLevelConfig
+import com.swahilib.core.games.engine.GameStepTimer
 import com.swahilib.core.games.engine.HangmanScorer
 import com.swahilib.core.games.generator.HangmanGenerator
 import com.swahilib.core.games.model.HangmanRound
 import com.swahilib.core.games.model.HangmanSessionResult
+import com.swahilib.core.ui.components.game.GameLevelUiModel
+import com.swahilib.core.ui.components.game.GameSound
+import com.swahilib.core.ui.components.game.GameSoundPlayer
+import com.swahilib.feature.hangman.utils.HangmanRoundSnapshot
+import com.swahilib.feature.hangman.utils.HangmanSnapshot
+import com.swahilib.feature.hangman.utils.HangmanUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
-
-sealed interface HangmanUiState {
-    data object Loading : HangmanUiState
-    data object Empty : HangmanUiState
-    data class Playing(val rounds: List<HangmanRound>, val index: Int) : HangmanUiState {
-        val round: HangmanRound get() = rounds[index]
-    }
-    data class Finished(val result: HangmanSessionResult, val unlockedAchievements: List<Achievement> = emptyList()) : HangmanUiState
-}
+import kotlin.random.Random
 
 @HiltViewModel
 class HangmanViewModel @Inject constructor(
     private val generator: HangmanGenerator,
     private val engageRepo: EngagementRepo,
+    private val gameProgressRepo: GameProgressRepo,
+    private val soundPlayer: GameSoundPlayer,
 ) : ViewModel() {
+
+    private val gameType = StatisticsEngine.EventType.HANGMAN.name
 
     private val _uiState = MutableStateFlow<HangmanUiState>(HangmanUiState.Loading)
     val uiState: StateFlow<HangmanUiState> = _uiState.asStateFlow()
@@ -43,46 +51,223 @@ class HangmanViewModel @Inject constructor(
     private var activityId: String? = null
     private var difficulty: Difficulty = Difficulty.BEGINNER
     private var startedAtMs: Long = 0L
+    private var contentSeed: Long = 0L
+    private var wordCount: Int = 5
+
+    private val stepTimer = GameStepTimer(
+        scope = viewModelScope,
+        onTick = ::onTick,
+        onExpire = ::onStepExpired,
+    )
 
     fun start(challengeId: String?, activityId: String?, difficulty: Difficulty = Difficulty.BEGINNER, wordCount: Int = 5) {
         if (_uiState.value !is HangmanUiState.Loading) return
         this.challengeId = challengeId
         this.activityId = activityId
-        startedAtMs = System.currentTimeMillis()
+        this.difficulty = difficulty
+        this.wordCount = wordCount
 
         viewModelScope.launch {
-            this@HangmanViewModel.difficulty = if (challengeId == null) {
-                engageRepo.recommendedDifficulty(StatisticsEngine.EventType.HANGMAN)
+            if (challengeId != null) {
+                // Challenge deep-link: skip level select, behave as a single fixed-difficulty session.
+                beginSession(level = null, resume = false)
             } else {
-                difficulty
+                showLevelSelect()
             }
-            val rounds = generator.session(this@HangmanViewModel.difficulty, wordCount)
-            _uiState.value = if (rounds.isEmpty()) HangmanUiState.Empty else HangmanUiState.Playing(rounds, index = 0)
         }
+    }
+
+    private suspend fun showLevelSelect() {
+        val progress = gameProgressRepo.getProgress(gameType)
+        val levels = GameLevelConfig.levels().map { lvl ->
+            GameLevelUiModel(
+                level = lvl,
+                bannerPoints = GameLevelConfig.bannerPointsForLevel(lvl),
+                unlocked = lvl <= progress.highestUnlockedLevel,
+                isCurrent = lvl == progress.highestUnlockedLevel,
+            )
+        }
+        _uiState.value = HangmanUiState.LevelSelect(levels, progress.totalPoints.toInt())
+    }
+
+    fun chooseLevel(level: Int) {
+        viewModelScope.launch {
+            if (!gameProgressRepo.canPlay(gameType, level)) {
+                soundPlayer.play(GameSound.LOCKED)
+                return@launch
+            }
+            beginSession(level = level, resume = true)
+        }
+    }
+
+    private suspend fun beginSession(level: Int?, resume: Boolean) {
+        startedAtMs = System.currentTimeMillis()
+        val progress = gameProgressRepo.getProgress(gameType)
+        val effectiveDifficulty = level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
+
+        val saved = if (resume) gameProgressRepo.loadSession(gameType) else null
+        val matchesSaved = saved != null && saved.level == (level ?: 0)
+
+        contentSeed = if (matchesSaved) saved!!.contentSeed else Random.nextLong()
+        var rounds = generator.session(effectiveDifficulty, wordCount, contentSeed)
+        if (rounds.isEmpty()) {
+            _uiState.value = HangmanUiState.Empty
+            return
+        }
+
+        var index = 0
+        var livePoints = 0
+        if (matchesSaved) {
+            val snapshot = runCatching { Json.decodeFromString<HangmanSnapshot>(saved!!.snapshotJson) }.getOrNull()
+            if (snapshot != null) {
+                rounds = rounds.mapIndexed { i, round ->
+                    snapshot.roundsSoFar.getOrNull(i)?.let {
+                        round.copy(guessedLetters = it.guessedLetters.toSet(), wrongGuesses = it.wrongGuesses)
+                    } ?: round
+                }
+                index = saved!!.stepIndex.coerceIn(0, rounds.lastIndex)
+                livePoints = saved.livePoints
+            }
+        }
+
+        val totalSeconds = level?.let { GameLevelConfig.timerSecondsForLevel(it) } ?: 60
+        _uiState.value = HangmanUiState.Playing(
+            rounds = rounds,
+            index = index,
+            level = level,
+            previousPoints = progress.totalPoints.toInt(),
+            livePoints = livePoints,
+            secondsRemaining = totalSeconds,
+            secondsTotal = totalSeconds,
+        )
+        stepTimer.start(totalSeconds)
+    }
+
+    private fun onTick(secondsRemaining: Int) {
+        val state = _uiState.value as? HangmanUiState.Playing ?: return
+        _uiState.value = state.copy(secondsRemaining = secondsRemaining)
+        if (secondsRemaining in 1..5) soundPlayer.play(GameSound.TICK, volume = 0.5f)
+    }
+
+    private fun onStepExpired() {
+        val state = _uiState.value as? HangmanUiState.Playing ?: return
+        if (state.round.isOver) return
+        soundPlayer.play(GameSound.TIME_UP)
+        val forcedLoss = state.round.copy(wrongGuesses = state.round.maxWrongGuesses)
+        val newRounds = state.rounds.toMutableList().apply { set(state.index, forcedLoss) }
+        _uiState.value = state.copy(rounds = newRounds)
+        advanceAfterDelay()
     }
 
     fun guess(letter: Char) {
         val state = _uiState.value as? HangmanUiState.Playing ?: return
         if (state.round.isOver) return
+        soundPlayer.play(GameSound.TAP)
         val updated = HangmanScorer.guess(state.round, letter.uppercaseChar())
         val newRounds = state.rounds.toMutableList().apply { set(state.index, updated) }
         _uiState.value = state.copy(rounds = newRounds)
-    }
-
-    fun next() {
-        val state = _uiState.value as? HangmanUiState.Playing ?: return
-        if (!state.round.isOver) return
-        val nextIndex = state.index + 1
-        if (nextIndex >= state.rounds.size) {
-            finish(state.rounds)
-        } else {
-            _uiState.value = state.copy(index = nextIndex)
+        if (updated.isOver) {
+            soundPlayer.play(GameSound.SUBMIT)
+            if (updated.isWon) {
+                val level = state.level
+                val bonus = level?.let { GameLevelConfig.pointsPerCorrect(it) } ?: 10
+                _uiState.value = (_uiState.value as HangmanUiState.Playing).copy(livePoints = state.livePoints + bonus)
+            }
+            advanceAfterDelay()
         }
     }
 
-    private fun finish(rounds: List<HangmanRound>) {
+    private fun advanceAfterDelay() {
+        stepTimer.stop()
+        viewModelScope.launch {
+            delay(650)
+            advanceStep()
+        }
+    }
+
+    private fun advanceStep() {
+        val state = _uiState.value as? HangmanUiState.Playing ?: return
+        persistSnapshot(state)
+        val nextIndex = state.index + 1
+        if (nextIndex >= state.rounds.size) {
+            finish(state)
+        } else {
+            val totalSeconds = state.secondsTotal
+            _uiState.value = state.copy(index = nextIndex, secondsRemaining = totalSeconds)
+            stepTimer.start(totalSeconds)
+        }
+    }
+
+    private fun persistSnapshot(state: HangmanUiState.Playing) {
+        val snapshot = HangmanSnapshot(
+            roundsSoFar = state.rounds.take(state.index + 1).map {
+                HangmanRoundSnapshot(it.guessedLetters.joinToString(""), it.wrongGuesses)
+            }
+        )
+        viewModelScope.launch {
+            gameProgressRepo.saveSession(
+                gameType = gameType,
+                level = state.level ?: 0,
+                contentSeed = contentSeed,
+                stepIndex = state.index,
+                livePoints = state.livePoints,
+                snapshotJson = Json.encodeToString(HangmanSnapshot.serializer(), snapshot),
+            )
+        }
+    }
+
+    fun restart() {
+        val state = _uiState.value
+        val level = when (state) {
+            is HangmanUiState.Playing -> state.level
+            else -> null
+        }
+        stepTimer.stop()
+        _uiState.value = HangmanUiState.Loading
+        viewModelScope.launch {
+            gameProgressRepo.clearSession(gameType)
+            beginSession(level = level, resume = false)
+        }
+    }
+
+    fun discardAndExit(onDone: () -> Unit) {
+        stepTimer.stop()
+        viewModelScope.launch {
+            gameProgressRepo.clearSession(gameType)
+            onDone()
+        }
+    }
+
+    fun saveAndExit(onDone: () -> Unit) {
+        stepTimer.stop()
+        val state = _uiState.value as? HangmanUiState.Playing
+        if (state == null) {
+            onDone()
+            return
+        }
+        val snapshot = HangmanSnapshot(
+            roundsSoFar = state.rounds.take(state.index + 1).map {
+                HangmanRoundSnapshot(it.guessedLetters.joinToString(""), it.wrongGuesses)
+            }
+        )
+        viewModelScope.launch {
+            gameProgressRepo.saveSession(
+                gameType = gameType,
+                level = state.level ?: 0,
+                contentSeed = contentSeed,
+                stepIndex = state.index,
+                livePoints = state.livePoints,
+                snapshotJson = Json.encodeToString(HangmanSnapshot.serializer(), snapshot),
+            )
+            onDone()
+        }
+    }
+
+    private fun finish(state: HangmanUiState.Playing) {
+        stepTimer.stop()
         val secondsSpent = ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(1)
-        val result = HangmanScorer.tally(rounds, difficulty, secondsSpent)
+        val effectiveDifficulty = state.level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
+        val result = HangmanScorer.tally(state.rounds, effectiveDifficulty, secondsSpent)
 
         viewModelScope.launch {
             val cId = challengeId
@@ -91,7 +276,7 @@ class HangmanViewModel @Inject constructor(
 
             if (cId != null && aId != null) {
                 engageRepo.markActivityComplete(cId, aId, secondsSpent)
-                xpEarnedThisSession = RewardRules.activityXp(ActivityType.HANGMAN, difficulty)
+                xpEarnedThisSession = RewardRules.activityXp(ActivityType.HANGMAN, effectiveDifficulty)
             } else if (result.xpEarned > 0) {
                 engageRepo.awardXp(
                     XpAward(
@@ -112,7 +297,33 @@ class HangmanViewModel @Inject constructor(
                 secondsSpent = secondsSpent,
             )
 
-            _uiState.value = HangmanUiState.Finished(result.copy(xpEarned = xpEarnedThisSession), unlocked)
+            var leveledUp = false
+            if (state.level != null) {
+                val before = gameProgressRepo.getProgress(gameType)
+                leveledUp = state.level >= before.highestUnlockedLevel
+                gameProgressRepo.completeLevel(gameType, state.level, state.livePoints)
+                soundPlayer.play(GameSound.LEVEL_COMPLETE)
+            } else {
+                gameProgressRepo.clearSession(gameType)
+            }
+
+            _uiState.value = HangmanUiState.Finished(
+                result = result.copy(xpEarned = xpEarnedThisSession),
+                rounds = state.rounds,
+                unlockedAchievements = unlocked,
+                level = state.level,
+                pointsEarned = state.livePoints,
+                leveledUp = leveledUp,
+            )
         }
+    }
+
+    fun backToLevelSelect() {
+        viewModelScope.launch { showLevelSelect() }
+    }
+
+    override fun onCleared() {
+        stepTimer.stop()
+        super.onCleared()
     }
 }

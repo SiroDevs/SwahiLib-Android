@@ -14,21 +14,11 @@ import kotlin.random.Random
 
 private data class Candidate(val answer: String, val clue: String)
 
-/**
- * Greedy crossword builder: places the longest candidate first, then tries
- * to intersect every following candidate with an already-placed word at a
- * shared letter. Runs on an unbounded (row, col) plane during placement,
- * then the puzzle's bounding box becomes the final grid size. Clues mix
- * word definitions/English meanings (per CLAUDE.md) with single-word idioms
- * where available; proverbs/synonyms aren't gridable as single answers so
- * they're left to Proverb Challenge and Sentence Builder instead.
- */
 @Singleton
 class CrosswordGenerator @Inject constructor(
     private val wordDao: WordDao,
     private val idiomDao: IdiomDao,
 ) {
-
     suspend fun generate(
         difficulty: Difficulty = Difficulty.BEGINNER,
         targetEntries: Int = 7,
@@ -74,8 +64,8 @@ class CrosswordGenerator @Inject constructor(
 
         fun fits(candidate: Candidate, row: Int, col: Int, direction: CrosswordDirection): Boolean {
             for (i in candidate.answer.indices) {
-                val r = if (direction == CrosswordDirection.DOWN) row + i else row
-                val c = if (direction == CrosswordDirection.ACROSS) col + i else col
+                val r = row + i * direction.dRow
+                val c = col + i * direction.dCol
                 val existing = plane[r to c]
                 if (existing != null && existing != candidate.answer[i]) return false
             }
@@ -84,14 +74,13 @@ class CrosswordGenerator @Inject constructor(
 
         fun commit(candidate: Candidate, row: Int, col: Int, direction: CrosswordDirection) {
             for (i in candidate.answer.indices) {
-                val r = if (direction == CrosswordDirection.DOWN) row + i else row
-                val c = if (direction == CrosswordDirection.ACROSS) col + i else col
+                val r = row + i * direction.dRow
+                val c = col + i * direction.dCol
                 plane[r to c] = candidate.answer[i]
             }
             placed.add(Placed(candidate, row, col, direction))
         }
 
-        // Seed with the longest word, centered horizontally at the origin.
         val first = candidates.first()
         commit(first, row = 0, col = 0, direction = CrosswordDirection.ACROSS)
 
@@ -102,25 +91,24 @@ class CrosswordGenerator @Inject constructor(
             outer@ for (existing in placed) {
                 for ((existingIndex, existingChar) in existing.candidate.answer.withIndex()) {
                     val matchIndex = candidate.answer.indices.firstOrNull { candidate.answer[it] == existingChar } ?: continue
-                    val newDirection = if (existing.direction == CrosswordDirection.ACROSS) CrosswordDirection.DOWN else CrosswordDirection.ACROSS
-                    val existingR = if (existing.direction == CrosswordDirection.DOWN) existing.row + existingIndex else existing.row
-                    val existingC = if (existing.direction == CrosswordDirection.ACROSS) existing.col + existingIndex else existing.col
-                    val newRow = if (newDirection == CrosswordDirection.DOWN) existingR - matchIndex else existingR
-                    val newCol = if (newDirection == CrosswordDirection.ACROSS) existingC - matchIndex else existingC
+                    val existingR = existing.row + existingIndex * existing.direction.dRow
+                    val existingC = existing.col + existingIndex * existing.direction.dCol
 
-                    if (fits(candidate, newRow, newCol, newDirection)) {
-                        commit(candidate, newRow, newCol, newDirection)
-                        placedThisOne = true
-                        break@outer
+                    for (newDirection in CrosswordDirection.entries) {
+                        if (newDirection == existing.direction) continue
+                        val newRow = existingR - matchIndex * newDirection.dRow
+                        val newCol = existingC - matchIndex * newDirection.dCol
+                        if (fits(candidate, newRow, newCol, newDirection)) {
+                            commit(candidate, newRow, newCol, newDirection)
+                            placedThisOne = true
+                            break@outer
+                        }
                     }
                 }
             }
             if (!placedThisOne) continue
         }
 
-        // Normalize to a 0-based bounding box, computed from every occupied cell
-        // (not just placement anchors - an ACROSS word's row is fixed but a DOWN
-        // word's column is fixed, so anchors alone don't give the true extents).
         val minRow = plane.keys.minOf { it.first }
         val minCol = plane.keys.minOf { it.second }
         val shiftedPlane = plane.mapKeys { (pos, _) -> (pos.first - minRow) to (pos.second - minCol) }
@@ -128,7 +116,7 @@ class CrosswordGenerator @Inject constructor(
         val entries = placed.mapIndexed { index, p ->
             CrosswordEntry(
                 id = "cw_$index",
-                number = 0, // assigned below once cell numbering is known
+                number = 0,
                 row = p.row - minRow,
                 col = p.col - minCol,
                 direction = p.direction,
@@ -137,8 +125,6 @@ class CrosswordGenerator @Inject constructor(
             )
         }
 
-        // Number entries in reading order (top-to-bottom, left-to-right); a
-        // cell that starts more than one entry shares a single number.
         val startCells = entries.map { it.row to it.col }.distinct()
             .sortedWith(compareBy({ it.first }, { it.second }))
         val numberByCell = startCells.withIndex().associate { (i, cell) -> cell to i + 1 }

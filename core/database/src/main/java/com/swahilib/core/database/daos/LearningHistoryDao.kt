@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LearningHistoryDao {
-
     @Insert
     suspend fun insert(entry: LearningHistoryEntity): Long
 

@@ -2,11 +2,11 @@ package com.swahilib.feature.social.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.social.dto.LeaderboardEntry
-import com.swahilib.core.social.model.AchievementFeedItem
-import com.swahilib.core.social.model.Friend
-import com.swahilib.core.social.model.FriendChallenge
-import com.swahilib.core.social.model.SocialProfile
+import com.swahilib.core.social.dtos.LeaderboardEntry
+import com.swahilib.core.social.models.AchievementFeedItem
+import com.swahilib.core.social.models.Friend
+import com.swahilib.core.social.models.FriendChallenge
+import com.swahilib.core.social.models.SocialProfile
 import com.swahilib.core.social.repos.SocialAuthRepo
 import com.swahilib.core.social.repos.SocialRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,11 +20,6 @@ import javax.inject.Inject
 
 enum class LeaderboardScope { GLOBAL, FRIENDS }
 
-/**
- * Owns the whole Jumuiya (Social) hub: leaderboard, friends, friend challenges, and the
- * friends' achievement feed. Every read/write goes straight through [SocialRepo] - there's no
- * local cache, since community data is inherently shared/live and small in volume.
- */
 @HiltViewModel
 class SocialViewModel @Inject constructor(
     private val authRepo: SocialAuthRepo,
@@ -83,8 +78,6 @@ class SocialViewModel @Inject constructor(
         _achievementFeed.value = emptyList()
     }
 
-    // ── Leaderboard ─────────────────────────────────────────────────────
-
     fun setLeaderboardScope(scope: LeaderboardScope) {
         if (_leaderboardScope.value == scope) return
         _leaderboardScope.value = scope
@@ -97,8 +90,6 @@ class SocialViewModel @Inject constructor(
             LeaderboardScope.FRIENDS -> socialRepo.friendsLeaderboard()
         }
     }
-
-    // ── Friends ─────────────────────────────────────────────────────────
 
     fun refreshFriends() {
         viewModelScope.launch { _friends.value = socialRepo.friends() }
@@ -124,15 +115,12 @@ class SocialViewModel @Inject constructor(
         }
     }
 
-    /** "Remove" a friend - schema has no delete policy for friendships, so this blocks instead. */
     fun removeFriend(friendshipId: String) {
         viewModelScope.launch {
             socialRepo.respondToFriendRequest(friendshipId, accept = false)
             refreshFriends()
         }
     }
-
-    // ── Friend Challenges ───────────────────────────────────────────────
 
     fun refreshChallenges() {
         viewModelScope.launch { _challenges.value = socialRepo.myFriendChallenges() }
@@ -163,8 +151,6 @@ class SocialViewModel @Inject constructor(
             refreshChallenges()
         }
     }
-
-    // ── Achievement Feed ────────────────────────────────────────────────
 
     fun refreshAchievementFeed() {
         viewModelScope.launch { _achievementFeed.value = socialRepo.friendsAchievementFeed() }

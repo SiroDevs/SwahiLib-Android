@@ -18,11 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-/**
- * Shown before [ShareSheet] whenever an entry has more than one meaning, so the
- * person picks which one gets shared — whether they end up tapping "Maandishi"
- * or "Picha" afterwards, since both read the meaning already chosen here.
- */
 @Composable
 fun MeaningPickerDialog(
     meanings: List<String>,

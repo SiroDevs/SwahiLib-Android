@@ -8,7 +8,6 @@ import com.swahilib.core.database.model.DailyContentEntity
 
 @Dao
 interface DailyContentDao {
-
     @Query("SELECT * FROM daily_content WHERE date = :date LIMIT 1")
     suspend fun getByDate(date: String): DailyContentEntity?
 

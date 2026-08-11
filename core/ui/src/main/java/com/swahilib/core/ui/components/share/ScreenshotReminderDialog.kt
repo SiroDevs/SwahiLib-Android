@@ -20,12 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 
-/**
- * Silently watches [MediaStore.Images.Media.EXTERNAL_CONTENT_URI] for new screenshots.
- * When one is detected an [AlertDialog] nudges the user toward the in-app share flow.
- *
- * @param onShareClick called when the user taps "Shiriki" — open [ShareSheet] from here.
- */
 @Composable
 fun ScreenshotReminderDialog(onShareClick: () -> Unit) {
     val context = LocalContext.current

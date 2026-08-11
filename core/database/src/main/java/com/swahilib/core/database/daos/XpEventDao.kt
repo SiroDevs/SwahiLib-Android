@@ -7,7 +7,6 @@ import com.swahilib.core.database.model.XpEventEntity
 
 @Dao
 interface XpEventDao {
-
     @Insert
     suspend fun insert(event: XpEventEntity): Long
 

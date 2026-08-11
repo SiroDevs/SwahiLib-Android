@@ -12,12 +12,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
 
-/**
- * Builds ready-to-play [QuizSet]s straight from `words` (core:database).
- * Deliberately stateless/pure aside from the DB read - callers own session
- * state. Distractors are drawn from the rest of the word pool so every quiz
- * looks different even for the same target word.
- */
 @Singleton
 class QuizGenerator @Inject constructor(
     private val wordDao: WordDao,

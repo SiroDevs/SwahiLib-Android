@@ -64,8 +64,6 @@ object NotificationScheduler {
             wm.cancelUniqueWork(NotifConstants.WORK_WEEKLY_SUMMARY)
             return
         }
-        // Fires weekly rather than daily; delay to the next Sunday at (hour, minute)
-        // so the recap always covers the week the user just finished.
         val request = PeriodicWorkRequestBuilder<WeeklySummaryWorker>(7, TimeUnit.DAYS)
             .setInitialDelay(delayUntilNextSunday(hour, minute), TimeUnit.MILLISECONDS)
             .build()

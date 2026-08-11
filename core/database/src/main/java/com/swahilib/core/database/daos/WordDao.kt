@@ -22,7 +22,6 @@ interface WordDao {
     @Query("SELECT * FROM words WHERE rid = :rid")
     fun getById(rid: String): Flow<WordEntity>
 
-    /** Direct (non-Flow) lookup by primary key, used for Word-of-the-Day. */
     @Query("SELECT * FROM words WHERE rid = :rid LIMIT 1")
     suspend fun getByRid(rid: Int): WordEntity?
 
@@ -32,12 +31,6 @@ interface WordDao {
     @Query("UPDATE words SET liked = 0 WHERE liked = 1")
     suspend fun clearAllLiked()
 
-    /**
-     * Exact-match-first search:
-     *  Priority 0 – title exactly equals query
-     *  Priority 1 – title starts with query
-     *  Priority 2 – title contains query elsewhere
-     */
     @Query("""
         SELECT * FROM words
         WHERE title LIKE '%' || :title || '%'
@@ -57,7 +50,6 @@ interface WordDao {
     @Query("SELECT * FROM words")
     fun getAll(): Flow<List<WordEntity>>
 
-    /** Returns a single random word for Word-of-the-Day. */
     @Query("SELECT * FROM words WHERE title IS NOT NULL AND meaning IS NOT NULL ORDER BY RANDOM() LIMIT 1")
     suspend fun getRandomWord(): WordEntity?
 }

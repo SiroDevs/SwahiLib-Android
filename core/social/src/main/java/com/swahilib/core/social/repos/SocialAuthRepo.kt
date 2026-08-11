@@ -18,13 +18,6 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Handles Google Sign-In (still via Credential Manager, same as before) but now exchanges the
- * resulting ID token with Firebase Auth instead of Supabase Auth directly. Firebase becomes the
- * actual identity/session provider; Supabase trusts Firebase's JWTs via Third-Party Auth (see
- * SupabaseClient.kt for the required Supabase Dashboard + Firebase custom-claim setup this
- * depends on - none of that can be done from this file).
- */
 @Singleton
 class SocialAuthRepo @Inject constructor(
     private val firebaseAuth: FirebaseAuth,

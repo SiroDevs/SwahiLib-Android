@@ -18,11 +18,6 @@ import com.swahilib.core.data.repos.PrefsRepo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
-/**
- * Fires once a day (typically evening) to remind the user about the daily
- * challenge. Skips the notification if today's challenge is already complete
- * so we don't nag a user who finished before dinner.
- */
 @HiltWorker
 class DailyChallengeWorker @AssistedInject constructor(
     @Assisted private val context: Context,
@@ -40,14 +35,14 @@ class DailyChallengeWorker @AssistedInject constructor(
             NotifConstants.CHANNEL_CHALLENGE_ID,
             NotifConstants.CHANNEL_CHALLENGE_NAME,
             NotificationManager.IMPORTANCE_DEFAULT,
-        ).apply { description = "Kumbusho la changamoto ya kila siku" }
+        ).apply { description = "Kumbusho la Changamoto ya siku" }
         manager.createNotificationChannel(channel)
 
         if (challenge != null && challenge.completed) return Result.success()
 
         val remaining = challenge?.activities?.count { !it.completed } ?: 3
         val streak = prefsRepo.currentStreak
-        val title = "🎯 Changamoto ya Leo inakusubiri"
+        val title = "🎯 Changamoto ya Leo Yakusubiri"
         val summary = when {
             remaining == 0 -> "Changamoto imekamilika. Anza tena kesho!"
             remaining == 1 -> "Umebakiwa na shughuli 1 tu. Kamilisha ndani ya dakika 2!"

@@ -32,17 +32,5 @@ class HistoryRepo @Inject constructor(
             historiesDao.delete()
         }
     }
-    suspend fun getHistoryById(historyId: String): Flow<HistoryEntity> {
-        try {
-//            val historyFlow = historiesDao.getById(historyId)
-//            return historyFlow.map {
-//                it.asDomainModel()
-//            }
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
-        return flow {}
-    }
-
 }
 

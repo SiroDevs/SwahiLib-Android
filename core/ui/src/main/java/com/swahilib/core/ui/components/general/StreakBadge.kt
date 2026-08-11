@@ -13,12 +13,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-/**
- * Small pill showing the user's current daily-visit streak, e.g. "🔥 5 siku mfululizo".
- * Shown on the Daily Word / Daily Proverb screens right after a visit is recorded
- * via [com.swahilib.core.data.repos.PrefsRepo.recordDailyVisit]. Renders nothing
- * for a streak of 0 or 1 so it doesn't nag first-time or one-off visitors.
- */
 @Composable
 fun StreakBadge(
     streakCount: Int,

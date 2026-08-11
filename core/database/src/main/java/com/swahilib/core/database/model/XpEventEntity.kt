@@ -6,11 +6,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-/**
- * Append-only ledger of XP awards. Keeping the full history (instead of just
- * a running total) lets StatisticsEngine build charts, and lets us re-audit
- * or roll back a bad award without losing everything else.
- */
 @Keep
 @Entity(
     tableName = "xp_events",

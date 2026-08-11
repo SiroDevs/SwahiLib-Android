@@ -37,6 +37,7 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/advanced_search" />
+            <option value="$PROJECT_DIR$/feature/auth" />
             <option value="$PROJECT_DIR$/feature/crossword" />
             <option value="$PROJECT_DIR$/feature/daily_content" />
             <option value="$PROJECT_DIR$/feature/donation" />
@@ -53,10 +54,11 @@
             <option value="$PROJECT_DIR$/feature/saying" />
             <option value="$PROJECT_DIR$/feature/sentence_builder" />
             <option value="$PROJECT_DIR$/feature/settings" />
+            <option value="$PROJECT_DIR$/feature/social" />
             <option value="$PROJECT_DIR$/feature/spelling" />
+            <option value="$PROJECT_DIR$/feature/sudoku" />
             <option value="$PROJECT_DIR$/feature/word" />
             <option value="$PROJECT_DIR$/feature/word_builder" />
-            <option value="$PROJECT_DIR$/feature/word_search" />
           </set>
         </option>
       </GradleProjectSettings>

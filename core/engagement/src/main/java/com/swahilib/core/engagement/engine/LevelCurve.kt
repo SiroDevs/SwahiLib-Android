@@ -3,13 +3,6 @@ package com.swahilib.core.engagement.engine
 import kotlin.math.max
 import kotlin.math.sqrt
 
-/**
- * XP → level mapping. Uses a mild quadratic so early levels arrive quickly
- * (~100 XP to reach level 2) but higher levels stretch out.
- *
- *   xpForLevel(n) = 50 * n * (n - 1)     // total XP needed to *reach* level n
- *   level(xp)     = floor((1 + sqrt(1 + 8*xp/50)) / 2)
- */
 object LevelCurve {
     private const val BASE = 50.0
 
@@ -25,7 +18,6 @@ object LevelCurve {
         return level.toInt().coerceAtLeast(1)
     }
 
-    /** [xpIntoLevel, xpForNextLevel] where xpForNextLevel is the distance across the current level. */
     fun progressWithin(xp: Long): Pair<Long, Long> {
         val currentLevel = levelForXp(xp)
         val floorXp = xpForLevel(currentLevel)

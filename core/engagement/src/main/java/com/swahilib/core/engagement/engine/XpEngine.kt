@@ -8,17 +8,6 @@ import com.swahilib.core.engagement.time.TimeKeys
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * The one place XP gets minted. Every activity, challenge, daily-login bonus,
- * or achievement passes through here so:
- *
- *  - the append-only ledger (`xp_events`) always agrees with `user_progress`,
- *  - level-ups fire consistently regardless of which caller triggered them,
- *  - RewardRules.sourceMultiplier is applied uniformly.
- *
- * Callers get back an [AwardResult] describing what changed - use it to
- * render "+45 XP" toasts, level-up dialogs, and newly-unlocked badges.
- */
 @Singleton
 class XpEngine @Inject constructor(
     private val store: ProgressStore,

@@ -3,7 +3,7 @@ package com.swahilib.feature.auth.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.social.model.SocialProfile
+import com.swahilib.core.social.models.SocialProfile
 import com.swahilib.core.social.repos.SocialAuthRepo
 import com.swahilib.core.social.repos.SocialRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,11 +15,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Drives sign-in/out. [SocialAuthRepo] now talks to Firebase Auth rather than Supabase Auth
- * directly (Supabase trusts Firebase's JWTs via Third-Party Auth instead) - nothing here needed
- * to change as a result, since that swap is entirely internal to SocialAuthRepo.
- */
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepo: SocialAuthRepo,

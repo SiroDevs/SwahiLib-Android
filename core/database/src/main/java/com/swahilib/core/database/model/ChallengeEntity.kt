@@ -6,12 +6,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-/**
- * A generated challenge (daily / weekly / monthly / practice). The activity
- * list is stored in [ChallengeActivityEntity] with a `challengeId` FK, so
- * downstream games can update completion state on a single activity without
- * rewriting the whole challenge row.
- */
 @Keep
 @Entity(
     tableName = "challenges",

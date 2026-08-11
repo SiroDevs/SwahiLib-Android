@@ -27,10 +27,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.engagement.model.Difficulty
-import com.swahilib.core.social.model.Friend
-import com.swahilib.feature.social.view.challengeableActivityTypes
-import com.swahilib.feature.social.view.difficultyTitle
-import com.swahilib.feature.social.view.titleFor
+import com.swahilib.core.social.models.Friend
+import com.swahilib.feature.social.utils.challengeableActivityTypes
+import com.swahilib.feature.social.utils.difficultyTitle
+import com.swahilib.feature.social.utils.titleFor
 
 @Composable
 fun AddFriendDialog(

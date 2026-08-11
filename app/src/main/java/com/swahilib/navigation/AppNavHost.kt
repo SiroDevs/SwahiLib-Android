@@ -1,19 +1,3 @@
-/*
- * Copyright 2026 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.swahilib.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -70,22 +54,22 @@ import com.swahilib.feature.progress.view.screen.ProgressScreen
 import com.swahilib.feature.progress.view.screen.StatisticsScreen
 import com.swahilib.feature.progress.viewmodel.ProgressViewModel
 import com.swahilib.core.engagement.model.Difficulty
-import com.swahilib.feature.quiz.view.QuizScreen
+import com.swahilib.feature.quiz.view.screen.QuizScreen
 import com.swahilib.feature.quiz.viewmodel.QuizContentSource
 import com.swahilib.feature.quiz.viewmodel.QuizViewModel
-import com.swahilib.feature.word_builder.view.WordBuilderScreen
+import com.swahilib.feature.word_builder.view.screen.WordBuilderScreen
 import com.swahilib.feature.word_builder.viewmodel.WordBuilderViewModel
-import com.swahilib.feature.sentence_builder.view.SentenceBuilderScreen
+import com.swahilib.feature.sentence_builder.view.screen.SentenceBuilderScreen
 import com.swahilib.feature.sentence_builder.viewmodel.SentenceBuilderViewModel
-import com.swahilib.feature.spelling.view.SpellingScreen
+import com.swahilib.feature.spelling.view.screen.SpellingScreen
 import com.swahilib.feature.spelling.viewmodel.SpellingViewModel
-import com.swahilib.feature.crossword.view.CrosswordScreen
+import com.swahilib.feature.crossword.view.screen.CrosswordScreen
 import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
-import com.swahilib.feature.word_search.view.WordSearchScreen
-import com.swahilib.feature.word_search.viewmodel.WordSearchViewModel
-import com.swahilib.feature.hangman.view.HangmanScreen
+import com.swahilib.sudoku.view.SudokuScreen
+import com.swahilib.sudoku.viewmodel.SudokuViewModel
+import com.swahilib.feature.hangman.view.screen.HangmanScreen
 import com.swahilib.feature.hangman.viewmodel.HangmanViewModel
-import com.swahilib.core.games.model.WordSearchTheme
+import com.swahilib.core.games.model.SudokuTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
@@ -397,7 +381,7 @@ fun AppNavHost(
         }
 
         composable(
-            route = Routes.WORD_SEARCH,
+            route = Routes.SUDOKU,
             arguments = listOf(
                 navArgument("challengeId") { type = NavType.StringType; nullable = true; defaultValue = null },
                 navArgument("activityId") { type = NavType.StringType; nullable = true; defaultValue = null },
@@ -405,14 +389,14 @@ fun AppNavHost(
                 navArgument("theme") { type = NavType.StringType; defaultValue = "RANDOM" },
             ),
         ) { backStackEntry ->
-            val viewModel: WordSearchViewModel = hiltViewModel()
+            val viewModel: SudokuViewModel = hiltViewModel()
             val difficulty = runCatching {
                 Difficulty.valueOf(backStackEntry.arguments?.getString("difficulty") ?: "BEGINNER")
             }.getOrDefault(Difficulty.BEGINNER)
             val theme = runCatching {
-                WordSearchTheme.valueOf(backStackEntry.arguments?.getString("theme") ?: "RANDOM")
-            }.getOrDefault(WordSearchTheme.RANDOM)
-            WordSearchScreen(
+                SudokuTheme.valueOf(backStackEntry.arguments?.getString("theme") ?: "RANDOM")
+            }.getOrDefault(SudokuTheme.RANDOM)
+            SudokuScreen(
                 navController = navController,
                 viewModel = viewModel,
                 challengeId = backStackEntry.arguments?.getString("challengeId"),
