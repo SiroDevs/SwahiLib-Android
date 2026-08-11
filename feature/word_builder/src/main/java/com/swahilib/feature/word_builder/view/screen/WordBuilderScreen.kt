@@ -133,7 +133,8 @@ fun WordBuilderScreen(
                 )
 
                 is WordBuilderUiState.Playing -> AnimatedContent(
-                    targetState = s.roundIndex,
+                    targetState = s,
+                    contentKey = { it.roundIndex },
                     transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(160)) },
                     label = "wordBuilderRound",
                 ) { playingState ->

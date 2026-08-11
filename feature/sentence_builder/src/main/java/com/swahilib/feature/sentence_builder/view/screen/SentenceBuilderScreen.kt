@@ -96,9 +96,11 @@ fun SentenceBuilderScreen(
             }
         },
     ) { padding ->
-        Box(Modifier
-            .fillMaxSize()
-            .padding(padding)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
             when (val s = state) {
                 is SentenceUiState.Loading -> Box(
                     Modifier.fillMaxSize(),
@@ -120,18 +122,19 @@ fun SentenceBuilderScreen(
                 }
 
                 is SentenceUiState.LevelSelect -> LevelSelectContent(
-                    s.previousPoints,
-                    s.levels,
-                    viewModel::chooseLevel
+                    previousPoints = s.previousPoints,
+                    levels = s.levels,
+                    onLevelTap = { model -> viewModel.chooseLevel(model.level) },
                 )
 
                 is SentenceUiState.Playing -> AnimatedContent(
-                    targetState = s.index,
+                    targetState = s,
+                    contentKey = { it.index },
                     transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(160)) },
                     label = "sentenceRound",
-                ) {
+                ) { playingState ->
                     PlayingContent(
-                        state = s,
+                        state = playingState,
                         onPick = viewModel::pickWord,
                         onClear = viewModel::clear,
                         onSubmit = viewModel::submit
