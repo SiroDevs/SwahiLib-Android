@@ -12,7 +12,6 @@ import kotlin.random.Random
 class SpellingGenerator @Inject constructor(
     private val wordDao: WordDao,
 ) {
-
     suspend fun generate(
         difficulty: Difficulty = Difficulty.BEGINNER,
         count: Int = 5,

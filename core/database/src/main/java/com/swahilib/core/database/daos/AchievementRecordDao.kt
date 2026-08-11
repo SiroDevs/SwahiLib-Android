@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AchievementRecordDao {
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(record: AchievementRecordEntity): Long
 

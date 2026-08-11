@@ -1,26 +1,18 @@
 package com.swahilib.feature.social.view.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,24 +22,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.social.model.FriendChallenge
-import com.swahilib.core.social.model.FriendshipStatus
+import com.swahilib.core.social.models.FriendChallenge
+import com.swahilib.core.social.models.FriendshipStatus
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.social.view.components.AddFriendDialog
 import com.swahilib.feature.social.view.components.CreateChallengeDialog
 import com.swahilib.feature.social.view.components.EnterScoreDialog
-import com.swahilib.feature.social.view.tabs.achievementFeedTab
-import com.swahilib.feature.social.view.tabs.challengesTab
-import com.swahilib.feature.social.view.tabs.friendsTab
-import com.swahilib.feature.social.view.tabs.leaderboardTab
+import com.swahilib.feature.social.view.components.ProfileHeader
+import com.swahilib.feature.social.view.screen.tabs.achievementFeedTab
+import com.swahilib.feature.social.view.screen.tabs.challengesTab
+import com.swahilib.feature.social.view.screen.tabs.friendsTab
+import com.swahilib.feature.social.view.screen.tabs.leaderboardTab
 import com.swahilib.feature.social.viewmodel.SocialViewModel
 
 private enum class SocialTab(val label: String) {
@@ -80,8 +71,6 @@ fun SocialScreen(
     var createChallengeSubmitting by remember { mutableStateOf(false) }
     var scoreDialogChallenge by remember { mutableStateOf<FriendChallenge?>(null) }
 
-    // Not signed in (e.g. user signed out while this screen was still on the back stack) -
-    // send them to the sign-in flow rather than showing an empty hub.
     LaunchedEffect(isSignedIn) {
         if (!isSignedIn) {
             navController.navigate(Routes.AUTH_SIGN_IN) {
@@ -206,38 +195,6 @@ fun SocialScreen(
                     SocialTab.ACHIEVEMENTS -> achievementFeedTab(achievementFeed)
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun ProfileHeader(displayName: String, level: Int, totalXp: Int, streak: Int) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                displayName.take(1).uppercase(),
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-        }
-        Spacer(Modifier.width(12.dp))
-        Column {
-            Text(displayName, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
-            Text(
-                "Ngazi $level · $totalXp XP · Mfuatano $streak 🔥",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
         }
     }
 }

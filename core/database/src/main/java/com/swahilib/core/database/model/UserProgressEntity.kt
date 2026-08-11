@@ -5,11 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-/**
- * Singleton-row store for the user's engagement totals. Uses the same
- * `id = SINGLETON_ID` pattern as DailyContentEntity so PagingSource /
- * arbitrary reads keep working.
- */
 @Keep
 @Entity(tableName = "user_progress")
 data class UserProgressEntity(

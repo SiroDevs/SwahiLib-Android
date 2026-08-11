@@ -23,19 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.ui.components.action.AppTopBar
 
-/**
- * Top app bar shared by every engagement game screen.
- *
- * - [level] is shown as a "Kiwango N" tagline under the title; pass null for
- *   Quiz, which has no levels.
- * - [previousPoints] is the points banked for this game before this session
- *   ("Points in the game (gotten previously)").
- * - [livePoints] is the running total earned during the current session
- *   ("Points in the game realtime as player plays").
- * - Back always routes through [onBack] (never pops directly) so the caller
- *   can show the exit-confirmation dialog. Refresh routes through
- *   [onRefresh] so the caller can show the restart-confirmation dialog.
- */
 @Composable
 fun GameTopBar(
     title: String,

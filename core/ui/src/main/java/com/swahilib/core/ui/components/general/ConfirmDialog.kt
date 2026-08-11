@@ -5,7 +5,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 
-/** Simple Ndio/Hapana confirmation dialog, reused wherever a destructive action needs confirming. */
 @Composable
 fun ConfirmDialog(
     title: String,

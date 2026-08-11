@@ -16,11 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.ui.components.general.ConfirmDialog
 
-/**
- * Refresh action confirmation:
- * "Je, unataka kuanza upya? Kuanza upya kutafuta mwendelezo (progress) wako."
- * La (dismiss) / Ndio (confirm - restarts the current level from scratch).
- */
 @Composable
 fun GameRestartDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     ConfirmDialog(
@@ -33,13 +28,6 @@ fun GameRestartDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     )
 }
 
-/**
- * Back-navigation confirmation:
- * "Je unataka kuachia njiani? Iwapo unataka kurudi nyuma unaweza kuhifadhi
- * mwendelezo wako ama ufute kabisa."
- * Three actions: rudi nyuma (discard & go back) / hifadhi na rudi nyuma
- * (save & go back, enabling autoresume) / ghairi (cancel, stay on screen).
- */
 @Composable
 fun GameExitDialog(
     onGoBackDiscard: () -> Unit,

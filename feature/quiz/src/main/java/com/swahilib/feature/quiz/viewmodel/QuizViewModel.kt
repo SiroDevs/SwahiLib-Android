@@ -7,7 +7,6 @@ import com.swahilib.core.data.repos.GameProgressRepo
 import com.swahilib.core.engagement.engine.RewardRules
 import com.swahilib.core.engagement.engine.StatisticsEngine
 import com.swahilib.core.engagement.model.ActivityType
-import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.AwardResult
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.engagement.model.XpAward
@@ -18,55 +17,24 @@ import com.swahilib.core.games.generator.ProverbQuizGenerator
 import com.swahilib.core.games.generator.QuizGenerator
 import com.swahilib.core.games.model.QuizAnswer
 import com.swahilib.core.games.model.QuizQuestion
-import com.swahilib.core.games.model.QuizResult
-import com.swahilib.core.games.model.QuizSet
 import com.swahilib.core.ui.components.game.GameSound
 import com.swahilib.core.ui.components.game.GameSoundPlayer
+import com.swahilib.feature.quiz.utils.QuizSnapshot
+import com.swahilib.feature.quiz.utils.QuizUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.random.Random
 
-/** Which vocabulary source this quiz session pulls from - drives content, XP activity type, and stats event. */
 enum class QuizContentSource { WORDS, PROVERBS }
 
-/** Quiz has no kiwango levels - a flat per-question timer and a simple points bucket per content source. */
 private const val QUIZ_STEP_SECONDS = 60
 private const val QUIZ_POINTS_PER_CORRECT = 10
-
-sealed interface QuizUiState {
-    data object Loading : QuizUiState
-    data object Empty : QuizUiState
-    data class Playing(
-        val quizSet: QuizSet,
-        val index: Int,
-        val answers: List<QuizAnswer>,
-        val previousPoints: Int,
-        val livePoints: Int,
-        val secondsRemaining: Int,
-        val secondsTotal: Int,
-    ) : QuizUiState {
-        val question: QuizQuestion get() = quizSet.questions[index]
-        val progressLabel: String get() = "Swali ${index + 1}/${quizSet.questions.size}"
-    }
-    data class Finished(
-        val result: QuizResult,
-        val quizSet: QuizSet,
-        val answers: List<QuizAnswer>,
-        val activityAward: AwardResult?,
-        val unlockedAchievements: List<Achievement> = emptyList(),
-        val pointsEarned: Int,
-    ) : QuizUiState
-}
-
-@Serializable
-private data class QuizSnapshot(val answers: List<QuizAnswer>)
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(
@@ -93,7 +61,6 @@ class QuizViewModel @Inject constructor(
     private val gameType: String
         get() = (if (source == QuizContentSource.PROVERBS) StatisticsEngine.EventType.PROVERB else StatisticsEngine.EventType.QUIZ).name
 
-    /** Call once when the screen is first composed. Safe to call repeatedly - only the first call starts a session. */
     fun start(
         challengeId: String?,
         activityId: String?,

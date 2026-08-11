@@ -12,14 +12,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
 
-/**
- * Proverb Challenge - same [QuizQuestion]/[QuizSet] shape as the Quiz Engine
- * (so it can reuse QuizScreen/QuizViewModel/QuizScorer as-is) but sourced
- * from `proverbs` instead of `words`. Sticks to MULTIPLE_CHOICE and
- * TRUE_FALSE - typing out a full proverb verbatim (FILL_IN_BLANK) is a much
- * heavier ask than typing one word, so that's left to Sentence Builder,
- * which already reorders proverb words instead.
- */
 @Singleton
 class ProverbQuizGenerator @Inject constructor(
     private val proverbDao: ProverbDao,

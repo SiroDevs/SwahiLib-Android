@@ -6,12 +6,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-/**
- * Chronological log of every learning event the user completes - one row per
- * quiz attempt, word lookup, game round, or challenge completion. Feeds the
- * "recent activity" list on the progress dashboard and (in Sprint 3) the
- * adaptive-difficulty engine.
- */
 @Keep
 @Entity(
     tableName = "learning_history",

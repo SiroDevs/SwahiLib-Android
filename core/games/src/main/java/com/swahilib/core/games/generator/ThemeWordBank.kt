@@ -1,57 +1,46 @@
 package com.swahilib.core.games.generator
 
-import com.swahilib.core.games.model.WordSearchTheme
+import com.swahilib.core.games.model.SudokuTheme
 
-/**
- * `WordEntity` has no category/tag column, so themed Word Search puzzles
- * (Animals, Food, Family, Nature, Verbs, Numbers per CLAUDE.md) can't be
- * queried from the dictionary directly today. This is a small curated
- * fallback bank so themed mode still works; RANDOM mode pulls live from
- * `words` instead and needs no bank at all.
- *
- * TODO(Sprint 3+): once WordEntity gets a category column, replace this
- * with a WordDao query and delete the hardcoded lists.
- */
 internal object ThemeWordBank {
-
-    private val banks: Map<WordSearchTheme, List<Pair<String, String>>> = mapOf(
-        WordSearchTheme.ANIMALS to listOf(
+    private val banks: Map<SudokuTheme, List<Pair<String, String>>> = mapOf(
+        SudokuTheme.ANIMALS to listOf(
             "SIMBA" to "Mfalme wa wanyama",
-            "TEMBO" to "Mnyama mkubwa mwenye pua ndefu",
+            "TEMBO" to "Mnyama mkubwa mwenye mkonga",
             "TWIGA" to "Mnyama mwenye shingo ndefu",
-            "NYOKA" to "Mnyama atambaaye asiye na miguu",
-            "PAKA" to "Mnyama wa nyumbani apendaye samaki",
+            "NYOKA" to "Mnyama atambaaye",
+            "PAKA" to "Mnyama wa nyumbani apendaye kula panya",
             "MBWA" to "Rafiki wa mwanadamu, hulinda nyumba",
             "SAMAKI" to "Mnyama aishiye majini",
             "NDEGE" to "Mnyama arukaye angani",
             "SUNGURA" to "Mnyama mdogo mwenye masikio marefu",
-            "CHUI" to "Mnyama mwenye madoa, mkali",
+            "CHUI" to "Mnyama anayekula nyama ambaye anafanana na paka mkubwa",
         ),
-        WordSearchTheme.FOOD to listOf(
+        SudokuTheme.FOOD to listOf(
             "UGALI" to "Chakula kikuu cha unga",
             "WALI" to "Mchele uliopikwa",
             "NYAMA" to "Chakula kitokanacho na mnyama",
             "MBOGA" to "Chakula cha majani",
             "MAHARAGE" to "Aina ya kunde",
             "SAMAKI" to "Chakula kitokanacho na baharini/mtoni",
-            "NDIZI" to "Tunda refu la njano",
+            "NDIZI" to "Tunda refu la manjano",
             "CHAI" to "Kinywaji cha moto",
             "MAJI" to "Kinywaji muhimu kwa uhai",
             "SUKARI" to "Kitamu kiongezwacho kwenye chai",
         ),
-        WordSearchTheme.FAMILY to listOf(
+        SudokuTheme.FAMILY to listOf(
             "MAMA" to "Mzazi wa kike",
             "BABA" to "Mzazi wa kiume",
             "KAKA" to "Ndugu wa kiume mkubwa",
             "DADA" to "Ndugu wa kike",
             "BIBI" to "Mama wa mzazi",
             "BABU" to "Baba wa mzazi",
-            "MTOTO" to "Kijana mdogo",
+            "MTOTO" to "mtu ambaye hajatimiza umri wa utu uzima",
             "SHANGAZI" to "Dada wa baba",
             "MJOMBA" to "Kaka wa mama",
-            "FAMILIA" to "Kikundi cha wazazi na watoto",
+            "FAMILIA" to "Jamaa ya watu wanaoishi pamoja yenye baba, mama na watoto",
         ),
-        WordSearchTheme.NATURE to listOf(
+        SudokuTheme.NATURE to listOf(
             "MTI" to "Mmea mkubwa wenye shina",
             "MLIMA" to "Ardhi iliyoinuka juu sana",
             "MTO" to "Maji yatiririkayo",
@@ -63,19 +52,19 @@ internal object ThemeWordBank {
             "UPEPO" to "Hewa inayovuma",
             "MSITU" to "Eneo lenye miti mingi",
         ),
-        WordSearchTheme.VERBS to listOf(
-            "KULA" to "Kitendo cha kupokea chakula mdomoni",
-            "KUNYWA" to "Kitendo cha kupokea kinywaji",
-            "KUSOMA" to "Kitendo cha kuelewa maandishi",
-            "KUANDIKA" to "Kitendo cha kuweka maneno karatasini",
-            "KUCHEZA" to "Kitendo cha kufanya mchezo",
-            "KULALA" to "Kitendo cha kupumzika kwa usingizi",
-            "KUKIMBIA" to "Kitendo cha kwenda kwa kasi kwa miguu",
+        SudokuTheme.VERBS to listOf(
+            "KULA" to "Kitendo cha kutafuna chakula kinywani na kukimeza",
+            "KUNYWA" to "Kitendo cha kutia kitu cha majimaji  kinywani na kukimeza",
+            "KUSOMA" to "Kitendo cha kuelewa yaliyoandikwa kwa kutamka au kupitisha macho",
+            "KUANDIKA" to "Kitendo cha kuchora herufi kwa kutumia kalamu",
+            "KUCHEZA" to "Kitendo cha kufanya jambo la kuchangamsha mwili kwa lengo la kujifurahisha",
+            "KULALA" to "Kitendo cha kujinyosha mahali kwa mfano kitandani ili kupata usingizi",
+            "KUKIMBIA" to "Kitendo cha kwenda mbio, enda kwa kasi",
             "KUOGELEA" to "Kitendo cha kuelea/kutembea majini",
-            "KUIMBA" to "Kitendo cha kutoa wimbo",
+            "KUIMBA" to "Kitendo cha kutamka maneno kwa kufuata mahadhi fulani kwa sauti",
             "KUPIKA" to "Kitendo cha kuandaa chakula",
         ),
-        WordSearchTheme.NUMBERS to listOf(
+        SudokuTheme.NUMBERS to listOf(
             "MOJA" to "Nambari 1",
             "MBILI" to "Nambari 2",
             "TATU" to "Nambari 3",
@@ -89,5 +78,5 @@ internal object ThemeWordBank {
         ),
     )
 
-    fun wordsFor(theme: WordSearchTheme): List<Pair<String, String>> = banks[theme].orEmpty()
+    fun wordsFor(theme: SudokuTheme): List<Pair<String, String>> = banks[theme].orEmpty()
 }

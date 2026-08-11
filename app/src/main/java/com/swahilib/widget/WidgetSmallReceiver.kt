@@ -5,10 +5,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.os.Bundle
 
-/**
- * Word-only widget, resizable between 1x2 (compact pill) and 1x4 (wide, with
- * meaning) - see swahilib_widget_neno_info.xml for the resize bounds.
- */
 class WidgetSmallReceiver : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -26,7 +22,7 @@ class WidgetSmallReceiver : AppWidgetProvider() {
         val shape = WidgetContentRenderer.resolveShape(
             options = newOptions,
             supportsBoth = false,
-            fallback = WidgetShape.NENO_WIDE,
+            fallback = WidgetShape.WIDGET_WIDE,
         )
         WidgetContentRenderer.render(context, appWidgetManager, appWidgetId, shape)
     }

@@ -8,14 +8,7 @@ import com.swahilib.core.games.model.QuizOption
 import com.swahilib.core.games.model.QuizQuestion
 import com.swahilib.core.games.model.QuizResult
 
-/**
- * Stateless answer-checking + tallying. The ViewModel owns session state
- * (current index, collected answers); this just judges one answer at a time
- * and folds a finished session into a [QuizResult].
- */
 object QuizScorer {
-
-    /** Checks a multiple-choice / true-false selection against the question. */
     fun checkChoice(question: QuizQuestion, selectedOptionId: String): QuizAnswer =
         QuizAnswer(
             questionId = question.id,
@@ -23,7 +16,6 @@ object QuizScorer {
             correct = selectedOptionId in question.correctOptionIds,
         )
 
-    /** Checks a typed fill-in-the-blank answer, forgiving case/whitespace. */
     fun checkTyped(question: QuizQuestion, typed: String): QuizAnswer =
         QuizAnswer(
             questionId = question.id,
@@ -32,7 +24,6 @@ object QuizScorer {
                 typed.isNotBlank(),
         )
 
-    /** Checks a MATCH_WORDS question given the pairs the user connected (leftId to rightId). */
     fun checkMatches(question: QuizQuestion, connectedPairs: Map<String, String>): QuizAnswer {
         val allCorrect = question.matchLeft.isNotEmpty() &&
             question.matchLeft.all { left -> connectedPairs[left.id] == left.id }
@@ -43,7 +34,6 @@ object QuizScorer {
         )
     }
 
-    /** Folds a completed set of answers into XP + accuracy for the session. */
     fun tally(
         answers: List<QuizAnswer>,
         difficulty: Difficulty,
@@ -70,5 +60,4 @@ object QuizScorer {
     private fun normalize(text: String): String = text.trim().lowercase()
 }
 
-/** Convenience for UI code that needs to know an option's correctness after reveal. */
 fun QuizOption.isCorrectFor(question: QuizQuestion): Boolean = id in question.correctOptionIds

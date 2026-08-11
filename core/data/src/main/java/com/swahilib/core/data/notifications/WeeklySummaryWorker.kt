@@ -18,10 +18,6 @@ import com.swahilib.core.data.repos.PrefsRepo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
-/**
- * Fires once a week (typically Sunday evening) with a short recap of the
- * user's learning week. Silent if the user hasn't engaged at all this week.
- */
 @HiltWorker
 class WeeklySummaryWorker @AssistedInject constructor(
     @Assisted private val context: Context,

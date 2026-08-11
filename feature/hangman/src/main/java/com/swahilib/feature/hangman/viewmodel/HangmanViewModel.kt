@@ -20,6 +20,9 @@ import com.swahilib.core.games.model.HangmanSessionResult
 import com.swahilib.core.ui.components.game.GameLevelUiModel
 import com.swahilib.core.ui.components.game.GameSound
 import com.swahilib.core.ui.components.game.GameSoundPlayer
+import com.swahilib.feature.hangman.utils.HangmanRoundSnapshot
+import com.swahilib.feature.hangman.utils.HangmanSnapshot
+import com.swahilib.feature.hangman.utils.HangmanUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,44 +33,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.random.Random
-
-sealed interface HangmanUiState {
-    data object Loading : HangmanUiState
-    data object Empty : HangmanUiState
-
-    data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : HangmanUiState
-
-    data class Playing(
-        val rounds: List<HangmanRound>,
-        val index: Int,
-        val level: Int?,
-        val previousPoints: Int,
-        val livePoints: Int,
-        val secondsRemaining: Int,
-        val secondsTotal: Int,
-        val justAdvanced: Boolean = false,
-    ) : HangmanUiState {
-        val round: HangmanRound get() = rounds[index]
-    }
-
-    data class Finished(
-        val result: HangmanSessionResult,
-        val rounds: List<HangmanRound>,
-        val unlockedAchievements: List<Achievement> = emptyList(),
-        val level: Int?,
-        val pointsEarned: Int,
-        val leveledUp: Boolean,
-    ) : HangmanUiState
-}
-
-@Serializable
-private data class HangmanRoundSnapshot(
-    val guessedLetters: String,
-    val wrongGuesses: Int,
-)
-
-@Serializable
-private data class HangmanSnapshot(val roundsSoFar: List<HangmanRoundSnapshot>)
 
 @HiltViewModel
 class HangmanViewModel @Inject constructor(
@@ -95,7 +60,6 @@ class HangmanViewModel @Inject constructor(
         onExpire = ::onStepExpired,
     )
 
-    /** Entry point from the game hub (freeplay). Shows the level carousel first. */
     fun start(challengeId: String?, activityId: String?, difficulty: Difficulty = Difficulty.BEGINNER, wordCount: Int = 5) {
         if (_uiState.value !is HangmanUiState.Loading) return
         this.challengeId = challengeId
@@ -126,7 +90,6 @@ class HangmanViewModel @Inject constructor(
         _uiState.value = HangmanUiState.LevelSelect(levels, progress.totalPoints.toInt())
     }
 
-    /** Called when the player taps a level card. No-ops (with a locked sound) if it isn't unlocked yet. */
     fun chooseLevel(level: Int) {
         viewModelScope.launch {
             if (!gameProgressRepo.canPlay(gameType, level)) {
@@ -253,7 +216,6 @@ class HangmanViewModel @Inject constructor(
         }
     }
 
-    /** Refresh action, after user confirms "Ndio" on the restart dialog: same level, brand-new content. */
     fun restart() {
         val state = _uiState.value
         val level = when (state) {
@@ -268,7 +230,6 @@ class HangmanViewModel @Inject constructor(
         }
     }
 
-    /** Back action -> "Rudi Nyuma": discard any in-progress attempt. */
     fun discardAndExit(onDone: () -> Unit) {
         stepTimer.stop()
         viewModelScope.launch {
@@ -277,7 +238,6 @@ class HangmanViewModel @Inject constructor(
         }
     }
 
-    /** Back action -> "Hifadhi na Rudi Nyuma": persist current progress, then leave. */
     fun saveAndExit(onDone: () -> Unit) {
         stepTimer.stop()
         val state = _uiState.value as? HangmanUiState.Playing
@@ -358,7 +318,6 @@ class HangmanViewModel @Inject constructor(
         }
     }
 
-    /** Called from the Finished screen to go back to the level carousel (e.g. "Cheza Tena"). */
     fun backToLevelSelect() {
         viewModelScope.launch { showLevelSelect() }
     }

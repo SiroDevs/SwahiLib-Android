@@ -6,71 +6,34 @@ import com.swahilib.core.data.repos.EngagementRepo
 import com.swahilib.core.data.repos.GameProgressRepo
 import com.swahilib.core.engagement.engine.RewardRules
 import com.swahilib.core.engagement.engine.StatisticsEngine
-import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.engagement.model.XpAward
 import com.swahilib.core.engagement.model.XpSource
 import com.swahilib.core.games.engine.GameLevelConfig
 import com.swahilib.core.games.engine.GameStepTimer
-import com.swahilib.core.games.engine.WordBuilderScorer
-import com.swahilib.core.games.generator.WordBuilderGenerator
+import com.swahilib.core.games.engine.WordScorer
+import com.swahilib.core.games.generator.WordGenerator
 import com.swahilib.core.games.model.ScrambledWord
-import com.swahilib.core.games.model.WordBuilderRoundResult
-import com.swahilib.core.games.model.WordBuilderSessionResult
+import com.swahilib.core.games.model.WordRoundResult
 import com.swahilib.core.ui.components.game.GameLevelUiModel
 import com.swahilib.core.ui.components.game.GameSound
 import com.swahilib.core.ui.components.game.GameSoundPlayer
+import com.swahilib.feature.word_builder.utils.WordBuilderSnapshot
+import com.swahilib.feature.word_builder.utils.WordBuilderUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.random.Random
 
-sealed interface WordBuilderUiState {
-    data object Loading : WordBuilderUiState
-    data object Empty : WordBuilderUiState
-
-    data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : WordBuilderUiState
-
-    data class Playing(
-        val word: ScrambledWord,
-        val roundIndex: Int,
-        val totalRounds: Int,
-        val level: Int?,
-        val previousPoints: Int,
-        val livePoints: Int,
-        val pickedIndices: List<Int> = emptyList(),
-        val revealedCount: Int = 0,
-        val hintsUsed: Int = 0,
-        val locked: Boolean = false,
-        val secondsRemaining: Int,
-        val secondsTotal: Int,
-    ) : WordBuilderUiState {
-        val assembled: String get() = pickedIndices.joinToString("") { word.scrambledLetters[it].toString() }
-    }
-
-    data class Finished(
-        val result: WordBuilderSessionResult,
-        val rounds: List<Pair<ScrambledWord, WordBuilderRoundResult>>,
-        val unlockedAchievements: List<Achievement> = emptyList(),
-        val level: Int?,
-        val pointsEarned: Int,
-        val leveledUp: Boolean,
-    ) : WordBuilderUiState
-}
-
-@Serializable
-private data class WordBuilderSnapshot(val roundsSoFar: List<WordBuilderRoundResult>)
-
 @HiltViewModel
 class WordBuilderViewModel @Inject constructor(
-    private val generator: WordBuilderGenerator,
+    private val generator: WordGenerator,
     private val engageRepo: EngagementRepo,
     private val gameProgressRepo: GameProgressRepo,
     private val soundPlayer: GameSoundPlayer,
@@ -88,7 +51,7 @@ class WordBuilderViewModel @Inject constructor(
     private var contentSeed: Long = 0L
     private var wordCount: Int = 5
     private var session: List<ScrambledWord> = emptyList()
-    private var rounds = mutableListOf<WordBuilderRoundResult>()
+    private var rounds = mutableListOf<WordRoundResult>()
 
     private val stepTimer = GameStepTimer(scope = viewModelScope, onTick = ::onTick, onExpire = ::onStepExpired)
 
@@ -232,9 +195,9 @@ class WordBuilderViewModel @Inject constructor(
         stepTimer.stop()
         val secondsSpent = ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(0)
         val result = if (gaveUp) {
-            WordBuilderRoundResult(state.word.id, correct = false, hintsUsed = state.hintsUsed, secondsSpent = secondsSpent, gaveUp = true)
+            WordRoundResult(state.word.id, correct = false, hintsUsed = state.hintsUsed, secondsSpent = secondsSpent, gaveUp = true)
         } else {
-            WordBuilderScorer.checkAnswer(state.word, state.assembled, state.hintsUsed, secondsSpent)
+            WordScorer.checkAnswer(state.word, state.assembled, state.hintsUsed, secondsSpent)
         }
         rounds.add(result)
         val bonus = if (result.correct) (state.level?.let { GameLevelConfig.pointsPerCorrect(it) } ?: 10) else 0
@@ -322,7 +285,7 @@ class WordBuilderViewModel @Inject constructor(
         stepTimer.stop()
         val secondsSpent = ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(1)
         val effectiveDifficulty = state.level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
-        val result = WordBuilderScorer.tally(rounds, effectiveDifficulty, secondsSpent)
+        val result = WordScorer.tally(rounds, effectiveDifficulty, secondsSpent)
 
         viewModelScope.launch {
             val cId = challengeId

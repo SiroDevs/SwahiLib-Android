@@ -1,19 +1,12 @@
 package com.swahilib.core.engagement.catalog
 
-/**
- * Small fixed-date holiday calendar (Kenya-relevant + Kiswahili-specific).
- * Deliberately excludes movable-date observances like Eid al-Fitr/Eid
- * al-Adha, since they follow the lunar calendar and can't be hardcoded
- * reliably across years without a lookup table that needs yearly upkeep -
- * left as a follow-up rather than guessed at.
- */
 data class SeasonalEventDef(
     val id: String,
     val title: String,
     val description: String,
     val month: Int, // 1-12
     val day: Int,
-    val windowDays: Int = 1, // event is active on [day, day + windowDays - 1] of `month`
+    val windowDays: Int = 1,
 )
 
 object SeasonalEventCatalog {
@@ -57,7 +50,6 @@ object SeasonalEventCatalog {
         ),
     )
 
-    /** The holiday active on this exact (month, day), if any. Windows never cross a month boundary. */
     fun activeHoliday(month: Int, day: Int): SeasonalEventDef? =
         HOLIDAYS.firstOrNull { it.month == month && day >= it.day && day < it.day + it.windowDays }
 }

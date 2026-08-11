@@ -6,11 +6,6 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-/**
- * Small clock indirection so tests can pin time and every engine agrees on
- * "what day is it". All keys are computed in the device's default timezone so
- * they line up with what the user perceives as "today".
- */
 interface Clock {
     fun now(): Long
     fun timeZone(): TimeZone = TimeZone.getDefault()
@@ -29,7 +24,6 @@ object TimeKeys {
 
     fun format(epochMillis: Long): String = DAY_FMT.format(Date(epochMillis))
 
-    /** ISO-week key like "2026-W31". Used to key weekly challenges. */
     fun weekKey(clock: Clock = SystemClock): String {
         val cal = Calendar.getInstance(clock.timeZone(), Locale.US).apply {
             timeInMillis = clock.now()
@@ -41,7 +35,6 @@ object TimeKeys {
         return "%d-W%02d".format(year, week)
     }
 
-    /** Month key like "2026-07". Used to key monthly challenges. */
     fun monthKey(clock: Clock = SystemClock): String {
         val cal = Calendar.getInstance(clock.timeZone(), Locale.US).apply {
             timeInMillis = clock.now()

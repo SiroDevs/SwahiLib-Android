@@ -5,12 +5,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-/**
- * Simple per-step countdown. [onTick] fires once immediately with the full
- * duration and then every second thereafter; [onExpire] fires once when it
- * hits zero, at which point the caller is expected to auto-advance to the
- * next step rather than wait for the player.
- */
 class GameStepTimer(
     private val scope: CoroutineScope,
     private val onTick: (secondsRemaining: Int) -> Unit,

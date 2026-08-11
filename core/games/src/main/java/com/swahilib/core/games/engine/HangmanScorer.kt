@@ -7,7 +7,6 @@ import com.swahilib.core.games.model.HangmanRound
 import com.swahilib.core.games.model.HangmanSessionResult
 
 object HangmanScorer {
-
     fun guess(round: HangmanRound, letter: Char): HangmanRound {
         if (round.isOver || letter in round.guessedLetters) return round
         val correct = letter in round.answer

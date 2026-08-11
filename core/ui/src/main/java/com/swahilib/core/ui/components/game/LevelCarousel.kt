@@ -45,13 +45,6 @@ data class GameLevelUiModel(
     val isCurrent: Boolean,
 )
 
-/**
- * A carousel-styled (peeking side cards) row of level cards. It intentionally
- * does not respond to swipe gestures - [levels] are laid out once and the
- * currently-eligible level (the highest unlocked one) is auto-centered on
- * appearance so it reads as "in front". Selecting a level is a tap, not a
- * scroll gesture.
- */
 @Composable
 fun LevelCarousel(
     levels: List<GameLevelUiModel>,

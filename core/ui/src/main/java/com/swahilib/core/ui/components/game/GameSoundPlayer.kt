@@ -19,12 +19,6 @@ enum class GameSound {
     TIME_UP,
 }
 
-/**
- * Tiny wrapper around [SoundPool] for the short UI blips that accompany game
- * actions (tap, submit, timer tick, level complete, locked level, etc).
- * Correct/wrong tones are only ever triggered from the end-of-game answer
- * review, never mid-round, so audio can't leak the answer while playing.
- */
 @Singleton
 class GameSoundPlayer @Inject constructor(
     @ApplicationContext context: Context,

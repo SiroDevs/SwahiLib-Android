@@ -4,20 +4,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 data class ActivityRecommendation(
-    val type: String, // StatisticsEngine.EventType name
+    val type: String,
     val reason: String,
-    val recentAccuracy: Float?, // null if never attempted
+    val recentAccuracy: Float?,
 )
 
-/**
- * Sprint 3 - Personalized Learning Paths. Purely data-driven from existing
- * `learning_history` - no separate "interests" tracking exists yet, so
- * "interests" is approximated as "games you haven't tried" (novelty), and
- * "weak vocabulary/grammar" as "lowest recent accuracy among games you
- * have played". Learning pace isn't factored into the picks themselves
- * (there's nothing useful to recommend *harder* off of low pace), but is
- * exposed via [DifficultyEngine] separately for the difficulty-scaling item.
- */
 @Singleton
 class RecommendationEngine @Inject constructor(
     private val store: ProgressStore,
@@ -25,7 +16,7 @@ class RecommendationEngine @Inject constructor(
 ) {
     companion object {
         private val ALL_TYPES = listOf(
-            "QUIZ", "WORD_BUILDER", "SENTENCE_BUILDER", "SPELLING", "CROSSWORD", "WORD_SEARCH", "PROVERB", "HANGMAN",
+            "QUIZ", "WORD_BUILDER", "SENTENCE_BUILDER", "SPELLING", "CROSSWORD", "SUDOKU", "PROVERB", "HANGMAN",
         )
         private const val REASON_WEAK = "Boresha ustadi wako - hii ndiyo eneo lenye changamoto zaidi kwa sasa"
         private const val REASON_NEW = "Bado hujajaribu mchezo huu - jipe changamoto mpya!"
@@ -45,7 +36,6 @@ class RecommendationEngine @Inject constructor(
         val neverTried = stats.filter { it.second == 0 }
             .map { (type, _, _) -> ActivityRecommendation(type, REASON_NEW, null) }
 
-        // Interleave: lead with the weakest area (most actionable), then one novel suggestion, then more weak areas.
         val combined = buildList {
             weakestPlayed.firstOrNull()?.let { add(it) }
             neverTried.firstOrNull()?.let { add(it) }

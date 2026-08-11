@@ -5,13 +5,8 @@ import com.swahilib.core.engagement.model.ChallengeScope
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.engagement.model.XpSource
 
-/**
- * Single source of truth for reward numbers. Every engine that mints XP or
- * coins must go through here, so we can tune the whole economy in one place.
- */
 object RewardRules {
 
-    /** Base XP for a single activity of the given type at the given difficulty. */
     fun activityXp(type: ActivityType, difficulty: Difficulty = Difficulty.BEGINNER): Int {
         val base = when (type) {
             ActivityType.DAILY_READ -> 5
@@ -19,7 +14,7 @@ object RewardRules {
             ActivityType.VOCABULARY_QUIZ -> 15
             ActivityType.SPELLING_CHALLENGE -> 15
             ActivityType.WORD_BUILDER -> 20
-            ActivityType.WORD_SEARCH -> 20
+            ActivityType.SUDOKU -> 20
             ActivityType.SENTENCE_BUILDER -> 25
             ActivityType.PROVERB_CHALLENGE -> 25
             ActivityType.CROSSWORD -> 30
@@ -29,7 +24,6 @@ object RewardRules {
         return (base * difficultyMultiplier(difficulty)).toInt()
     }
 
-    /** Bundled bonus for finishing every activity in a challenge. */
     fun challengeCompletionXp(scope: ChallengeScope, activityXpTotal: Int): Int = when (scope) {
         ChallengeScope.DAILY -> activityXpTotal / 4
         ChallengeScope.WEEKLY -> activityXpTotal / 3
@@ -46,7 +40,6 @@ object RewardRules {
         ChallengeScope.SEASONAL -> 50
     }
 
-    /** Daily-login coin drop that grows (capped) with streak length. */
     fun dailyLoginCoins(streakDay: Int): Int = when {
         streakDay <= 1 -> 2
         streakDay < 7 -> 3
@@ -62,7 +55,6 @@ object RewardRules {
         else -> 40
     }
 
-    /** Extra XP for hitting streak milestones (fired the day the milestone is reached). */
     fun streakMilestoneXp(streakDay: Int): Int = when (streakDay) {
         3 -> 25
         7 -> 75
@@ -74,13 +66,8 @@ object RewardRules {
         else -> 0
     }
 
-    /** Coin cost for a single hint. Purely a cap for RewardsEngine.spend(). */
     const val HINT_COST = 5
 
-    /**
-     * Multiplier applied to XpSource before writing to the ledger. Lets us
-     * up-weight rare wins without touching each caller.
-     */
     fun sourceMultiplier(source: XpSource): Float = when (source) {
         XpSource.PERFECT_QUIZ -> 1.25f
         XpSource.CHALLENGE_COMPLETE -> 1.1f

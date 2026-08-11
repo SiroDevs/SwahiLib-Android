@@ -11,15 +11,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
 
-/**
- * Pushes the local XP/level/streak snapshot up to `profiles`, and re-posts
- * every currently-unlocked achievement to `achievements` (the table's
- * unique constraint on (user_id, achievement_id) makes re-posting an
- * unlocked-yesterday achievement a harmless no-op, not a duplicate). Only
- * does anything if the user is actually signed in - a no-op otherwise, so
- * scheduling this unconditionally is safe even for users who never opt
- * into community features.
- */
 @HiltWorker
 class SocialSyncWorker @AssistedInject constructor(
     @Assisted context: Context,

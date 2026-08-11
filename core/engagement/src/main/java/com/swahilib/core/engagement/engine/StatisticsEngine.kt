@@ -8,17 +8,10 @@ import com.swahilib.core.engagement.time.TimeKeys
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Aggregates persisted engagement data into a shape the dashboard renders
- * directly. Everything here is a read; mutations belong on the individual
- * engines (XP / Rewards / Challenge) so the counters stay authoritative.
- */
 @Singleton
 class StatisticsEngine @Inject constructor(
     private val store: ProgressStore,
 ) {
-
-    /** Aggregate summary + last-7-day activity chart. */
     suspend fun summary(): StatisticsSummary {
         val progress = store.loadOrInitProgress()
         val from = TimeKeys.daysAgoKey(6, store.clock)
@@ -56,11 +49,6 @@ class StatisticsEngine @Inject constructor(
         )
     }
 
-    /**
-     * Records a completed learning event and rolls its counters into the
-     * daily-activity row + user progress totals. Call from every game/quiz
-     * on completion so the dashboard reflects reality.
-     */
     suspend fun recordEvent(
         type: EventType,
         title: String,
@@ -109,7 +97,7 @@ class StatisticsEngine @Inject constructor(
         QUIZ(gamePlayed = true, wordsLearned = 0),
         WORD_BUILDER(gamePlayed = true, wordsLearned = 1),
         CROSSWORD(gamePlayed = true, wordsLearned = 2),
-        WORD_SEARCH(gamePlayed = true, wordsLearned = 1),
+        SUDOKU(gamePlayed = true, wordsLearned = 1),
         SENTENCE_BUILDER(gamePlayed = true, wordsLearned = 0),
         SPELLING(gamePlayed = true, wordsLearned = 1),
         HANGMAN(gamePlayed = true, wordsLearned = 1),

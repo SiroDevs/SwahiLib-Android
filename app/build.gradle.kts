@@ -124,7 +124,7 @@ dependencies {
     implementation(project(":feature:sentence_builder"))
     implementation(project(":feature:spelling"))
     implementation(project(":feature:crossword"))
-    implementation(project(":feature:word_search"))
+    implementation(project(":feature:sudoku"))
     implementation(project(":feature:hangman"))
 
     // Android Room

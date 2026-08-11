@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.ui.graphics.vector.ImageVector
 
-/** Maps `Achievement.iconKey` (AchievementCatalog) to an actual Material icon. */
 fun achievementIconFor(iconKey: String): ImageVector = when (iconKey) {
     "footprints" -> Icons.Filled.DirectionsWalk
     "flame" -> Icons.Filled.LocalFireDepartment

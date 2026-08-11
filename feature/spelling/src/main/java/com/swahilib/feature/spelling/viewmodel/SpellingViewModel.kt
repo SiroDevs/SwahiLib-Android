@@ -6,7 +6,6 @@ import com.swahilib.core.data.repos.EngagementRepo
 import com.swahilib.core.data.repos.GameProgressRepo
 import com.swahilib.core.engagement.engine.RewardRules
 import com.swahilib.core.engagement.engine.StatisticsEngine
-import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.engagement.model.XpAward
@@ -16,57 +15,21 @@ import com.swahilib.core.games.engine.GameStepTimer
 import com.swahilib.core.games.engine.SpellingScorer
 import com.swahilib.core.games.generator.SpellingGenerator
 import com.swahilib.core.games.model.SpellingQuestion
-import com.swahilib.core.games.model.SpellingResult
 import com.swahilib.core.games.model.SpellingRoundResult
 import com.swahilib.core.ui.components.game.GameLevelUiModel
 import com.swahilib.core.ui.components.game.GameSound
 import com.swahilib.core.ui.components.game.GameSoundPlayer
+import com.swahilib.feature.spelling.utils.SpellingSnapshot
+import com.swahilib.feature.spelling.utils.SpellingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.random.Random
-
-sealed interface SpellingUiState {
-    data object Loading : SpellingUiState
-    data object Empty : SpellingUiState
-
-    data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : SpellingUiState
-
-    data class Playing(
-        val questions: List<SpellingQuestion>,
-        val index: Int,
-        val level: Int?,
-        val previousPoints: Int,
-        val livePoints: Int,
-        val revealedLetters: Int = 0,
-        val locked: Boolean = false,
-        val secondsRemaining: Int,
-        val secondsTotal: Int,
-    ) : SpellingUiState {
-        val question: SpellingQuestion get() = questions[index]
-        val hintText: String get() = question.answer.take(revealedLetters) +
-            "_".repeat((question.answer.length - revealedLetters).coerceAtLeast(0))
-    }
-
-    data class Finished(
-        val result: SpellingResult,
-        val questions: List<SpellingQuestion>,
-        val rounds: List<SpellingRoundResult>,
-        val unlockedAchievements: List<Achievement> = emptyList(),
-        val level: Int?,
-        val pointsEarned: Int,
-        val leveledUp: Boolean,
-    ) : SpellingUiState
-}
-
-@Serializable
-private data class SpellingSnapshot(val roundsSoFar: List<SpellingRoundResult>)
 
 @HiltViewModel
 class SpellingViewModel @Inject constructor(

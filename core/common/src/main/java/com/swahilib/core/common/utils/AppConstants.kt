@@ -9,7 +9,7 @@ object AppConstants {
     const val APP_TITLE2 = "Kamusi ya Kiswahili"
     const val APP_TAGLINE = "Kiswahili Kitukuzwe"
     const val APP_CREDITS = "© Siro Devs"
-    const val APP_LINK = "https://linktr.ee/SwahilibApp"
+    const val APP_LINK = "https://sirodevs.vercel.app/SwahiLib"
     const val SUPPORT_EMAIL = "futuristicken@gmail.com"
 }
 
@@ -71,7 +71,7 @@ object NotifConstants {
     const val DEFAULT_MINUTE = 0
 
     const val CHANNEL_CHALLENGE_ID = "swahilib_daily_challenge"
-    const val CHANNEL_CHALLENGE_NAME = "Changamoto ya Kila Siku"
+    const val CHANNEL_CHALLENGE_NAME = "Changamoto ya Siku"
     const val NOTIF_CHALLENGE_ID = 1003
     const val WORK_CHALLENGE = "work_daily_challenge"
     const val DEFAULT_CHALLENGE_HOUR = 18
@@ -115,7 +115,6 @@ object Routes {
     const val ACHIEVEMENTS = "achievements"
     const val CHALLENGES = "challenges"
 
-    // ── Games (Sprint 2) ──
     const val QUIZ = "quiz?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}&source={source}"
 
     /** Quiz tied to a specific challenge activity - completing it marks that activity done. */
@@ -156,7 +155,7 @@ object Routes {
 
     fun crosswordFreeplay(difficulty: String = "BEGINNER"): String = "crossword?difficulty=$difficulty"
 
-    const val WORD_SEARCH = "wordsearch?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}&theme={theme}"
+    const val SUDOKU = "wordsearch?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}&theme={theme}"
 
     fun wordSearch(challengeId: String, activityId: String, difficulty: String, theme: String = "RANDOM"): String =
         "wordsearch?challengeId=$challengeId&activityId=$activityId&difficulty=$difficulty&theme=$theme"

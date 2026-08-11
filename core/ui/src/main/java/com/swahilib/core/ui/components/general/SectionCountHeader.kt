@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-/** Sticky section header with a title and a small count badge - used above grouped lists (Likes, History). */
 @Composable
 fun SectionCountHeader(title: String, count: Int) {
     Row(

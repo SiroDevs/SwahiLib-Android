@@ -7,13 +7,12 @@ import com.swahilib.core.games.model.CrosswordEntry
 import com.swahilib.core.games.model.CrosswordResult
 
 object CrosswordScorer {
-
     fun checkEntry(entry: CrosswordEntry, typed: String): Boolean =
         typed.trim().equals(entry.answer, ignoreCase = true)
 
     fun tally(
         entries: List<CrosswordEntry>,
-        answers: Map<String, String>, // entryId -> typed text
+        answers: Map<String, String>,
         difficulty: Difficulty,
         secondsSpent: Int,
     ): CrosswordResult {

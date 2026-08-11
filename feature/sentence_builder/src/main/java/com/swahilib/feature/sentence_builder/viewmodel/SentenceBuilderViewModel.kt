@@ -13,13 +13,15 @@ import com.swahilib.core.engagement.model.XpAward
 import com.swahilib.core.engagement.model.XpSource
 import com.swahilib.core.games.engine.GameLevelConfig
 import com.swahilib.core.games.engine.GameStepTimer
-import com.swahilib.core.games.engine.SentenceBuilderScorer
-import com.swahilib.core.games.generator.SentenceBuilderGenerator
+import com.swahilib.core.games.engine.SentenceScorer
+import com.swahilib.core.games.generator.SentenceGenerator
 import com.swahilib.core.games.model.SentenceQuestion
 import com.swahilib.core.games.model.SentenceResult
 import com.swahilib.core.ui.components.game.GameLevelUiModel
 import com.swahilib.core.ui.components.game.GameSound
 import com.swahilib.core.ui.components.game.GameSoundPlayer
+import com.swahilib.feature.sentence_builder.utils.SentenceSnapshot
+import com.swahilib.feature.sentence_builder.utils.SentenceUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,44 +33,9 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.random.Random
 
-sealed interface SentenceUiState {
-    data object Loading : SentenceUiState
-    data object Empty : SentenceUiState
-
-    data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : SentenceUiState
-
-    data class Playing(
-        val questions: List<SentenceQuestion>,
-        val index: Int,
-        val level: Int?,
-        val previousPoints: Int,
-        val livePoints: Int,
-        val pickedIndices: List<Int> = emptyList(),
-        val locked: Boolean = false,
-        val secondsRemaining: Int,
-        val secondsTotal: Int,
-    ) : SentenceUiState {
-        val question: SentenceQuestion get() = questions[index]
-        val picked: List<String> get() = pickedIndices.map { question.shuffledWords[it] }
-    }
-
-    data class Finished(
-        val result: SentenceResult,
-        val questions: List<SentenceQuestion>,
-        val correctness: List<Boolean>,
-        val unlockedAchievements: List<Achievement> = emptyList(),
-        val level: Int?,
-        val pointsEarned: Int,
-        val leveledUp: Boolean,
-    ) : SentenceUiState
-}
-
-@Serializable
-private data class SentenceSnapshot(val correctness: List<Boolean>)
-
 @HiltViewModel
 class SentenceBuilderViewModel @Inject constructor(
-    private val generator: SentenceBuilderGenerator,
+    private val generator: SentenceGenerator,
     private val engageRepo: EngagementRepo,
     private val gameProgressRepo: GameProgressRepo,
     private val soundPlayer: GameSoundPlayer,
@@ -200,7 +167,7 @@ class SentenceBuilderViewModel @Inject constructor(
         val state = _uiState.value as? SentenceUiState.Playing ?: return
         if (state.locked || state.pickedIndices.size != state.question.shuffledWords.size) return
         soundPlayer.play(GameSound.SUBMIT)
-        val correct = SentenceBuilderScorer.check(state.question, state.picked)
+        val correct = SentenceScorer.check(state.question, state.picked)
         recordRound(state, correct)
     }
 
@@ -284,7 +251,7 @@ class SentenceBuilderViewModel @Inject constructor(
         stepTimer.stop()
         val secondsSpent = ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(1)
         val effectiveDifficulty = state.level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
-        val result = SentenceBuilderScorer.tally(results, effectiveDifficulty, secondsSpent)
+        val result = SentenceScorer.tally(results, effectiveDifficulty, secondsSpent)
 
         viewModelScope.launch {
             val cId = challengeId

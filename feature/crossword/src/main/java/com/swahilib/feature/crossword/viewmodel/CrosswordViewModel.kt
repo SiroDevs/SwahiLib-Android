@@ -20,6 +20,8 @@ import com.swahilib.core.games.model.CrosswordResult
 import com.swahilib.core.ui.components.game.GameLevelUiModel
 import com.swahilib.core.ui.components.game.GameSound
 import com.swahilib.core.ui.components.game.GameSoundPlayer
+import com.swahilib.feature.crossword.utils.CrosswordSnapshot
+import com.swahilib.feature.crossword.utils.CrosswordUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,40 +31,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.random.Random
-
-sealed interface CrosswordUiState {
-    data object Loading : CrosswordUiState
-    data object Empty : CrosswordUiState
-
-    data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : CrosswordUiState
-
-    data class Playing(
-        val puzzle: CrosswordPuzzle,
-        val level: Int?,
-        val previousPoints: Int,
-        val answers: Map<String, String> = emptyMap(),
-        val focusedEntryId: String? = null,
-        val secondsRemaining: Int,
-        val secondsTotal: Int,
-        val easyMode: Boolean,
-    ) : CrosswordUiState {
-        /** Every unique letter needed anywhere in the puzzle - the easy-mode letter pool. */
-        val letterPool: List<Char> get() = puzzle.entries.flatMap { it.answer.toList() }.distinct().sorted()
-    }
-
-    data class Finished(
-        val result: CrosswordResult,
-        val puzzle: CrosswordPuzzle,
-        val answers: Map<String, String>,
-        val unlockedAchievements: List<Achievement> = emptyList(),
-        val level: Int?,
-        val pointsEarned: Int,
-        val leveledUp: Boolean,
-    ) : CrosswordUiState
-}
-
-@Serializable
-private data class CrosswordSnapshot(val answers: Map<String, String>)
 
 @HiltViewModel
 class CrosswordViewModel @Inject constructor(

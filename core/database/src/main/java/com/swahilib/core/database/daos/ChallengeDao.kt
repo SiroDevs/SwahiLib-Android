@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ChallengeDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertChallenge(challenge: ChallengeEntity)
 

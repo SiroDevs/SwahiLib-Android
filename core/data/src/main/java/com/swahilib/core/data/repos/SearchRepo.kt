@@ -32,22 +32,5 @@ class SearchRepo @Inject constructor(
             searchesDao.delete()
         }
     }
-
-    suspend fun searchSearchsByTitle(title: String?) {
-        //searchesDao.searchSearchByTitle(title)?.map { it.asDomainModel() }
-    }
-
-    suspend fun getSearchById(searchId: String): Flow<SearchEntity> {
-        try {
-//            val searchFlow = searchsDao?.getById(searchId)
-//            return searchFlow.map {
-//                it.asDomainModel()
-//            }
-        } catch (e: Exception) {
-            Log.d("TAG", e.message.toString())
-        }
-        return flow {}
-    }
-
 }
 

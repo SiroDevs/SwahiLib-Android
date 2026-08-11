@@ -45,7 +45,6 @@ class SayingRepo @Inject constructor(
     fun getSayingsByTitles(titles: List<String>): Flow<List<SayingEntity>> =
         sayingsDao.getSayingsByTitles(titles)
 
-    /** Direct lookup by primary key, e.g. to resolve a history row back to its saying. */
     suspend fun getSayingByRid(rid: Int): SayingEntity? = withContext(Dispatchers.IO) {
         sayingsDao.getByRid(rid)
     }

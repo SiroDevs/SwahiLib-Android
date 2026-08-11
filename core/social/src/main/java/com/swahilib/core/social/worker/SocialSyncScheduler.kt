@@ -8,12 +8,6 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
-/**
- * Call [schedule] once after a successful sign-in (and it's safe to call
- * again on every app launch - KEEP policy means it's a no-op if already
- * scheduled). Call [cancel] on sign-out so a signed-out device stops
- * pinging Supabase for nothing.
- */
 object SocialSyncScheduler {
 
     private val networkConstraints = Constraints.Builder()

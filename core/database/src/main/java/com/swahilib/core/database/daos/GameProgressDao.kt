@@ -9,7 +9,6 @@ import com.swahilib.core.database.model.GameSessionStateEntity
 
 @Dao
 interface GameProgressDao {
-
     @Query("SELECT * FROM game_level_progress WHERE gameType = :gameType LIMIT 1")
     suspend fun getLevelProgress(gameType: String): GameLevelProgressEntity?
 
