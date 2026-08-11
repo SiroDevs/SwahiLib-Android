@@ -60,6 +60,7 @@ key.properties
 **/*.keystore
 **/*.jks
 keystore/
+google-services.json
 *.DS_Store
 keys*.json
 
