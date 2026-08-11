@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
-import com.swahilib.sudoku.viewmodel.SudokuUiState
+import com.swahilib.feature.sudoku.utils.SudokuUiState
 
 @Composable
 fun FinishedContent(state: SudokuUiState.Finished, onPlayAgain: () -> Unit, onDone: () -> Unit) {

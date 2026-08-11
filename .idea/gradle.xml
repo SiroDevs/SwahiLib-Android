@@ -56,9 +56,9 @@
             <option value="$PROJECT_DIR$/feature/settings" />
             <option value="$PROJECT_DIR$/feature/social" />
             <option value="$PROJECT_DIR$/feature/spelling" />
+            <option value="$PROJECT_DIR$/feature/sudoku" />
             <option value="$PROJECT_DIR$/feature/word" />
             <option value="$PROJECT_DIR$/feature/word_builder" />
-            <option value="$PROJECT_DIR$/feature/word_search" />
           </set>
         </option>
       </GradleProjectSettings>

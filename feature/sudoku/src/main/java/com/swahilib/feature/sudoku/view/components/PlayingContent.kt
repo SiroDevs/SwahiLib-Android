@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -21,10 +27,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.swahilib.core.games.model.PlacedWord
 import com.swahilib.core.ui.components.game.StepTimerBar
-import com.swahilib.sudoku.view.WordListRow
-import com.swahilib.sudoku.viewmodel.SudokuUiState
+import com.swahilib.feature.sudoku.utils.SudokuUiState
 
 @Composable
 fun PlayingContent(state: SudokuUiState.Playing, onTapCell: (Int, Int) -> Unit, onGiveUp: () -> Unit) {
@@ -70,6 +77,40 @@ fun PlayingContent(state: SudokuUiState.Playing, onTapCell: (Int, Int) -> Unit, 
                 }
                 Spacer(Modifier.height(6.dp))
                 OutlinedButton(onClick = onGiveUp, modifier = Modifier.fillMaxWidth()) { Text("Maliza / Toa Mchezo") }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WordListRow(word: PlacedWord) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = if (word.found) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+        ),
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text(
+                    word.word,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = if (word.found) TextDecoration.LineThrough else null,
+                    ),
+                )
+                Text(word.clue, style = MaterialTheme.typography.bodySmall)
+            }
+            if (word.found) {
+                Icon(
+                    Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary
+                )
             }
         }
     }

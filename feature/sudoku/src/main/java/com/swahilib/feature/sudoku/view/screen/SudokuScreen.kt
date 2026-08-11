@@ -142,9 +142,9 @@ fun SudokuScreen(
                 }
 
                 is SudokuUiState.LevelSelect -> LevelSelectContent(
-                    s.previousPoints,
-                    s.levels,
-                    viewModel::chooseLevel
+                    previousPoints = s.previousPoints,
+                    levels = s.levels,
+                    onLevelTap = { model -> viewModel.chooseLevel(model.level) },
                 )
 
                 is SudokuUiState.Playing -> PlayingContent(
@@ -187,39 +187,5 @@ private fun LevelSelectContent(
         )
         Spacer(Modifier.height(24.dp))
         LevelCarousel(levels = levels, onLevelTap = onLevelTap)
-    }
-}
-
-@Composable
-private fun WordListRow(word: PlacedWord) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = if (word.found) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-        ),
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(Modifier.weight(1f)) {
-                Text(
-                    word.word,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        textDecoration = if (word.found) TextDecoration.LineThrough else null,
-                    ),
-                )
-                Text(word.clue, style = MaterialTheme.typography.bodySmall)
-            }
-            if (word.found) {
-                Icon(
-                    Icons.Default.CheckCircle,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.tertiary
-                )
-            }
-        }
     }
 }

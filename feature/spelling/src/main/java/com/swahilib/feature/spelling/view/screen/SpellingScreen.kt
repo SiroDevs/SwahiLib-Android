@@ -60,12 +60,18 @@ fun SpellingScreen(
     BackHandler(enabled = isPlaying) { showExit = true }
 
     if (showRestart) {
-        GameRestartDialog(onConfirm = { showRestart = false; viewModel.restart() }, onDismiss = { showRestart = false })
+        GameRestartDialog(
+            onConfirm = { showRestart = false; viewModel.restart() },
+            onDismiss = { showRestart = false })
     }
     if (showExit) {
         GameExitDialog(
-            onGoBackDiscard = { showExit = false; viewModel.discardAndExit { navController.popBackStack() } },
-            onSaveAndGoBack = { showExit = false; viewModel.saveAndExit { navController.popBackStack() } },
+            onGoBackDiscard = {
+                showExit = false; viewModel.discardAndExit { navController.popBackStack() }
+            },
+            onSaveAndGoBack = {
+                showExit = false; viewModel.saveAndExit { navController.popBackStack() }
+            },
             onCancel = { showExit = false },
         )
     }
@@ -81,26 +87,56 @@ fun SpellingScreen(
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                 )
-                else -> AppTopBar(title = "Tahajia (Spellcheck)", showGoBack = true, onNavIconClick = { navController.popBackStack() })
+
+                else -> AppTopBar(
+                    title = "Tahajia (Spellcheck)",
+                    showGoBack = true,
+                    onNavIconClick = { navController.popBackStack() })
             }
         },
     ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding)) {
+        Box(Modifier
+            .fillMaxSize()
+            .padding(padding)) {
             when (val s = state) {
-                is SpellingUiState.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                is SpellingUiState.Loading -> Box(
+                    Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator()
                 }
-                is SpellingUiState.Empty -> Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
-                    Text("Hakuna maneno ya kutosha kwa sasa.", style = MaterialTheme.typography.bodyLarge)
+
+                is SpellingUiState.Empty -> Box(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "Hakuna maneno ya kutosha kwa sasa.",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
-                is SpellingUiState.LevelSelect -> LevelSelectContent(s.previousPoints, s.levels, viewModel::chooseLevel)
+
+                is SpellingUiState.LevelSelect -> LevelSelectContent(
+                    previousPoints = s.previousPoints,
+                    levels = s.levels,
+                    onLevelTap = { model -> viewModel.chooseLevel(model.level) },
+                )
+
                 is SpellingUiState.Playing -> AnimatedContent(
-                    targetState = s.index,
+                    targetState = s,
+                    contentKey = { it.index },
                     transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(160)) },
                     label = "spellingRound",
-                ) {
-                    PlayingContent(state = s, onHint = viewModel::useHint, onSubmit = viewModel::submit)
+                ) { playingState ->
+                    PlayingContent(
+                        state = playingState,
+                        onHint = viewModel::useHint,
+                        onSubmit = viewModel::submit
+                    )
                 }
+
                 is SpellingUiState.Finished -> FinishedContent(
                     state = s,
                     onPlayAgain = { viewModel.backToLevelSelect() },
@@ -112,11 +148,27 @@ fun SpellingScreen(
 }
 
 @Composable
-private fun LevelSelectContent(previousPoints: Int, levels: List<GameLevelUiModel>, onLevelTap: (GameLevelUiModel) -> Unit) {
-    Column(Modifier.fillMaxSize().padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Chagua Kiwango", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold))
+private fun LevelSelectContent(
+    previousPoints: Int,
+    levels: List<GameLevelUiModel>,
+    onLevelTap: (GameLevelUiModel) -> Unit
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            "Chagua Kiwango",
+            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+        )
         Spacer(Modifier.height(4.dp))
-        Text("Jumla ya alama: $previousPoints", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            "Jumla ya alama: $previousPoints",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         Spacer(Modifier.height(24.dp))
         LevelCarousel(levels = levels, onLevelTap = onLevelTap)
     }

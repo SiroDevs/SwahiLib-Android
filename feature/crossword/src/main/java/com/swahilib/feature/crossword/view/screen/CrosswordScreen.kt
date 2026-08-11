@@ -68,12 +68,18 @@ fun CrosswordScreen(
     BackHandler(enabled = isPlaying) { showExit = true }
 
     if (showRestart) {
-        GameRestartDialog(onConfirm = { showRestart = false; viewModel.restart() }, onDismiss = { showRestart = false })
+        GameRestartDialog(
+            onConfirm = { showRestart = false; viewModel.restart() },
+            onDismiss = { showRestart = false })
     }
     if (showExit) {
         GameExitDialog(
-            onGoBackDiscard = { showExit = false; viewModel.discardAndExit { navController.popBackStack() } },
-            onSaveAndGoBack = { showExit = false; viewModel.saveAndExit { navController.popBackStack() } },
+            onGoBackDiscard = {
+                showExit = false; viewModel.discardAndExit { navController.popBackStack() }
+            },
+            onSaveAndGoBack = {
+                showExit = false; viewModel.saveAndExit { navController.popBackStack() }
+            },
             onCancel = { showExit = false },
         )
     }
@@ -89,31 +95,60 @@ fun CrosswordScreen(
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                 )
-                else -> AppTopBar(title = "CrossWord", showGoBack = true, onNavIconClick = { navController.popBackStack() })
+
+                else -> AppTopBar(
+                    title = "CrossWord",
+                    showGoBack = true,
+                    onNavIconClick = { navController.popBackStack() })
             }
         },
         bottomBar = {
             val s = state
             if (s is CrosswordUiState.Playing && s.easyMode) {
-                LetterPoolBar(letters = s.letterPool, onLetter = viewModel::tapPoolLetter, onBackspace = viewModel::poolBackspace)
+                LetterPoolBar(
+                    letters = s.letterPool,
+                    onLetter = viewModel::tapPoolLetter,
+                    onBackspace = viewModel::poolBackspace
+                )
             }
         },
     ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding)) {
+        Box(Modifier
+            .fillMaxSize()
+            .padding(padding)) {
             when (val s = state) {
-                is CrosswordUiState.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                is CrosswordUiState.Loading -> Box(
+                    Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator()
                 }
-                is CrosswordUiState.Empty -> Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
-                    Text("Hakuna maneno ya kutosha kuunda Crossword kwa sasa.", style = MaterialTheme.typography.bodyLarge)
+
+                is CrosswordUiState.Empty -> Box(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "Hakuna maneno ya kutosha kuunda Crossword kwa sasa.",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
-                is CrosswordUiState.LevelSelect -> LevelSelectContent(s.previousPoints, s.levels, viewModel::chooseLevel)
+
+                is CrosswordUiState.LevelSelect -> LevelSelectContent(
+                    previousPoints = s.previousPoints,
+                    levels = s.levels,
+                    onLevelTap = { model -> viewModel.chooseLevel(model.level) },
+                )
+
                 is CrosswordUiState.Playing -> PlayingContent(
                     state = s,
                     onAnswerChange = viewModel::updateAnswer,
                     onFocus = viewModel::focusEntry,
                     onFinish = viewModel::finishNow,
                 )
+
                 is CrosswordUiState.Finished -> FinishedContent(
                     state = s,
                     onPlayAgain = { viewModel.backToLevelSelect() },
@@ -125,11 +160,27 @@ fun CrosswordScreen(
 }
 
 @Composable
-private fun LevelSelectContent(previousPoints: Int, levels: List<GameLevelUiModel>, onLevelTap: (GameLevelUiModel) -> Unit) {
-    Column(Modifier.fillMaxSize().padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Chagua Kiwango", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold))
+private fun LevelSelectContent(
+    previousPoints: Int,
+    levels: List<GameLevelUiModel>,
+    onLevelTap: (GameLevelUiModel) -> Unit
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            "Chagua Kiwango",
+            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+        )
         Spacer(Modifier.height(4.dp))
-        Text("Jumla ya alama: $previousPoints", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            "Jumla ya alama: $previousPoints",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         Spacer(Modifier.height(24.dp))
         LevelCarousel(levels = levels, onLevelTap = onLevelTap)
     }
@@ -152,7 +203,10 @@ private fun LetterPoolBar(letters: List<Char>, onLetter: (Char) -> Unit, onBacks
                     modifier = Modifier.size(40.dp),
                 ) {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(letter.uppercase(), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                        Text(
+                            letter.uppercase(),
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                        )
                     }
                 }
             }

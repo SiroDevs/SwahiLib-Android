@@ -47,10 +47,16 @@ fun QuizScreen(
     source: QuizContentSource = QuizContentSource.WORDS,
 ) {
     LaunchedEffect(challengeId, activityId) {
-        viewModel.start(challengeId = challengeId, activityId = activityId, difficulty = difficulty, source = source)
+        viewModel.start(
+            challengeId = challengeId,
+            activityId = activityId,
+            difficulty = difficulty,
+            source = source
+        )
     }
     val state by viewModel.uiState.collectAsState()
-    val title = if (source == QuizContentSource.PROVERBS) "Changamoto ya Methali" else "Jaribio la Msamiati"
+    val title =
+        if (source == QuizContentSource.PROVERBS) "Changamoto ya Methali" else "Jaribio la Msamiati"
 
     var showRestart by remember { mutableStateOf(false) }
     var showExit by remember { mutableStateOf(false) }
@@ -58,12 +64,18 @@ fun QuizScreen(
     BackHandler(enabled = isPlaying) { showExit = true }
 
     if (showRestart) {
-        GameRestartDialog(onConfirm = { showRestart = false; viewModel.restart() }, onDismiss = { showRestart = false })
+        GameRestartDialog(
+            onConfirm = { showRestart = false; viewModel.restart() },
+            onDismiss = { showRestart = false })
     }
     if (showExit) {
         GameExitDialog(
-            onGoBackDiscard = { showExit = false; viewModel.discardAndExit { navController.popBackStack() } },
-            onSaveAndGoBack = { showExit = false; viewModel.saveAndExit { navController.popBackStack() } },
+            onGoBackDiscard = {
+                showExit = false; viewModel.discardAndExit { navController.popBackStack() }
+            },
+            onSaveAndGoBack = {
+                showExit = false; viewModel.saveAndExit { navController.popBackStack() }
+            },
             onCancel = { showExit = false },
         )
     }
@@ -79,26 +91,34 @@ fun QuizScreen(
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                 )
-                else -> AppTopBar(title = title, showGoBack = true, onNavIconClick = { navController.popBackStack() })
+
+                else -> AppTopBar(
+                    title = title,
+                    showGoBack = true,
+                    onNavIconClick = { navController.popBackStack() })
             }
         },
     ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding)) {
+        Box(Modifier
+            .fillMaxSize()
+            .padding(padding)) {
             when (val s = state) {
                 is QuizUiState.Loading -> LoadingState()
                 is QuizUiState.Empty -> EmptyState()
                 is QuizUiState.Playing -> AnimatedContent(
-                    targetState = s.index,
+                    targetState = s,
+                    contentKey = { it.index },
                     transitionSpec = { (fadeIn(tween(220))) togetherWith (fadeOut(tween(160))) },
                     label = "quizQuestion",
-                ) {
+                ) { playingState ->
                     PlayingState(
-                        state = s,
+                        state = playingState,
                         onChoice = viewModel::submitChoice,
                         onTyped = viewModel::submitTyped,
                         onMatches = viewModel::submitMatches,
                     )
                 }
+
                 is QuizUiState.Finished -> ResultState(
                     result = s.result,
                     quizSet = s.quizSet,
@@ -120,7 +140,9 @@ private fun LoadingState() {
 
 @Composable
 private fun EmptyState() {
-    Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
+    Box(Modifier
+        .fillMaxSize()
+        .padding(24.dp), contentAlignment = Alignment.Center) {
         Text(
             "Hakuna maneno ya kutosha kwenye kamusi kuunda jaribio kwa sasa.",
             style = MaterialTheme.typography.bodyLarge,

@@ -63,12 +63,18 @@ fun HangmanScreen(
     BackHandler(enabled = isPlaying) { showExit = true }
 
     if (showRestart) {
-        GameRestartDialog(onConfirm = { showRestart = false; viewModel.restart() }, onDismiss = { showRestart = false })
+        GameRestartDialog(
+            onConfirm = { showRestart = false; viewModel.restart() },
+            onDismiss = { showRestart = false })
     }
     if (showExit) {
         GameExitDialog(
-            onGoBackDiscard = { showExit = false; viewModel.discardAndExit { navController.popBackStack() } },
-            onSaveAndGoBack = { showExit = false; viewModel.saveAndExit { navController.popBackStack() } },
+            onGoBackDiscard = {
+                showExit = false; viewModel.discardAndExit { navController.popBackStack() }
+            },
+            onSaveAndGoBack = {
+                showExit = false; viewModel.saveAndExit { navController.popBackStack() }
+            },
             onCancel = { showExit = false },
         )
     }
@@ -84,33 +90,55 @@ fun HangmanScreen(
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                 )
-                else -> AppTopBar(title = "Hangman", showGoBack = true, onNavIconClick = { navController.popBackStack() })
+
+                else -> AppTopBar(
+                    title = "Hangman",
+                    showGoBack = true,
+                    onNavIconClick = { navController.popBackStack() })
             }
         },
     ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding)) {
+        Box(Modifier
+            .fillMaxSize()
+            .padding(padding)) {
             when (val s = state) {
-                is HangmanUiState.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                is HangmanUiState.Loading -> Box(
+                    Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator()
                 }
-                is HangmanUiState.Empty -> Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
-                    Text("Hakuna maneno ya kutosha kwa sasa.", style = MaterialTheme.typography.bodyLarge)
+
+                is HangmanUiState.Empty -> Box(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "Hakuna maneno ya kutosha kwa sasa.",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
+
                 is HangmanUiState.LevelSelect -> LevelSelectContent(
                     previousPoints = s.previousPoints,
                     levels = s.levels,
-                    onLevelTap = viewModel::chooseLevel,
+                    onLevelTap = { model -> viewModel.chooseLevel(model.level) },
                 )
+
                 is HangmanUiState.Playing -> AnimatedContent(
-                    targetState = s.index,
+                    targetState = s,
+                    contentKey = { it.index },
                     transitionSpec = {
                         (slideInHorizontally(tween(280)) { it } + fadeIn()) togetherWith
                             (slideOutHorizontally(tween(280)) { -it } + fadeOut())
                     },
                     label = "hangmanRound",
-                ) {
-                    PlayingContent(s, onGuess = viewModel::guess)
+                ) { playingState ->
+                    PlayingContent(state = playingState, onGuess = viewModel::guess)
                 }
+
                 is HangmanUiState.Finished -> FinishedContent(
                     state = s,
                     onPlayAgain = { viewModel.backToLevelSelect() },
@@ -122,11 +150,27 @@ fun HangmanScreen(
 }
 
 @Composable
-private fun LevelSelectContent(previousPoints: Int, levels: List<GameLevelUiModel>, onLevelTap: (GameLevelUiModel) -> Unit) {
-    Column(Modifier.fillMaxSize().padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Chagua Kiwango", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold))
+private fun LevelSelectContent(
+    previousPoints: Int,
+    levels: List<GameLevelUiModel>,
+    onLevelTap: (GameLevelUiModel) -> Unit
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            "Chagua Kiwango",
+            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+        )
         Spacer(Modifier.height(4.dp))
-        Text("Jumla ya alama: $previousPoints", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            "Jumla ya alama: $previousPoints",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         Spacer(Modifier.height(24.dp))
         LevelCarousel(levels = levels, onLevelTap = { onLevelTap(it) })
     }

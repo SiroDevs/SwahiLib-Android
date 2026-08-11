@@ -72,100 +72,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/model/EngagementEnums.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/navigation/AppNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/navigation/AppNavHost.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/viewmodel/MainViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/viewmodel/MainViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetContentRenderer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetContentRenderer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetFullReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetFullReceiver.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetRefreshWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetRefreshWorker.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetScheduler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetScheduler.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetSmallReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/swahilib/widget/WidgetSmallReceiver.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/entity/UiState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/entity/UiState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/DailyChallengeWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/DailyChallengeWorker.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/NotificationScheduler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/NotificationScheduler.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/WeeklySummaryWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/notifications/WeeklySummaryWorker.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/DailyContentRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/DailyContentRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/EngagementRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/EngagementRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/GameProgressRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/GameProgressRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/HistoryRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/HistoryRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/ProverbRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/ProverbRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/SayingRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/SayingRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/SearchRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/SearchRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/WordRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/WordRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/AchievementRecordDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/AchievementRecordDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/ChallengeDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/ChallengeDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/DailyActivityDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/DailyActivityDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/DailyContentDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/DailyContentDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/GameProgressDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/GameProgressDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/IdiomDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/IdiomDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/LearningHistoryDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/LearningHistoryDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/ProverbDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/ProverbDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/SayingDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/SayingDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/UserProgressDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/UserProgressDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/WordDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/WordDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/XpEventDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/daos/XpEventDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/di/DatabaseModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/di/DatabaseModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/AchievementRecordEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/AchievementRecordEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/ChallengeEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/ChallengeEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/DailyActivityEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/DailyActivityEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/GameLevelProgressEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/GameLevelProgressEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/GameSessionStateEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/GameSessionStateEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/LearningHistoryEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/LearningHistoryEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/UserProgressEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/UserProgressEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/XpEventEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/swahilib/core/database/model/XpEventEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/catalog/AchievementCatalog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/catalog/AchievementCatalog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/catalog/SeasonalEventCatalog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/catalog/SeasonalEventCatalog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/AchievementEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/AchievementEngine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/ChallengeEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/ChallengeEngine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/ChallengeTemplates.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/ChallengeTemplates.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/DifficultyEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/DifficultyEngine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/LevelCurve.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/LevelCurve.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/ProgressStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/ProgressStore.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/RecommendationEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/RecommendationEngine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/RewardRules.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/RewardRules.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/StatisticsEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/StatisticsEngine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/XpEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/engine/XpEngine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/model/EngagementModels.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/model/EngagementModels.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/time/TimeKeys.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/time/TimeKeys.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/CrosswordScorer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/CrosswordScorer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/GameLevelConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/GameLevelConfig.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/GameStepTimer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/GameStepTimer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/HangmanScorer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/HangmanScorer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/QuizScorer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/QuizScorer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/SentenceBuilderScorer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/SentenceScorer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/SpellingScorer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/SpellingScorer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/WordBuilderScorer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/WordScorer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/WordSearchScorer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/engine/SudokuScorer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/CrosswordGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/CrosswordGenerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/ThemeWordBank.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/ThemeWordBank.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/WordBuilderGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/WordGenerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/WordSearchGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/SudokuGenerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/model/WordBuilderModels.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/model/WordBuilderModels.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/model/WordSearchModels.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/model/WordSearchModels.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/action/MiscActions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/action/MiscActions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/game/StepTimerBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/game/StepTimerBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/progress/AchievementCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/progress/AchievementCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/progress/AchievementUnlockBanner.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/progress/AchievementUnlockBanner.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/progress/ChallengeNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/progress/ChallengeNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/progress/ProgressComponents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/progress/ProgressComponents.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/view/components/ConfirmDonationDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/view/components/ConfirmDonationDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/DailyHighlight.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/DailyHighlight.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/DailyHighlights.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/DailyHighlights.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/HomeNavDrawer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/HomeNavDrawer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/SearchFieldRow.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/SearchFieldRow.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/VerticalLetters.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/home/src/main/java/com/swahilib/feature/home/view/components/VerticalLetters.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/components/Components.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/proverb/src/main/java/com/swahilib/feature/proverb/view/components/Components.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/sentence_builder/src/main/java/com/swahilib/feature/sentence_builder/viewmodel/SentenceBuilderViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sentence_builder/src/main/java/com/swahilib/feature/sentence_builder/viewmodel/SentenceBuilderViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/social/src/main/java/com/swahilib/feature/social/view/ActivityTypeDisplay.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/social/src/main/java/com/swahilib/feature/social/view/ActivityTypeDisplay.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/word_builder/src/main/java/com/swahilib/feature/word_builder/viewmodel/WordBuilderViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word_builder/src/main/java/com/swahilib/feature/word_builder/viewmodel/WordBuilderViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/word_search/src/main/java/com/swahilib/feature/word_search/view/WordSearchScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word_search/src/main/java/com/swahilib/feature/word_search/view/WordSearchScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/word_search/src/main/java/com/swahilib/feature/word_search/viewmodel/WordSearchViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word_search/src/main/java/com/swahilib/feature/word_search/viewmodel/WordSearchViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/crossword/src/main/java/com/swahilib/feature/crossword/view/screen/CrosswordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/crossword/src/main/java/com/swahilib/feature/crossword/view/screen/CrosswordScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/hangman/src/main/java/com/swahilib/feature/hangman/view/components/FinishedContent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/hangman/src/main/java/com/swahilib/feature/hangman/view/components/FinishedContent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/hangman/src/main/java/com/swahilib/feature/hangman/view/screen/HangmanScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/hangman/src/main/java/com/swahilib/feature/hangman/view/screen/HangmanScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/spelling/src/main/java/com/swahilib/feature/spelling/view/screen/SpellingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/spelling/src/main/java/com/swahilib/feature/spelling/view/screen/SpellingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/FinishedContent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/FinishedContent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/PlayingContent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/PlayingContent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/SudokuGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/SudokuGrid.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/screen/SudokuScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/screen/SudokuScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +92,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Default::serial=GUIF6PMR4LPZ4D5H;connection=a6588504]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Default::serial=GUIF6PMR4LPZ4D5H;connection=39a3b612]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -245,7 +162,7 @@
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "develop",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/sirodaves/Developer/Android/Projects/SwahiLib/core/engagement/src/main/java/com/swahilib/core/engagement/model",
+    "last_opened_file_path": "/Users/sirodaves/Developer/Android/Projects/SwahiLib/core/social/src/main/java/com/swahilib/core/social/models",
     "recommended.upgrade.do.not.ask.for.project": "true",
     "settings.editor.selected.configurable": "preferences.lookFeel",
     "show.migrate.to.gradle.popup": "false"
@@ -253,11 +170,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/core/social/src/main/java/com/swahilib/core/social/models" />
+      <recent name="$PROJECT_DIR$/core/social/src/main/java/com/swahilib/core/social/dto" />
       <recent name="$PROJECT_DIR$/core/engagement/src/main/java/com/swahilib/core/engagement/model" />
       <recent name="$PROJECT_DIR$/feature/settings/src/main" />
       <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
-      <recent name="$PROJECT_DIR$/feature" />
-      <recent name="$PROJECT_DIR$/feature/advsearch/src/main/java/com/swahilib/feature/advsearch/components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data" />
@@ -268,11 +185,11 @@
       <recent name="com.swahilib.core.data.repository" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
-      <recent name="com.swahilib.viewmodel" />
-      <recent name="com.swahilib.feature.word.viewmodel" />
-      <recent name="com.swahilib.feature.settings.viewmodel" />
-      <recent name="com.swahilib.feature.settings.view.screen" />
-      <recent name="com.swahilib.feature.saying.viewmodel" />
+      <recent name="com.swahilib.feature.hangman.view.screen" />
+      <recent name="com.swahilib.feature.crossword.view.screen" />
+      <recent name="com.swahilib.feature.quiz.view.screen" />
+      <recent name="com.swahilib.feature.sentence_builder.view.screen" />
+      <recent name="com.swahilib.feature.social.utils" />
     </key>
   </component>
   <component name="RunManager">
