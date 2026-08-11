@@ -1,18 +1,55 @@
-name: Release to Play Store
+name: Build And Release
 
-# Fires whenever `stable` gets new commits — i.e. when `develop` is merged into it,
-# whether that's a fast-forward push, a merge commit, or a merged PR.
 on:
   push:
     branches:
       - stable
 
 permissions:
-  contents: write   # needed to create the tag + GitHub Release
+  contents: write
 
 jobs:
-  release:
+  check-version:
+    name: Check Version
     runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.check.outputs.should_release }}
+      tag: ${{ steps.version.outputs.tag }}
+      versionCode: ${{ steps.version.outputs.versionCode }}
+      apkName: ${{ steps.version.outputs.apkName }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Derive version + tag
+        id: version
+        run: |
+          VERSION_NAME=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
+          VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K[0-9]+' app/build.gradle.kts)
+          TAG="v${VERSION_NAME}"
+          echo "versionName=${VERSION_NAME}" >> "$GITHUB_OUTPUT"
+          echo "versionCode=${VERSION_CODE}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "apkName=SwahiLib-${TAG}.apk" >> "$GITHUB_OUTPUT"
+          echo "Resolved tag: ${TAG} (versionCode ${VERSION_CODE})"
+
+      - name: Check for existing tag
+        id: check
+        run: |
+          if git ls-remote --tags origin | grep -q "refs/tags/${{ steps.version.outputs.tag }}$"; then
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            echo "The release ${{ steps.version.outputs.tag }} already exists — nothing to release, skipping build."
+          else
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            echo "Tag ${{ steps.version.outputs.tag }} is new — proceeding to build + release."
+          fi
+
+  build-release:
+    name: Build Release
+    needs: check-version
+    if: needs.check-version.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,52 +63,41 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # app/build.gradle.kts already carries the source of truth for the version,
-      # e.g. versionName = "1.0.870" -> tag v1.0.870, apk SwahiLib-v1.0.870.apk
-      - name: Derive version + tag
-        id: version
-        run: |
-          VERSION_NAME=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
-          VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K[0-9]+' app/build.gradle.kts)
-          TAG="v${VERSION_NAME}"
-          echo "versionName=${VERSION_NAME}" >> "$GITHUB_OUTPUT"
-          echo "versionCode=${VERSION_CODE}" >> "$GITHUB_OUTPUT"
-          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
-          echo "apkName=SwahiLib-${TAG}.apk" >> "$GITHUB_OUTPUT"
-          echo "Resolved tag: ${TAG} (versionCode ${VERSION_CODE})"
-
-      - name: Fail if tag already exists
-        run: |
-          if git ls-remote --tags origin | grep -q "refs/tags/${{ steps.version.outputs.tag }}$"; then
-            echo "::error::Tag ${{ steps.version.outputs.tag }} already exists. Bump versionCode/versionName in app/build.gradle.kts before merging to stable."
-            exit 1
-          fi
-
-      # local.properties isn't committed; recreate what the build needs.
-      # NOTE: app/build.gradle.kts loads this file unconditionally (no exists() guard),
-      # so it must exist before ANY Gradle task runs, even a clean/lint task.
       - name: Create local.properties
         run: |
           echo "sdk.dir=${ANDROID_SDK_ROOT}" > local.properties
-          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> local.properties
           echo "PAYSTACK_SECRET_KEY=${{ secrets.PAYSTACK_SECRET_KEY }}" >> local.properties
+          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> local.properties
           echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> local.properties
           echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> local.properties
 
-      # Recreate the signing keystore + key.properties from secrets.
-      # storeFile is read by app/build.gradle.kts via `file(it as String)`, which resolves
-      # relative to the app/ module directory (not the repo root) — so it must be
-      # "../keystore/release.jks" to point back at <root>/keystore/release.jks.
       - name: Set up signing config
         run: |
           mkdir -p keystore
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore/release.jks
+          echo "${{ secrets.SIGNING_KEY }}" | base64 -d > keystore/release.jks
           cat > keystore/key.properties <<EOF
-          storeFile=../keystore/release.jks
-          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
-          keyAlias=${{ secrets.KEY_ALIAS }}
-          keyPassword=${{ secrets.KEY_PASSWORD }}
+          STORE_FILE=../keystore/release.jks
+          KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS=${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
           EOF
+
+      - name: Verify signing config
+        run: |
+          echo "keystore/key.properties keys present:"
+          sed 's/=.*/=<set>/' keystore/key.properties
+          for key in STORE_FILE KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            value=$(grep "^${key}=" keystore/key.properties | cut -d= -f2-)
+            if [ -z "$value" ]; then
+              echo "::error::${key} is empty — check that the matching secret is set."
+              exit 1
+            fi
+          done
+          if [ ! -f keystore/release.jks ] || [ ! -s keystore/release.jks ]; then
+            echo "::error::keystore/release.jks is missing or empty — check secrets.SIGNING_KEY."
+            exit 1
+          fi
+          echo "Signing config looks good."
 
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
@@ -90,7 +116,7 @@ jobs:
       - name: Rename APK to the release tag
         run: |
           mkdir -p release-assets
-          cp "${{ steps.outputs.outputs.apkPath }}" "release-assets/${{ steps.version.outputs.apkName }}"
+          cp "${{ steps.outputs.outputs.apkPath }}" "release-assets/${{ needs.check-version.outputs.apkName }}"
 
       - name: Upload AAB to Play Store
         uses: r0adkll/upload-google-play@v1
@@ -104,11 +130,11 @@ jobs:
       - name: Create GitHub Release with tagged APK
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: ${{ steps.version.outputs.tag }}
+          tag_name: ${{ needs.check-version.outputs.tag }}
+          name: ${{ needs.check-version.outputs.tag }}
           target_commitish: stable
           generate_release_notes: true
-          files: release-assets/${{ steps.version.outputs.apkName }}
+          files: release-assets/${{ needs.check-version.outputs.apkName }}
 
       - name: Clean up signing material
         if: always()

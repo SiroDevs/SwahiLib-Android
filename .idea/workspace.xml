@@ -72,17 +72,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/release.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/crossword/src/main/java/com/swahilib/feature/crossword/view/screen/CrosswordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/crossword/src/main/java/com/swahilib/feature/crossword/view/screen/CrosswordScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/hangman/src/main/java/com/swahilib/feature/hangman/view/components/FinishedContent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/hangman/src/main/java/com/swahilib/feature/hangman/view/components/FinishedContent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/hangman/src/main/java/com/swahilib/feature/hangman/view/screen/HangmanScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/hangman/src/main/java/com/swahilib/feature/hangman/view/screen/HangmanScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/spelling/src/main/java/com/swahilib/feature/spelling/view/screen/SpellingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/spelling/src/main/java/com/swahilib/feature/spelling/view/screen/SpellingScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/FinishedContent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/FinishedContent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/PlayingContent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/PlayingContent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/SudokuGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/components/SudokuGrid.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/screen/SudokuScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sudoku/src/main/java/com/swahilib/feature/sudoku/view/screen/SudokuScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/sentence_builder/src/main/java/com/swahilib/feature/sentence_builder/view/screen/SentenceBuilderScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/sentence_builder/src/main/java/com/swahilib/feature/sentence_builder/view/screen/SentenceBuilderScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/word_builder/src/main/java/com/swahilib/feature/word_builder/view/screen/WordBuilderScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word_builder/src/main/java/com/swahilib/feature/word_builder/view/screen/WordBuilderScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
