@@ -140,10 +140,15 @@ fun HomeNavDrawer(
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                Text(
-                    text = AppConstants.APP_CREDITS,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                NavigationDrawerItem(
+                    label = { Text(
+                        text = AppConstants.APP_CREDITS,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ) },
+                    selected = false,
+                    onClick = {  },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
             }
         },

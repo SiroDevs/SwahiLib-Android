@@ -22,12 +22,6 @@ enum class GameSound {
     CHEER,
 }
 
-/**
- * Plays the short synthesized SFX plus a looping background music bed for
- * game screens. Both music and SFX respect their own mute switch (Game
- * Settings), persisted via [PrefsRepo] so they survive process death and
- * apply the moment a game screen is opened.
- */
 @Singleton
 class GameSoundPlayer @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -76,10 +70,23 @@ class GameSoundPlayer @Inject constructor(
         soundPool.play(id, volume, volume, 1, 0, 1f)
     }
 
-    /** Call when a game screen becomes active (e.g. entering LevelSelect/Playing). */
     fun startMusic() {
+        var lastTrackIndex = -1
+
+        val musicTracks = listOf(
+            R.raw.game_music_loop_1,
+            R.raw.game_music_loop_2,
+            R.raw.game_music_loop_3
+        )
+
         if (musicPlayer == null) {
-            musicPlayer = MediaPlayer.create(context, R.raw.game_music_loop)?.apply {
+            var index: Int
+            do {
+                index = musicTracks.indices.random()
+            } while (index == lastTrackIndex)
+            lastTrackIndex = index
+
+            musicPlayer = MediaPlayer.create(context, R.raw.game_music_loop_1)?.apply {
                 isLooping = true
                 setVolume(0.4f, 0.4f)
             }
