@@ -41,7 +41,7 @@ private val gameTiles = listOf(
     GameTile("Jenga Sentensi", Icons.AutoMirrored.Filled.Sort, Routes.sentenceBuilderFreeplay()),
     GameTile("Tahajia (Spellcheck)", Icons.Default.Spellcheck, Routes.spellingFreeplay()),
     GameTile("CrossWord", Icons.Default.GridView, Routes.crosswordFreeplay()),
-    GameTile("Tafuta Maneno", Icons.Default.ManageSearch, Routes.wordSearchFreeplay()),
+    GameTile("Sudoku", Icons.Default.ManageSearch, Routes.wordSearchFreeplay()),
     GameTile("Hangman", Icons.Default.AccessibilityNew, Routes.hangmanFreeplay()),
 )
 

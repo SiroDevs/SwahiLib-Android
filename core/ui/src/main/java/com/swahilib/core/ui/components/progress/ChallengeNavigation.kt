@@ -43,7 +43,7 @@ fun routeAndTitleFor(type: String): Pair<String, String> = when (type) {
     "SENTENCE_BUILDER" -> Routes.sentenceBuilderFreeplay() to "Jenga Sentensi"
     "SPELLING" -> Routes.spellingFreeplay() to "Tahajia (Spellcheck)"
     "CROSSWORD" -> Routes.crosswordFreeplay() to "CrossWord"
-    "SUDOKU" -> Routes.wordSearchFreeplay() to "Tafuta Maneno"
+    "SUDOKU" -> Routes.wordSearchFreeplay() to "Sudoku"
     "PROVERB" -> Routes.quizFreeplay(source = "PROVERBS") to "Changamoto ya Methali"
     "HANGMAN" -> Routes.hangmanFreeplay() to "Hangman"
     else -> Routes.quizFreeplay() to "Jaribio la Msamiati"

@@ -312,7 +312,7 @@ class SudokuViewModel @Inject constructor(
 
             val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.SUDOKU,
-                title = "Tafuta Maneno",
+                title = "Sudoku",
                 score = result.foundWords,
                 maxScore = result.totalWords,
                 xpEarned = xpEarnedThisSession,
