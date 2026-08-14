@@ -10,6 +10,8 @@ sealed interface SentenceUiState {
     data object Loading : SentenceUiState
     data object Empty : SentenceUiState
 
+    data class Overview(val previousPoints: Int) : SentenceUiState
+
     data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : SentenceUiState
 
     data class Playing(
@@ -22,6 +24,7 @@ sealed interface SentenceUiState {
         val locked: Boolean = false,
         val secondsRemaining: Int,
         val secondsTotal: Int,
+        val practice: Boolean = false,
     ) : SentenceUiState {
         val question: SentenceQuestion get() = questions[index]
         val picked: List<String> get() = pickedIndices.map { question.shuffledWords[it] }
@@ -35,6 +38,7 @@ sealed interface SentenceUiState {
         val level: Int?,
         val pointsEarned: Int,
         val leveledUp: Boolean,
+        val practice: Boolean = false,
     ) : SentenceUiState
 }
 

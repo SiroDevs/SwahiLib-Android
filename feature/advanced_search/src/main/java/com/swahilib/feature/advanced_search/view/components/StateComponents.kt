@@ -49,11 +49,11 @@ fun EmptySection(category: String) {
         contentAlignment = Alignment.Center
     ) {
         val statement = when (category) {
-            "maneno" -> "Hamna maneno yanayolingana na utafutaji wako"
-            "nahau" -> "Hamna nahau zinazolingana na utafutaji wako"
-            "misemo" -> "Hamna misemo inayolingana na utafutaji wako"
-            "methali" -> "Hamna methali inayolingana na utafutaji wako"
-            else -> "Hamna matokeo yanayolingana na utafutaji wako"
+            "maneno" -> "Hamna maneno kulingana na utafutaji wako"
+            "nahau" -> "Hamna nahau kulingana na utafutaji wako"
+            "misemo" -> "Hamna misemo kulingana na utafutaji wako"
+            "methali" -> "Hamna methali kulingana na utafutaji wako"
+            else -> "Hamna matokeo kulingana na utafutaji wako"
         }
 
         Text(

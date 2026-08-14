@@ -39,6 +39,7 @@ import com.swahilib.core.games.model.SudokuTheme
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameLevelUiModel
+import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelCarousel
@@ -47,6 +48,12 @@ import com.swahilib.feature.sudoku.view.components.FinishedContent
 import com.swahilib.feature.sudoku.view.components.LetterPoolBar
 import com.swahilib.feature.sudoku.view.components.PlayingContent
 import com.swahilib.sudoku.viewmodel.SudokuViewModel
+
+private val SUDOKU_INSTRUCTIONS = listOf(
+    "Tafuta maneno yaliyofichwa kwenye gridi ya herufi - mlalo, wima, na mshazari.",
+    "Gusa herufi ya kwanza kisha ya mwisho ya neno kulichagua.",
+    "Maneno uliyopata yatabaki na rangi kwenye gridi na kuvuka kwenye orodha.",
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,6 +106,7 @@ fun SudokuScreen(
                     livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
+                    soundPlayer = viewModel.soundPlayer,
                 )
 
                 else -> AppTopBar(
@@ -141,6 +149,14 @@ fun SudokuScreen(
                     )
                 }
 
+                is SudokuUiState.Overview -> GameOverviewScreen(
+                    title = "Sudoku",
+                    tagline = "Tafuta maneno ya Kiswahili yaliyofichwa kwenye gridi.",
+                    instructions = SUDOKU_INSTRUCTIONS,
+                    onStart = viewModel::proceedToLevelSelect,
+                    onPractice = viewModel::startPractice,
+                )
+
                 is SudokuUiState.LevelSelect -> LevelSelectContent(
                     previousPoints = s.previousPoints,
                     levels = s.levels,
@@ -155,6 +171,7 @@ fun SudokuScreen(
 
                 is SudokuUiState.Finished -> FinishedContent(
                     state = s,
+                    soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
                 )

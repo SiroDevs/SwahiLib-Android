@@ -39,7 +39,7 @@ class HangmanViewModel @Inject constructor(
     private val generator: HangmanGenerator,
     private val engageRepo: EngagementRepo,
     private val gameProgressRepo: GameProgressRepo,
-    private val soundPlayer: GameSoundPlayer,
+    val soundPlayer: GameSoundPlayer,
 ) : ViewModel() {
 
     private val gameType = StatisticsEngine.EventType.HANGMAN.name
@@ -69,12 +69,23 @@ class HangmanViewModel @Inject constructor(
 
         viewModelScope.launch {
             if (challengeId != null) {
-                // Challenge deep-link: skip level select, behave as a single fixed-difficulty session.
-                beginSession(level = null, resume = false)
+                // Challenge deep-link: skip overview/level select, behave as a single fixed-difficulty session.
+                beginSession(level = null, resume = false, practice = false)
             } else {
-                showLevelSelect()
+                val progress = gameProgressRepo.getProgress(gameType)
+                _uiState.value = HangmanUiState.Overview(progress.totalPoints.toInt())
             }
         }
+    }
+
+    /** "Anza Kucheza" from the overview screen. */
+    fun proceedToLevelSelect() {
+        viewModelScope.launch { showLevelSelect() }
+    }
+
+    /** "Jaribu Kwanza (Mazoezi)" from the overview screen - a short, zero-stakes trial at level 1. */
+    fun startPractice() {
+        viewModelScope.launch { beginSession(level = 1, resume = false, practice = true) }
     }
 
     private suspend fun showLevelSelect() {
@@ -96,16 +107,16 @@ class HangmanViewModel @Inject constructor(
                 soundPlayer.play(GameSound.LOCKED)
                 return@launch
             }
-            beginSession(level = level, resume = true)
+            beginSession(level = level, resume = true, practice = false)
         }
     }
 
-    private suspend fun beginSession(level: Int?, resume: Boolean) {
+    private suspend fun beginSession(level: Int?, resume: Boolean, practice: Boolean) {
         startedAtMs = System.currentTimeMillis()
         val progress = gameProgressRepo.getProgress(gameType)
         val effectiveDifficulty = level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
 
-        val saved = if (resume) gameProgressRepo.loadSession(gameType) else null
+        val saved = if (resume && !practice) gameProgressRepo.loadSession(gameType) else null
         val matchesSaved = saved != null && saved.level == (level ?: 0)
 
         contentSeed = if (matchesSaved) saved!!.contentSeed else Random.nextLong()
@@ -130,6 +141,7 @@ class HangmanViewModel @Inject constructor(
             }
         }
 
+        soundPlayer.startMusic()
         val totalSeconds = level?.let { GameLevelConfig.timerSecondsForLevel(it) } ?: 60
         _uiState.value = HangmanUiState.Playing(
             rounds = rounds,
@@ -139,6 +151,7 @@ class HangmanViewModel @Inject constructor(
             livePoints = livePoints,
             secondsRemaining = totalSeconds,
             secondsTotal = totalSeconds,
+            practice = practice,
         )
         stepTimer.start(totalSeconds)
     }
@@ -199,6 +212,7 @@ class HangmanViewModel @Inject constructor(
     }
 
     private fun persistSnapshot(state: HangmanUiState.Playing) {
+        if (state.practice) return // practice runs never touch saved progress
         val snapshot = HangmanSnapshot(
             roundsSoFar = state.rounds.take(state.index + 1).map {
                 HangmanRoundSnapshot(it.guessedLetters.joinToString(""), it.wrongGuesses)
@@ -222,26 +236,30 @@ class HangmanViewModel @Inject constructor(
             is HangmanUiState.Playing -> state.level
             else -> null
         }
+        val practice = (state as? HangmanUiState.Playing)?.practice ?: false
         stepTimer.stop()
         _uiState.value = HangmanUiState.Loading
         viewModelScope.launch {
-            gameProgressRepo.clearSession(gameType)
-            beginSession(level = level, resume = false)
+            if (!practice) gameProgressRepo.clearSession(gameType)
+            beginSession(level = level, resume = false, practice = practice)
         }
     }
 
     fun discardAndExit(onDone: () -> Unit) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
+        val practice = (_uiState.value as? HangmanUiState.Playing)?.practice ?: false
         viewModelScope.launch {
-            gameProgressRepo.clearSession(gameType)
+            if (!practice) gameProgressRepo.clearSession(gameType)
             onDone()
         }
     }
 
     fun saveAndExit(onDone: () -> Unit) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         val state = _uiState.value as? HangmanUiState.Playing
-        if (state == null) {
+        if (state == null || state.practice) {
             onDone()
             return
         }
@@ -265,9 +283,23 @@ class HangmanViewModel @Inject constructor(
 
     private fun finish(state: HangmanUiState.Playing) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         val secondsSpent = ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(1)
         val effectiveDifficulty = state.level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
         val result = HangmanScorer.tally(state.rounds, effectiveDifficulty, secondsSpent)
+
+        if (state.practice) {
+            // Practice runs never touch XP, points, saved progress, or level unlocks.
+            _uiState.value = HangmanUiState.Finished(
+                result = result,
+                rounds = state.rounds,
+                level = state.level,
+                pointsEarned = 0,
+                leveledUp = false,
+                practice = true,
+            )
+            return
+        }
 
         viewModelScope.launch {
             val cId = challengeId
@@ -314,6 +346,7 @@ class HangmanViewModel @Inject constructor(
                 level = state.level,
                 pointsEarned = state.livePoints,
                 leveledUp = leveledUp,
+                practice = false,
             )
         }
     }
@@ -324,6 +357,7 @@ class HangmanViewModel @Inject constructor(
 
     override fun onCleared() {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         super.onCleared()
     }
 }

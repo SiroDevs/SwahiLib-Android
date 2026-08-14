@@ -16,6 +16,7 @@ object SyncScheduler {
         .build()
 
     fun scheduleOnLaunch(context: Context) {
+        if (!WorkManagerReadiness.isAvailable) return
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
             .setConstraints(networkConstraints)
             .addTag(SyncWorker.TAG)

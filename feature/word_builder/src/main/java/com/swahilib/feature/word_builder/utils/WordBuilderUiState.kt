@@ -11,6 +11,8 @@ sealed interface WordBuilderUiState {
     data object Loading : WordBuilderUiState
     data object Empty : WordBuilderUiState
 
+    data class Overview(val previousPoints: Int) : WordBuilderUiState
+
     data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : WordBuilderUiState
 
     data class Playing(
@@ -26,6 +28,7 @@ sealed interface WordBuilderUiState {
         val locked: Boolean = false,
         val secondsRemaining: Int,
         val secondsTotal: Int,
+        val practice: Boolean = false,
     ) : WordBuilderUiState {
         val assembled: String get() = pickedIndices.joinToString("") { word.scrambledLetters[it].toString() }
     }
@@ -37,6 +40,7 @@ sealed interface WordBuilderUiState {
         val level: Int?,
         val pointsEarned: Int,
         val leveledUp: Boolean,
+        val practice: Boolean = false,
     ) : WordBuilderUiState
 }
 

@@ -108,11 +108,11 @@ private fun DailyHighlightItem(
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
                 )
 
-                if (english.isNullOrBlank()) {
+                if (!english.isNullOrBlank()) {
                     Spacer(Modifier.width(8.dp))
 
                     Text(
-                        text = english!!,
+                        text = english,
                         style = MaterialTheme.typography.titleSmall.copy(
                             fontStyle = FontStyle.Italic
                         ),

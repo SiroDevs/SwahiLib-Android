@@ -37,8 +37,12 @@ import com.swahilib.feature.sudoku.utils.SudokuUiState
 fun PlayingContent(state: SudokuUiState.Playing, onTapCell: (Int, Int) -> Unit, onGiveUp: () -> Unit) {
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
-            StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal)
+            StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal, modifier = Modifier.align(Alignment.CenterHorizontally))
             Spacer(Modifier.height(8.dp))
+            if (state.practice) {
+                Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                Spacer(Modifier.height(4.dp))
+            }
             Text(
                 "Gusa herufi ya kwanza, kisha herufi ya mwisho, ya kila neno.",
                 style = MaterialTheme.typography.bodySmall,

@@ -119,6 +119,39 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getInt(PrefConstants.NOTIF_CHALLENGE_MINUTE, NotifConstants.DEFAULT_CHALLENGE_MINUTE)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_CHALLENGE_MINUTE, value) }
 
+    // ── Game audio ──
+
+    var gameMusicEnabled: Boolean
+        get() = prefs.getBoolean(PrefConstants.GAME_MUSIC_ENABLED, true)
+        set(value) = prefs.edit { putBoolean(PrefConstants.GAME_MUSIC_ENABLED, value) }
+
+    var gameSfxEnabled: Boolean
+        get() = prefs.getBoolean(PrefConstants.GAME_SFX_ENABLED, true)
+        set(value) = prefs.edit { putBoolean(PrefConstants.GAME_SFX_ENABLED, value) }
+
+    // ── Notification permission nag ──
+    // Shown on app open while notifications are OS-disabled. Backs off to at most
+    // once every 3 days so it nudges without becoming an annoyance, and can be
+    // silenced for good from the banner itself.
+
+    var notifNagLastShownAt: Long
+        get() = prefs.getLong(PrefConstants.NOTIF_NAG_LAST_SHOWN_AT, 0L)
+        set(value) = prefs.edit { putLong(PrefConstants.NOTIF_NAG_LAST_SHOWN_AT, value) }
+
+    var notifNagDismissedPermanently: Boolean
+        get() = prefs.getBoolean(PrefConstants.NOTIF_NAG_DISMISSED_PERMANENTLY, false)
+        set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_NAG_DISMISSED_PERMANENTLY, value) }
+
+    fun shouldShowNotifNag(notificationsGranted: Boolean): Boolean {
+        if (notificationsGranted || notifNagDismissedPermanently) return false
+        val threeDaysMs = 3 * 24 * 60 * 60 * 1000L
+        return System.currentTimeMillis() - notifNagLastShownAt >= threeDaysMs
+    }
+
+    fun recordNotifNagShown() {
+        notifNagLastShownAt = System.currentTimeMillis()
+    }
+
     var weeklySummaryNotifEnabled: Boolean
         get() = prefs.getBoolean(PrefConstants.NOTIF_WEEKLY_SUMMARY_ENABLED, true)
         set(value) = prefs.edit { putBoolean(PrefConstants.NOTIF_WEEKLY_SUMMARY_ENABLED, value) }

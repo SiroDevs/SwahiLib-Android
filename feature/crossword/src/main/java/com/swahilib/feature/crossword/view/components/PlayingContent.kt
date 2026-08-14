@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -28,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.games.model.CrosswordDirection
 import com.swahilib.core.games.model.CrosswordEntry
+import com.swahilib.core.ui.components.game.GameActionFab
 import com.swahilib.core.ui.components.game.StepTimerBar
 import com.swahilib.feature.crossword.utils.CrosswordUiState
 import kotlin.collections.orEmpty
@@ -43,7 +43,11 @@ fun PlayingContent(
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
-            StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal)
+            StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal, modifier = Modifier.align(Alignment.CenterHorizontally))
+            if (state.practice) {
+                Spacer(Modifier.height(4.dp))
+                Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.align(Alignment.CenterHorizontally))
+            }
             Spacer(Modifier.height(12.dp))
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                 CrosswordGrid(state.puzzle, state.answers, state.focusedEntryId)
@@ -86,7 +90,9 @@ fun PlayingContent(
                     }
                 }
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = onFinish, modifier = Modifier.fillMaxWidth()) { Text("Maliza") }
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    GameActionFab(text = "Maliza", onClick = onFinish)
+                }
             }
         }
     }

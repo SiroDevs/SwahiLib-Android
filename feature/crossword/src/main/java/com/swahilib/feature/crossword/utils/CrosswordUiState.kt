@@ -10,6 +10,8 @@ sealed interface CrosswordUiState {
     data object Loading : CrosswordUiState
     data object Empty : CrosswordUiState
 
+    data class Overview(val previousPoints: Int) : CrosswordUiState
+
     data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : CrosswordUiState
 
     data class Playing(
@@ -21,6 +23,7 @@ sealed interface CrosswordUiState {
         val secondsRemaining: Int,
         val secondsTotal: Int,
         val easyMode: Boolean,
+        val practice: Boolean = false,
     ) : CrosswordUiState {
         val letterPool: List<Char> get() = puzzle.entries.flatMap { it.answer.toList() }.distinct().sorted()
     }
@@ -33,6 +36,7 @@ sealed interface CrosswordUiState {
         val level: Int?,
         val pointsEarned: Int,
         val leveledUp: Boolean,
+        val practice: Boolean = false,
     ) : CrosswordUiState
 }
 

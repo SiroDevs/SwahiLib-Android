@@ -10,18 +10,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.swahilib.core.ui.components.game.GameActionFab
 import com.swahilib.core.ui.components.game.StepTimerBar
 import com.swahilib.feature.sentence_builder.utils.SentenceUiState
 
@@ -33,8 +35,12 @@ fun PlayingContent(state: SentenceUiState.Playing, onPick: (Int) -> Unit, onClea
             .verticalScroll(rememberScrollState())
             .padding(20.dp),
     ) {
-        StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal)
+        StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal, modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(Modifier.height(16.dp))
+        if (state.practice) {
+            Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+            Spacer(Modifier.height(4.dp))
+        }
         Text(
             "Sentensi ${state.index + 1}/${state.questions.size}",
             style = MaterialTheme.typography.labelLarge,
@@ -77,13 +83,14 @@ fun PlayingContent(state: SentenceUiState.Playing, onPick: (Int) -> Unit, onClea
         }
         Spacer(Modifier.height(24.dp))
 
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            OutlinedButton(onClick = onClear, enabled = !state.locked, modifier = Modifier.weight(1f)) { Text("Futa") }
-            Button(
+        OutlinedButton(onClick = onClear, enabled = !state.locked, modifier = Modifier.fillMaxWidth()) { Text("Futa") }
+        Spacer(Modifier.height(16.dp))
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            GameActionFab(
+                text = "Tuma",
                 onClick = onSubmit,
                 enabled = !state.locked && state.pickedIndices.size == state.question.shuffledWords.size,
-                modifier = Modifier.weight(1f),
-            ) { Text("Tuma") }
+            )
         }
     }
 }

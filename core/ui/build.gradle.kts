@@ -12,6 +12,7 @@ dependencies {
     api(project(":core:database"))
     api(project(":core:design_system"))
     api(project(":core:engagement"))
+    api(project(":core:data"))
 
     implementation(libs.androidx.foundation)
     implementation(libs.androidx.compose.livedata)

@@ -33,6 +33,7 @@ import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameLevelUiModel
+import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelCarousel
@@ -41,6 +42,12 @@ import com.swahilib.feature.sentence_builder.view.components.PlayingContent
 import com.swahilib.feature.sentence_builder.view.components.FinishedContent
 import com.swahilib.feature.sentence_builder.viewmodel.SentenceBuilderViewModel
 import kotlin.collections.get
+
+private val SENTENCE_INSTRUCTIONS = listOf(
+    "Panga maneno yaliyochanganyika kuunda sentensi sahihi ya Kiswahili.",
+    "Gusa neno kuliongeza; gusa 'Futa' kuanza upya mzunguko huo huo.",
+    "Kila kiwango kina muda maalum kwa kila sentensi - ukiisha muda, mchezo utaendelea kiotomatiki.",
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,6 +94,7 @@ fun SentenceBuilderScreen(
                     livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
+                    soundPlayer = viewModel.soundPlayer,
                 )
 
                 else -> AppTopBar(
@@ -121,6 +129,14 @@ fun SentenceBuilderScreen(
                     )
                 }
 
+                is SentenceUiState.Overview -> GameOverviewScreen(
+                    title = "Panga Sentensi",
+                    tagline = "Panga maneno kwa mpangilio sahihi kuunda sentensi.",
+                    instructions = SENTENCE_INSTRUCTIONS,
+                    onStart = viewModel::proceedToLevelSelect,
+                    onPractice = viewModel::startPractice,
+                )
+
                 is SentenceUiState.LevelSelect -> LevelSelectContent(
                     previousPoints = s.previousPoints,
                     levels = s.levels,
@@ -143,6 +159,7 @@ fun SentenceBuilderScreen(
 
                 is SentenceUiState.Finished -> FinishedContent(
                     state = s,
+                    soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
                 )

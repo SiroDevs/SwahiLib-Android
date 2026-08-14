@@ -11,6 +11,8 @@ sealed interface SudokuUiState {
     data object Loading : SudokuUiState
     data object Empty : SudokuUiState
 
+    data class Overview(val previousPoints: Int) : SudokuUiState
+
     data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : SudokuUiState
 
     data class Playing(
@@ -25,6 +27,7 @@ sealed interface SudokuUiState {
         val secondsRemaining: Int,
         val secondsTotal: Int,
         val easyMode: Boolean,
+        val practice: Boolean = false,
     ) : SudokuUiState {
         val letterPool: List<Char> get() = words.flatMap { it.word.toList() }.distinct().sorted()
     }
@@ -36,6 +39,7 @@ sealed interface SudokuUiState {
         val level: Int?,
         val pointsEarned: Int,
         val leveledUp: Boolean,
+        val practice: Boolean = false,
     ) : SudokuUiState
 }
 
