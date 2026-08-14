@@ -1,6 +1,7 @@
 package com.swahilib.core.ui.components.general
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,16 +21,18 @@ fun StreakBadge(
 ) {
     if (streakCount <= 1) return
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
         modifier = modifier
             .clip(RoundedCornerShape(50))
             .background(MaterialTheme.colorScheme.tertiaryContainer)
             .padding(horizontal = 14.dp, vertical = 6.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = "🔥 Siku $streakCount Mfululizo",
-            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.labelMedium.copy(
+                fontWeight = FontWeight.Bold
+            ),
             color = MaterialTheme.colorScheme.onTertiaryContainer,
         )
     }

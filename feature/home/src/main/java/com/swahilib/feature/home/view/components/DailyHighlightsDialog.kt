@@ -20,7 +20,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.swahilib.core.ui.components.general.StreakBadge
 import com.swahilib.feature.home.viewmodel.HomeViewModel
