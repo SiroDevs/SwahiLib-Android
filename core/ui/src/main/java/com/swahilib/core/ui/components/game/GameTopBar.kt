@@ -36,18 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.ui.components.action.AppTopBar
 
-/**
- * Top app bar shared by every engagement game screen.
- *
- * - [level] is shown as a "Kiwango N" tagline under the title; pass null for
- *   Quiz, which has no levels, or while on the Overview/practice-config step.
- * - [onBack] backs out through the exit-confirmation dialog; [onKill] is the
- *   small 'x' that does the exact same thing - a second, more obvious affordance
- *   for players who want out immediately.
- * - [onRefresh] triggers the restart-confirmation dialog.
- * - [soundPlayer] is optional: pass it to show the in-game music/SFX mute menu.
- *   Screens that don't play audio yet (rare) can omit it.
- */
 @Composable
 fun GameTopBar(
     title: String,

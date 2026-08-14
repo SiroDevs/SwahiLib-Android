@@ -96,7 +96,7 @@ fun SignInScreen(
 
             BenefitRow(Icons.Default.Leaderboard, "Ona nafasi yako kwenye ubao wa vinara")
             Spacer(Modifier.height(12.dp))
-            BenefitRow(Icons.Default.Groups, "Ongeza marafiki na uwapatie changamoto")
+            BenefitRow(Icons.Default.Groups, "Ongeza marafiki na uwape changamoto")
             Spacer(Modifier.height(12.dp))
             BenefitRow(Icons.Default.EmojiEvents, "Shiriki beji ulizofungua na marafiki")
 

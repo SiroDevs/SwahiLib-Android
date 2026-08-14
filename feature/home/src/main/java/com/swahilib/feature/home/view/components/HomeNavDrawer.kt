@@ -72,18 +72,11 @@ fun HomeNavDrawer(
                                 color = MaterialTheme.colorScheme.primary
                             )
                         )
-                        Row() {
-                            Text(
-                                text = "${AppConstants.APP_TAGLINE} · ",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = AppConstants.APP_CREDITS,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
+                        Text(
+                            text = "${AppConstants.APP_TAGLINE} · ",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
 
@@ -145,6 +138,12 @@ fun HomeNavDrawer(
                     selected = false,
                     onClick = { navigateAndClose(Routes.SETTINGS) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                Text(
+                    text = AppConstants.APP_CREDITS,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },

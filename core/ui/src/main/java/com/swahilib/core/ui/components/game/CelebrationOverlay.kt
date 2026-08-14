@@ -5,6 +5,7 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
@@ -15,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberInfiniteTransition
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -26,7 +26,7 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 private data class FloatingShape(
-    val x: Float, // 0f..1f fraction of width
+    val x: Float,
     val baseSize: Float,
     val color: Color,
     val speed: Float, // seconds to cross the screen
@@ -40,11 +40,6 @@ private val CelebrationPalette = listOf(
     Color(0xFF00C2A8), Color(0xFF4D8AF0), Color(0xFFFF9671),
 )
 
-/**
- * Balloons-and-bubbles celebration, floating up over whatever's behind it.
- * Plays [GameSound.CHEER] once when it appears. Any tap anywhere dismisses
- * it early, same as pressing a real button on the finish screen underneath.
- */
 @Composable
 fun CelebrationOverlay(
     visible: Boolean,
@@ -92,7 +87,7 @@ fun CelebrationOverlay(
                     val m = v % 1f
                     if (m < 0f) m + 1f else m
                 }
-                val yFrac = 1f - cycle // rises from bottom (1) to top (0)
+                val yFrac = 1f - cycle
                 val wobbleX = sin((cycle * 2f * Math.PI).toFloat()) * shape.wobble
                 val cx = shape.x * w + wobbleX
                 val cy = yFrac * h * 1.15f - h * 0.05f
@@ -112,7 +107,6 @@ fun CelebrationOverlay(
                         style = Stroke(width = 2f),
                     )
                 } else {
-                    // A simple balloon: an oval body plus a thin string.
                     drawOval(
                         color = shape.color.copy(alpha = alpha),
                         topLeft = Offset(cx - shape.baseSize * 0.7f, cy - shape.baseSize),

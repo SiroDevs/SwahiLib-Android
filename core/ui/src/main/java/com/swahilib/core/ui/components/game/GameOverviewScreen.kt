@@ -1,6 +1,5 @@
 package com.swahilib.core.ui.components.game
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -29,14 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-/**
- * Shown the first time a player opens a game, before any level is chosen -
- * a quick "here's what awaits you" briefing with two ways forward:
- * [onStart] goes into the normal flow (level carousel, or straight into play
- * for Quiz), [onPractice] launches a zero-stakes trial run of the easiest
- * level so the player can learn the ropes without spending an attempt -
- * no points, XP, or level progress is affected by a practice run.
- */
 @Composable
 fun GameOverviewScreen(
     title: String,
@@ -62,7 +54,7 @@ fun GameOverviewScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(Modifier.padding(18.dp)) {
-                Text("Yanayokungoja", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                Text("Yaliyomo", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
                 Spacer(Modifier.height(10.dp))
                 instructions.forEach { line ->
                     Row(
