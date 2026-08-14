@@ -35,32 +35,54 @@ fun SortDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val label = when (current) {
-        SortOrder.AZ          -> "A→Z"
-        SortOrder.ZA          -> "Z→A"
+        SortOrder.AZ -> "A→Z"
+        SortOrder.ZA -> "Z→A"
         SortOrder.LIKED_FIRST -> "♥"
     }
     Box(modifier = modifier) {
         TextButton(onClick = { expanded = true }) {
             Text(label, style = MaterialTheme.typography.labelLarge)
-            Icon(Icons.Filled.ArrowDropDown, contentDescription = null, modifier = Modifier.size(18.dp))
+            Icon(
+                Icons.Filled.ArrowDropDown,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(
                 text = { Text("A → Z") },
                 leadingIcon = { Icon(Icons.Filled.SortByAlpha, null, Modifier.size(18.dp)) },
-                trailingIcon = { if (current == SortOrder.AZ) Icon(Icons.Filled.Check, null, Modifier.size(16.dp)) },
+                trailingIcon = {
+                    if (current == SortOrder.AZ) Icon(
+                        Icons.Filled.Check,
+                        null,
+                        Modifier.size(16.dp)
+                    )
+                },
                 onClick = { onSelect(SortOrder.AZ); expanded = false }
             )
             DropdownMenuItem(
                 text = { Text("Z → A") },
                 leadingIcon = { Icon(Icons.Filled.SortByAlpha, null, Modifier.size(18.dp)) },
-                trailingIcon = { if (current == SortOrder.ZA) Icon(Icons.Filled.Check, null, Modifier.size(16.dp)) },
+                trailingIcon = {
+                    if (current == SortOrder.ZA) Icon(
+                        Icons.Filled.Check,
+                        null,
+                        Modifier.size(16.dp)
+                    )
+                },
                 onClick = { onSelect(SortOrder.ZA); expanded = false }
             )
             DropdownMenuItem(
                 text = { Text("Vipendwa kwanza") },
                 leadingIcon = { Icon(Icons.Filled.FavoriteBorder, null, Modifier.size(18.dp)) },
-                trailingIcon = { if (current == SortOrder.LIKED_FIRST) Icon(Icons.Filled.Check, null, Modifier.size(16.dp)) },
+                trailingIcon = {
+                    if (current == SortOrder.LIKED_FIRST) Icon(
+                        Icons.Filled.Check,
+                        null,
+                        Modifier.size(16.dp)
+                    )
+                },
                 onClick = { onSelect(SortOrder.LIKED_FIRST); expanded = false }
             )
         }

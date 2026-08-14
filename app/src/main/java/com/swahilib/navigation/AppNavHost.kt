@@ -19,7 +19,7 @@ import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
-import com.swahilib.feature.advanced_search.viewmodel.AdvSearchViewModel
+import com.swahilib.feature.advanced_search.viewmodel.AdvancedSearchViewModel
 import com.swahilib.feature.home.viewmodel.HomeViewModel
 import com.swahilib.feature.settings.viewmodel.SettingsViewModel
 import com.swahilib.feature.idiom.viewmodel.IdiomViewModel
@@ -28,7 +28,7 @@ import com.swahilib.feature.saying.viewmodel.SayingViewModel
 import com.swahilib.feature.word.viewmodel.WordViewModel
 import com.swahilib.feature.donation.viewmodel.DonationViewModel
 import com.swahilib.feature.home.view.screen.HomeScreen
-import com.swahilib.feature.advanced_search.view.screen.AdvSearchScreen
+import com.swahilib.feature.advanced_search.view.screen.AdvancedSearchScreen
 import com.swahilib.feature.daily_content.view.DailyContentHistory
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.proverb.view.screen.ProverbScreen
@@ -70,6 +70,8 @@ import com.swahilib.sudoku.viewmodel.SudokuViewModel
 import com.swahilib.feature.hangman.view.screen.HangmanScreen
 import com.swahilib.feature.hangman.viewmodel.HangmanViewModel
 import com.swahilib.core.games.model.SudokuTheme
+import com.swahilib.feature.settings.view.screen.GameSettingsScreen
+import com.swahilib.feature.settings.viewmodel.GameSettingsViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
@@ -162,8 +164,8 @@ fun AppNavHost(
         }
 
         composable(Routes.SETTINGS_GAMES) {
-            val viewModel: com.swahilib.feature.settings.viewmodel.GameSettingsViewModel = hiltViewModel()
-            com.swahilib.feature.settings.view.screen.GameSettingsScreen(navController = navController, viewModel = viewModel)
+            val viewModel: GameSettingsViewModel = hiltViewModel()
+            GameSettingsScreen(navController = navController, viewModel = viewModel)
         }
 
         composable(Routes.LIKES) {
@@ -183,8 +185,8 @@ fun AppNavHost(
         }
 
         composable(Routes.ADVANCED_SEARCH) {
-            val viewModel: AdvSearchViewModel = hiltViewModel()
-            AdvSearchScreen(
+            val viewModel: AdvancedSearchViewModel = hiltViewModel()
+            AdvancedSearchScreen(
                 navController = navController,
                 viewModel = viewModel,
                 prefsRepo = prefsRepo

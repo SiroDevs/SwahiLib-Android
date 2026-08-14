@@ -104,9 +104,10 @@ fun HomeNavDrawer(
                     onClick = { navigateAndClose(Routes.DAILY_PROVERB) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
+                HorizontalDivider()
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.Groups, contentDescription = null) },
-                    label = { Text("Jumuiya") },
+                    label = { Text("Jamii ya SwahiLib") },
                     selected = false,
                     onClick = { navigateAndClose(Routes.AUTH_SIGN_IN) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)

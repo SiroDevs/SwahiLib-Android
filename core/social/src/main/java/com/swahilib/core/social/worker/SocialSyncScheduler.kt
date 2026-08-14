@@ -6,6 +6,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.swahilib.core.data.worker.WorkManagerReadiness
 import java.util.concurrent.TimeUnit
 
 object SocialSyncScheduler {
@@ -15,6 +16,7 @@ object SocialSyncScheduler {
         .build()
 
     fun schedule(context: Context) {
+        if (!WorkManagerReadiness.isAvailable) return
         val request = PeriodicWorkRequestBuilder<SocialSyncWorker>(6, TimeUnit.HOURS)
             .setConstraints(networkConstraints)
             .build()
@@ -27,6 +29,7 @@ object SocialSyncScheduler {
     }
 
     fun cancel(context: Context) {
+        if (!WorkManagerReadiness.isAvailable) return
         WorkManager.getInstance(context).cancelUniqueWork(SocialSyncWorker.WORK_NAME)
     }
 }

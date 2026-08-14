@@ -133,12 +133,12 @@ fun SocialScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Jumuiya",
+                title = "Jamii ya SwahiLib",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() },
                 actions = {
                     IconButton(onClick = { viewModel.signOut() }) {
-                        Icon(Icons.Default.Logout, contentDescription = "Toka")
+                        Icon(Icons.Default.Logout, contentDescription = "Jiondoe")
                     }
                 },
             )

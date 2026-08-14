@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.swahilib.core.data.worker.WorkManagerReadiness
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -14,6 +15,7 @@ object WidgetScheduler {
     private const val TARGET_MINUTE = 0
 
     fun scheduleDailyRefresh(context: Context) {
+        if (!WorkManagerReadiness.isAvailable) return
         val request = PeriodicWorkRequestBuilder<WidgetRefreshWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(delayUntil(TARGET_HOUR, TARGET_MINUTE), TimeUnit.MILLISECONDS)
             .build()

@@ -31,7 +31,7 @@ import com.swahilib.core.ui.components.listitems.IdiomItem
 import com.swahilib.core.ui.components.listitems.ProverbItem
 import com.swahilib.core.ui.components.listitems.SayingItem
 import com.swahilib.core.ui.components.listitems.WordItem
-import com.swahilib.feature.advanced_search.viewmodel.AdvSearchViewModel
+import com.swahilib.feature.advanced_search.viewmodel.AdvancedSearchViewModel
 
 @Composable
 fun NoResultsPlaceholder(query: String) {
@@ -48,7 +48,7 @@ fun NoResultsPlaceholder(query: String) {
             )
             Spacer(Modifier.height(12.dp))
             Text(
-                "Hamna matokeo kwa \"$query\"",
+                "Hamna matokeo ya \"$query\"",
                 style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -64,7 +64,7 @@ fun NoResultsPlaceholder(query: String) {
 
 fun LazyListScope.wordsSection(
     words: List<WordEntity>, query: String, show: Boolean,
-    navController: NavHostController, viewModel: AdvSearchViewModel,
+    navController: NavHostController, viewModel: AdvancedSearchViewModel,
     showDonation: Boolean = false, onShowDonation: () -> Unit = {},
 ) {
     if (!show) return
@@ -88,7 +88,7 @@ fun LazyListScope.wordsSection(
 
 fun LazyListScope.idiomsSection(
     idioms: List<IdiomEntity>, query: String, show: Boolean,
-    navController: NavHostController, viewModel: AdvSearchViewModel,
+    navController: NavHostController, viewModel: AdvancedSearchViewModel,
     showDonation: Boolean = false, onShowDonation: () -> Unit = {},
 ) {
     if (!show) return
@@ -112,7 +112,7 @@ fun LazyListScope.idiomsSection(
 
 fun LazyListScope.proverbsSection(
     proverbs: List<ProverbEntity>, query: String, show: Boolean,
-    navController: NavHostController, viewModel: AdvSearchViewModel,
+    navController: NavHostController, viewModel: AdvancedSearchViewModel,
     showDonation: Boolean = false, onShowDonation: () -> Unit = {},
 ) {
     if (!show) return
@@ -136,7 +136,7 @@ fun LazyListScope.proverbsSection(
 
 fun LazyListScope.sayingsSection(
     sayings: List<SayingEntity>, query: String, show: Boolean,
-    navController: NavHostController, viewModel: AdvSearchViewModel,
+    navController: NavHostController, viewModel: AdvancedSearchViewModel,
     showDonation: Boolean = false, onShowDonation: () -> Unit = {},
 ) {
     if (!show) return

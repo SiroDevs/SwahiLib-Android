@@ -5,12 +5,14 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.swahilib.core.common.utils.NotifConstants
+import com.swahilib.core.data.worker.WorkManagerReadiness
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 object NotificationScheduler {
 
     fun scheduleDailyWord(context: Context, enabled: Boolean, hour: Int, minute: Int) {
+        if (!WorkManagerReadiness.isAvailable) return
         val wm = WorkManager.getInstance(context)
         if (!enabled) {
             wm.cancelUniqueWork(NotifConstants.WORK_WORD)
@@ -27,6 +29,7 @@ object NotificationScheduler {
     }
 
     fun scheduleDailyProverb(context: Context, enabled: Boolean, hour: Int, minute: Int) {
+        if (!WorkManagerReadiness.isAvailable) return
         val wm = WorkManager.getInstance(context)
         if (!enabled) {
             wm.cancelUniqueWork(NotifConstants.WORK_PROVERB)
@@ -43,6 +46,7 @@ object NotificationScheduler {
     }
 
     fun scheduleDailyChallenge(context: Context, enabled: Boolean, hour: Int, minute: Int) {
+        if (!WorkManagerReadiness.isAvailable) return
         val wm = WorkManager.getInstance(context)
         if (!enabled) {
             wm.cancelUniqueWork(NotifConstants.WORK_CHALLENGE)
@@ -59,6 +63,7 @@ object NotificationScheduler {
     }
 
     fun scheduleWeeklySummary(context: Context, enabled: Boolean, hour: Int, minute: Int) {
+        if (!WorkManagerReadiness.isAvailable) return
         val wm = WorkManager.getInstance(context)
         if (!enabled) {
             wm.cancelUniqueWork(NotifConstants.WORK_WEEKLY_SUMMARY)

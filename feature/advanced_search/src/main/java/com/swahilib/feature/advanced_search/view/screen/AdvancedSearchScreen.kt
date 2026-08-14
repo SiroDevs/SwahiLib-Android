@@ -29,7 +29,7 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.feature.advanced_search.viewmodel.AdvSearchViewModel
+import com.swahilib.feature.advanced_search.viewmodel.AdvancedSearchViewModel
 import com.swahilib.feature.advanced_search.viewmodel.SearchMode
 import com.swahilib.feature.advanced_search.viewmodel.SortOrder
 import com.swahilib.feature.advanced_search.view.components.idiomsSection
@@ -47,9 +47,9 @@ import java.util.Locale
 private val TYPES = listOf("YOTE", "MANENO", "NAHAU", "METHALI", "MISEMO")
 
 @Composable
-fun AdvSearchScreen(
+fun AdvancedSearchScreen(
     navController: NavHostController,
-    viewModel: AdvSearchViewModel,
+    viewModel: AdvancedSearchViewModel,
     prefsRepo: PrefsRepo,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
@@ -91,7 +91,7 @@ fun AdvSearchScreen(
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
             )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            putExtra(RecognizerIntent.EXTRA_PROMPT, "Sema unachotafuta ...")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Tamka unachotafuta ...")
         }
     )
 

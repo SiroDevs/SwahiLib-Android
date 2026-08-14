@@ -58,7 +58,7 @@ fun SignInScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Jumuiya",
+                title = "Jamii ya SwahiLib",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() }
             )
@@ -80,7 +80,7 @@ fun SignInScreen(
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                "Jiunge na Jumuiya",
+                "Jiunge na Jamii",
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                 textAlign = TextAlign.Center,
             )
@@ -125,12 +125,12 @@ fun SignInScreen(
                     )
                     Spacer(Modifier.width(10.dp))
                 }
-                Text(if (isLoading) "Inaingia..." else "Ingia na Google")
+                Text(if (isLoading) "Inaingia ..." else "Ingia na Google")
             }
 
             Spacer(Modifier.height(12.dp))
             Text(
-                "Hii ni hiari kabisa - programu inaendelea kufanya kazi vizuri bila akaunti.",
+                "Hii ni kwa hiari yako - SwahiLib itafanya kazi vyema bila akaunti.",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
