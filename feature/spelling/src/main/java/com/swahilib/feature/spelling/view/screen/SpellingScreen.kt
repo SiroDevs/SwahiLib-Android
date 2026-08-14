@@ -33,6 +33,7 @@ import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameLevelUiModel
+import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelCarousel
@@ -40,6 +41,12 @@ import com.swahilib.feature.spelling.utils.SpellingUiState
 import com.swahilib.feature.spelling.view.components.PlayingContent
 import com.swahilib.feature.spelling.view.components.FinishedContent
 import com.swahilib.feature.spelling.viewmodel.SpellingViewModel
+
+private val SPELLING_INSTRUCTIONS = listOf(
+    "Soma maelezo, kisha andika neno sahihi la Kiswahili.",
+    "Tumia 'Kidokezo' kuonyesha herufi moja - hupunguza alama za mzunguko huo.",
+    "Kila kiwango kina muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,6 +93,7 @@ fun SpellingScreen(
                     livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
+                    soundPlayer = viewModel.soundPlayer,
                 )
 
                 else -> AppTopBar(
@@ -118,6 +126,14 @@ fun SpellingScreen(
                     )
                 }
 
+                is SpellingUiState.Overview -> GameOverviewScreen(
+                    title = "Tahajia (Spellcheck)",
+                    tagline = "Andika tahajia sahihi ya maneno ya Kiswahili.",
+                    instructions = SPELLING_INSTRUCTIONS,
+                    onStart = viewModel::proceedToLevelSelect,
+                    onPractice = viewModel::startPractice,
+                )
+
                 is SpellingUiState.LevelSelect -> LevelSelectContent(
                     previousPoints = s.previousPoints,
                     levels = s.levels,
@@ -139,6 +155,7 @@ fun SpellingScreen(
 
                 is SpellingUiState.Finished -> FinishedContent(
                     state = s,
+                    soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
                 )

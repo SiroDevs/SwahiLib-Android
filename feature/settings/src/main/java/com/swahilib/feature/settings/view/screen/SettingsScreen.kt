@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -64,6 +65,15 @@ fun SettingsScreen(navController: NavHostController) {
                 supportingContent = { Text("Dhibiti data iliyohifadhiwa kwenye kifaa chako") },
                 trailingContent = { Icon(Icons.Default.ChevronRight, contentDescription = null) },
                 modifier = Modifier.clickable { navController.navigate(Routes.SETTINGS_DATA) },
+            )
+            HorizontalDivider()
+
+            ListItem(
+                leadingContent = { Icon(Icons.Default.SportsEsports, contentDescription = null) },
+                headlineContent = { Text("Michezo (ChemshaBongo)") },
+                supportingContent = { Text("Muziki, sauti za mchezo, na mazoezi") },
+                trailingContent = { Icon(Icons.Default.ChevronRight, contentDescription = null) },
+                modifier = Modifier.clickable { navController.navigate(Routes.SETTINGS_GAMES) },
             )
             HorizontalDivider()
         }

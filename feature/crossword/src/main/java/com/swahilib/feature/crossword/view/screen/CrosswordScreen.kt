@@ -41,6 +41,7 @@ import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameLevelUiModel
+import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelCarousel
@@ -48,6 +49,12 @@ import com.swahilib.feature.crossword.utils.CrosswordUiState
 import com.swahilib.feature.crossword.view.components.FinishedContent
 import com.swahilib.feature.crossword.view.components.PlayingContent
 import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
+
+private val CROSSWORD_INSTRUCTIONS = listOf(
+    "Jaza majibu ya maswali ya Mlalo, Wima, na Mshazari kwenye gridi.",
+    "Gusa swali kulichagua, kisha andika jibu lako - majibu hayaonyeshwi hadi umalize.",
+    "Kiwango kina saa moja kwa mchezo mzima wa gridi, si kwa kila swali peke yake.",
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,6 +101,7 @@ fun CrosswordScreen(
                     livePoints = 0,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
+                    soundPlayer = viewModel.soundPlayer,
                 )
 
                 else -> AppTopBar(
@@ -136,6 +144,14 @@ fun CrosswordScreen(
                     )
                 }
 
+                is CrosswordUiState.Overview -> GameOverviewScreen(
+                    title = "CrossWord",
+                    tagline = "Jaza gridi ya maneno mtambuka ya Kiswahili.",
+                    instructions = CROSSWORD_INSTRUCTIONS,
+                    onStart = viewModel::proceedToLevelSelect,
+                    onPractice = viewModel::startPractice,
+                )
+
                 is CrosswordUiState.LevelSelect -> LevelSelectContent(
                     previousPoints = s.previousPoints,
                     levels = s.levels,
@@ -151,6 +167,7 @@ fun CrosswordScreen(
 
                 is CrosswordUiState.Finished -> FinishedContent(
                     state = s,
+                    soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
                 )

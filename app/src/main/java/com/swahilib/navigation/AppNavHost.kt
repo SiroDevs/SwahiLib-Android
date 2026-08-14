@@ -161,6 +161,11 @@ fun AppNavHost(
             DataSettingsScreen(navController = navController)
         }
 
+        composable(Routes.SETTINGS_GAMES) {
+            val viewModel: com.swahilib.feature.settings.viewmodel.GameSettingsViewModel = hiltViewModel()
+            com.swahilib.feature.settings.view.screen.GameSettingsScreen(navController = navController, viewModel = viewModel)
+        }
+
         composable(Routes.LIKES) {
             LikesScreen(navController = navController)
         }

@@ -37,7 +37,7 @@ class CrosswordViewModel @Inject constructor(
     private val generator: CrosswordGenerator,
     private val engageRepo: EngagementRepo,
     private val gameProgressRepo: GameProgressRepo,
-    private val soundPlayer: GameSoundPlayer,
+    val soundPlayer: GameSoundPlayer,
 ) : ViewModel() {
 
     private val gameType = StatisticsEngine.EventType.CROSSWORD.name
@@ -61,11 +61,20 @@ class CrosswordViewModel @Inject constructor(
 
         viewModelScope.launch {
             if (challengeId != null) {
-                beginSession(level = null, resume = false)
+                beginSession(level = null, resume = false, practice = false)
             } else {
-                showLevelSelect()
+                val progress = gameProgressRepo.getProgress(gameType)
+                _uiState.value = CrosswordUiState.Overview(progress.totalPoints.toInt())
             }
         }
+    }
+
+    fun proceedToLevelSelect() {
+        viewModelScope.launch { showLevelSelect() }
+    }
+
+    fun startPractice() {
+        viewModelScope.launch { beginSession(level = 1, resume = false, practice = true) }
     }
 
     private suspend fun showLevelSelect() {
@@ -87,17 +96,17 @@ class CrosswordViewModel @Inject constructor(
                 soundPlayer.play(GameSound.LOCKED)
                 return@launch
             }
-            beginSession(level = level, resume = true)
+            beginSession(level = level, resume = true, practice = false)
         }
     }
 
-    private suspend fun beginSession(level: Int?, resume: Boolean) {
+    private suspend fun beginSession(level: Int?, resume: Boolean, practice: Boolean) {
         startedAtMs = System.currentTimeMillis()
         val progress = gameProgressRepo.getProgress(gameType)
         val effectiveDifficulty = level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
         val targetEntries = level?.let { GameLevelConfig.stepCountForLevel(it) } ?: 7
 
-        val saved = if (resume) gameProgressRepo.loadSession(gameType) else null
+        val saved = if (resume && !practice) gameProgressRepo.loadSession(gameType) else null
         val matchesSaved = saved != null && saved.level == (level ?: 0)
 
         contentSeed = if (matchesSaved) saved!!.contentSeed else Random.nextLong()
@@ -113,6 +122,7 @@ class CrosswordViewModel @Inject constructor(
             if (snapshot != null) answers = snapshot.answers
         }
 
+        soundPlayer.startMusic()
         val totalSeconds = level?.let { GameLevelConfig.timerSecondsForLevel(it) * 2 } ?: 180 // whole puzzle, not per-clue
         _uiState.value = CrosswordUiState.Playing(
             puzzle = puzzle,
@@ -122,6 +132,7 @@ class CrosswordViewModel @Inject constructor(
             secondsRemaining = totalSeconds,
             secondsTotal = totalSeconds,
             easyMode = level?.let { GameLevelConfig.isEasyLevel(it) } ?: false,
+            practice = practice,
         )
         stepTimer.start(totalSeconds)
     }
@@ -170,6 +181,7 @@ class CrosswordViewModel @Inject constructor(
     }
 
     private fun persistSnapshot(state: CrosswordUiState.Playing) {
+        if (state.practice) return
         viewModelScope.launch {
             gameProgressRepo.saveSession(
                 gameType = gameType,
@@ -189,27 +201,32 @@ class CrosswordViewModel @Inject constructor(
     }
 
     fun restart() {
-        val level = (_uiState.value as? CrosswordUiState.Playing)?.level
+        val state = _uiState.value as? CrosswordUiState.Playing
+        val level = state?.level
+        val practice = state?.practice ?: false
         stepTimer.stop()
         _uiState.value = CrosswordUiState.Loading
         viewModelScope.launch {
-            gameProgressRepo.clearSession(gameType)
-            beginSession(level = level, resume = false)
+            if (!practice) gameProgressRepo.clearSession(gameType)
+            beginSession(level = level, resume = false, practice = practice)
         }
     }
 
     fun discardAndExit(onDone: () -> Unit) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
+        val practice = (_uiState.value as? CrosswordUiState.Playing)?.practice ?: false
         viewModelScope.launch {
-            gameProgressRepo.clearSession(gameType)
+            if (!practice) gameProgressRepo.clearSession(gameType)
             onDone()
         }
     }
 
     fun saveAndExit(onDone: () -> Unit) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         val state = _uiState.value as? CrosswordUiState.Playing
-        if (state == null) {
+        if (state == null || state.practice) {
             onDone()
             return
         }
@@ -228,10 +245,24 @@ class CrosswordViewModel @Inject constructor(
 
     private fun finish(state: CrosswordUiState.Playing) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         val secondsSpent = ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(1)
         val effectiveDifficulty = state.level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
         val result = CrosswordScorer.tally(state.puzzle.entries, state.answers, effectiveDifficulty, secondsSpent)
         val pointsEarned = state.level?.let { GameLevelConfig.pointsPerCorrect(it) * result.correctEntries } ?: (10 * result.correctEntries)
+
+        if (state.practice) {
+            _uiState.value = CrosswordUiState.Finished(
+                result = result,
+                puzzle = state.puzzle,
+                answers = state.answers,
+                level = state.level,
+                pointsEarned = 0,
+                leveledUp = false,
+                practice = true,
+            )
+            return
+        }
 
         viewModelScope.launch {
             val cId = challengeId
@@ -279,6 +310,7 @@ class CrosswordViewModel @Inject constructor(
                 level = state.level,
                 pointsEarned = pointsEarned,
                 leveledUp = leveledUp,
+                practice = false,
             )
         }
     }
@@ -289,6 +321,7 @@ class CrosswordViewModel @Inject constructor(
 
     override fun onCleared() {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         super.onCleared()
     }
 }

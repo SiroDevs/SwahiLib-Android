@@ -56,6 +56,14 @@ object PrefConstants {
     const val NOTIF_WEEKLY_SUMMARY_MINUTE = "notif_weekly_summary_minute"
 
     const val DAILY_LOGIN_LAST_DATE = "daily_login_last_date"
+
+    // ── Game audio ──
+    const val GAME_MUSIC_ENABLED = "game_music_enabled"
+    const val GAME_SFX_ENABLED = "game_sfx_enabled"
+
+    // ── Notification permission nag ──
+    const val NOTIF_NAG_LAST_SHOWN_AT = "notif_nag_last_shown_at"
+    const val NOTIF_NAG_DISMISSED_PERMANENTLY = "notif_nag_dismissed_permanently"
 }
 
 object NotifConstants {
@@ -99,6 +107,7 @@ object Routes {
     const val SETTINGS_APPEARANCE = "settings_appearance"
     const val SETTINGS_NOTIFICATIONS = "settings_notifications"
     const val SETTINGS_DATA = "settings_data"
+    const val SETTINGS_GAMES = "settings_games"
     const val LIKES = "likes"
     const val HISTORY = "history"
     const val AUTH_SIGN_IN = "auth_sign_in"

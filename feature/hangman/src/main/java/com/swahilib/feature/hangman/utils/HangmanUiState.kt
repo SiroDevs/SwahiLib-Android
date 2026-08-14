@@ -10,6 +10,9 @@ sealed interface HangmanUiState {
     data object Loading : HangmanUiState
     data object Empty : HangmanUiState
 
+    /** "Here's what awaits you" briefing shown before the level carousel, with a practice option. */
+    data class Overview(val previousPoints: Int) : HangmanUiState
+
     data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : HangmanUiState
 
     data class Playing(
@@ -21,6 +24,7 @@ sealed interface HangmanUiState {
         val secondsRemaining: Int,
         val secondsTotal: Int,
         val justAdvanced: Boolean = false,
+        val practice: Boolean = false,
     ) : HangmanUiState {
         val round: HangmanRound get() = rounds[index]
     }
@@ -32,6 +36,7 @@ sealed interface HangmanUiState {
         val level: Int?,
         val pointsEarned: Int,
         val leveledUp: Boolean,
+        val practice: Boolean = false,
     ) : HangmanUiState
 }
 

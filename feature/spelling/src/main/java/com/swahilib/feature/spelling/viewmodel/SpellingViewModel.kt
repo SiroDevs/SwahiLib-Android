@@ -36,7 +36,7 @@ class SpellingViewModel @Inject constructor(
     private val generator: SpellingGenerator,
     private val engageRepo: EngagementRepo,
     private val gameProgressRepo: GameProgressRepo,
-    private val soundPlayer: GameSoundPlayer,
+    val soundPlayer: GameSoundPlayer,
 ) : ViewModel() {
 
     private val gameType = StatisticsEngine.EventType.SPELLING.name
@@ -64,11 +64,20 @@ class SpellingViewModel @Inject constructor(
 
         viewModelScope.launch {
             if (challengeId != null) {
-                beginSession(level = null, resume = false)
+                beginSession(level = null, resume = false, practice = false)
             } else {
-                showLevelSelect()
+                val progress = gameProgressRepo.getProgress(gameType)
+                _uiState.value = SpellingUiState.Overview(progress.totalPoints.toInt())
             }
         }
+    }
+
+    fun proceedToLevelSelect() {
+        viewModelScope.launch { showLevelSelect() }
+    }
+
+    fun startPractice() {
+        viewModelScope.launch { beginSession(level = 1, resume = false, practice = true) }
     }
 
     private suspend fun showLevelSelect() {
@@ -90,17 +99,17 @@ class SpellingViewModel @Inject constructor(
                 soundPlayer.play(GameSound.LOCKED)
                 return@launch
             }
-            beginSession(level = level, resume = true)
+            beginSession(level = level, resume = true, practice = false)
         }
     }
 
-    private suspend fun beginSession(level: Int?, resume: Boolean) {
+    private suspend fun beginSession(level: Int?, resume: Boolean, practice: Boolean) {
         startedAtMs = System.currentTimeMillis()
         val progress = gameProgressRepo.getProgress(gameType)
         val effectiveDifficulty = level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
         val count = level?.let { GameLevelConfig.stepCountForLevel(it) } ?: questionCount
 
-        val saved = if (resume) gameProgressRepo.loadSession(gameType) else null
+        val saved = if (resume && !practice) gameProgressRepo.loadSession(gameType) else null
         val matchesSaved = saved != null && saved.level == (level ?: 0)
 
         contentSeed = if (matchesSaved) saved!!.contentSeed else Random.nextLong()
@@ -122,6 +131,7 @@ class SpellingViewModel @Inject constructor(
             }
         }
 
+        soundPlayer.startMusic()
         val totalSeconds = level?.let { GameLevelConfig.timerSecondsForLevel(it) } ?: 45
         _uiState.value = SpellingUiState.Playing(
             questions = questions,
@@ -131,6 +141,7 @@ class SpellingViewModel @Inject constructor(
             livePoints = livePoints,
             secondsRemaining = totalSeconds,
             secondsTotal = totalSeconds,
+            practice = practice,
         )
         stepTimer.start(totalSeconds)
     }
@@ -189,6 +200,7 @@ class SpellingViewModel @Inject constructor(
     }
 
     private fun persistSnapshot(state: SpellingUiState.Playing) {
+        if (state.practice) return
         viewModelScope.launch {
             gameProgressRepo.saveSession(
                 gameType = gameType,
@@ -202,27 +214,32 @@ class SpellingViewModel @Inject constructor(
     }
 
     fun restart() {
-        val level = (_uiState.value as? SpellingUiState.Playing)?.level
+        val state = _uiState.value as? SpellingUiState.Playing
+        val level = state?.level
+        val practice = state?.practice ?: false
         stepTimer.stop()
         _uiState.value = SpellingUiState.Loading
         viewModelScope.launch {
-            gameProgressRepo.clearSession(gameType)
-            beginSession(level = level, resume = false)
+            if (!practice) gameProgressRepo.clearSession(gameType)
+            beginSession(level = level, resume = false, practice = practice)
         }
     }
 
     fun discardAndExit(onDone: () -> Unit) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
+        val practice = (_uiState.value as? SpellingUiState.Playing)?.practice ?: false
         viewModelScope.launch {
-            gameProgressRepo.clearSession(gameType)
+            if (!practice) gameProgressRepo.clearSession(gameType)
             onDone()
         }
     }
 
     fun saveAndExit(onDone: () -> Unit) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         val state = _uiState.value as? SpellingUiState.Playing
-        if (state == null) {
+        if (state == null || state.practice) {
             onDone()
             return
         }
@@ -241,9 +258,23 @@ class SpellingViewModel @Inject constructor(
 
     private fun finish(state: SpellingUiState.Playing) {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         val secondsSpent = ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(1)
         val effectiveDifficulty = state.level?.let { GameLevelConfig.difficultyForLevel(it) } ?: difficulty
         val result = SpellingScorer.tally(rounds, effectiveDifficulty, secondsSpent)
+
+        if (state.practice) {
+            _uiState.value = SpellingUiState.Finished(
+                result = result,
+                questions = questions,
+                rounds = rounds.toList(),
+                level = state.level,
+                pointsEarned = 0,
+                leveledUp = false,
+                practice = true,
+            )
+            return
+        }
 
         viewModelScope.launch {
             val cId = challengeId
@@ -291,6 +322,7 @@ class SpellingViewModel @Inject constructor(
                 level = state.level,
                 pointsEarned = state.livePoints,
                 leveledUp = leveledUp,
+                practice = false,
             )
         }
     }
@@ -301,6 +333,7 @@ class SpellingViewModel @Inject constructor(
 
     override fun onCleared() {
         stepTimer.stop()
+        soundPlayer.stopMusic()
         super.onCleared()
     }
 }

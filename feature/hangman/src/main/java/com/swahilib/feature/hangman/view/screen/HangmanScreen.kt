@@ -35,6 +35,7 @@ import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameLevelUiModel
+import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelCarousel
@@ -42,6 +43,12 @@ import com.swahilib.feature.hangman.utils.HangmanUiState
 import com.swahilib.feature.hangman.view.components.PlayingContent
 import com.swahilib.feature.hangman.view.components.FinishedContent
 import com.swahilib.feature.hangman.viewmodel.HangmanViewModel
+
+private val HANGMAN_INSTRUCTIONS = listOf(
+    "Bofya herufi kukisia neno la siri kabla ya kukosea mara sita.",
+    "Kila kiwango kina muda maalum kwa kila neno - ukiisha muda, mchezo utaendelea kiotomatiki.",
+    "Majibu hayaonyeshwi mpaka mwisho wa mchezo, kisha utaona ukaguzi kamili.",
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,6 +96,7 @@ fun HangmanScreen(
                     livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
+                    soundPlayer = viewModel.soundPlayer,
                 )
 
                 else -> AppTopBar(
@@ -121,6 +129,14 @@ fun HangmanScreen(
                     )
                 }
 
+                is HangmanUiState.Overview -> GameOverviewScreen(
+                    title = "Hangman",
+                    tagline = "Kisia neno la Kiswahili herufi kwa herufi.",
+                    instructions = HANGMAN_INSTRUCTIONS,
+                    onStart = viewModel::proceedToLevelSelect,
+                    onPractice = viewModel::startPractice,
+                )
+
                 is HangmanUiState.LevelSelect -> LevelSelectContent(
                     previousPoints = s.previousPoints,
                     levels = s.levels,
@@ -141,6 +157,7 @@ fun HangmanScreen(
 
                 is HangmanUiState.Finished -> FinishedContent(
                     state = s,
+                    soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
                 )

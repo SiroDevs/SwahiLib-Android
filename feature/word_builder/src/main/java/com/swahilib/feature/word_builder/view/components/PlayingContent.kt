@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.swahilib.core.ui.components.game.GameActionFab
 import com.swahilib.core.ui.components.game.StepTimerBar
 import com.swahilib.feature.word_builder.utils.WordBuilderUiState
 
@@ -34,8 +34,12 @@ fun PlayingContent(
     onSubmit: () -> Unit,
 ) {
     Column(Modifier.fillMaxSize().padding(20.dp)) {
-        StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal)
+        StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal, modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(Modifier.height(16.dp))
+        if (state.practice) {
+            Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+            Spacer(Modifier.height(4.dp))
+        }
         Text(
             "Neno ${state.roundIndex + 1}/${state.totalRounds}",
             style = MaterialTheme.typography.labelLarge,
@@ -76,12 +80,14 @@ fun PlayingContent(
             OutlinedButton(onClick = onClear, enabled = !state.locked, modifier = Modifier.weight(1f)) { Text("Futa") }
             OutlinedButton(onClick = onHint, enabled = !state.locked, modifier = Modifier.weight(1f)) { Text("Kidokezo") }
         }
-        Spacer(Modifier.height(12.dp))
-        Button(
-            onClick = onSubmit,
-            enabled = !state.locked && state.assembled.length == state.word.answer.length,
-            modifier = Modifier.fillMaxWidth(),
-        ) { Text("Tuma") }
+        Spacer(Modifier.height(16.dp))
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            GameActionFab(
+                text = "Tuma",
+                onClick = onSubmit,
+                enabled = !state.locked && state.assembled.length == state.word.answer.length,
+            )
+        }
     }
 }
 

@@ -11,6 +11,8 @@ sealed interface SpellingUiState {
     data object Loading : SpellingUiState
     data object Empty : SpellingUiState
 
+    data class Overview(val previousPoints: Int) : SpellingUiState
+
     data class LevelSelect(val levels: List<GameLevelUiModel>, val previousPoints: Int) : SpellingUiState
 
     data class Playing(
@@ -23,6 +25,7 @@ sealed interface SpellingUiState {
         val locked: Boolean = false,
         val secondsRemaining: Int,
         val secondsTotal: Int,
+        val practice: Boolean = false,
     ) : SpellingUiState {
         val question: SpellingQuestion get() = questions[index]
         val hintText: String get() = question.answer.take(revealedLetters) +
@@ -37,6 +40,7 @@ sealed interface SpellingUiState {
         val level: Int?,
         val pointsEarned: Int,
         val leveledUp: Boolean,
+        val practice: Boolean = false,
     ) : SpellingUiState
 }
 
