@@ -71,9 +71,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-    </list>
+    <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -176,11 +174,11 @@
       <recent name="com.swahilib.core.data.repository" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
-      <recent name="com.swahilib.feature.hangman.view.screen" />
-      <recent name="com.swahilib.feature.crossword.view.screen" />
-      <recent name="com.swahilib.feature.quiz.view.screen" />
-      <recent name="com.swahilib.feature.sentence_builder.view.screen" />
-      <recent name="com.swahilib.feature.social.utils" />
+      <recent name="com.swahilib.core.database.entities.game" />
+      <recent name="com.swahilib.core.database.entities.daily" />
+      <recent name="com.swahilib.core.database.entities.content" />
+      <recent name="com.swahilib.core.database" />
+      <recent name="com.swahilib.core.database.daos.dailies" />
     </key>
   </component>
   <component name="RunManager">
