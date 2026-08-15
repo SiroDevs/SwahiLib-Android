@@ -12,17 +12,17 @@ import com.swahilib.core.database.model.IdiomEntity
 import com.swahilib.core.database.model.ProverbEntity
 import com.swahilib.core.database.model.SayingEntity
 import com.swahilib.core.database.model.WordEntity
-import com.swahilib.feature.advanced_search.view.screen.AdvSearchScreen
-import com.swahilib.feature.advanced_search.viewmodel.AdvSearchViewModel
+import com.swahilib.feature.advanced_search.view.screen.AdvancedSearchScreen
+import com.swahilib.feature.advanced_search.viewmodel.AdvancedSearchViewModel
 import com.swahilib.feature.daily_content.view.DailyContentHistory
 import com.swahilib.feature.daily_content.view.DailyProverbScreen
 import com.swahilib.feature.daily_content.view.DailyWordScreen
-import com.swahilib.feature.help.view.HelpScreen
+import com.swahilib.feature.history.view.HistoryScreen
 import com.swahilib.feature.home.view.screen.HomeScreen
 import com.swahilib.feature.home.viewmodel.HomeViewModel
-import com.swahilib.feature.how_it_works.view.HowItWorksScreen
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.idiom.viewmodel.IdiomViewModel
+import com.swahilib.feature.likes.view.LikesScreen
 import com.swahilib.feature.proverb.view.screen.ProverbScreen
 import com.swahilib.feature.proverb.viewmodel.ProverbViewModel
 import com.swahilib.feature.saying.view.SayingScreen
@@ -30,8 +30,7 @@ import com.swahilib.feature.saying.viewmodel.SayingViewModel
 import com.swahilib.feature.word.view.WordScreen
 import com.swahilib.feature.word.viewmodel.WordViewModel
 
-/** Home, dictionary entry (idiom/proverb/saying/word) detail screens, search, and daily content. */
-fun NavGraphBuilder.contentGraph(
+fun NavGraphBuilder.mainGraph(
     navController: NavHostController,
     prefsRepo: PrefsRepo,
     deepLinkRoute: String?,
@@ -97,16 +96,20 @@ fun NavGraphBuilder.contentGraph(
     }
 
     composable(Routes.ADVANCED_SEARCH) {
-        val viewModel: AdvSearchViewModel = hiltViewModel()
-        AdvSearchScreen(
+        val viewModel: AdvancedSearchViewModel = hiltViewModel()
+        AdvancedSearchScreen(
             navController = navController,
             viewModel = viewModel,
             prefsRepo = prefsRepo
         )
     }
+    composable(Routes.LIKES) {
+        LikesScreen(navController = navController)
+    }
 
-    composable(Routes.HOW_IT_WORKS) { HowItWorksScreen(navController = navController) }
-    composable(Routes.HELP) { HelpScreen(navController = navController) }
+    composable(Routes.HISTORY) {
+        HistoryScreen(navController = navController)
+    }
 
     composable(Routes.DAILY_WORD) {
         DailyWordScreen(navController = navController, prefsRepo = prefsRepo)

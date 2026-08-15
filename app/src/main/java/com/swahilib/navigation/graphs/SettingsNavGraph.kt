@@ -14,7 +14,6 @@ import com.swahilib.feature.settings.view.screen.SettingsScreen
 import com.swahilib.feature.settings.viewmodel.GameSettingsViewModel
 import com.swahilib.feature.settings.viewmodel.SettingsViewModel
 
-/** App settings hub and its sub-pages (appearance, notifications, data, games). */
 fun NavGraphBuilder.settingsGraph(
     navController: NavHostController,
     themeRepo: ThemeRepo,

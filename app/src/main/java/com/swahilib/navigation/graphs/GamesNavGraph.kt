@@ -25,7 +25,6 @@ import com.swahilib.feature.word_builder.viewmodel.WordBuilderViewModel
 import com.swahilib.sudoku.view.SudokuScreen
 import com.swahilib.sudoku.viewmodel.SudokuViewModel
 
-/** The seven mini-game screens: quiz, word/sentence builders, spelling, crossword, sudoku, hangman. */
 fun NavGraphBuilder.gamesGraph(navController: NavHostController) {
     composable(
         route = Routes.QUIZ,

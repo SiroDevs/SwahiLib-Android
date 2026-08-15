@@ -17,6 +17,7 @@ import com.swahilib.core.database.daos.SearchDao
 import com.swahilib.core.database.daos.UserProgressDao
 import com.swahilib.core.database.daos.WordDao
 import com.swahilib.core.database.daos.XpEventDao
+import com.swahilib.core.database.migrations.ALL_MIGRATIONS
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,7 +32,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase =
         Room.databaseBuilder(appContext, AppDatabase::class.java, "SwahiliLibrary")
-            .addMigrations(*AppDatabase.ALL_MIGRATIONS)
+            .addMigrations(*ALL_MIGRATIONS)
             .build()
 
     @Provides fun provideHistoryDao(db: AppDatabase): HistoryDao = db.historiesDao()

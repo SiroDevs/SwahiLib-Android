@@ -13,13 +13,17 @@ import com.swahilib.core.data.repos.PrefsRepo
 import com.swahilib.feature.donation.view.screen.DonationScreen
 import com.swahilib.feature.donation.view.screen.PaymentWebViewScreen
 import com.swahilib.feature.donation.viewmodel.DonationViewModel
+import com.swahilib.feature.help.view.HelpScreen
+import com.swahilib.feature.how_it_works.view.HowItWorksScreen
 import kotlinx.coroutines.launch
 
-/** Donation flow: the donation screen and its payment webview redirect. */
-fun NavGraphBuilder.donationGraph(
+fun NavGraphBuilder.miscGraph(
     navController: NavHostController,
     prefsRepo: PrefsRepo,
 ) {
+    composable(Routes.HOW_IT_WORKS) { HowItWorksScreen(navController = navController) }
+    composable(Routes.HELP) { HelpScreen(navController = navController) }
+
     composable(Routes.DONATION) {
         val viewModel: DonationViewModel = hiltViewModel()
         DonationScreen(navController = navController, viewModel = viewModel)
