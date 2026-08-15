@@ -46,7 +46,7 @@ private val WORD_BUILDER_INSTRUCTIONS = listOf(
     "Gusa vipande vya herufi kwa mpangilio sahihi kuunda neno la Kiswahili.",
     "Tumia 'Kidokezo' ukikwama - lakini kila kidokezo hupunguza alama za mzunguko huo.",
     "Kila kiwango kina muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
-]
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

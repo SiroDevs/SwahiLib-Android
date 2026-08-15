@@ -98,7 +98,6 @@ private fun DailyHighlightItem(
         Column(modifier = Modifier.padding(14.dp)) {
 
             Row(
-                modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
