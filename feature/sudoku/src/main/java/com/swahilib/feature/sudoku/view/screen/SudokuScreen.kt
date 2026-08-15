@@ -197,7 +197,7 @@ private fun LevelSelectContent(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            "Jumla ya alama: $previousPoints",
+            "Jumla ya sign: $previousPoints",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

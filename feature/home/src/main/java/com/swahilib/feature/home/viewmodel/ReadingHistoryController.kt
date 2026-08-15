@@ -1,6 +1,6 @@
 package com.swahilib.feature.home.viewmodel
 
-import com.swahilib.core.data.repos.HistoryRepo
+import com.swahilib.core.data.repos.content.HistoryRepo
 import com.swahilib.core.database.entities.content.HistoryEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

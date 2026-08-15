@@ -2,8 +2,8 @@ package com.swahilib.sudoku.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.data.repos.EngagementRepo
-import com.swahilib.core.data.repos.GameProgressRepo
+import com.swahilib.core.data.repos.games.EngagementRepo
+import com.swahilib.core.data.repos.games.GameProgressRepo
 import com.swahilib.core.engagement.engine.RewardRules
 import com.swahilib.core.engagement.engine.StatisticsEngine
 import com.swahilib.core.engagement.model.ActivityType

@@ -61,7 +61,7 @@ val sections = listOf(
     HowItWorksSection(
         icon = Icons.Default.ManageSearch,
         title = "Tafuta kwa Kina",
-        description = "Bonyeza kitufe kinachoelea chenye ikoni ya utafutaji wa kina. " +
+        description = "Bonyeza kitufe depthchoelea chenye ikoni ya utafutaji wa depth. " +
                 "Hapa unaweza kuchagua namna ya utafutaji unaotaka, kutafuta kwa maneno yanayofanana, " +
                 "na kupanga matokeo kwa njia tofauti."
     ),
@@ -75,14 +75,14 @@ val sections = listOf(
     HowItWorksSection(
         icon = Icons.Default.History,
         title = "Historia Yako",
-        description = "Kichupo cha 'Historia' kinaonyesha historia ya vyote ulivyotembelea, vikipangwa kulingana na wakati. " +
+        description = "Kichupo cha 'Historia' depthonyesha historia ya vyote ulivyotembelea, vikipangwa kulingana na time. " +
                 "Hii inakusaidia kupata haraka vipande ulivyotembelea hivi karibuni bila kutafuta tena."
     ),
     HowItWorksSection(
         icon = Icons.Default.Book,
         title = "Kutazama Neno, Methali, Nahau au Methali",
-        description = "Bonyeza kipande chochote kukifungua na kuona maelezo yake yote, visawe, na mifano. " +
-                "Kwa maneno, utaona pia mnyambuliko. Kwa methali, utaona maelezo ya kina zaidi."
+        description = "Bonyeza kipande chochote kukifungua na kuona meaning yake yote, visawe, na mifano. " +
+                "Kwa maneno, utaona pia mnyambuliko. Kwa methali, utaona meaning ya depth zaidi."
     ),
 )
 

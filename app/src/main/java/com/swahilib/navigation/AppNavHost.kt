@@ -7,8 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.data.repos.ThemeRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
+import com.swahilib.core.data.repos.utils.ThemeRepo
 import com.swahilib.navigation.graphs.gamesGraph
 import com.swahilib.navigation.graphs.mainGraph
 import com.swahilib.navigation.graphs.miscGraph

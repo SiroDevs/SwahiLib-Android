@@ -16,7 +16,7 @@ gen/
 out/
 build/
 generated/
-.wakatime-project
+.timeme-project
 
 # Ignore all build directories at any level
 **/build/

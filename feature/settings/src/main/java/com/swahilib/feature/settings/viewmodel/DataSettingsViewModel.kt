@@ -2,14 +2,14 @@ package com.swahilib.feature.settings.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.data.repos.DailyContentRepo
-import com.swahilib.core.data.repos.EngagementRepo
-import com.swahilib.core.data.repos.HistoryRepo
-import com.swahilib.core.data.repos.IdiomRepo
-import com.swahilib.core.data.repos.ProverbRepo
-import com.swahilib.core.data.repos.SayingRepo
-import com.swahilib.core.data.repos.SearchRepo
-import com.swahilib.core.data.repos.WordRepo
+import com.swahilib.core.data.repos.content.DailyContentRepo
+import com.swahilib.core.data.repos.games.EngagementRepo
+import com.swahilib.core.data.repos.content.HistoryRepo
+import com.swahilib.core.data.repos.content.IdiomRepo
+import com.swahilib.core.data.repos.content.ProverbRepo
+import com.swahilib.core.data.repos.content.SayingRepo
+import com.swahilib.core.data.repos.content.SearchRepo
+import com.swahilib.core.data.repos.content.WordRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

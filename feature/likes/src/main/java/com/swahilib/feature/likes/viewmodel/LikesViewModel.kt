@@ -2,10 +2,10 @@ package com.swahilib.feature.likes.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.data.repos.IdiomRepo
-import com.swahilib.core.data.repos.ProverbRepo
-import com.swahilib.core.data.repos.SayingRepo
-import com.swahilib.core.data.repos.WordRepo
+import com.swahilib.core.data.repos.content.IdiomRepo
+import com.swahilib.core.data.repos.content.ProverbRepo
+import com.swahilib.core.data.repos.content.SayingRepo
+import com.swahilib.core.data.repos.content.WordRepo
 import com.swahilib.core.database.entities.content.IdiomEntity
 import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.database.entities.content.SayingEntity

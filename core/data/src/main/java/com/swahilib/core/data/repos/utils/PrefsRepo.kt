@@ -1,4 +1,4 @@
-package com.swahilib.core.data.repos
+package com.swahilib.core.data.repos.utils
 
 import android.content.Context
 import androidx.core.content.edit

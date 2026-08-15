@@ -42,7 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.feature.home.view.components.HomeSearchResults
 import com.swahilib.feature.home.view.components.SearchFieldRow
 import com.swahilib.feature.home.view.components.VerticalLetters

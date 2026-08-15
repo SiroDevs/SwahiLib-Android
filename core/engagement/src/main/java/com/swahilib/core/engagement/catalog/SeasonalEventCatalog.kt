@@ -27,7 +27,7 @@ object SeasonalEventCatalog {
         SeasonalEventDef(
             id = "kiswahili_day",
             title = "Siku ya Kiswahili Duniani",
-            description = "Sherehekea lugha yetu adhimu ya Kiswahili!",
+            description = "Sherehekea language yetu adhimu ya Kiswahili!",
             month = 7, day = 7, windowDays = 3,
         ),
         SeasonalEventDef(

@@ -29,7 +29,7 @@ fun MeaningsView(meanings: List<String>) {
         meanings.forEachIndexed { index, meaning ->
             val parts = meaning.split(":")
             val maana = parts.first().trim()
-            val mfano = parts.getOrNull(1)?.trim()
+            val example = parts.getOrNull(1)?.trim()
 
             if (maana.isEmpty()) return@forEachIndexed
 
@@ -68,7 +68,7 @@ fun MeaningsView(meanings: List<String>) {
                         )
                     }
 
-                    if (!mfano.isNullOrEmpty()) {
+                    if (!example.isNullOrEmpty()) {
                         HorizontalDivider(
                             modifier = Modifier.padding(vertical = 10.dp),
                             color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
@@ -76,7 +76,7 @@ fun MeaningsView(meanings: List<String>) {
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append("Mfano: ") }
-                                withStyle(SpanStyle(fontStyle = FontStyle.Italic)) { append(mfano) }
+                                withStyle(SpanStyle(fontStyle = FontStyle.Italic)) { append(example) }
                             },
                             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
                             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f)

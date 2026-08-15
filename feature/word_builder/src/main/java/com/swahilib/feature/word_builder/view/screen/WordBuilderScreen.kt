@@ -44,8 +44,8 @@ import com.swahilib.feature.word_builder.viewmodel.WordBuilderViewModel
 
 private val WORD_BUILDER_INSTRUCTIONS = listOf(
     "Gusa vipande vya herufi kwa mpangilio sahihi kuunda neno la Kiswahili.",
-    "Tumia 'Kidokezo' ukikwama - lakini kila kidokezo hupunguza alama za mzunguko huo.",
-    "Kila kiwango kina muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
+    "Tumia 'Kidokezo' ukikwama - lakini kila kidokezo hupunguza sign za mzunguko huo.",
+    "Kila kiwango depth muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -192,7 +192,7 @@ private fun LevelSelectContent(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            "Jumla ya alama: $previousPoints",
+            "Jumla ya sign: $previousPoints",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

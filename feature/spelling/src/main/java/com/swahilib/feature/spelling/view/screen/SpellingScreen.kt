@@ -43,9 +43,9 @@ import com.swahilib.feature.spelling.view.components.FinishedContent
 import com.swahilib.feature.spelling.viewmodel.SpellingViewModel
 
 private val SPELLING_INSTRUCTIONS = listOf(
-    "Soma maelezo, kisha andika neno sahihi la Kiswahili.",
-    "Tumia 'Kidokezo' kuonyesha herufi moja - hupunguza alama za mzunguko huo.",
-    "Kila kiwango kina muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
+    "Soma meaning, kisha andika neno sahihi la Kiswahili.",
+    "Tumia 'Kidokezo' kuonyesha herufi moja - hupunguza sign za mzunguko huo.",
+    "Kila kiwango depth muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -182,7 +182,7 @@ private fun LevelSelectContent(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            "Jumla ya alama: $previousPoints",
+            "Jumla ya sign: $previousPoints",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

@@ -1,4 +1,4 @@
-package com.swahilib.core.data.repos
+package com.swahilib.core.data.repos.content
 
 import com.swahilib.core.database.daos.content.HistoryDao
 import com.swahilib.core.database.entities.content.HistoryEntity

@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.ThemeRepo
+import com.swahilib.core.data.repos.utils.ThemeRepo
 import com.swahilib.feature.settings.view.screen.AppearanceSettingsScreen
 import com.swahilib.feature.settings.view.screen.DataSettingsScreen
 import com.swahilib.feature.settings.view.screen.GameSettingsScreen

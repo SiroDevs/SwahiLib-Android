@@ -1,4 +1,4 @@
-package com.swahilib.core.data.repos
+package com.swahilib.core.data.repos.utils
 
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel

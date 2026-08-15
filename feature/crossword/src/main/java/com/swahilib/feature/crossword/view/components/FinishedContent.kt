@@ -55,7 +55,7 @@ fun FinishedContent(state: CrosswordUiState.Finished, soundPlayer: GameSoundPlay
             if (!state.practice) {
                 Text("+${state.result.xpEarned} XP", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                 if (state.level != null) {
-                    Text("+${state.pointsEarned} alama - Kiwango ${state.level}", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
+                    Text("+${state.pointsEarned} sign - Kiwango ${state.level}", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
                 }
             }
             Spacer(Modifier.height(16.dp))

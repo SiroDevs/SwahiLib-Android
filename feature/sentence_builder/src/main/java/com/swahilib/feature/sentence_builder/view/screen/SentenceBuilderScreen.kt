@@ -46,7 +46,7 @@ import kotlin.collections.get
 private val SENTENCE_INSTRUCTIONS = listOf(
     "Panga maneno yaliyochanganyika kuunda sentensi sahihi ya Kiswahili.",
     "Gusa neno kuliongeza; gusa 'Futa' kuanza upya mzunguko huo huo.",
-    "Kila kiwango kina muda maalum kwa kila sentensi - ukiisha muda, mchezo utaendelea kiotomatiki.",
+    "Kila kiwango depth muda maalum kwa kila sentensi - ukiisha muda, mchezo utaendelea kiotomatiki.",
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -186,7 +186,7 @@ private fun LevelSelectContent(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            "Jumla ya alama: $previousPoints",
+            "Jumla ya sign: $previousPoints",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

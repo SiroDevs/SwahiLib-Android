@@ -1,6 +1,7 @@
 package com.swahilib.core.network.api
 
 import android.util.Log
+import com.swahilib.core.common.library.LibraryKeys
 import com.swahilib.core.common.utils.ApiConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -67,11 +68,38 @@ class KamusiApi @Inject constructor(
             }
         }
 
-    enum class Endpoint(val path: String, val prefKey: String) {
-        WORDS("words.json", "etag_words"),
-        IDIOMS("idioms.json", "etag_idioms"),
-        PROVERBS("proverbs.json", "etag_proverbs"),
-        SAYINGS("sayings.json", "etag_sayings"),
+    enum class Endpoint(
+        val path: String,
+        val prefKey: String,
+        val libraryCollectionKey: String? = null,
+    ) {
+        WORDS("kamusi/words.json", "etag_words"),
+        IDIOMS("kamusi/idioms.json", "etag_idioms"),
+        PROVERBS("kamusi/proverbs.json", "etag_proverbs"),
+        SAYINGS("kamusi/sayings.json", "etag_sayings"),
+
+        LIBRARY_FAMILY("maktaba/family.json", "etag_library_family", LibraryKeys.FAMILY),
+        LIBRARY_CAPS("maktaba/caps.json", "etag_library_caps", LibraryKeys.CAPS),
+        LIBRARY_FISH("maktaba/fish.json", "etag_library_fish", LibraryKeys.FISH),
+        LIBRARY_INSECTS("maktaba/insects.json", "etag_library_insects", LibraryKeys.INSECTS),
+        LIBRARY_SEAS("maktaba/seas.json", "etag_library_seas", LibraryKeys.SEAS),
+        LIBRARY_KIDGAMES(
+            "maktaba/kid_games.json",
+            "etag_library_kid_games",
+            LibraryKeys.KIDGAMES,
+        ),
+        LIBRARY_GREETING("maktaba/greetings.json", "etag_library_greetings", LibraryKeys.GREETING),
+        LIBRARY_PUNCTUATION(
+            "maktaba/punctuation.json",
+            "etag_library_punctuation",
+            LibraryKeys.PUNCTUATION
+        ),
+        LIBRARY_NCHI("maktaba/countries.json", "etag_library_countries", LibraryKeys.NCHI);
+
+        companion object {
+            fun forLibraryKey(key: String): Endpoint? =
+                entries.find { it.libraryCollectionKey == key }
+        }
     }
 
     companion object {

@@ -157,7 +157,7 @@ fun EnterScoreDialog(
         text = {
             Column {
                 Text(
-                    "Baada ya kucheza, ingiza alama uliyopata.",
+                    "Baada ya kucheza, ingiza sign uliyopata.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

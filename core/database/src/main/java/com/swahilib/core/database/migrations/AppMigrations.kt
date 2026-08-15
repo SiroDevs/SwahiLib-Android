@@ -7,4 +7,5 @@ val ALL_MIGRATIONS: Array<Migration> = arrayOf(
     Migration3To4,
     Migration4To5,
     Migration5To6,
+    Migration6To7,
 )

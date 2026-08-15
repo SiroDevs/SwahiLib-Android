@@ -1,4 +1,4 @@
-package com.swahilib.core.data.repos
+package com.swahilib.core.data.repos.content
 
 import android.util.Log
 import com.swahilib.core.database.daos.content.WordDao

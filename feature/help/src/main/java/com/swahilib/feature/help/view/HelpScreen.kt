@@ -88,7 +88,7 @@ fun HelpScreen(navController: NavHostController) {
                 label = { Text("Kichwa *") },
                 placeholder = { Text("Muhtasari mfupi wa tatizo au pendekezo lako") },
                 isError = titleError,
-                supportingText = if (titleError) ({ Text("Kichwa kinahitajika") }) else null,
+                supportingText = if (titleError) ({ Text("Kichwa depthhitajika") }) else null,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)

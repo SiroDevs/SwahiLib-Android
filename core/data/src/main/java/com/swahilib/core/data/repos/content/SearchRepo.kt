@@ -1,4 +1,4 @@
-package com.swahilib.core.data.repos
+package com.swahilib.core.data.repos.content
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

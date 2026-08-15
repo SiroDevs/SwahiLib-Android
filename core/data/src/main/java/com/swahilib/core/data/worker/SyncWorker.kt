@@ -6,11 +6,12 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.swahilib.core.common.helpers.NetworkUtils
-import com.swahilib.core.data.repos.IdiomRepo
-import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.data.repos.ProverbRepo
-import com.swahilib.core.data.repos.SayingRepo
-import com.swahilib.core.data.repos.WordRepo
+import com.swahilib.core.data.repos.content.IdiomRepo
+import com.swahilib.core.data.repos.content.LibraryRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
+import com.swahilib.core.data.repos.content.ProverbRepo
+import com.swahilib.core.data.repos.content.SayingRepo
+import com.swahilib.core.data.repos.content.WordRepo
 import com.swahilib.core.network.api.KamusiApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -25,6 +26,7 @@ class SyncWorker @AssistedInject constructor(
     private val proverbRepo: ProverbRepo,
     private val sayingRepo: SayingRepo,
     private val wordRepo: WordRepo,
+    private val libraryRepo: LibraryRepo,
     private val prefsRepo: PrefsRepo,
     private val api: KamusiApi,
 ) : CoroutineWorker(context, workerParams) {
@@ -69,6 +71,12 @@ class SyncWorker @AssistedInject constructor(
             KamusiApi.Endpoint.IDIOMS -> idiomRepo.fetchRemoteData().isSuccess
             KamusiApi.Endpoint.PROVERBS -> proverbRepo.fetchRemoteData().isSuccess
             KamusiApi.Endpoint.SAYINGS -> sayingRepo.fetchRemoteData().isSuccess
+            else -> if (endpoint.libraryCollectionKey != null) {
+                libraryRepo.fetchRemoteData(endpoint).isSuccess
+            } else {
+                Log.w(TAG, "⚠️ No sync handler registered for ${endpoint.path}")
+                false
+            }
         }
 
         if (success) {

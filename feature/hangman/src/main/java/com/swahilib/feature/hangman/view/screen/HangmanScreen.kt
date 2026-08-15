@@ -46,7 +46,7 @@ import com.swahilib.feature.hangman.viewmodel.HangmanViewModel
 
 private val HANGMAN_INSTRUCTIONS = listOf(
     "Bofya herufi kukisia neno la siri kabla ya kukosea mara sita.",
-    "Kila kiwango kina muda maalum kwa kila neno - ukiisha muda, mchezo utaendelea kiotomatiki.",
+    "Kila kiwango depth muda maalum kwa kila neno - ukiisha muda, mchezo utaendelea kiotomatiki.",
     "Majibu hayaonyeshwi mpaka mwisho wa mchezo, kisha utaona ukaguzi kamili.",
 )
 
@@ -187,7 +187,7 @@ private fun LevelSelectContent(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            "Jumla ya alama: $previousPoints",
+            "Jumla ya sign: $previousPoints",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

@@ -13,8 +13,8 @@ import androidx.work.WorkerParameters
 import com.swahilib.core.common.utils.DeepLinkConstants
 import com.swahilib.core.common.utils.NotifConstants
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.DailyContentRepo
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.content.DailyContentRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import dagger.assisted.Assisted
 import com.swahilib.core.common.R
 import dagger.assisted.AssistedInject

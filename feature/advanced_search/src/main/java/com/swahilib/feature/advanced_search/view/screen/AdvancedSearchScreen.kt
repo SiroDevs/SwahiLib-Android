@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.advanced_search.viewmodel.AdvancedSearchViewModel
 import com.swahilib.feature.advanced_search.viewmodel.SearchMode

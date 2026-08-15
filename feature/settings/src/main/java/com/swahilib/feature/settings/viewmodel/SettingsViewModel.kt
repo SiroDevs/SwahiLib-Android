@@ -3,7 +3,7 @@ package com.swahilib.feature.settings.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.swahilib.core.data.notifications.NotificationScheduler
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow

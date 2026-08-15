@@ -38,6 +38,7 @@ include(":core:ui")
 
 // Feature modules
 include(":feature:home")
+include(":feature:library")
 include(":feature:likes")
 include(":feature:history")
 include(":feature:auth")
