@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.database.model.IdiomEntity
-import com.swahilib.core.database.model.ProverbEntity
-import com.swahilib.core.database.model.SayingEntity
-import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.entities.content.IdiomEntity
+import com.swahilib.core.database.entities.content.ProverbEntity
+import com.swahilib.core.database.entities.content.SayingEntity
+import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.core.ui.components.donation.DonationBanner
 import com.swahilib.core.ui.components.listitems.IdiomItem
 import com.swahilib.core.ui.components.listitems.ProverbItem

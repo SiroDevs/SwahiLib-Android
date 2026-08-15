@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.swahilib.core.database.model.SearchEntity
+import com.swahilib.core.database.entities.content.SearchEntity
 
 @Composable
 fun ReviewNudgeRow(

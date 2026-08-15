@@ -8,10 +8,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.database.model.IdiomEntity
-import com.swahilib.core.database.model.ProverbEntity
-import com.swahilib.core.database.model.SayingEntity
-import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.entities.content.IdiomEntity
+import com.swahilib.core.database.entities.content.ProverbEntity
+import com.swahilib.core.database.entities.content.SayingEntity
+import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.feature.advanced_search.view.screen.AdvancedSearchScreen
 import com.swahilib.feature.advanced_search.viewmodel.AdvancedSearchViewModel
 import com.swahilib.feature.daily_content.view.DailyContentHistory

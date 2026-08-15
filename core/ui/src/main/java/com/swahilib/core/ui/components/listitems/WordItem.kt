@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -43,8 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.swahilib.core.common.utils.cleanMeaning
-import com.swahilib.core.database.model.WordEntity
-import com.swahilib.core.ui.components.indicators.ShimmerBrush
+import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.core.ui.sample.SampleWords
 
 @OptIn(ExperimentalFoundationApi::class)

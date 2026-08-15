@@ -1,7 +1,7 @@
 package com.swahilib.feature.home.viewmodel
 
 import com.swahilib.core.data.repos.SearchRepo
-import com.swahilib.core.database.model.SearchEntity
+import com.swahilib.core.database.entities.content.SearchEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

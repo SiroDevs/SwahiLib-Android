@@ -1,6 +1,6 @@
 package com.swahilib.core.ui.sample
 
-import com.swahilib.core.database.model.SayingEntity
+import com.swahilib.core.database.entities.content.SayingEntity
 
 val SampleSayings = listOf(
     SayingEntity(

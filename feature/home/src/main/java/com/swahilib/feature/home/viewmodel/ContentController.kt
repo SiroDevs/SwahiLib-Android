@@ -11,18 +11,15 @@ import com.swahilib.core.data.repos.ProverbRepo
 import com.swahilib.core.data.repos.SayingRepo
 import com.swahilib.core.data.repos.WordRepo
 import com.swahilib.core.data.worker.SyncWorker
-import com.swahilib.core.database.model.IdiomEntity
-import com.swahilib.core.database.model.ProverbEntity
-import com.swahilib.core.database.model.SayingEntity
-import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.entities.content.IdiomEntity
+import com.swahilib.core.database.entities.content.ProverbEntity
+import com.swahilib.core.database.entities.content.SayingEntity
+import com.swahilib.core.database.entities.content.WordEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.math.max
 

@@ -1,7 +1,7 @@
 package com.swahilib.core.engagement.engine
 
-import com.swahilib.core.database.model.DailyActivityEntity
-import com.swahilib.core.database.model.LearningHistoryEntity
+import com.swahilib.core.database.entities.daily.DailyActivityEntity
+import com.swahilib.core.database.entities.game.LearningHistoryEntity
 import com.swahilib.core.engagement.model.DailyActivitySnapshot
 import com.swahilib.core.engagement.model.StatisticsSummary
 import com.swahilib.core.engagement.time.TimeKeys

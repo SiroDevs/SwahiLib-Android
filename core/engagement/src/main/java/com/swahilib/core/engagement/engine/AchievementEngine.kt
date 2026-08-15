@@ -1,7 +1,7 @@
 package com.swahilib.core.engagement.engine
 
-import com.swahilib.core.database.model.AchievementRecordEntity
-import com.swahilib.core.database.model.UserProgressEntity
+import com.swahilib.core.database.entities.game.AchievementRecordEntity
+import com.swahilib.core.database.entities.game.UserProgressEntity
 import com.swahilib.core.engagement.catalog.AchievementCatalog
 import com.swahilib.core.engagement.model.Achievement
 import javax.inject.Inject

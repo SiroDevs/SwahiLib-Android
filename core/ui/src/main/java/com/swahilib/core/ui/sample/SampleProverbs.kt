@@ -1,6 +1,6 @@
 package com.swahilib.core.ui.sample
 
-import com.swahilib.core.database.model.ProverbEntity
+import com.swahilib.core.database.entities.content.ProverbEntity
 
 val SampleProverbs = listOf(
     ProverbEntity(

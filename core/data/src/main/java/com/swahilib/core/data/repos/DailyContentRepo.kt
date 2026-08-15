@@ -1,11 +1,11 @@
 package com.swahilib.core.data.repos
 
-import com.swahilib.core.database.daily.DailyContentManager
-import com.swahilib.core.database.daos.DailyContentDao
-import com.swahilib.core.database.daos.ProverbDao
-import com.swahilib.core.database.daos.WordDao
-import com.swahilib.core.database.model.ProverbEntity
-import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.DailyContentManager
+import com.swahilib.core.database.daos.daily.DailyContentDao
+import com.swahilib.core.database.daos.content.ProverbDao
+import com.swahilib.core.database.daos.content.WordDao
+import com.swahilib.core.database.entities.content.ProverbEntity
+import com.swahilib.core.database.entities.content.WordEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

@@ -1,15 +1,12 @@
 package com.swahilib.core.data.repos
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.swahilib.core.database.daos.SearchDao
-import com.swahilib.core.database.model.SearchEntity
+import com.swahilib.core.database.daos.content.SearchDao
+import com.swahilib.core.database.entities.content.SearchEntity
 
 @Singleton
 class SearchRepo @Inject constructor(

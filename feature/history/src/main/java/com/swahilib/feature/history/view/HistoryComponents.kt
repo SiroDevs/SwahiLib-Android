@@ -15,7 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.database.model.SearchEntity
+import com.swahilib.core.database.entities.content.SearchEntity
 import com.swahilib.core.ui.components.action.BucketHeader
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.listitems.IdiomItem

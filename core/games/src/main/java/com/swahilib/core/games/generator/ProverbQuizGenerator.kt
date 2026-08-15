@@ -1,7 +1,7 @@
 package com.swahilib.core.games.generator
 
-import com.swahilib.core.database.daos.ProverbDao
-import com.swahilib.core.database.model.ProverbEntity
+import com.swahilib.core.database.daos.content.ProverbDao
+import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.games.model.QuizFormat
 import com.swahilib.core.games.model.QuizOption

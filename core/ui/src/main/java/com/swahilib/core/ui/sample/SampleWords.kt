@@ -1,6 +1,6 @@
 package com.swahilib.core.ui.sample
 
-import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.entities.content.WordEntity
 
 val SampleWords = listOf(
     WordEntity(

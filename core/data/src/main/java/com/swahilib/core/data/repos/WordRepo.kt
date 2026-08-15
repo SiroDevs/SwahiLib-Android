@@ -1,8 +1,8 @@
 package com.swahilib.core.data.repos
 
 import android.util.Log
-import com.swahilib.core.database.daos.WordDao
-import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.daos.content.WordDao
+import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.core.network.api.KamusiApi
 import com.swahilib.core.network.dtos.WordDto
 import com.swahilib.core.network.mapper.MapDtoToEntity

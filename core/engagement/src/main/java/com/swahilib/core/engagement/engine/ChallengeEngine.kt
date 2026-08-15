@@ -1,7 +1,7 @@
 package com.swahilib.core.engagement.engine
 
-import com.swahilib.core.database.model.ChallengeActivityEntity
-import com.swahilib.core.database.model.ChallengeEntity
+import com.swahilib.core.database.entities.game.ChallengeActivityEntity
+import com.swahilib.core.database.entities.game.ChallengeEntity
 import com.swahilib.core.engagement.model.AwardResult
 import com.swahilib.core.engagement.model.Challenge
 import com.swahilib.core.engagement.model.ChallengeActivity

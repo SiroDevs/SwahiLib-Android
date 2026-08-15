@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.swahilib.core.database.model.ProverbEntity
+import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.ui.components.donation.DonationBanner
 import com.swahilib.core.ui.components.general.CollapsingHeader
 import com.swahilib.core.ui.components.general.MeaningsView

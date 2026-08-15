@@ -1,7 +1,7 @@
 package com.swahilib.core.games.generator
 
-import com.swahilib.core.database.daos.WordDao
-import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.daos.content.WordDao
+import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.games.model.QuizFormat
 import com.swahilib.core.games.model.QuizOption

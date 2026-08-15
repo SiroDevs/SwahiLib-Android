@@ -1,6 +1,6 @@
 package com.swahilib.core.games.generator
 
-import com.swahilib.core.database.daos.ProverbDao
+import com.swahilib.core.database.daos.content.ProverbDao
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.games.model.SentenceQuestion
 import kotlinx.coroutines.flow.first
