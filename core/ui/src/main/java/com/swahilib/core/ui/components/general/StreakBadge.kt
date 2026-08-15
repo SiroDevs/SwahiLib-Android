@@ -29,7 +29,7 @@ fun StreakBadge(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = "🔥 Siku $streakCount Mfululizo",
+            text = "Sadakta 🔥 Siku $streakCount Mfululizo",
             style = MaterialTheme.typography.labelMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
