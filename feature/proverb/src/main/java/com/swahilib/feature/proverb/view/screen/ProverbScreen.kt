@@ -27,7 +27,7 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.ViewerState
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.database.model.ProverbEntity
+import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState

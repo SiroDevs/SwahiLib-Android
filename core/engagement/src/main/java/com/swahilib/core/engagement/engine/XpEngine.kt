@@ -1,6 +1,7 @@
 package com.swahilib.core.engagement.engine
 
-import com.swahilib.core.database.model.XpEventEntity
+import com.swahilib.core.database.entities.game.XpEventEntity
+import com.swahilib.core.database.entities.game.UserProgressEntity
 import com.swahilib.core.engagement.model.AwardResult
 import com.swahilib.core.engagement.model.UserProgress
 import com.swahilib.core.engagement.model.XpAward
@@ -76,7 +77,7 @@ class XpEngine @Inject constructor(
         return toDomain(entity)
     }
 
-    private fun toDomain(entity: com.swahilib.core.database.model.UserProgressEntity): UserProgress {
+    private fun toDomain(entity: UserProgressEntity): UserProgress {
         val (into, span) = LevelCurve.progressWithin(entity.totalXp)
         return UserProgress(
             totalXp = entity.totalXp,

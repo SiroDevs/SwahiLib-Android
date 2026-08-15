@@ -92,8 +92,6 @@ fun HangmanScreen(
                 is HangmanUiState.Playing -> GameTopBar(
                     title = "Hangman",
                     level = s.level,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     soundPlayer = viewModel.soundPlayer,
@@ -152,7 +150,12 @@ fun HangmanScreen(
                     },
                     label = "hangmanRound",
                 ) { playingState ->
-                    PlayingContent(state = playingState, onGuess = viewModel::guess)
+                    PlayingContent(
+                        state = playingState,
+                        onGuess = viewModel::guess,
+                        onTogglePause = viewModel::togglePause,
+                        onContinue = viewModel::continueToNext,
+                    )
                 }
 
                 is HangmanUiState.Finished -> FinishedContent(

@@ -97,8 +97,6 @@ fun WordBuilderScreen(
                 is WordBuilderUiState.Playing -> GameTopBar(
                     title = "Jenga Maneno",
                     level = s.level,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     soundPlayer = viewModel.soundPlayer,
@@ -160,6 +158,8 @@ fun WordBuilderScreen(
                         onClear = viewModel::clearPicks,
                         onHint = viewModel::useHint,
                         onSubmit = viewModel::submit,
+                        onTogglePause = viewModel::togglePause,
+                        onContinue = viewModel::continueToNext,
                     )
                 }
 

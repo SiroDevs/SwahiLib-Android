@@ -29,6 +29,9 @@ sealed interface QuizUiState {
         val secondsRemaining: Int,
         val secondsTotal: Int,
         val practice: Boolean = false,
+        val paused: Boolean = false,
+        /** True once the current question has been submitted - "Endelea" unlocks, inputs lock. */
+        val answered: Boolean = false,
     ) : QuizUiState {
         val question: QuizQuestion get() = quizSet.questions[index]
         val progressLabel: String get() = "Swali ${index + 1}/${quizSet.questions.size}"

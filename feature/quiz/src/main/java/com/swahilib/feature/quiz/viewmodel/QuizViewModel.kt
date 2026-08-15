@@ -22,7 +22,6 @@ import com.swahilib.core.ui.components.game.GameSoundPlayer
 import com.swahilib.feature.quiz.utils.QuizSnapshot
 import com.swahilib.feature.quiz.utils.QuizUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -163,9 +162,15 @@ class QuizViewModel @Inject constructor(
 
     private fun onStepExpired() {
         val state = _uiState.value as? QuizUiState.Playing ?: return
+        if (state.answered) return
         soundPlayer.play(GameSound.TIME_UP)
         val answer = QuizAnswer(questionId = state.question.id, correct = false)
-        recordAnswerAndAdvance(state, answer)
+        val updated = state.copy(answers = state.answers + answer)
+        _uiState.value = updated
+        if (!state.practice) persistSnapshot(updated)
+        // Timing out already forced the player's hand - move on immediately rather than
+        // also waiting on a Continue tap.
+        advanceStep()
     }
 
     fun submitChoice(optionId: String) = submit { question -> QuizScorer.checkChoice(question, optionId) }
@@ -174,20 +179,32 @@ class QuizViewModel @Inject constructor(
 
     private inline fun submit(judge: (QuizQuestion) -> QuizAnswer) {
         val state = _uiState.value as? QuizUiState.Playing ?: return
+        if (state.answered || state.paused) return
         soundPlayer.play(GameSound.SUBMIT)
-        val answer = judge(state.question)
-        recordAnswerAndAdvance(state, answer)
-    }
-
-    private fun recordAnswerAndAdvance(state: QuizUiState.Playing, answer: QuizAnswer) {
         stepTimer.stop()
+        val answer = judge(state.question)
         val newLivePoints = if (answer.correct) state.livePoints + QUIZ_POINTS_PER_CORRECT else state.livePoints
-        val updated = state.copy(answers = state.answers + answer, livePoints = newLivePoints)
+        val updated = state.copy(answers = state.answers + answer, livePoints = newLivePoints, answered = true)
         _uiState.value = updated
         if (!state.practice) persistSnapshot(updated)
-        viewModelScope.launch {
-            delay(450)
-            advanceStep()
+    }
+
+    /** "Endelea" - only enabled once the current question has been submitted. */
+    fun continueToNext() {
+        val state = _uiState.value as? QuizUiState.Playing ?: return
+        if (!state.answered || state.paused) return
+        advanceStep()
+    }
+
+    /** Pause/resume toggle from the status bar. */
+    fun togglePause() {
+        val state = _uiState.value as? QuizUiState.Playing ?: return
+        if (state.paused) {
+            _uiState.value = state.copy(paused = false)
+            stepTimer.start(state.secondsRemaining)
+        } else {
+            stepTimer.stop()
+            _uiState.value = state.copy(paused = true)
         }
     }
 
@@ -197,7 +214,7 @@ class QuizViewModel @Inject constructor(
         if (nextIndex >= state.quizSet.questions.size) {
             finish(state)
         } else {
-            _uiState.value = state.copy(index = nextIndex, secondsRemaining = QUIZ_STEP_SECONDS)
+            _uiState.value = state.copy(index = nextIndex, secondsRemaining = QUIZ_STEP_SECONDS, answered = false)
             stepTimer.start(QUIZ_STEP_SECONDS)
         }
     }

@@ -22,7 +22,6 @@ import com.swahilib.core.ui.components.game.GameSoundPlayer
 import com.swahilib.feature.word_builder.utils.WordBuilderSnapshot
 import com.swahilib.feature.word_builder.utils.WordBuilderUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -169,20 +168,20 @@ class WordBuilderViewModel @Inject constructor(
 
     fun pickLetter(index: Int) {
         val state = _uiState.value as? WordBuilderUiState.Playing ?: return
-        if (state.locked || index in state.pickedIndices) return
+        if (state.locked || state.paused || index in state.pickedIndices) return
         soundPlayer.play(GameSound.TAP)
         _uiState.value = state.copy(pickedIndices = state.pickedIndices + index)
     }
 
     fun clearPicks() {
         val state = _uiState.value as? WordBuilderUiState.Playing ?: return
-        if (state.locked) return
+        if (state.locked || state.paused) return
         _uiState.value = state.copy(pickedIndices = state.pickedIndices.take(state.revealedCount))
     }
 
     fun useHint() {
         val state = _uiState.value as? WordBuilderUiState.Playing ?: return
-        if (state.locked || state.revealedCount >= state.word.answer.length) return
+        if (state.locked || state.paused || state.revealedCount >= state.word.answer.length) return
         val nextChar = state.word.answer[state.revealedCount]
         val tileIndex = state.word.scrambledLetters.indices
             .firstOrNull { it !in state.pickedIndices && state.word.scrambledLetters[it] == nextChar }
@@ -197,7 +196,7 @@ class WordBuilderViewModel @Inject constructor(
 
     fun submit() {
         val state = _uiState.value as? WordBuilderUiState.Playing ?: return
-        if (state.locked) return
+        if (state.locked || state.paused) return
         soundPlayer.play(GameSound.SUBMIT)
         recordRound(state, gaveUp = false)
     }
@@ -215,9 +214,25 @@ class WordBuilderViewModel @Inject constructor(
         val updated = state.copy(locked = true, livePoints = state.livePoints + bonus)
         _uiState.value = updated
         persistSnapshot(updated)
-        viewModelScope.launch {
-            delay(650)
-            advanceStep()
+        // Wait for an explicit "Endelea" tap instead of auto-advancing.
+    }
+
+    /** "Endelea" - only enabled once the current round is locked in (submitted or timed out). */
+    fun continueToNext() {
+        val state = _uiState.value as? WordBuilderUiState.Playing ?: return
+        if (!state.locked || state.paused) return
+        advanceStep()
+    }
+
+    /** Pause/resume toggle from the status bar. */
+    fun togglePause() {
+        val state = _uiState.value as? WordBuilderUiState.Playing ?: return
+        if (state.paused) {
+            _uiState.value = state.copy(paused = false)
+            stepTimer.start(state.secondsRemaining)
+        } else {
+            stepTimer.stop()
+            _uiState.value = state.copy(paused = true)
         }
     }
 

@@ -24,7 +24,6 @@ import com.swahilib.feature.hangman.utils.HangmanRoundSnapshot
 import com.swahilib.feature.hangman.utils.HangmanSnapshot
 import com.swahilib.feature.hangman.utils.HangmanUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -169,32 +168,43 @@ class HangmanViewModel @Inject constructor(
         val forcedLoss = state.round.copy(wrongGuesses = state.round.maxWrongGuesses)
         val newRounds = state.rounds.toMutableList().apply { set(state.index, forcedLoss) }
         _uiState.value = state.copy(rounds = newRounds)
-        advanceAfterDelay()
+        // Round is resolved but we wait for an explicit "Endelea" tap rather than auto-advancing.
     }
 
     fun guess(letter: Char) {
         val state = _uiState.value as? HangmanUiState.Playing ?: return
-        if (state.round.isOver) return
+        if (state.round.isOver || state.paused) return
         soundPlayer.play(GameSound.TAP)
         val updated = HangmanScorer.guess(state.round, letter.uppercaseChar())
         val newRounds = state.rounds.toMutableList().apply { set(state.index, updated) }
         _uiState.value = state.copy(rounds = newRounds)
         if (updated.isOver) {
             soundPlayer.play(GameSound.SUBMIT)
+            stepTimer.stop()
             if (updated.isWon) {
                 val level = state.level
                 val bonus = level?.let { GameLevelConfig.pointsPerCorrect(it) } ?: 10
                 _uiState.value = (_uiState.value as HangmanUiState.Playing).copy(livePoints = state.livePoints + bonus)
             }
-            advanceAfterDelay()
         }
     }
 
-    private fun advanceAfterDelay() {
-        stepTimer.stop()
-        viewModelScope.launch {
-            delay(650)
-            advanceStep()
+    /** "Endelea" - only enabled once the current round has resolved (won, lost, or timed out). */
+    fun continueToNext() {
+        val state = _uiState.value as? HangmanUiState.Playing ?: return
+        if (!state.round.isOver) return
+        advanceStep()
+    }
+
+    /** Pause/resume toggle from the status bar - stops the countdown and blocks guesses while paused. */
+    fun togglePause() {
+        val state = _uiState.value as? HangmanUiState.Playing ?: return
+        if (state.paused) {
+            _uiState.value = state.copy(paused = false)
+            stepTimer.start(state.secondsRemaining)
+        } else {
+            stepTimer.stop()
+            _uiState.value = state.copy(paused = true)
         }
     }
 

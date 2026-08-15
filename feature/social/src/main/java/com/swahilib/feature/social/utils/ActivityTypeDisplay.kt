@@ -21,7 +21,7 @@ fun titleFor(type: ActivityType): String = when (type) {
     ActivityType.SENTENCE_BUILDER -> "Jenga Sentensi"
     ActivityType.SPELLING_CHALLENGE -> "Tahajia (Spellcheck)"
     ActivityType.CROSSWORD -> "CrossWord"
-    ActivityType.SUDOKU -> "Tafuta Maneno"
+    ActivityType.SUDOKU -> "Sudoku"
     ActivityType.PROVERB_CHALLENGE -> "Changamoto ya Methali"
     ActivityType.HANGMAN -> "Hangman"
     ActivityType.DAILY_READ, ActivityType.STREAK_VISIT, ActivityType.CUSTOM -> type.name

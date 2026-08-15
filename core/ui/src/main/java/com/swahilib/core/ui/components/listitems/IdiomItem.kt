@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.swahilib.core.common.utils.cleanMeaning
-import com.swahilib.core.database.model.IdiomEntity
+import com.swahilib.core.database.entities.content.IdiomEntity
 import com.swahilib.core.ui.sample.SampleIdioms
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -25,6 +25,7 @@ sealed interface HangmanUiState {
         val secondsTotal: Int,
         val justAdvanced: Boolean = false,
         val practice: Boolean = false,
+        val paused: Boolean = false,
     ) : HangmanUiState {
         val round: HangmanRound get() = rounds[index]
     }

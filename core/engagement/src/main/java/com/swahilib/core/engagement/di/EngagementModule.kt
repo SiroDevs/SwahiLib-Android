@@ -1,11 +1,11 @@
 package com.swahilib.core.engagement.di
 
-import com.swahilib.core.database.daos.AchievementRecordDao
-import com.swahilib.core.database.daos.ChallengeDao
-import com.swahilib.core.database.daos.DailyActivityDao
-import com.swahilib.core.database.daos.LearningHistoryDao
-import com.swahilib.core.database.daos.UserProgressDao
-import com.swahilib.core.database.daos.XpEventDao
+import com.swahilib.core.database.daos.game.AchievementRecordDao
+import com.swahilib.core.database.daos.game.ChallengeDao
+import com.swahilib.core.database.daos.daily.DailyActivityDao
+import com.swahilib.core.database.daos.game.LearningHistoryDao
+import com.swahilib.core.database.daos.game.UserProgressDao
+import com.swahilib.core.database.daos.game.XpEventDao
 import com.swahilib.core.engagement.engine.ProgressStore
 import com.swahilib.core.engagement.time.Clock
 import com.swahilib.core.engagement.time.SystemClock

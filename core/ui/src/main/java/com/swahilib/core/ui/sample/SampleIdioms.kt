@@ -1,6 +1,6 @@
 package com.swahilib.core.ui.sample
 
-import com.swahilib.core.database.model.IdiomEntity
+import com.swahilib.core.database.entities.content.IdiomEntity
 
 val SampleIdioms = listOf(
     IdiomEntity(

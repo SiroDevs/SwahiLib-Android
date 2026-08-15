@@ -1,8 +1,8 @@
 package com.swahilib.core.data.repos
 
 import android.util.Log
-import com.swahilib.core.database.daos.SayingDao
-import com.swahilib.core.database.model.SayingEntity
+import com.swahilib.core.database.daos.content.SayingDao
+import com.swahilib.core.database.entities.content.SayingEntity
 import com.swahilib.core.network.api.KamusiApi
 import com.swahilib.core.network.dtos.SayingDto
 import com.swahilib.core.network.mapper.MapDtoToEntity

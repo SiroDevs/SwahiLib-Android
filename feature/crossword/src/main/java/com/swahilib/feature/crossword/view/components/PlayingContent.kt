@@ -1,5 +1,8 @@
 package com.swahilib.feature.crossword.view.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -28,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.swahilib.core.games.model.CrosswordDirection
 import com.swahilib.core.games.model.CrosswordEntry
 import com.swahilib.core.ui.components.game.GameActionFab
-import com.swahilib.core.ui.components.game.StepTimerBar
+import com.swahilib.core.ui.components.game.GameStatusBar
 import com.swahilib.feature.crossword.utils.CrosswordUiState
 import kotlin.collections.orEmpty
 import kotlin.collections.sortedBy
@@ -40,10 +44,18 @@ fun PlayingContent(
     onAnswerChange: (String, String) -> Unit,
     onFocus: (String) -> Unit,
     onFinish: () -> Unit,
+    onTogglePause: () -> Unit,
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
-            StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal, modifier = Modifier.align(Alignment.CenterHorizontally))
+            GameStatusBar(
+                remainingSeconds = state.secondsRemaining,
+                totalSeconds = state.secondsTotal,
+                previousPoints = state.previousPoints,
+                livePoints = 0,
+                paused = state.paused,
+                onTogglePause = onTogglePause,
+            )
             if (state.practice) {
                 Spacer(Modifier.height(4.dp))
                 Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -76,22 +88,41 @@ fun PlayingContent(
                     val byDirection = state.puzzle.entries.groupBy { it.direction }
                     byDirection[CrosswordDirection.ACROSS]?.sortedBy { it.number }?.let { entries ->
                         item { ClueSectionHeader("Mlalo (Across)") }
-                        items(entries) { entry -> ClueRow(entry, state.answers[entry.id].orEmpty(), state.focusedEntryId == entry.id, state.easyMode, onFocus, onAnswerChange) }
+                        items(entries) { entry -> ClueRow(entry, state.answers[entry.id].orEmpty(), state.focusedEntryId == entry.id, state.easyMode, !state.paused, onFocus, onAnswerChange) }
                     }
                     byDirection[CrosswordDirection.DOWN]?.sortedBy { it.number }?.let { entries ->
                         item { ClueSectionHeader("Wima (Down)") }
-                        items(entries) { entry -> ClueRow(entry, state.answers[entry.id].orEmpty(), state.focusedEntryId == entry.id, state.easyMode, onFocus, onAnswerChange) }
+                        items(entries) { entry -> ClueRow(entry, state.answers[entry.id].orEmpty(), state.focusedEntryId == entry.id, state.easyMode, !state.paused, onFocus, onAnswerChange) }
                     }
                     val diagonals = (byDirection[CrosswordDirection.DIAGONAL_DOWN_RIGHT].orEmpty() + byDirection[CrosswordDirection.DIAGONAL_DOWN_LEFT].orEmpty())
                         .sortedBy { it.number }
                     if (diagonals.isNotEmpty()) {
                         item { ClueSectionHeader("Mshazari (Diagonal)") }
-                        items(diagonals) { entry -> ClueRow(entry, state.answers[entry.id].orEmpty(), state.focusedEntryId == entry.id, state.easyMode, onFocus, onAnswerChange) }
+                        items(diagonals) { entry -> ClueRow(entry, state.answers[entry.id].orEmpty(), state.focusedEntryId == entry.id, state.easyMode, !state.paused, onFocus, onAnswerChange) }
                     }
                 }
                 Spacer(Modifier.height(8.dp))
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    GameActionFab(text = "Maliza", onClick = onFinish)
+                    GameActionFab(text = "Maliza", onClick = onFinish, enabled = !state.paused)
+                }
+            }
+        }
+
+        AnimatedVisibility(visible = state.paused, enter = fadeIn(), exit = fadeOut()) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        "Mchezo Umesimamishwa",
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Button(onClick = onTogglePause) { Text("Endelea na Mchezo") }
                 }
             }
         }
@@ -109,19 +140,21 @@ private fun ClueRow(
     typed: String,
     focused: Boolean,
     easyMode: Boolean,
+    enabled: Boolean,
     onFocus: (String) -> Unit,
     onAnswerChange: (String, String) -> Unit,
 ) {
     OutlinedTextField(
         value = typed,
-        onValueChange = { if (!easyMode) onAnswerChange(entry.id, it) },
+        onValueChange = { if (!easyMode && enabled) onAnswerChange(entry.id, it) },
         label = { Text("${entry.number}. ${entry.clue}") },
         singleLine = true,
-        readOnly = easyMode,
+        readOnly = easyMode || !enabled,
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
-            .onFocusChanged { if (it.isFocused) onFocus(entry.id) }
-            .let { if (easyMode) it.clickable { onFocus(entry.id) } else it }
+            .onFocusChanged { if (it.isFocused && enabled) onFocus(entry.id) }
+            .let { if (easyMode) it.clickable(enabled = enabled) { onFocus(entry.id) } else it }
             .let { if (focused) it.border(1.5.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small) else it },
     )
 }

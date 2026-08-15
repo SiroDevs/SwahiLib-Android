@@ -12,10 +12,10 @@ import com.swahilib.core.data.repos.ProverbRepo
 import com.swahilib.core.data.repos.SayingRepo
 import com.swahilib.core.data.repos.SearchRepo
 import com.swahilib.core.data.repos.WordRepo
-import com.swahilib.core.database.model.IdiomEntity
-import com.swahilib.core.database.model.ProverbEntity
-import com.swahilib.core.database.model.SayingEntity
-import com.swahilib.core.database.model.WordEntity
+import com.swahilib.core.database.entities.content.IdiomEntity
+import com.swahilib.core.database.entities.content.ProverbEntity
+import com.swahilib.core.database.entities.content.SayingEntity
+import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.feature.home.view.components.HomeTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

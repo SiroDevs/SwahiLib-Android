@@ -1,5 +1,8 @@
 package com.swahilib.feature.sudoku.view.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,11 +19,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,14 +33,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.games.model.PlacedWord
-import com.swahilib.core.ui.components.game.StepTimerBar
+import com.swahilib.core.ui.components.game.GameActionFab
+import com.swahilib.core.ui.components.game.GameStatusBar
 import com.swahilib.feature.sudoku.utils.SudokuUiState
 
 @Composable
-fun PlayingContent(state: SudokuUiState.Playing, onTapCell: (Int, Int) -> Unit, onGiveUp: () -> Unit) {
+fun PlayingContent(
+    state: SudokuUiState.Playing,
+    onTapCell: (Int, Int) -> Unit,
+    onGiveUp: () -> Unit,
+    onTogglePause: () -> Unit,
+) {
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
-            StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal, modifier = Modifier.align(Alignment.CenterHorizontally))
+            GameStatusBar(
+                remainingSeconds = state.secondsRemaining,
+                totalSeconds = state.secondsTotal,
+                previousPoints = state.previousPoints,
+                livePoints = state.livePoints,
+                paused = state.paused,
+                onTogglePause = onTogglePause,
+            )
             Spacer(Modifier.height(8.dp))
             if (state.practice) {
                 Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
@@ -80,7 +96,28 @@ fun PlayingContent(state: SudokuUiState.Playing, onTapCell: (Int, Int) -> Unit, 
                     items(state.words, key = { it.word }) { word -> WordListRow(word) }
                 }
                 Spacer(Modifier.height(6.dp))
-                OutlinedButton(onClick = onGiveUp, modifier = Modifier.fillMaxWidth()) { Text("Maliza / Toa Mchezo") }
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    GameActionFab(text = "Maliza / Toa Mchezo", onClick = onGiveUp, enabled = !state.paused)
+                }
+            }
+        }
+
+        AnimatedVisibility(visible = state.paused, enter = fadeIn(), exit = fadeOut()) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        "Mchezo Umesimamishwa",
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Button(onClick = onTogglePause) { Text("Endelea na Mchezo") }
+                }
             }
         }
     }

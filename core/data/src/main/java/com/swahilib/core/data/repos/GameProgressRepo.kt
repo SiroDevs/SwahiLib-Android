@@ -1,8 +1,8 @@
 package com.swahilib.core.data.repos
 
-import com.swahilib.core.database.daos.GameProgressDao
-import com.swahilib.core.database.model.GameLevelProgressEntity
-import com.swahilib.core.database.model.GameSessionStateEntity
+import com.swahilib.core.database.daos.game.GameProgressDao
+import com.swahilib.core.database.entities.game.GameLevelProgressEntity
+import com.swahilib.core.database.entities.game.GameSessionStateEntity
 import com.swahilib.core.games.engine.GameLevelConfig
 import javax.inject.Inject
 

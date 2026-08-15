@@ -22,7 +22,6 @@ import com.swahilib.core.ui.components.game.GameSoundPlayer
 import com.swahilib.feature.spelling.utils.SpellingSnapshot
 import com.swahilib.feature.spelling.utils.SpellingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -161,14 +160,14 @@ class SpellingViewModel @Inject constructor(
 
     fun useHint() {
         val state = _uiState.value as? SpellingUiState.Playing ?: return
-        if (state.locked || state.revealedLetters >= state.question.answer.length - 1) return
+        if (state.locked || state.paused || state.revealedLetters >= state.question.answer.length - 1) return
         soundPlayer.play(GameSound.TAP)
         _uiState.value = state.copy(revealedLetters = state.revealedLetters + 1)
     }
 
     fun submit(typed: String) {
         val state = _uiState.value as? SpellingUiState.Playing ?: return
-        if (state.locked) return
+        if (state.locked || state.paused) return
         soundPlayer.play(GameSound.SUBMIT)
         recordRound(state, typed)
     }
@@ -181,9 +180,25 @@ class SpellingViewModel @Inject constructor(
         val updated = state.copy(locked = true, livePoints = state.livePoints + bonus)
         _uiState.value = updated
         persistSnapshot(updated)
-        viewModelScope.launch {
-            delay(650)
-            advanceStep()
+        // Wait for an explicit "Endelea" tap instead of auto-advancing.
+    }
+
+    /** "Endelea" - only enabled once the current round is locked in (submitted or timed out). */
+    fun continueToNext() {
+        val state = _uiState.value as? SpellingUiState.Playing ?: return
+        if (!state.locked || state.paused) return
+        advanceStep()
+    }
+
+    /** Pause/resume toggle from the status bar. */
+    fun togglePause() {
+        val state = _uiState.value as? SpellingUiState.Playing ?: return
+        if (state.paused) {
+            _uiState.value = state.copy(paused = false)
+            stepTimer.start(state.secondsRemaining)
+        } else {
+            stepTimer.stop()
+            _uiState.value = state.copy(paused = true)
         }
     }
 

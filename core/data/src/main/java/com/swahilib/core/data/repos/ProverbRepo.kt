@@ -1,8 +1,8 @@
 package com.swahilib.core.data.repos
 
 import android.util.Log
-import com.swahilib.core.database.daos.ProverbDao
-import com.swahilib.core.database.model.ProverbEntity
+import com.swahilib.core.database.daos.content.ProverbDao
+import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.network.api.KamusiApi
 import com.swahilib.core.network.dtos.ProverbDto
 import com.swahilib.core.network.mapper.MapDtoToEntity

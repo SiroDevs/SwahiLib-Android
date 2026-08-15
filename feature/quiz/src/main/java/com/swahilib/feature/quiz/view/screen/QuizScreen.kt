@@ -111,8 +111,6 @@ fun QuizScreen(
                 is QuizUiState.Playing -> GameTopBar(
                     title = title,
                     level = null,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     soundPlayer = viewModel.soundPlayer,
@@ -149,6 +147,8 @@ fun QuizScreen(
                         onChoice = viewModel::submitChoice,
                         onTyped = viewModel::submitTyped,
                         onMatches = viewModel::submitMatches,
+                        onTogglePause = viewModel::togglePause,
+                        onContinue = viewModel::continueToNext,
                     )
                 }
 

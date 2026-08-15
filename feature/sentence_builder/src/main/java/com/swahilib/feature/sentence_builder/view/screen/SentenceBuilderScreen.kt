@@ -90,8 +90,6 @@ fun SentenceBuilderScreen(
                 is SentenceUiState.Playing -> GameTopBar(
                     title = "Panga Sentensi",
                     level = s.level,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     soundPlayer = viewModel.soundPlayer,
@@ -153,7 +151,9 @@ fun SentenceBuilderScreen(
                         state = playingState,
                         onPick = viewModel::pickWord,
                         onClear = viewModel::clear,
-                        onSubmit = viewModel::submit
+                        onSubmit = viewModel::submit,
+                        onTogglePause = viewModel::togglePause,
+                        onContinue = viewModel::continueToNext,
                     )
                 }
 

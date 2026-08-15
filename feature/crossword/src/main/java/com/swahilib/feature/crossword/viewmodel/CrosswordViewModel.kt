@@ -151,6 +151,7 @@ class CrosswordViewModel @Inject constructor(
 
     fun focusEntry(entryId: String) {
         val state = _uiState.value as? CrosswordUiState.Playing ?: return
+        if (state.paused) return
         soundPlayer.play(GameSound.TAP)
         _uiState.value = state.copy(focusedEntryId = entryId)
         persistSnapshot(state)
@@ -158,6 +159,7 @@ class CrosswordViewModel @Inject constructor(
 
     fun updateAnswer(entryId: String, text: String) {
         val state = _uiState.value as? CrosswordUiState.Playing ?: return
+        if (state.paused) return
         val updated = state.copy(answers = state.answers + (entryId to text))
         _uiState.value = updated
         persistSnapshot(updated)
@@ -166,6 +168,7 @@ class CrosswordViewModel @Inject constructor(
     /** Easy-mode letter pool: append a tapped letter to whichever entry is focused. */
     fun tapPoolLetter(letter: Char) {
         val state = _uiState.value as? CrosswordUiState.Playing ?: return
+        if (state.paused) return
         val entryId = state.focusedEntryId ?: return
         soundPlayer.play(GameSound.TAP)
         val current = state.answers[entryId].orEmpty()
@@ -174,10 +177,23 @@ class CrosswordViewModel @Inject constructor(
 
     fun poolBackspace() {
         val state = _uiState.value as? CrosswordUiState.Playing ?: return
+        if (state.paused) return
         val entryId = state.focusedEntryId ?: return
         val current = state.answers[entryId].orEmpty()
         if (current.isEmpty()) return
         updateAnswer(entryId, current.dropLast(1))
+    }
+
+    /** Pause/resume toggle from the status bar. */
+    fun togglePause() {
+        val state = _uiState.value as? CrosswordUiState.Playing ?: return
+        if (state.paused) {
+            _uiState.value = state.copy(paused = false)
+            stepTimer.start(state.secondsRemaining)
+        } else {
+            stepTimer.stop()
+            _uiState.value = state.copy(paused = true)
+        }
     }
 
     private fun persistSnapshot(state: CrosswordUiState.Playing) {

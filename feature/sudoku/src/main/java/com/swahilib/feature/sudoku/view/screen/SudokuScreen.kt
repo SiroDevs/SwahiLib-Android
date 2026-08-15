@@ -102,8 +102,6 @@ fun SudokuScreen(
                 is SudokuUiState.Playing -> GameTopBar(
                     title = "Sudoku",
                     level = s.level,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     soundPlayer = viewModel.soundPlayer,
@@ -166,7 +164,8 @@ fun SudokuScreen(
                 is SudokuUiState.Playing -> PlayingContent(
                     state = s,
                     onTapCell = viewModel::tapCell,
-                    onGiveUp = viewModel::giveUp
+                    onGiveUp = viewModel::giveUp,
+                    onTogglePause = viewModel::togglePause,
                 )
 
                 is SudokuUiState.Finished -> FinishedContent(

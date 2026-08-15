@@ -10,7 +10,7 @@ import com.swahilib.R
 import com.swahilib.core.common.utils.DeepLinkConstants
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.database.AppDatabase
-import com.swahilib.core.database.daily.DailyContentManager
+import com.swahilib.core.database.DailyContentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
