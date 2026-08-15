@@ -1,5 +1,9 @@
 package com.swahilib.feature.hangman.view.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -20,47 +25,96 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.swahilib.core.ui.components.game.StepTimerBar
+import com.swahilib.core.ui.components.game.GameStatusBar
+import com.swahilib.core.ui.components.game.GameSubmitContinueBar
 import com.swahilib.feature.hangman.utils.HangmanUiState
-import kotlin.collections.chunked
-import kotlin.collections.forEach
 
 private val ALPHABET = ('A'..'Z').toList()
 
 @Composable
-fun PlayingContent(state: HangmanUiState.Playing, onGuess: (Char) -> Unit) {
+fun PlayingContent(
+    state: HangmanUiState.Playing,
+    onGuess: (Char) -> Unit,
+    onTogglePause: () -> Unit,
+    onContinue: () -> Unit,
+) {
     val round = state.round
-    Column(Modifier.fillMaxSize().padding(20.dp)) {
-        StepTimerBar(remainingSeconds = state.secondsRemaining, totalSeconds = state.secondsTotal)
-        Spacer(Modifier.height(16.dp))
-        Text(
-            "Neno ${state.index + 1}/${state.rounds.size}",
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            "Makosa: ${round.wrongGuesses}/${round.maxWrongGuesses}",
-            style = MaterialTheme.typography.bodyMedium,
-            color = if (round.wrongGuesses >= round.maxWrongGuesses - 1) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Spacer(Modifier.height(8.dp))
-        if (round.hint.isNotBlank()) {
-            Text("Kidokezo: ${round.hint}", style = MaterialTheme.typography.bodyMedium)
-        }
-        Spacer(Modifier.height(24.dp))
-
-        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), modifier = Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().padding(20.dp)) {
+            GameStatusBar(
+                remainingSeconds = state.secondsRemaining,
+                totalSeconds = state.secondsTotal,
+                previousPoints = state.previousPoints,
+                livePoints = state.livePoints,
+                paused = state.paused,
+                onTogglePause = onTogglePause,
+            )
+            Spacer(Modifier.height(16.dp))
             Text(
-                round.displayWord,
-                modifier = Modifier.fillMaxWidth().padding(20.dp),
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                textAlign = TextAlign.Center,
+                "Neno ${state.index + 1}/${state.rounds.size}",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "Makosa: ${round.wrongGuesses}/${round.maxWrongGuesses}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (round.wrongGuesses >= round.maxWrongGuesses - 1) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(8.dp))
+            if (round.hint.isNotBlank()) {
+                Text("Kidokezo: ${round.hint}", style = MaterialTheme.typography.bodyMedium)
+            }
+            Spacer(Modifier.height(24.dp))
+
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    round.displayWord,
+                    modifier = Modifier.fillMaxWidth().padding(20.dp),
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    textAlign = TextAlign.Center,
+                )
+            }
+            Spacer(Modifier.height(24.dp))
+
+            LetterGrid(
+                guessed = round.guessedLetters,
+                answer = round.answer,
+                enabled = !round.isOver && !state.paused,
+                onGuess = onGuess,
+            )
+            Spacer(Modifier.weight(1f))
+            GameSubmitContinueBar(
+                onSubmit = null,
+                submitEnabled = false,
+                onContinue = onContinue,
+                continueEnabled = round.isOver && !state.paused,
             )
         }
-        Spacer(Modifier.height(24.dp))
 
-        LetterGrid(guessed = round.guessedLetters, answer = round.answer, enabled = !round.isOver, onGuess = onGuess)
+        AndroidPauseOverlay(visible = state.paused, onResume = onTogglePause)
+    }
+}
+
+@Composable
+private fun AndroidPauseOverlay(visible: Boolean, onResume: () -> Unit) {
+    AnimatedVisibility(visible = visible, enter = fadeIn(), exit = fadeOut()) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    "Mchezo Umesimamishwa",
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Spacer(Modifier.height(16.dp))
+                Button(onClick = onResume) { Text("Endelea na Mchezo") }
+            }
+        }
     }
 }
 

@@ -46,7 +46,7 @@ private val WORD_BUILDER_INSTRUCTIONS = listOf(
     "Gusa vipande vya herufi kwa mpangilio sahihi kuunda neno la Kiswahili.",
     "Tumia 'Kidokezo' ukikwama - lakini kila kidokezo hupunguza alama za mzunguko huo.",
     "Kila kiwango kina muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
-)
+]
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,8 +97,6 @@ fun WordBuilderScreen(
                 is WordBuilderUiState.Playing -> GameTopBar(
                     title = "Jenga Maneno",
                     level = s.level,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     soundPlayer = viewModel.soundPlayer,
@@ -160,6 +158,8 @@ fun WordBuilderScreen(
                         onClear = viewModel::clearPicks,
                         onHint = viewModel::useHint,
                         onSubmit = viewModel::submit,
+                        onTogglePause = viewModel::togglePause,
+                        onContinue = viewModel::continueToNext,
                     )
                 }
 

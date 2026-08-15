@@ -24,6 +24,7 @@ sealed interface CrosswordUiState {
         val secondsTotal: Int,
         val easyMode: Boolean,
         val practice: Boolean = false,
+        val paused: Boolean = false,
     ) : CrosswordUiState {
         val letterPool: List<Char> get() = puzzle.entries.flatMap { it.answer.toList() }.distinct().sorted()
     }

@@ -97,8 +97,6 @@ fun CrosswordScreen(
                 is CrosswordUiState.Playing -> GameTopBar(
                     title = "CrossWord",
                     level = s.level,
-                    previousPoints = s.previousPoints,
-                    livePoints = 0,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     soundPlayer = viewModel.soundPlayer,
@@ -163,6 +161,7 @@ fun CrosswordScreen(
                     onAnswerChange = viewModel::updateAnswer,
                     onFocus = viewModel::focusEntry,
                     onFinish = viewModel::finishNow,
+                    onTogglePause = viewModel::togglePause,
                 )
 
                 is CrosswordUiState.Finished -> FinishedContent(

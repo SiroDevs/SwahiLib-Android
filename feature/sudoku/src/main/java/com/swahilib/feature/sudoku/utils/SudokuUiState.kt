@@ -28,6 +28,7 @@ sealed interface SudokuUiState {
         val secondsTotal: Int,
         val easyMode: Boolean,
         val practice: Boolean = false,
+        val paused: Boolean = false,
     ) : SudokuUiState {
         val letterPool: List<Char> get() = words.flatMap { it.word.toList() }.distinct().sorted()
     }

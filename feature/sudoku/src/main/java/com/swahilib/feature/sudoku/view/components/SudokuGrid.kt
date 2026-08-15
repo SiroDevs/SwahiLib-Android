@@ -55,7 +55,7 @@ fun SudokuGrid(state: SudokuUiState.Playing, onTapCell: (Int, Int) -> Unit) {
                                     else -> MaterialTheme.colorScheme.surface
                                 }
                             )
-                            .clickable(enabled = !found) { onTapCell(row, col) },
+                            .clickable(enabled = !found && !state.paused) { onTapCell(row, col) },
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(

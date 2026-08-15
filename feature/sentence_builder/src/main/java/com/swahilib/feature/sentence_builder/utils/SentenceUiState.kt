@@ -25,6 +25,7 @@ sealed interface SentenceUiState {
         val secondsRemaining: Int,
         val secondsTotal: Int,
         val practice: Boolean = false,
+        val paused: Boolean = false,
     ) : SentenceUiState {
         val question: SentenceQuestion get() = questions[index]
         val picked: List<String> get() = pickedIndices.map { question.shuffledWords[it] }

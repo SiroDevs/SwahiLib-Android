@@ -164,6 +164,7 @@ class SudokuViewModel @Inject constructor(
 
     fun tapCell(row: Int, col: Int) {
         val state = _uiState.value as? SudokuUiState.Playing ?: return
+        if (state.paused) return
         val start = state.selectionStart
         soundPlayer.play(GameSound.TAP)
 
@@ -182,8 +183,21 @@ class SudokuViewModel @Inject constructor(
 
     fun tapPoolLetter(letter: Char) {
         val state = _uiState.value as? SudokuUiState.Playing ?: return
+        if (state.paused) return
         soundPlayer.play(GameSound.TAP)
         _uiState.value = state.copy(highlightedLetter = letter)
+    }
+
+    /** Pause/resume toggle from the status bar. */
+    fun togglePause() {
+        val state = _uiState.value as? SudokuUiState.Playing ?: return
+        if (state.paused) {
+            _uiState.value = state.copy(paused = false)
+            stepTimer.start(state.secondsRemaining)
+        } else {
+            stepTimer.stop()
+            _uiState.value = state.copy(paused = true)
+        }
     }
 
     private fun onWordFound(state: SudokuUiState.Playing, foundWord: String) {
@@ -312,7 +326,7 @@ class SudokuViewModel @Inject constructor(
 
             val unlocked = engageRepo.recordLearningEvent(
                 type = StatisticsEngine.EventType.SUDOKU,
-                title = "Sudoku",
+                title = "Tafuta Maneno",
                 score = result.foundWords,
                 maxScore = result.totalWords,
                 xpEarned = xpEarnedThisSession,

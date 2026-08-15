@@ -29,6 +29,7 @@ sealed interface WordBuilderUiState {
         val secondsRemaining: Int,
         val secondsTotal: Int,
         val practice: Boolean = false,
+        val paused: Boolean = false,
     ) : WordBuilderUiState {
         val assembled: String get() = pickedIndices.joinToString("") { word.scrambledLetters[it].toString() }
     }

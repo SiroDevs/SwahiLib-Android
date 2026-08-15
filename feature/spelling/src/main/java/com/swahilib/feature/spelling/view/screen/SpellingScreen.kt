@@ -89,8 +89,6 @@ fun SpellingScreen(
                 is SpellingUiState.Playing -> GameTopBar(
                     title = "Tahajia (Spellcheck)",
                     level = s.level,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     soundPlayer = viewModel.soundPlayer,
@@ -149,7 +147,9 @@ fun SpellingScreen(
                     PlayingContent(
                         state = playingState,
                         onHint = viewModel::useHint,
-                        onSubmit = viewModel::submit
+                        onSubmit = viewModel::submit,
+                        onTogglePause = viewModel::togglePause,
+                        onContinue = viewModel::continueToNext,
                     )
                 }
 

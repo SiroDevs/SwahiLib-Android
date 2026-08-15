@@ -26,6 +26,7 @@ sealed interface SpellingUiState {
         val secondsRemaining: Int,
         val secondsTotal: Int,
         val practice: Boolean = false,
+        val paused: Boolean = false,
     ) : SpellingUiState {
         val question: SpellingQuestion get() = questions[index]
         val hintText: String get() = question.answer.take(revealedLetters) +
