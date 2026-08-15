@@ -141,6 +141,10 @@ fun HomeScreen(
                                 }
                             }
 
+                            HomeTab.Library -> {
+                                // No extra actions for the Library catalogue tab.
+                            }
+
                             HomeTab.Engage -> {
                                 IconButton (onClick = { navController.navigate(Routes.CHALLENGES) }) {
                                     Icon(Icons.Default.TrackChanges, contentDescription = "Changamoto")
@@ -200,6 +204,14 @@ fun HomeScreen(
                                         prefsRepo = prefsRepo,
                                         onShowDonation = { navController.navigate(Routes.DONATION) },
                                     )
+
+                                    HomeTab.Library -> {
+                                        val libraryViewModel: LibraryViewModel = hiltViewModel()
+                                        HomeLibrary(
+                                            navController = navController,
+                                            viewModel = libraryViewModel,
+                                        )
+                                    }
 
                                     HomeTab.Engage -> HomeEngage(
                                         navController = navController,

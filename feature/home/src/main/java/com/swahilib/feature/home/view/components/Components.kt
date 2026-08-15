@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,11 +33,13 @@ import androidx.compose.ui.unit.dp
 
 sealed class HomeTab(var title: String, var icon: ImageVector) {
     object Search : HomeTab("Tafuta", Icons.Default.Search)
+    object Library : HomeTab("Maktaba", Icons.Default.MenuBook)
     object Engage : HomeTab("Chemsha Bongo", Icons.Default.EmojiEvents)
 }
 
 val homeTabs = listOf(
     HomeTab.Search,
+    HomeTab.Library,
     HomeTab.Engage,
 )
 

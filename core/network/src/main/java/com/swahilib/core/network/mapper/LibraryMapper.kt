@@ -31,7 +31,6 @@ object LibraryMapper {
     private fun JsonObject.ridOrIndex(index: Int): String =
         this["rid"].str() ?: (index + 1).toString()
 
-    // ---- family: [{rid, title, meaning}] ----
     fun mapFamily(rawJson: String): List<FamilyEntity> =
         parse(rawJson).jsonArray.mapIndexed { index, el ->
             val obj = el.jsonObject
@@ -43,7 +42,6 @@ object LibraryMapper {
             )
         }
 
-    // ---- caps: [{rid, title, meaning}] ----
     fun mapCaps(rawJson: String): List<CapEntity> =
         parse(rawJson).jsonArray.mapIndexed { index, el ->
             val obj = el.jsonObject
@@ -55,7 +53,6 @@ object LibraryMapper {
             )
         }
 
-    // ---- fish: [{rid, title}] ----
     fun mapFish(rawJson: String): List<FishEntity> =
         parse(rawJson).jsonArray.mapIndexed { index, el ->
             val obj = el.jsonObject
@@ -66,7 +63,6 @@ object LibraryMapper {
             )
         }
 
-    // ---- insects: { "Category name": [{rid, title}], ... } ----
     fun mapInsects(rawJson: String): List<InsectEntity> {
         val entries = mutableListOf<InsectEntity>()
         var order = 0
@@ -97,7 +93,6 @@ object LibraryMapper {
             )
         }
 
-    // ---- kid_games: [{rid, title, meaning, lengo}] ----
     fun mapKidGames(rawJson: String): List<KidGameEntity> =
         parse(rawJson).jsonArray.mapIndexed { index, el ->
             val obj = el.jsonObject
