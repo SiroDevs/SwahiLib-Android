@@ -1,15 +1,15 @@
 package com.swahilib.core.common.library
 
 object LibraryKeys {
-    const val SEAS = "seas"
-    const val FAMILY = "family"
     const val CAPS = "caps"
-    const val KIDGAMES = "kid_games"
-    const val NCHI = "countries"
-    const val GREETING = "greetings"
+    const val COUNTRIES = "countries"
+    const val FAMILY = "family"
     const val FISH = "fish"
-    const val PUNCTUATION = "punctuation"
+    const val GREETING = "greetings"
     const val INSECTS = "insects"
+    const val KIDGAMES = "kid_games"
+    const val PUNCTUATION = "punctuation"
+    const val SEAS = "seas"
 }
 
 enum class LibraryDisplayMode {
@@ -30,19 +30,28 @@ data class LibraryCollectionConfig(
 object LibraryCatalog {
     val ALL: List<LibraryCollectionConfig> = listOf(
         LibraryCollectionConfig(
-            key = LibraryKeys.FAMILY,
-            title = "Family",
-            subtitle = "Matitle ya wanafamilia",
-            iconName = "Groups",
-            endpointPath = "maktaba/${LibraryKeys.FAMILY}.json",
-            displayMode = LibraryDisplayMode.GRID,
-        ),
-        LibraryCollectionConfig(
             key = LibraryKeys.CAPS,
             title = "Kofia",
             subtitle = "Aina za kofia za jadi",
             iconName = "Checkroom",
             endpointPath = "maktaba/${LibraryKeys.CAPS}.json",
+            displayMode = LibraryDisplayMode.GRID,
+        ),
+        LibraryCollectionConfig(
+            key = LibraryKeys.COUNTRIES,
+            title = "Nchi",
+            subtitle = "Nchi za dunia",
+            iconName = "Public",
+            endpointPath = "maktaba/${LibraryKeys.COUNTRIES}.json",
+            displayMode = LibraryDisplayMode.LIST,
+            isGrouped = true,
+        ),
+        LibraryCollectionConfig(
+            key = LibraryKeys.FAMILY,
+            title = "Family",
+            subtitle = "Matitle ya wanafamilia",
+            iconName = "Groups",
+            endpointPath = "maktaba/${LibraryKeys.FAMILY}.json",
             displayMode = LibraryDisplayMode.GRID,
         ),
         LibraryCollectionConfig(
@@ -54,6 +63,14 @@ object LibraryCatalog {
             displayMode = LibraryDisplayMode.GRID,
         ),
         LibraryCollectionConfig(
+            key = LibraryKeys.GREETING,
+            title = "Salamu",
+            subtitle = "Salamu za kienyeji",
+            iconName = "WavingHand",
+            endpointPath = "maktaba/${LibraryKeys.GREETING}.json",
+            displayMode = LibraryDisplayMode.LIST,
+        ),
+        LibraryCollectionConfig(
             key = LibraryKeys.INSECTS,
             title = "Wadudu",
             subtitle = "Aina za wadudu",
@@ -63,27 +80,11 @@ object LibraryCatalog {
             isGrouped = true,
         ),
         LibraryCollectionConfig(
-            key = LibraryKeys.SEAS,
-            title = "Bahari",
-            subtitle = "Bahari za dunia",
-            iconName = "Water",
-            endpointPath = "maktaba/${LibraryKeys.SEAS}.json",
-            displayMode = LibraryDisplayMode.LIST,
-        ),
-        LibraryCollectionConfig(
             key = LibraryKeys.KIDGAMES,
             title = "Michezo ya Watoto",
             subtitle = "Michezo ya asili ya watoto",
             iconName = "Casino",
             endpointPath = "maktaba/${LibraryKeys.KIDGAMES}.json",
-            displayMode = LibraryDisplayMode.LIST,
-        ),
-        LibraryCollectionConfig(
-            key = LibraryKeys.GREETING,
-            title = "Salamu",
-            subtitle = "Salamu za kienyeji",
-            iconName = "WavingHand",
-            endpointPath = "maktaba/${LibraryKeys.GREETING}.json",
             displayMode = LibraryDisplayMode.LIST,
         ),
         LibraryCollectionConfig(
@@ -95,13 +96,12 @@ object LibraryCatalog {
             displayMode = LibraryDisplayMode.LIST,
         ),
         LibraryCollectionConfig(
-            key = LibraryKeys.NCHI,
-            title = "Nchi",
-            subtitle = "Nchi za dunia",
-            iconName = "Public",
-            endpointPath = "maktaba/${LibraryKeys.NCHI}.json",
+            key = LibraryKeys.SEAS,
+            title = "Bahari",
+            subtitle = "Bahari za dunia",
+            iconName = "Water",
+            endpointPath = "maktaba/${LibraryKeys.SEAS}.json",
             displayMode = LibraryDisplayMode.LIST,
-            isGrouped = true,
         ),
     )
 

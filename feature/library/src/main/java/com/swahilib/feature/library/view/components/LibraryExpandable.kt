@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.swahilib.core.common.library.LibraryDisplayItem
+import com.swahilib.core.common.entity.LibraryDisplayItem
 
 @Composable
 fun LibraryExpandableList(

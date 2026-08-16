@@ -17,8 +17,8 @@
 package com.swahilib.core.data.repos.content
 
 import android.util.Log
-import com.swahilib.core.common.library.LibraryDetailField
-import com.swahilib.core.common.library.LibraryDisplayItem
+import com.swahilib.core.common.entity.LibraryDetailField
+import com.swahilib.core.common.entity.LibraryDisplayItem
 import com.swahilib.core.common.library.LibraryKeys
 import com.swahilib.core.database.daos.SeasDao
 import com.swahilib.core.database.daos.FamilyDao

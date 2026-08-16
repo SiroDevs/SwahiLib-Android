@@ -1,4 +1,4 @@
-package com.swahilib.core.common.library
+package com.swahilib.core.common.entity
 
 data class LibraryDetailField(val label: String, val value: String)
 

@@ -78,23 +78,23 @@ class KamusiApi @Inject constructor(
         PROVERBS("kamusi/proverbs.json", "etag_proverbs"),
         SAYINGS("kamusi/sayings.json", "etag_sayings"),
 
-        LIBRARY_FAMILY("maktaba/family.json", "etag_library_family", LibraryKeys.FAMILY),
         LIBRARY_CAPS("maktaba/caps.json", "etag_library_caps", LibraryKeys.CAPS),
+        LIBRARY_COUNTRIES("maktaba/countries.json", "etag_library_countries", LibraryKeys.COUNTRIES),
+        LIBRARY_FAMILY("maktaba/family.json", "etag_library_family", LibraryKeys.FAMILY),
         LIBRARY_FISH("maktaba/fish.json", "etag_library_fish", LibraryKeys.FISH),
+        LIBRARY_GREETING("maktaba/greetings.json", "etag_library_greetings", LibraryKeys.GREETING),
         LIBRARY_INSECTS("maktaba/insects.json", "etag_library_insects", LibraryKeys.INSECTS),
-        LIBRARY_SEAS("maktaba/seas.json", "etag_library_seas", LibraryKeys.SEAS),
         LIBRARY_KIDGAMES(
             "maktaba/kid_games.json",
             "etag_library_kid_games",
             LibraryKeys.KIDGAMES,
         ),
-        LIBRARY_GREETING("maktaba/greetings.json", "etag_library_greetings", LibraryKeys.GREETING),
         LIBRARY_PUNCTUATION(
             "maktaba/punctuation.json",
             "etag_library_punctuation",
             LibraryKeys.PUNCTUATION
         ),
-        LIBRARY_NCHI("maktaba/countries.json", "etag_library_countries", LibraryKeys.NCHI);
+        LIBRARY_SEAS("maktaba/seas.json", "etag_library_seas", LibraryKeys.SEAS);
 
         companion object {
             fun forLibraryKey(key: String): Endpoint? =

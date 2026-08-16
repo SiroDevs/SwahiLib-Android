@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.swahilib.core.common.library.LibraryDisplayItem
+import com.swahilib.core.common.entity.LibraryDisplayItem
 
 @Composable
 fun LibraryGrid(items: List<LibraryDisplayItem>, isGrouped: Boolean) {

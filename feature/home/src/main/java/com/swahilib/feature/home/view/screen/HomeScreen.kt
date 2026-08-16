@@ -33,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.swahilib.core.common.entity.UiState
@@ -50,6 +51,8 @@ import com.swahilib.feature.home.view.components.homeTabs
 import com.swahilib.feature.home.view.screen.tabs.HomeEngage
 import com.swahilib.feature.home.view.screen.tabs.HomeSearch
 import com.swahilib.feature.home.viewmodel.HomeViewModel
+import com.swahilib.feature.library.view.screen.HomeLibrary
+import com.swahilib.feature.library.viewmodel.LibraryViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)

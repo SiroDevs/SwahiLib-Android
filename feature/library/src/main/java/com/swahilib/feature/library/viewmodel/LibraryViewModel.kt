@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.common.library.LibraryCatalog
 import com.swahilib.core.common.library.LibraryCollectionConfig
-import com.swahilib.core.common.library.LibraryDisplayItem
+import com.swahilib.core.common.entity.LibraryDisplayItem
 import com.swahilib.core.data.repos.content.LibraryRepo
 import com.swahilib.core.network.api.KamusiApi
 import dagger.hilt.android.lifecycle.HiltViewModel
