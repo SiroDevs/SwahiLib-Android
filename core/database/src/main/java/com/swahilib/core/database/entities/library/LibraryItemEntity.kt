@@ -26,4 +26,4 @@ data class LibraryItemEntity(
     @ColumnInfo(name = "secondaryText") val secondaryText: String? = null,
     @ColumnInfo(name = "detailsJson") val detailsJson: String = "[]",
     @ColumnInfo(name = "orderIndex") val orderIndex: Int = 0,
-) : Parcelable, Parcelable
+) : Parcelable

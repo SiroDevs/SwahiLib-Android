@@ -110,7 +110,7 @@ object LibraryMapper {
             val obj = el.jsonObject
             GreetingEntity(
                 rid = obj.ridOrIndex(index),
-                greetings = obj["greetings"].str().orEmpty(),
+                greeting = obj["greeting"].str().orEmpty(),
                 answer = obj["answer"].str(),
                 person1 = obj["person1"].str(),
                 person2 = obj["person2"].str(),

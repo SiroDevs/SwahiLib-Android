@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
 data class GreetingEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "rid") val rid: String,
-    @ColumnInfo(name = "greetings") val greetings: String,
+    @ColumnInfo(name = "greeting") val greeting: String,
     @ColumnInfo(name = "answer") val answer: String? = null,
     @ColumnInfo(name = "person1") val person1: String? = null,
     @ColumnInfo(name = "person2") val person2: String? = null,
