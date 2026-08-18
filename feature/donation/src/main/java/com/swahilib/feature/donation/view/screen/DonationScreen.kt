@@ -35,13 +35,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.entity.DonationMethod
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.feature.donation.viewmodel.DonationState
 import com.swahilib.feature.donation.viewmodel.DonationViewModel
 import com.swahilib.feature.donation.view.components.ConfirmDonationDialog
+import com.swahilib.feature.donation.view.components.CryptoDonationSection
 import com.swahilib.feature.donation.view.components.DonateNowButton
 import com.swahilib.feature.donation.view.components.DonationHeaderCard
+import com.swahilib.feature.donation.view.components.DonationMethodFilterStrip
 import com.swahilib.feature.donation.view.components.DonorIdentitySection
 import com.swahilib.feature.donation.view.components.PresetAmountGrid
 import kotlinx.coroutines.launch
@@ -56,6 +59,8 @@ fun DonationScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
+    var selectedMethod by remember { mutableStateOf(DonationMethod.MPESA_CARD) }
+
     var selectedPreset by remember { mutableStateOf<Int?>(DEFAULT_PRESET) }
     var customAmount by remember { mutableStateOf("") }
     var showConfirmDialog by remember { mutableStateOf(false) }
@@ -63,7 +68,7 @@ fun DonationScreen(
 
     var donorName by remember { mutableStateOf("") }
     var donorEmail by remember { mutableStateOf("") }
-    var isDonatingAnonymously by remember { mutableStateOf(false) }
+    var isDonatingAnonymously by remember { mutableStateOf(true) }
     var isDonorEmailError by remember { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -74,6 +79,7 @@ fun DonationScreen(
             val amount = customAmount.toDoubleOrNull()
             if (amount != null && amount >= MINIMUM_DONATION) amount else null
         }
+
         selectedPreset != null -> selectedPreset!!.toDouble()
         else -> null
     }
@@ -87,11 +93,13 @@ fun DonationScreen(
                 val redirectUrl = (state as DonationState.ReadyToPay).redirectUrl
                 navController.navigate(Routes.paymentWebView(redirectUrl))
             }
+
             is DonationState.Error -> {
                 val msg = (state as DonationState.Error).message
                 scope.launch { snackbarHostState.showSnackbar(msg) }
                 viewModel.resetState()
             }
+
             else -> {}
         }
     }
@@ -159,109 +167,126 @@ fun DonationScreen(
             ) {
                 DonationHeaderCard()
 
-                Text(
-                    text = "Donation amount (KES)",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        letterSpacing = 0.5.sp,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                DonationMethodFilterStrip(
+                    selectedMethod = selectedMethod,
+                    onMethodSelected = { selectedMethod = it },
                 )
 
-                PresetAmountGrid(
-                    selectedPreset = selectedPreset,
-                    onPresetSelected = { amount ->
-                        selectedPreset = amount
-                        customAmount = ""
-                        showMinimumAmountError = false
-                    },
-                )
+                if (selectedMethod == DonationMethod.MPESA_CARD) {
+                    Text(
+                        text = "Donation amount (KES)",
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            letterSpacing = 0.5.sp,
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
 
-                OutlinedTextField(
-                    value = customAmount,
-                    onValueChange = { input ->
-                        val filtered = input.filter { it.isDigit() || it == '.' }
-                        val dotCount = filtered.count { it == '.' }
-                        if (dotCount <= 1) {
-                            customAmount = filtered
-                            if (filtered.isNotBlank()) {
-                                selectedPreset = null
-                                showMinimumAmountError = false
-                            }
-                        }
-                    },
-                    label = { Text("Or input your amount (KES)") },
-                    placeholder = { Text("Minimum is 50") },
-                    prefix = { Text("KES") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    isError = isCustomAmountBelowMinimum,
-                    supportingText = {
-                        if (isCustomAmountBelowMinimum) {
-                            Text(
-                                text = "Minimum amount is KES $MINIMUM_DONATION",
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        }
-                    }
-                )
+                    PresetAmountGrid(
+                        selectedPreset = selectedPreset,
+                        onPresetSelected = { amount ->
+                            selectedPreset = amount
+                            customAmount = ""
+                            showMinimumAmountError = false
+                        },
+                    )
 
-                DonorIdentitySection(
-                    name = donorName,
-                    onNameChange = { donorName = it },
-                    email = donorEmail,
-                    onEmailChange = {
-                        donorEmail = it
-                        isDonorEmailError = false
-                    },
-                    isAnonymous = isDonatingAnonymously,
-                    onAnonymousToggle = { isDonatingAnonymously = it },
-                    isEmailError = isDonorEmailError,
-                )
-
-                Spacer(Modifier.height(4.dp))
-
-                DonateNowButton(
-                    isLoading = state is DonationState.Loading,
-                    enabled = state !is DonationState.Loading && activeAmount != null && activeAmount >= MINIMUM_DONATION,
-                    onClick = {
-                        when {
-                            activeAmount == null -> {
-                                scope.launch {
-                                    snackbarHostState.showSnackbar("Please enter a donation amount")
+                    OutlinedTextField(
+                        value = customAmount,
+                        onValueChange = { input ->
+                            val filtered = input.filter { it.isDigit() || it == '.' }
+                            val dotCount = filtered.count { it == '.' }
+                            if (dotCount <= 1) {
+                                customAmount = filtered
+                                if (filtered.isNotBlank()) {
+                                    selectedPreset = null
+                                    showMinimumAmountError = false
                                 }
                             }
-
-                            activeAmount < MINIMUM_DONATION -> {
-                                showMinimumAmountError = true
-                            }
-
-                            !isDonatingAnonymously && donorEmail.isNotBlank() && !isValidEmail(
-                                donorEmail
-                            ) -> {
-                                isDonorEmailError = true
-                                scope.launch {
-                                    snackbarHostState.showSnackbar("Please enter a valid email address")
-                                }
-                            }
-
-                            else -> {
-                                showConfirmDialog = true
+                        },
+                        label = { Text("Or input your amount (KES)") },
+                        placeholder = { Text("Minimum is 50") },
+                        prefix = { Text("KES") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        isError = isCustomAmountBelowMinimum,
+                        supportingText = {
+                            if (isCustomAmountBelowMinimum) {
+                                Text(
+                                    text = "Minimum amount is KES $MINIMUM_DONATION",
+                                    color = MaterialTheme.colorScheme.error
+                                )
                             }
                         }
-                    },
-                )
+                    )
 
-                Text(
-                    text = "Donations are processed securely via Paystack",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                    DonorIdentitySection(
+                        name = donorName,
+                        onNameChange = { donorName = it },
+                        email = donorEmail,
+                        onEmailChange = {
+                            donorEmail = it
+                            isDonorEmailError = false
+                        },
+                        isAnonymous = isDonatingAnonymously,
+                        onAnonymousToggle = { isDonatingAnonymously = it },
+                        isEmailError = isDonorEmailError,
+                    )
 
+                    Spacer(Modifier.height(4.dp))
+
+                    DonateNowButton(
+                        isLoading = state is DonationState.Loading,
+                        enabled = state !is DonationState.Loading && activeAmount != null && activeAmount >= MINIMUM_DONATION,
+                        onClick = {
+                            when {
+                                activeAmount == null -> {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Please enter a donation amount")
+                                    }
+                                }
+
+                                activeAmount < MINIMUM_DONATION -> {
+                                    showMinimumAmountError = true
+                                }
+
+                                !isDonatingAnonymously && donorEmail.isNotBlank() && !isValidEmail(
+                                    donorEmail
+                                ) -> {
+                                    isDonorEmailError = true
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Please enter a valid email address")
+                                    }
+                                }
+
+                                else -> {
+                                    showConfirmDialog = true
+                                }
+                            }
+                        },
+                    )
+
+                    Text(
+                        text = "Donations are processed securely via Paystack",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                } else {
+                    CryptoDonationSection(
+                        onAddressCopied = { network ->
+                            viewModel.recordCryptoDonation()
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    "$network address copied — thank you for supporting SwahiLib!"
+                                )
+                            }
+                        },
+                    )
+                }
                 Spacer(Modifier.height(16.dp))
             }
         }

@@ -68,10 +68,10 @@ class KamusiApi @Inject constructor(
         }
 
     enum class Endpoint(val path: String, val prefKey: String) {
-        WORDS("words.json", "etag_words"),
-        IDIOMS("idioms.json", "etag_idioms"),
-        PROVERBS("proverbs.json", "etag_proverbs"),
-        SAYINGS("sayings.json", "etag_sayings"),
+        WORDS("kamusi/words.json", "etag_words"),
+        IDIOMS("kamusi/idioms.json", "etag_idioms"),
+        PROVERBS("kamusi/proverbs.json", "etag_proverbs"),
+        SAYINGS("kamusi/sayings.json", "etag_sayings"),
     }
 
     companion object {

@@ -22,6 +22,12 @@ object ApiConstants {
     const val KAMUSI_API = "https://swahilive.vercel.app/"
 }
 
+object CryptoConstants {
+    const val CRYPTO_PROFILE = "sirodevs.base.eth"
+    const val ETH_ADDRESS = "0x1C9A68b346D956e9Eff027C34DB671817e365fbb"
+    const val SOL_ADDRESS = "5qW65Qu8hMLdsjNPxvpFGuv6EAJosGA5YDo6ePSnva1A"
+}
+
 object PrefConstants {
     const val PREFERENCE_FILE = "app_pref"
     const val THEME_MODE = "theme_mode"
@@ -31,6 +37,7 @@ object PrefConstants {
     const val LAST_APP_OPEN_TIME = "lastAppOpenTime"
 
     const val DONATION_DONE_AT = "donation_done_at"
+    const val DONATION_METHOD = "donation_method"
     const val DONATION_REMIND_NEXT_OPEN = "donation_remind_next"
     const val LAST_SYNCED_AT = "last_synced_at"
 

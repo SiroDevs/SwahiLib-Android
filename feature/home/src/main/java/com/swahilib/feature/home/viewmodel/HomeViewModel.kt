@@ -92,13 +92,10 @@ class HomeViewModel @Inject constructor(
         tabController.setSelectedTab(HomeTab.Search)
     }
 
-    // ── Tabs → TabController ──
     val selectedTab: StateFlow<HomeTab> get() = tabController.selectedTab
     fun setSelectedTab(tab: HomeTab) = tabController.setSelectedTab(tab)
 
-    // ── Daily highlights → DailyHighlightsController ──
     val dailyHighlights: StateFlow<DailyHighlights> get() = dailyHighlightsController.dailyHighlights
 
-    /** See [DailyHighlightsController.load] - suspend so callers can await it before showing the dialog. */
     suspend fun loadDailyHighlights() = dailyHighlightsController.load()
 }

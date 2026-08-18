@@ -28,8 +28,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 186
-        versionName = "1.0.186"
+        versionCode = 188
+        versionName = "1.0.188"
         minSdk = 26
         targetSdk = 37
 
