@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.NorthEast
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -65,15 +67,16 @@ fun DiyDonationSection(
             ),
         ) {
             DiyBlock(
-                itemLabel = "Donate to M-Pesa Number",
+                itemLabel = "Donate to M-Pesa Acc",
                 iconRes = R.drawable.mpesa,
-                type = DiyBlockType.Digits("+${PayConstants.MPESA_NUMBER}"),
+                type = DiyBlockType.Digits(PayConstants.MPESA_NUMBER),
                 onCopyClick = {
                     clipboardManager.setText(
-                        AnnotatedString("+${PayConstants.MPESA_NUMBER}")
+                        AnnotatedString(PayConstants.MPESA_NUMBER)
                     )
                     onItemCopied("M-Pesa Number")
                 },
+                modifier = Modifier.padding(vertical = 5.dp)
             )
         }
 
@@ -88,28 +91,29 @@ fun DiyDonationSection(
         ) {
             Column() {
                 Text(
-                    text = "Donate to M-Pesa PayBill",
+                    text = "Donate to M-Pesa PayBill: (Bank Acc)",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                     ),
+                    textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(10.dp)
                 )
 
                 HorizontalDivider(
                     color = MaterialTheme.colorScheme.outlineVariant,
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier.padding(horizontal = 10.dp)
                 )
 
                 DiyBlock(
-                    itemLabel = "Paybill Number",
+                    itemLabel = "PayBill Number",
                     iconRes = R.drawable.mpesa,
                     type = DiyBlockType.Digits(PayConstants.PAYBILL_NUMBER),
                     onCopyClick = {
                         clipboardManager.setText(
                             AnnotatedString(PayConstants.PAYBILL_NUMBER)
                         )
-                        onItemCopied("Paybill Number")
+                        onItemCopied("PayBill Number")
                     },
                 )
 
@@ -125,6 +129,7 @@ fun DiyDonationSection(
                     },
                 )
             }
+            Spacer(Modifier.height(10.dp))
         }
 
         Card(
@@ -137,9 +142,16 @@ fun DiyDonationSection(
             ),
         ) {
             DiyBlock(
-                itemLabel = "PayPal",
+                itemLabel = "Donate via PayPal",
                 iconRes = R.drawable.paypal,
-                type = DiyBlockType.Link(PayConstants.PAYPAL_ADDRESS),
+                type = DiyBlockType.Digits(PayConstants.PAYPAL_ADDRESS),
+                modifier = Modifier.padding(vertical = 5.dp),
+                onCopyClick = {
+                    clipboardManager.setText(
+                        AnnotatedString(PayConstants.PAYPAL_ADDRESS)
+                    )
+                    onItemCopied("PayPal Account")
+                },
             )
         }
     }
@@ -155,13 +167,15 @@ private fun DiyBlock(
     itemLabel: String,
     iconRes: Int,
     type: DiyBlockType,
+    modifier: Modifier = Modifier,
     onCopyClick: (() -> Unit)? = null,
 ) {
     val uriHandler = LocalUriHandler.current
+
     Row(
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -222,7 +236,7 @@ private fun DiyBlock(
             Icon(
                 imageVector = when (type) {
                     is DiyBlockType.Digits -> Icons.Filled.ContentCopy
-                    is DiyBlockType.Link -> Icons.Filled.Link
+                    is DiyBlockType.Link -> Icons.Filled.NorthEast
                 },
                 contentDescription = when (type) {
                     is DiyBlockType.Digits -> "Copy $itemLabel"
@@ -236,5 +250,15 @@ private fun DiyBlock(
 
 private fun truncateDigits(value: String?): String {
     if (value.isNullOrEmpty()) return ""
-    return if (value.length <= 8) value else "${value.take(5)}....${value.takeLast(3)}"
+    return if (value.length <= 8) {
+        value
+    } else {
+        if (value.contains("+254")){
+            "${value.take(6)}...${value.takeLast(3)}"
+        } else if (value.contains("gmail.com")){
+            "${value.take(5)}...${value.takeLast(9)}"
+        }else {
+            "${value.take(5)}...${value.takeLast(3)}"
+        }
+    }
 }
