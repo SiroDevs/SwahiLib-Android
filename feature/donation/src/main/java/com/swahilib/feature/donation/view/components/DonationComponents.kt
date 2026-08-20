@@ -137,13 +137,19 @@ fun DonationMethodFilterStrip(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         FilterStripItem(
-            label = "Mpesa/Card",
-            isSelected = selectedMethod == DonationMethod.MPESA_CARD,
-            onClick = { onMethodSelected(DonationMethod.MPESA_CARD) },
+            label = "DIY",
+            isSelected = selectedMethod == DonationMethod.DIY,
+            onClick = { onMethodSelected(DonationMethod.DIY) },
             modifier = Modifier.weight(1f),
         )
         FilterStripItem(
-            label = "Crypto",
+            label = "PAYSTACK",
+            isSelected = selectedMethod == DonationMethod.PAYSTACK,
+            onClick = { onMethodSelected(DonationMethod.PAYSTACK) },
+            modifier = Modifier.weight(1f),
+        )
+        FilterStripItem(
+            label = "CRYPTO",
             isSelected = selectedMethod == DonationMethod.CRYPTO,
             onClick = { onMethodSelected(DonationMethod.CRYPTO) },
             modifier = Modifier.weight(1f),

@@ -64,10 +64,10 @@ class PrefsRepo @Inject constructor(
     var donationMethod: DonationMethod
         get() = runCatching {
             DonationMethod.valueOf(
-                prefs.getString(PrefConstants.DONATION_METHOD, DonationMethod.MPESA_CARD.name)
-                    ?: DonationMethod.MPESA_CARD.name
+                prefs.getString(PrefConstants.DONATION_METHOD, DonationMethod.DIY.name)
+                    ?: DonationMethod.DIY.name
             )
-        }.getOrDefault(DonationMethod.MPESA_CARD)
+        }.getOrDefault(DonationMethod.DIY)
         set(value) = prefs.edit { putString(PrefConstants.DONATION_METHOD, value.name) }
 
     var donationRemindNextOpen: Boolean
@@ -83,7 +83,8 @@ class PrefsRepo @Inject constructor(
         if (donated == 0L) return true
 
         val monthsUntilNextPrompt = when (donationMethod) {
-            DonationMethod.MPESA_CARD -> 3
+            DonationMethod.DIY -> 3
+            DonationMethod.PAYSTACK -> 3
             DonationMethod.CRYPTO -> 5
         }
         val nextPromptAt = Calendar.getInstance().apply {
@@ -94,7 +95,7 @@ class PrefsRepo @Inject constructor(
         return now >= nextPromptAt
     }
 
-    fun recordDonation(method: DonationMethod = DonationMethod.MPESA_CARD) {
+    fun recordDonation(method: DonationMethod = DonationMethod.DIY) {
         donationDoneAt = System.currentTimeMillis()
         donationMethod = method
         donationRemindNextOpen = false

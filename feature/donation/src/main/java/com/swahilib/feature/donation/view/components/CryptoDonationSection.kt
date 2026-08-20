@@ -1,7 +1,6 @@
 package com.swahilib.feature.donation.view.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
@@ -34,7 +32,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.swahilib.core.common.utils.CryptoConstants
+import com.swahilib.core.common.utils.PayConstants
 import com.swahilib.feature.donation.R
 
 @Composable
@@ -50,7 +48,7 @@ fun CryptoDonationSection(
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Text(
-            text = CryptoConstants.CRYPTO_PROFILE,
+            text = PayConstants.CRYPTO_PROFILE,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -62,15 +60,6 @@ fun CryptoDonationSection(
         )
 
         Spacer(Modifier.height(12.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-
-        Text(
-            text = "Addresses",
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.Bold,
-            ),
-            color = MaterialTheme.colorScheme.onSurface,
-        )
 
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -84,11 +73,11 @@ fun CryptoDonationSection(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 CryptoAddressBlock(
-                    networkLabel = "Ethereum",
+                    networkLabel = "Ethereum Address",
                     iconRes = R.drawable.ethereum,
-                    fullAddress = CryptoConstants.ETH_ADDRESS,
+                    fullAddress = PayConstants.ETH_ADDRESS,
                 ) {
-                    clipboardManager.setText(AnnotatedString(CryptoConstants.ETH_ADDRESS))
+                    clipboardManager.setText(AnnotatedString(PayConstants.ETH_ADDRESS))
                     onAddressCopied("Ethereum")
                 }
 
@@ -141,11 +130,11 @@ fun CryptoDonationSection(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 CryptoAddressBlock(
-                    networkLabel = "Solana",
+                    networkLabel = "Solana Address",
                     iconRes = R.drawable.solana,
-                    fullAddress = CryptoConstants.SOL_ADDRESS,
+                    fullAddress = PayConstants.SOL_ADDRESS,
                 ) {
-                    clipboardManager.setText(AnnotatedString(CryptoConstants.SOL_ADDRESS))
+                    clipboardManager.setText(AnnotatedString(PayConstants.SOL_ADDRESS))
                     onAddressCopied("Solana")
                 }
             }
@@ -205,5 +194,5 @@ private fun CryptoAddressBlock(
 
 private fun truncateAddress(address: String): String {
     if (address.length <= 12) return address
-    return "${address.take(5)}...${address.takeLast(4)}"
+    return "${address.take(5)}....${address.takeLast(4)}"
 }

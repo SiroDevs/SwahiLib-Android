@@ -6,6 +6,7 @@ data class Selectable<T>(
 )
 
 enum class DonationMethod {
-    MPESA_CARD,
+    DIY,
+    PAYSTACK,
     CRYPTO,
 }

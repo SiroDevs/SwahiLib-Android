@@ -72,21 +72,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/view/components/CryptoDonation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/view/components/DonationComponents.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/entity/Basics.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/entity/Basics.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/swahilib/core/common/utils/AppConstants.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/swahilib/core/data/repos/PrefsRepo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/network/src/main/java/com/swahilib/core/network/api/KamusiApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/network/src/main/java/com/swahilib/core/network/api/KamusiApi.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/view/components/Components.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/view/components/MpesaCardDonation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/view/screen/DonationScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/view/screen/DonationScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/viewmodel/DonationViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/donation/src/main/java/com/swahilib/feature/donation/viewmodel/DonationViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

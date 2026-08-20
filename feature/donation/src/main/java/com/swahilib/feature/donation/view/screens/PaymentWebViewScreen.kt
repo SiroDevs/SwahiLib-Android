@@ -1,4 +1,4 @@
-package com.swahilib.feature.donation.view.screen
+package com.swahilib.feature.donation.view.screens
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
