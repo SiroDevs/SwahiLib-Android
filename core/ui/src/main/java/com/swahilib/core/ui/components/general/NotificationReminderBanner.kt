@@ -98,12 +98,12 @@ fun NotificationReminderBanner(
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Arifa Zimelemazwa",
+                        text = "Arifa (Notifications) Zimelemazwa",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                     Text(
-                        text = "Wezesha Arifa (Notifications) za Neno la Siku na Methali ya Siku ili upate kujifunza kila asubuhi.",
+                        text = "Wezesha Arifa ili kupokea vitu kama Neno la Siku, Changamoto ya Siku n.k ili upate kujifunza kila siku.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

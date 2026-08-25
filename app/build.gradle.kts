@@ -28,8 +28,8 @@ android {
 
     defaultConfig {
         applicationId = "com.swahilib"
-        versionCode = 188
-        versionName = "1.0.188"
+        versionCode = 190
+        versionName = "1.0.190"
         minSdk = 26
         targetSdk = 37
 
@@ -104,7 +104,6 @@ dependencies {
 
     // Feature modules
     implementation(project(":feature:home"))
-    implementation(project(":feature:library"))
     implementation(project(":feature:likes"))
     implementation(project(":feature:history"))
     implementation(project(":feature:auth"))

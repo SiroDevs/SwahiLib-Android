@@ -4,3 +4,9 @@ data class Selectable<T>(
     val data: T,
     val isSelected: Boolean = false
 )
+
+enum class DonationMethod {
+    DIY,
+    PAYSTACK,
+    CRYPTO,
+}

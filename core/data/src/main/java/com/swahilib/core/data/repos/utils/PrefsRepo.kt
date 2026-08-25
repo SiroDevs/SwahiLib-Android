@@ -2,6 +2,7 @@ package com.swahilib.core.data.repos.utils
 
 import android.content.Context
 import androidx.core.content.edit
+import com.swahilib.core.common.entity.DonationMethod
 import com.swahilib.core.common.utils.NotifConstants
 import com.swahilib.core.common.utils.PrefConstants
 import com.swahilib.core.network.api.KamusiApi
@@ -60,6 +61,15 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getLong(PrefConstants.DONATION_DONE_AT, 0L)
         set(value) = prefs.edit { putLong(PrefConstants.DONATION_DONE_AT, value) }
 
+    var donationMethod: DonationMethod
+        get() = runCatching {
+            DonationMethod.valueOf(
+                prefs.getString(PrefConstants.DONATION_METHOD, DonationMethod.DIY.name)
+                    ?: DonationMethod.DIY.name
+            )
+        }.getOrDefault(DonationMethod.DIY)
+        set(value) = prefs.edit { putString(PrefConstants.DONATION_METHOD, value.name) }
+
     var donationRemindNextOpen: Boolean
         get() = prefs.getBoolean(PrefConstants.DONATION_REMIND_NEXT_OPEN, false)
         set(value) = prefs.edit { putBoolean(PrefConstants.DONATION_REMIND_NEXT_OPEN, value) }
@@ -68,12 +78,26 @@ class PrefsRepo @Inject constructor(
         val now = System.currentTimeMillis()
         val oneDayMs = 24 * 60 * 60 * 1000L
         if (installDate == 0L || now - installDate < oneDayMs) return false
+
         val donated = donationDoneAt
-        return donated == 0L || now - donated > 60 * oneDayMs
+        if (donated == 0L) return true
+
+        val monthsUntilNextPrompt = when (donationMethod) {
+            DonationMethod.DIY -> 3
+            DonationMethod.PAYSTACK -> 3
+            DonationMethod.CRYPTO -> 5
+        }
+        val nextPromptAt = Calendar.getInstance().apply {
+            timeInMillis = donated
+            add(Calendar.MONTH, monthsUntilNextPrompt)
+        }.timeInMillis
+
+        return now >= nextPromptAt
     }
 
-    fun recordDonation() {
+    fun recordDonation(method: DonationMethod = DonationMethod.DIY) {
         donationDoneAt = System.currentTimeMillis()
+        donationMethod = method
         donationRemindNextOpen = false
     }
 
@@ -119,8 +143,6 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getInt(PrefConstants.NOTIF_CHALLENGE_MINUTE, NotifConstants.DEFAULT_CHALLENGE_MINUTE)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_CHALLENGE_MINUTE, value) }
 
-    // ── Game audio ──
-
     var gameMusicEnabled: Boolean
         get() = prefs.getBoolean(PrefConstants.GAME_MUSIC_ENABLED, true)
         set(value) = prefs.edit { putBoolean(PrefConstants.GAME_MUSIC_ENABLED, value) }
@@ -128,11 +150,6 @@ class PrefsRepo @Inject constructor(
     var gameSfxEnabled: Boolean
         get() = prefs.getBoolean(PrefConstants.GAME_SFX_ENABLED, true)
         set(value) = prefs.edit { putBoolean(PrefConstants.GAME_SFX_ENABLED, value) }
-
-    // ── Notification permission nag ──
-    // Shown on app open while notifications are OS-disabled. Backs off to at most
-    // once every 3 days so it nudges without becoming an annoyance, and can be
-    // silenced for good from the banner itself.
 
     var notifNagLastShownAt: Long
         get() = prefs.getLong(PrefConstants.NOTIF_NAG_LAST_SHOWN_AT, 0L)
@@ -164,11 +181,6 @@ class PrefsRepo @Inject constructor(
         get() = prefs.getInt(PrefConstants.NOTIF_WEEKLY_SUMMARY_MINUTE, NotifConstants.DEFAULT_SUMMARY_MINUTE)
         set(value) = prefs.edit { putInt(PrefConstants.NOTIF_WEEKLY_SUMMARY_MINUTE, value) }
 
-    /**
-     * Date-key of the last day we granted the daily-login reward. Callers
-     * pass this to RewardsEngine.grantDailyLogin() to keep the reward
-     * idempotent per calendar day.
-     */
     var lastDailyLoginDate: String
         get() = prefs.getString(PrefConstants.DAILY_LOGIN_LAST_DATE, "") ?: ""
         set(value) = prefs.edit { putString(PrefConstants.DAILY_LOGIN_LAST_DATE, value) }

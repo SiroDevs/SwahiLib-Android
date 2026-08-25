@@ -77,8 +77,6 @@ fun DailyWordScreen(
         word = dailyWord
         dailyMeaning = meaning
         loading = false
-        // Viewing the daily word is the habit we're trying to build, so this is
-        // where the streak actually advances (idempotent per calendar day).
         if (dailyWord != null) streak = prefsRepo.recordDailyVisit()
     }
 

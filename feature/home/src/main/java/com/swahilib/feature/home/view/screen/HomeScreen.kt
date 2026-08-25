@@ -139,7 +139,7 @@ fun HomeScreen(
                                 IconButton(onClick = { navController.navigate(Routes.LIKES) }) {
                                     Icon(Icons.Default.Favorite, contentDescription = "Vipendwa")
                                 }
-                                IconButton (onClick = { navController.navigate(Routes.HISTORY) }) {
+                                IconButton(onClick = { navController.navigate(Routes.HISTORY) }) {
                                     Icon(Icons.Default.History, contentDescription = "Historia")
                                 }
                             }
@@ -149,10 +149,13 @@ fun HomeScreen(
                             }
 
                             HomeTab.Engage -> {
-                                IconButton (onClick = { navController.navigate(Routes.CHALLENGES) }) {
-                                    Icon(Icons.Default.TrackChanges, contentDescription = "Changamoto")
+                                IconButton(onClick = { navController.navigate(Routes.CHALLENGES) }) {
+                                    Icon(
+                                        Icons.Default.TrackChanges,
+                                        contentDescription = "Changamoto"
+                                    )
                                 }
-                                IconButton (onClick = { navController.navigate(Routes.STATISTICS) }) {
+                                IconButton(onClick = { navController.navigate(Routes.STATISTICS) }) {
                                     Icon(Icons.Default.InsertChart, contentDescription = "Takwimu")
                                 }
                             }
@@ -187,7 +190,7 @@ fun HomeScreen(
             ) {
                 NotificationReminderBanner(
                     prefsRepo = prefsRepo,
-                    onGoToSettings = { navController.navigate(Routes.SETTINGS) },
+                    onGoToSettings = { navController.navigate(Routes.SETTINGS_NOTIFICATIONS) },
                 )
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -236,7 +239,7 @@ fun HomeScreen(
         }
     }
 
-    if (showDailyDialog) {
+    if (showDailyDialog && dailyHighlights.word?.title?.isNotEmpty() == true) {
         DailyHighlightsDialog(
             highlights = dailyHighlights,
             onDismiss = { showDailyDialog = false },

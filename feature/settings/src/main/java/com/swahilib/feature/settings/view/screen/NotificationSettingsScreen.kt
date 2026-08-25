@@ -98,7 +98,7 @@ fun NotificationSettingsScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Arifa",
+                title = "Arifa (Notifications)",
                 showGoBack = true,
                 onNavIconClick = { navController.popBackStack() }
             )
