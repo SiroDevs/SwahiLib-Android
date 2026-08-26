@@ -22,7 +22,7 @@ import com.swahilib.feature.home.view.screen.HomeScreen
 import com.swahilib.feature.home.viewmodel.HomeViewModel
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.idiom.viewmodel.IdiomViewModel
-import com.swahilib.feature.library.view.screen.LibraryScreen
+import com.swahilib.feature.library.view.screens.LibraryScreen
 import com.swahilib.feature.library.viewmodel.LibraryViewModel
 import com.swahilib.feature.likes.view.LikesScreen
 import com.swahilib.feature.proverb.view.screen.ProverbScreen

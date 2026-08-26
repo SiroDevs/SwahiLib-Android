@@ -51,7 +51,7 @@ import com.swahilib.feature.home.view.components.homeTabs
 import com.swahilib.feature.home.view.screen.tabs.HomeEngage
 import com.swahilib.feature.home.view.screen.tabs.HomeSearch
 import com.swahilib.feature.home.viewmodel.HomeViewModel
-import com.swahilib.feature.library.view.screen.HomeLibrary
+import com.swahilib.feature.library.view.screens.HomeLibrary
 import com.swahilib.feature.library.viewmodel.LibraryViewModel
 import kotlinx.coroutines.launch
 

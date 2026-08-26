@@ -1,4 +1,4 @@
-package com.swahilib.feature.library.view.screen
+package com.swahilib.feature.library.view.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
