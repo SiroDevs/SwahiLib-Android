@@ -77,9 +77,9 @@ object AchievementCatalog {
             iconKey = "pencil", xpReward = 200, coinReward = 50),
         Achievement(PROVERB_SAGE, "Mjuzi wa Methali", "Kamilisha changamoto 20 za methali",
             iconKey = "scroll", xpReward = 250, coinReward = 60),
-        Achievement(PERFECT_STREAK_5, "Mkamilifu", "Pata alama kamili mara 5 katika michezo yoyote",
+        Achievement(PERFECT_STREAK_5, "Mkamilifu", "Pata sign kamili mara 5 katika michezo yoyote",
             iconKey = "target", xpReward = 150, coinReward = 40),
-        Achievement(GRAND_SLAM, "Bingwa wa Michezo Yote", "Pata alama kamili angalau mara moja katika kila mchezo",
+        Achievement(GRAND_SLAM, "Bingwa wa Michezo Yote", "Pata sign kamili angalau mara moja katika kila mchezo",
             iconKey = "crown", xpReward = 750, coinReward = 150),
     )
 

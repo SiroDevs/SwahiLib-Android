@@ -17,7 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.swahilib.core.data.repos.ThemeRepo
+import com.swahilib.core.data.repos.utils.ThemeRepo
 import com.swahilib.core.design_system.theme.ThemeSelectorDialog
 import com.swahilib.core.design_system.theme.appThemeName
 import com.swahilib.core.ui.components.action.AppTopBar

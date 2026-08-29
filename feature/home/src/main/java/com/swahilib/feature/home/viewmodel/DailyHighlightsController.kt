@@ -1,7 +1,7 @@
 package com.swahilib.feature.home.viewmodel
 
-import com.swahilib.core.data.repos.DailyContentRepo
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.content.DailyContentRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

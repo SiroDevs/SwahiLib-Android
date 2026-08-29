@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.data.repos.EngagementRepo
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.games.EngagementRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.core.data.worker.SyncScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

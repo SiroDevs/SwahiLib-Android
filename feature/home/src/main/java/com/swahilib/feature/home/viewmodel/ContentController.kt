@@ -5,11 +5,11 @@ import android.util.Log
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.swahilib.core.common.entity.UiState
-import com.swahilib.core.data.repos.IdiomRepo
-import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.data.repos.ProverbRepo
-import com.swahilib.core.data.repos.SayingRepo
-import com.swahilib.core.data.repos.WordRepo
+import com.swahilib.core.data.repos.content.IdiomRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
+import com.swahilib.core.data.repos.content.ProverbRepo
+import com.swahilib.core.data.repos.content.SayingRepo
+import com.swahilib.core.data.repos.content.WordRepo
 import com.swahilib.core.data.worker.SyncWorker
 import com.swahilib.core.database.entities.content.IdiomEntity
 import com.swahilib.core.database.entities.content.ProverbEntity

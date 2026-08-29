@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.swahilib.core.data.repos.EngagementRepo
+import com.swahilib.core.data.repos.games.EngagementRepo
 import com.swahilib.core.social.repos.SocialAuthRepo
 import com.swahilib.core.social.repos.SocialRepo
 import dagger.assisted.Assisted

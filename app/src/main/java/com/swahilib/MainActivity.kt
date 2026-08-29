@@ -12,9 +12,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.swahilib.navigation.AppNavHost
 import com.swahilib.core.common.utils.DeepLinkConstants
-import com.swahilib.core.data.repos.PrefsRepo
-import com.swahilib.core.data.repos.ThemeRepo
-import com.swahilib.core.data.repos.ThemeMode
+import com.swahilib.core.data.repos.utils.PrefsRepo
+import com.swahilib.core.data.repos.utils.ThemeRepo
+import com.swahilib.core.data.repos.utils.ThemeMode
 import com.swahilib.core.design_system.theme.AppTheme
 import com.swahilib.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint

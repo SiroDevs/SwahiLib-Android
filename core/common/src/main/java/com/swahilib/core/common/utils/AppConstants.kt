@@ -135,6 +135,10 @@ object Routes {
     const val ACHIEVEMENTS = "achievements"
     const val CHALLENGES = "challenges"
 
+    const val LIBRARY_COLLECTION = "library_collection/{collectionKey}"
+
+    fun libraryCollection(collectionKey: String): String = "library_collection/$collectionKey"
+
     const val QUIZ = "quiz?challengeId={challengeId}&activityId={activityId}&difficulty={difficulty}&source={source}"
 
     /** Quiz tied to a specific challenge activity - completing it marks that activity done. */

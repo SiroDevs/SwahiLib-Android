@@ -17,6 +17,15 @@ import com.swahilib.core.database.daos.game.GameProgressDao
 import com.swahilib.core.database.daos.game.LearningHistoryDao
 import com.swahilib.core.database.daos.game.UserProgressDao
 import com.swahilib.core.database.daos.game.XpEventDao
+import com.swahilib.core.database.daos.library.CapsDao
+import com.swahilib.core.database.daos.library.CountriesDao
+import com.swahilib.core.database.daos.library.FamilyDao
+import com.swahilib.core.database.daos.library.FishDao
+import com.swahilib.core.database.daos.library.GreetingsDao
+import com.swahilib.core.database.daos.library.InsectsDao
+import com.swahilib.core.database.daos.library.KidGamesDao
+import com.swahilib.core.database.daos.library.PunctuationDao
+import com.swahilib.core.database.daos.library.SeasDao
 import com.swahilib.core.database.migrations.ALL_MIGRATIONS
 import dagger.Module
 import dagger.Provides
@@ -66,4 +75,14 @@ object DatabaseModule {
     fun provideLearningHistoryDao(db: AppDatabase): LearningHistoryDao = db.learningHistoryDao()
     @Provides
     fun provideGameProgressDao(db: AppDatabase): GameProgressDao = db.gameProgressDao()
+
+    @Provides fun provideFamilyDao(db: AppDatabase): FamilyDao = db.familyDao()
+    @Provides fun provideCapsDao(db: AppDatabase): CapsDao = db.capsDao()
+    @Provides fun provideFishDao(db: AppDatabase): FishDao = db.fishDao()
+    @Provides fun provideInsectsDao(db: AppDatabase): InsectsDao = db.insectsDao()
+    @Provides fun provideSeasDao(db: AppDatabase): SeasDao = db.seasDao()
+    @Provides fun provideKidGamesDao(db: AppDatabase): KidGamesDao = db.kidGamesDao()
+    @Provides fun provideGreetingsDao(db: AppDatabase): GreetingsDao = db.greetingsDao()
+    @Provides fun provideCountriesDao(db: AppDatabase): CountriesDao = db.countriesDao()
+    @Provides fun providePunctuationDao(db: AppDatabase): PunctuationDao = db.punctuationDao()
 }

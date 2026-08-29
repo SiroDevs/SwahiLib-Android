@@ -3,8 +3,8 @@ package com.swahilib.feature.donation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.common.entity.DonationMethod
-import com.swahilib.core.data.repos.DonationRepo
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.DonationRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

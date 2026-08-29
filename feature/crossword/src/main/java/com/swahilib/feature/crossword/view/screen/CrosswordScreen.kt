@@ -53,7 +53,7 @@ import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
 private val CROSSWORD_INSTRUCTIONS = listOf(
     "Jaza majibu ya maswali ya Mlalo, Wima, na Mshazari kwenye gridi.",
     "Gusa swali kulichagua, kisha andika jibu lako - majibu hayaonyeshwi hadi umalize.",
-    "Kiwango kina saa moja kwa mchezo mzima wa gridi, si kwa kila swali peke yake.",
+    "Kiwango depth saa moja kwa mchezo mzima wa gridi, si kwa kila swali peke yake.",
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -193,7 +193,7 @@ private fun LevelSelectContent(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            "Jumla ya alama: $previousPoints",
+            "Jumla ya sign: $previousPoints",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

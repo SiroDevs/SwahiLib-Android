@@ -64,7 +64,7 @@ private enum class DataAction(val title: String, val description: String, val ic
     ),
     ENGAGEMENT(
         "Futa ChemshaBongo",
-        "Futa alama zako, mfuatano, beji na changamoto zote za ChemshaBongo.",
+        "Futa sign zako, mfuatano, beji na changamoto zote za ChemshaBongo.",
         Icons.Default.EmojiEvents,
     ),
     EVERYTHING(

@@ -1,4 +1,4 @@
-package com.swahilib.core.data.repos
+package com.swahilib.core.data.repos.games
 
 import com.swahilib.core.database.daos.game.GameProgressDao
 import com.swahilib.core.database.entities.game.GameLevelProgressEntity

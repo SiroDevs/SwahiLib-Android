@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.core.database.entities.content.IdiomEntity
 import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.database.entities.content.SayingEntity
@@ -22,6 +22,8 @@ import com.swahilib.feature.home.view.screen.HomeScreen
 import com.swahilib.feature.home.viewmodel.HomeViewModel
 import com.swahilib.feature.idiom.view.IdiomScreen
 import com.swahilib.feature.idiom.viewmodel.IdiomViewModel
+import com.swahilib.feature.library.view.screens.LibraryScreen
+import com.swahilib.feature.library.viewmodel.LibraryViewModel
 import com.swahilib.feature.likes.view.LikesScreen
 import com.swahilib.feature.proverb.view.screen.ProverbScreen
 import com.swahilib.feature.proverb.viewmodel.ProverbViewModel
@@ -44,6 +46,21 @@ fun NavGraphBuilder.mainGraph(
             prefsRepo = prefsRepo,
             deepLinkRoute = deepLinkRoute,
             onDeepLinkConsumed = onDeepLinkConsumed
+        )
+    }
+
+    composable(
+        route = Routes.LIBRARY_COLLECTION,
+        arguments = listOf(
+            navArgument("collectionKey") { type = NavType.StringType },
+        ),
+    ) { backStackEntry ->
+        val collectionKey = backStackEntry.arguments?.getString("collectionKey") ?: return@composable
+        val viewModel: LibraryViewModel = hiltViewModel()
+        LibraryScreen(
+            navController = navController,
+            viewModel = viewModel,
+            collectionKey = collectionKey,
         )
     }
 

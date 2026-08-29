@@ -2,11 +2,10 @@ package com.swahilib.feature.crossword.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.data.repos.EngagementRepo
-import com.swahilib.core.data.repos.GameProgressRepo
+import com.swahilib.core.data.repos.games.EngagementRepo
+import com.swahilib.core.data.repos.games.GameProgressRepo
 import com.swahilib.core.engagement.engine.RewardRules
 import com.swahilib.core.engagement.engine.StatisticsEngine
-import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.ActivityType
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.engagement.model.XpAward
@@ -15,8 +14,6 @@ import com.swahilib.core.games.engine.CrosswordScorer
 import com.swahilib.core.games.engine.GameLevelConfig
 import com.swahilib.core.games.engine.GameStepTimer
 import com.swahilib.core.games.generator.CrosswordGenerator
-import com.swahilib.core.games.model.CrosswordPuzzle
-import com.swahilib.core.games.model.CrosswordResult
 import com.swahilib.core.ui.components.game.GameLevelUiModel
 import com.swahilib.core.ui.components.game.GameSound
 import com.swahilib.core.ui.components.game.GameSoundPlayer
@@ -27,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.random.Random

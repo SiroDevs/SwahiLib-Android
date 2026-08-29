@@ -1,5 +1,6 @@
-package com.swahilib.core.data.repos
+package com.swahilib.core.data.repos.games
 
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.core.engagement.engine.AchievementEngine
 import com.swahilib.core.engagement.engine.ActivityRecommendation
 import com.swahilib.core.engagement.engine.ChallengeEngine

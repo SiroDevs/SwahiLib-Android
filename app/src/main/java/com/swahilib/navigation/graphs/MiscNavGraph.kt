@@ -9,7 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.feature.donation.view.screens.DonationScreen
 import com.swahilib.feature.donation.view.screens.PaymentWebViewScreen
 import com.swahilib.feature.donation.viewmodel.DonationViewModel

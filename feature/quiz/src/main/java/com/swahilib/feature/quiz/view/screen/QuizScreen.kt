@@ -182,7 +182,7 @@ private fun SetupState(
         Text("Weka Mpangilio wa Jaribio", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold))
         Spacer(Modifier.height(4.dp))
         Text(
-            "Jumla ya alama ulizowahi kupata: ${state.previousPoints}",
+            "Jumla ya sign ulizowahi kupata: ${state.previousPoints}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

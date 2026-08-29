@@ -85,7 +85,7 @@ fun EmptySearchPrompt() {
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                "Andika neno, maana, mfano au chochote katika kisanduku",
+                "Andika neno, maana, example au chochote katika kisanduku",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.outline,
                 fontSize = 12.sp

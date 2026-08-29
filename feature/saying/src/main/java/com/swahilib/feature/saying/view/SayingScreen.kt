@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.entity.ViewerState
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.core.database.entities.content.SayingEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState

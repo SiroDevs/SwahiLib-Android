@@ -3,7 +3,7 @@ package com.swahilib
 import android.app.Application
 import androidx.work.Configuration
 import com.swahilib.core.data.notifications.NotificationScheduler
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.core.data.worker.WorkManagerReadiness
 import com.swahilib.widget.WidgetScheduler
 import dagger.hilt.android.HiltAndroidApp

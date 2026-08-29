@@ -1,4 +1,4 @@
-package com.swahilib.core.data.repos
+package com.swahilib.core.data.repos.utils
 
 import android.util.Log
 import com.swahilib.core.common.utils.ApiConstants

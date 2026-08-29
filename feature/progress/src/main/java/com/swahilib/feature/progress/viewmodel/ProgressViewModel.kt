@@ -2,7 +2,7 @@ package com.swahilib.feature.progress.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.data.repos.EngagementRepo
+import com.swahilib.core.data.repos.games.EngagementRepo
 import com.swahilib.core.engagement.engine.ActivityRecommendation
 import com.swahilib.core.engagement.model.Achievement
 import com.swahilib.core.engagement.model.Challenge

@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
@@ -97,6 +98,7 @@ fun HomeNavDrawer(
                     onClick = { navigateAndClose(Routes.DAILY_PROVERB) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
+                Spacer(Modifier.weight(1f))
                 HorizontalDivider()
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.Groups, contentDescription = null) },
@@ -105,10 +107,16 @@ fun HomeNavDrawer(
                     onClick = { navigateAndClose(Routes.AUTH_SIGN_IN) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
-
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.TrendingUp, contentDescription = null) },
+                    label = { Text("Maendeleo Yangu") },
+                    selected = false,
+                    onClick = { navigateAndClose(Routes.PROGRESS) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
 
                 Spacer(Modifier.weight(1f))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.Info, contentDescription = null) },
                     label = { Text("Jinsi ya Kutumia") },

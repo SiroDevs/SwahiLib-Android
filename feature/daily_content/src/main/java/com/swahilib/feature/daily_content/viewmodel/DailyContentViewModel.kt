@@ -2,8 +2,8 @@ package com.swahilib.feature.daily_content.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swahilib.core.data.repos.DailyContentHistoryEntry
-import com.swahilib.core.data.repos.DailyContentRepo
+import com.swahilib.core.data.repos.content.DailyContentHistoryEntry
+import com.swahilib.core.data.repos.content.DailyContentRepo
 import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.database.entities.content.WordEntity
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -33,11 +33,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.swahilib.core.common.entity.UiState
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.PrefsRepo
+import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.indicators.EmptyState
@@ -50,6 +51,8 @@ import com.swahilib.feature.home.view.components.homeTabs
 import com.swahilib.feature.home.view.screen.tabs.HomeEngage
 import com.swahilib.feature.home.view.screen.tabs.HomeSearch
 import com.swahilib.feature.home.viewmodel.HomeViewModel
+import com.swahilib.feature.library.view.screens.HomeLibrary
+import com.swahilib.feature.library.viewmodel.LibraryViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -141,6 +144,10 @@ fun HomeScreen(
                                 }
                             }
 
+                            HomeTab.Library -> {
+                                // No extra actions for the Library catalogue tab.
+                            }
+
                             HomeTab.Engage -> {
                                 IconButton(onClick = { navController.navigate(Routes.CHALLENGES) }) {
                                     Icon(
@@ -203,6 +210,14 @@ fun HomeScreen(
                                         prefsRepo = prefsRepo,
                                         onShowDonation = { navController.navigate(Routes.DONATION) },
                                     )
+
+                                    HomeTab.Library -> {
+                                        val libraryViewModel: LibraryViewModel = hiltViewModel()
+                                        HomeLibrary(
+                                            navController = navController,
+                                            viewModel = libraryViewModel,
+                                        )
+                                    }
 
                                     HomeTab.Engage -> HomeEngage(
                                         navController = navController,

@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.core.data.repos.DailyContentHistoryEntry
+import com.swahilib.core.data.repos.content.DailyContentHistoryEntry
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.feature.daily_content.viewmodel.DailyContentViewModel

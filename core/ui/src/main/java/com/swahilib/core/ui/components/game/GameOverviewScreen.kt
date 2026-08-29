@@ -92,7 +92,7 @@ fun GameOverviewScreen(
         }
         Spacer(Modifier.height(4.dp))
         Text(
-            "Mazoezi hayaathiri alama, XP, au maendeleo yako ya viwango.",
+            "Mazoezi hayaathiri sign, XP, au maendeleo yako ya viwango.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
