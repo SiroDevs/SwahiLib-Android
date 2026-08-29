@@ -69,12 +69,14 @@ fun LibraryScreen(
 
                 config.displayMode == LibraryDisplayMode.GRID -> LibraryGrid(
                     items = items,
-                    isGrouped = config.isGrouped
+                    isGrouped = config.isGrouped,
+                    numberOfGrids = config.numberOfGrids
                 )
 
                 else -> LibraryExpandableList(
                     items = items,
                     isGrouped = config.isGrouped,
+                    showSideBySide = config.sideBySide,
                     expandedId = expandedId,
                     onToggle = { id -> expandedId = if (expandedId == id) null else id },
                 )

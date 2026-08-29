@@ -95,7 +95,7 @@ class QuizGenerator @Inject constructor(
         val prompt = if (askForMeaning) {
             "Neno \"${word.title}\" lina maana gani?"
         } else {
-            "Neno gani lina maana: \"$correctText\"?"
+            "Neno gani lina maana ya: \n \"$correctText\"?"
         }
 
         return QuizQuestion(

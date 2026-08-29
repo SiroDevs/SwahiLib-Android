@@ -38,6 +38,7 @@ import com.swahilib.core.common.entity.LibraryDisplayItem
 fun LibraryExpandableList(
     items: List<LibraryDisplayItem>,
     isGrouped: Boolean,
+    showSideBySide: Boolean,
     expandedId: Long?,
     onToggle: (Long) -> Unit,
 ) {
@@ -49,18 +50,20 @@ fun LibraryExpandableList(
             items.groupBy { it.groupName ?: "" }.forEach { (group, groupItems) ->
                 item { LibraryGroupHeader(group) }
                 items(groupItems, key = { it.id }) { entity ->
-                    LibraryExpandableListItem(
+                    LibraryExpandableItem(
                         item = entity,
                         isExpanded = expandedId == entity.id,
+                        showSideBySide = showSideBySide,
                         onToggle = { onToggle(entity.id) },
                     )
                 }
             }
         } else {
             items(items, key = { it.id }) { entity ->
-                LibraryExpandableListItem(
+                LibraryExpandableItem(
                     item = entity,
                     isExpanded = expandedId == entity.id,
+                    showSideBySide = showSideBySide,
                     onToggle = { onToggle(entity.id) },
                 )
             }
@@ -69,9 +72,10 @@ fun LibraryExpandableList(
 }
 
 @Composable
-private fun LibraryExpandableListItem(
+private fun LibraryExpandableItem(
     item: LibraryDisplayItem,
     isExpanded: Boolean,
+    showSideBySide: Boolean,
     onToggle: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -107,7 +111,7 @@ private fun LibraryExpandableListItem(
                 }
                 Icon(
                     if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                    contentDescription = if (isExpanded) "Punguza" else "Panua",
+                    contentDescription = if (isExpanded) "Funga" else "Fungua",
                     tint = MaterialTheme.colorScheme.primary,
                 )
             }
@@ -121,17 +125,33 @@ private fun LibraryExpandableListItem(
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     Spacer(Modifier.width(4.dp))
                     item.detailFields.forEachIndexed { index, field ->
-                        Column(modifier = Modifier.padding(top = if (index == 0) 10.dp else 8.dp)) {
-                            Text(
-                                field.label,
-                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            Text(
-                                field.value,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                            )
+                        if (showSideBySide) {
+                            Row(modifier = Modifier.padding(top = if (index == 0) 10.dp else 8.dp)) {
+                                Text(
+                                    field.label,
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                                Spacer(Modifier.width(5.dp))
+                                Text(
+                                    field.value,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                )
+                            }
+                        } else {
+                            Column(modifier = Modifier.padding(top = if (index == 0) 10.dp else 8.dp)) {
+                                Text(
+                                    field.label,
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                                Text(
+                                    field.value,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                )
+                            }
                         }
                     }
                 }

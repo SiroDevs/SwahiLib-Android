@@ -3,7 +3,7 @@ package com.swahilib.feature.library.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swahilib.core.common.library.LibraryCatalog
-import com.swahilib.core.common.library.LibraryCollectionConfig
+import com.swahilib.core.common.library.LibraryConfig
 import com.swahilib.core.common.entity.LibraryDisplayItem
 import com.swahilib.core.data.repos.content.LibraryRepo
 import com.swahilib.core.network.api.KamusiApi
@@ -19,12 +19,12 @@ import javax.inject.Inject
 class LibraryViewModel @Inject constructor(
     private val libraryRepo: LibraryRepo,
 ) : ViewModel() {
-    val collections: List<LibraryCollectionConfig> = LibraryCatalog.ALL
+    val collections: List<LibraryConfig> = LibraryCatalog.ALL
 
     private val _isSyncing = MutableStateFlow(false)
     val isSyncing: StateFlow<Boolean> = _isSyncing
 
-    fun configFor(key: String): LibraryCollectionConfig? = LibraryCatalog.byKey(key)
+    fun configFor(key: String): LibraryConfig? = LibraryCatalog.byKey(key)
 
     fun itemsFor(key: String): StateFlow<List<LibraryDisplayItem>> =
         libraryRepo.displayItemsFor(key)
