@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
-import com.swahilib.feature.library.view.components.LibraryCollectionCard
+import com.swahilib.core.ui.components.action.TileAction
+import com.swahilib.core.ui.components.action.TileActionCard
+import com.swahilib.feature.library.view.components.resolveLibraryIcon
 import com.swahilib.feature.library.viewmodel.LibraryViewModel
 
 @Composable
@@ -27,9 +29,14 @@ fun HomeLibrary(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(viewModel.collections, key = { it.key }) { config ->
-            LibraryCollectionCard(
-                config = config,
-                onClick = { navController.navigate(Routes.libraryCollection(config.key)) },
+            val tile = TileAction(
+                title = config.title,
+                icon = resolveLibraryIcon(config.iconName),
+                route = Routes.libraryCollection(config.key),
+            )
+            TileActionCard(
+                tile = tile,
+                onClick = { navController.navigate(tile.route) },
             )
         }
     }

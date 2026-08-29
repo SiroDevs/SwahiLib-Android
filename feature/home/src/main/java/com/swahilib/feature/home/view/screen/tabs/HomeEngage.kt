@@ -32,17 +32,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
+import com.swahilib.core.ui.components.action.TileAction
+import com.swahilib.core.ui.components.action.TileActionCard
 import com.swahilib.feature.home.view.components.FeaturedCard
-import com.swahilib.feature.home.view.components.GameTile
-import com.swahilib.feature.home.view.components.GameTileCard
 
 private val gameTiles = listOf(
-    GameTile("Jenga Maneno", Icons.Default.Extension, Routes.wordBuilderFreeplay()),
-    GameTile("Jenga Sentensi", Icons.AutoMirrored.Filled.Sort, Routes.sentenceBuilderFreeplay()),
-    GameTile("Tahajia (Spellcheck)", Icons.Default.Spellcheck, Routes.spellingFreeplay()),
-    GameTile("CrossWord", Icons.Default.GridView, Routes.crosswordFreeplay()),
-    GameTile("Sudoku", Icons.Default.ManageSearch, Routes.wordSearchFreeplay()),
-    GameTile("Hangman", Icons.Default.AccessibilityNew, Routes.hangmanFreeplay()),
+    TileAction("Jenga Maneno", Icons.Default.Extension, Routes.wordBuilderFreeplay()),
+    TileAction("Jenga Sentensi", Icons.AutoMirrored.Filled.Sort, Routes.sentenceBuilderFreeplay()),
+    TileAction("Tahajia (Spellcheck)", Icons.Default.Spellcheck, Routes.spellingFreeplay()),
+    TileAction("CrossWord", Icons.Default.GridView, Routes.crosswordFreeplay()),
+    TileAction("Sudoku", Icons.Default.ManageSearch, Routes.wordSearchFreeplay()),
+    TileAction("Hangman", Icons.Default.AccessibilityNew, Routes.hangmanFreeplay()),
 )
 
 @Composable
@@ -78,7 +78,7 @@ fun HomeEngage(navController: NavHostController) {
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     row.forEach { tile ->
-                        GameTileCard(
+                        TileActionCard(
                             tile = tile,
                             modifier = Modifier.weight(1f),
                             onClick = { navController.navigate(tile.route) },

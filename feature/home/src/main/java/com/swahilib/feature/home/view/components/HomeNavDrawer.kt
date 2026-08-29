@@ -98,7 +98,6 @@ fun HomeNavDrawer(
                     onClick = { navigateAndClose(Routes.DAILY_PROVERB) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
-                HorizontalDivider()
                 Spacer(Modifier.weight(1f))
                 HorizontalDivider()
                 NavigationDrawerItem(
@@ -108,7 +107,6 @@ fun HomeNavDrawer(
                     onClick = { navigateAndClose(Routes.AUTH_SIGN_IN) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.TrendingUp, contentDescription = null) },
                     label = { Text("Maendeleo Yangu") },
@@ -116,9 +114,9 @@ fun HomeNavDrawer(
                     onClick = { navigateAndClose(Routes.PROGRESS) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
                 Spacer(Modifier.weight(1f))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Default.Info, contentDescription = null) },
                     label = { Text("Jinsi ya Kutumia") },
