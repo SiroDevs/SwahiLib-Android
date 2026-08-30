@@ -8,14 +8,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-/**
- * The bottom action row shared by the games that answer one step at a time
- * (Quiz, Word Builder, Sentence Builder, Spelling): "Wasilisha" (submit) on
- * the left locks in the current answer, "Endelea" (continue) on the right
- * moves to the next step once an answer has been recorded. Either side can
- * be omitted (pass null) for games with only one action, e.g. Hangman only
- * ever needs the continue side once a round ends.
- */
 @Composable
 fun GameSubmitContinueBar(
     onSubmit: (() -> Unit)?,

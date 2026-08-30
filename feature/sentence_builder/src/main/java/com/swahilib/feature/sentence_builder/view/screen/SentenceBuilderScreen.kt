@@ -31,12 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.game.GameBottomBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameLevelUiModel
 import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
+import com.swahilib.core.ui.components.game.GameSoundFab
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelCarousel
+import com.swahilib.core.ui.components.game.LevelSelectContent
 import com.swahilib.feature.sentence_builder.utils.SentenceUiState
 import com.swahilib.feature.sentence_builder.view.components.PlayingContent
 import com.swahilib.feature.sentence_builder.view.components.FinishedContent
@@ -92,7 +95,6 @@ fun SentenceBuilderScreen(
                     level = s.level,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
-                    soundPlayer = viewModel.soundPlayer,
                 )
 
                 else -> AppTopBar(
@@ -100,6 +102,24 @@ fun SentenceBuilderScreen(
                     showGoBack = true,
                     onNavIconClick = { navController.popBackStack() })
             }
+        },
+        bottomBar = {
+            val s = state
+            if (s is SentenceUiState.Playing) {
+                GameBottomBar(
+                    remainingSeconds = s.secondsRemaining,
+                    totalSeconds = s.secondsTotal,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
+                    paused = s.paused,
+                    onTogglePause = viewModel::togglePause,
+                    onAction = { viewModel.submit(); viewModel.continueToNext() },
+                    actionEnabled = !s.locked && !s.paused && s.pickedIndices.size == s.question.shuffledWords.size,
+                )
+            }
+        },
+        floatingActionButton = {
+            if (isPlaying) GameSoundFab(viewModel.soundPlayer)
         },
     ) { padding ->
         Box(
@@ -151,9 +171,7 @@ fun SentenceBuilderScreen(
                         state = playingState,
                         onPick = viewModel::pickWord,
                         onClear = viewModel::clear,
-                        onSubmit = viewModel::submit,
                         onTogglePause = viewModel::togglePause,
-                        onContinue = viewModel::continueToNext,
                     )
                 }
 
@@ -165,32 +183,5 @@ fun SentenceBuilderScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun LevelSelectContent(
-    previousPoints: Int,
-    levels: List<GameLevelUiModel>,
-    onLevelTap: (GameLevelUiModel) -> Unit
-) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(vertical = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            "Chagua Kiwango",
-            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
-        )
-        Spacer(Modifier.height(4.dp))
-        Text(
-            "Jumla ya sign: $previousPoints",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(Modifier.height(24.dp))
-        LevelCarousel(levels = levels, onLevelTap = onLevelTap)
     }
 }

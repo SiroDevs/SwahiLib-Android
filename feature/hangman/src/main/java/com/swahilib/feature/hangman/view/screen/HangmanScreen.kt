@@ -33,12 +33,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.game.GameBottomBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameLevelUiModel
 import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
+import com.swahilib.core.ui.components.game.GameSoundFab
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelCarousel
+import com.swahilib.core.ui.components.game.LevelSelectContent
 import com.swahilib.feature.hangman.utils.HangmanUiState
 import com.swahilib.feature.hangman.view.components.PlayingContent
 import com.swahilib.feature.hangman.view.components.FinishedContent
@@ -94,7 +97,6 @@ fun HangmanScreen(
                     level = s.level,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
-                    soundPlayer = viewModel.soundPlayer,
                 )
 
                 else -> AppTopBar(
@@ -102,6 +104,24 @@ fun HangmanScreen(
                     showGoBack = true,
                     onNavIconClick = { navController.popBackStack() })
             }
+        },
+        bottomBar = {
+            val s = state
+            if (s is HangmanUiState.Playing) {
+                GameBottomBar(
+                    remainingSeconds = s.secondsRemaining,
+                    totalSeconds = s.secondsTotal,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
+                    paused = s.paused,
+                    onTogglePause = viewModel::togglePause,
+                    onAction = viewModel::continueToNext,
+                    actionEnabled = s.round.isOver && !s.paused,
+                )
+            }
+        },
+        floatingActionButton = {
+            if (isPlaying) GameSoundFab(viewModel.soundPlayer)
         },
     ) { padding ->
         Box(Modifier
@@ -154,7 +174,6 @@ fun HangmanScreen(
                         state = playingState,
                         onGuess = viewModel::guess,
                         onTogglePause = viewModel::togglePause,
-                        onContinue = viewModel::continueToNext,
                     )
                 }
 
@@ -166,32 +185,5 @@ fun HangmanScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun LevelSelectContent(
-    previousPoints: Int,
-    levels: List<GameLevelUiModel>,
-    onLevelTap: (GameLevelUiModel) -> Unit
-) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(vertical = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            "Chagua Kiwango",
-            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
-        )
-        Spacer(Modifier.height(4.dp))
-        Text(
-            "Jumla ya sign: $previousPoints",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(Modifier.height(24.dp))
-        LevelCarousel(levels = levels, onLevelTap = { onLevelTap(it) })
     }
 }

@@ -22,10 +22,13 @@ import com.swahilib.core.games.model.QuizQuestion
 import kotlin.collections.plus
 
 @Composable
-fun MatchWords(question: QuizQuestion, onMatches: (Map<String, String>) -> Unit) {
+fun MatchWords(
+    question: QuizQuestion,
+    matchedPairs: Map<String, String>,
+    enabled: Boolean,
+    onPairsChange: (Map<String, String>) -> Unit,
+) {
     var selectedLeft by remember(question.id) { mutableStateOf<String?>(null) }
-    var pairs by remember(question.id) { mutableStateOf<Map<String, String>>(emptyMap()) }
-    var submitted by remember(question.id) { mutableStateOf(false) }
 
     Text(
         "Gusa neno, kisha gusa maana yake.",
@@ -38,29 +41,25 @@ fun MatchWords(question: QuizQuestion, onMatches: (Map<String, String>) -> Unit)
             question.matchLeft.forEach { left ->
                 MatchChip(
                     text = left.text,
-                    matched = pairs.containsKey(left.id),
+                    matched = matchedPairs.containsKey(left.id),
                     selected = selectedLeft == left.id,
-                    enabled = !submitted && !pairs.containsKey(left.id),
+                    enabled = enabled && !matchedPairs.containsKey(left.id),
                     onClick = { selectedLeft = left.id },
                 )
             }
         }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             question.matchRight.forEach { right ->
-                val alreadyUsed = pairs.containsValue(right.id)
+                val alreadyUsed = matchedPairs.containsValue(right.id)
                 MatchChip(
                     text = right.text,
                     matched = alreadyUsed,
                     selected = false,
-                    enabled = !submitted && !alreadyUsed && selectedLeft != null,
+                    enabled = enabled && !alreadyUsed && selectedLeft != null,
                     onClick = {
                         selectedLeft?.let { left ->
-                            pairs = pairs + (left to right.id)
+                            onPairsChange(matchedPairs + (left to right.id))
                             selectedLeft = null
-                            if (pairs.size == question.matchLeft.size) {
-                                submitted = true
-                                onMatches(pairs)
-                            }
                         }
                     },
                 )

@@ -25,8 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.swahilib.core.ui.components.game.GameStatusBar
-import com.swahilib.core.ui.components.game.GameSubmitContinueBar
+import com.swahilib.core.ui.components.game.AndroidPauseOverlay
 import com.swahilib.feature.hangman.utils.HangmanUiState
 
 private val ALPHABET = ('A'..'Z').toList()
@@ -36,20 +35,10 @@ fun PlayingContent(
     state: HangmanUiState.Playing,
     onGuess: (Char) -> Unit,
     onTogglePause: () -> Unit,
-    onContinue: () -> Unit,
 ) {
     val round = state.round
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(20.dp)) {
-            GameStatusBar(
-                remainingSeconds = state.secondsRemaining,
-                totalSeconds = state.secondsTotal,
-                previousPoints = state.previousPoints,
-                livePoints = state.livePoints,
-                paused = state.paused,
-                onTogglePause = onTogglePause,
-            )
-            Spacer(Modifier.height(16.dp))
             Text(
                 "Neno ${state.index + 1}/${state.rounds.size}",
                 style = MaterialTheme.typography.labelLarge,
@@ -83,38 +72,9 @@ fun PlayingContent(
                 enabled = !round.isOver && !state.paused,
                 onGuess = onGuess,
             )
-            Spacer(Modifier.weight(1f))
-            GameSubmitContinueBar(
-                onSubmit = null,
-                submitEnabled = false,
-                onContinue = onContinue,
-                continueEnabled = round.isOver && !state.paused,
-            )
         }
 
         AndroidPauseOverlay(visible = state.paused, onResume = onTogglePause)
-    }
-}
-
-@Composable
-private fun AndroidPauseOverlay(visible: Boolean, onResume: () -> Unit) {
-    AnimatedVisibility(visible = visible, enter = fadeIn(), exit = fadeOut()) {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    "Mchezo Umesimamishwa",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Spacer(Modifier.height(16.dp))
-                Button(onClick = onResume) { Text("Endelea na Mchezo") }
-            }
-        }
     }
 }
 
