@@ -33,7 +33,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.games.model.HangmanRound
 import com.swahilib.core.ui.components.game.CelebrationOverlay
-import com.swahilib.core.ui.components.game.GameActionFab
 import com.swahilib.core.ui.components.game.GameSoundPlayer
 import com.swahilib.core.ui.components.progress.AchievementUnlockBanner
 import com.swahilib.feature.hangman.utils.HangmanUiState
@@ -84,12 +83,9 @@ fun FinishedContent(state: HangmanUiState.Finished, soundPlayer: GameSoundPlayer
                         Text("Viwango")
                     }
                 }
-                GameActionFab(
-                    text = "Sawa",
-                    onClick = { celebrating = false; onDone() },
-                    modifier = Modifier.weight(1f),
-                    isContinue = true,
-                )
+                OutlinedButton(onClick = { celebrating = false; onDone() }, modifier = Modifier.weight(1f)) {
+                    Text("Sawa")
+                }
             }
         }
 

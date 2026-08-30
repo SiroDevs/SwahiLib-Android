@@ -21,10 +21,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -57,8 +61,12 @@ fun GameBottomBar(
     modifier: Modifier = Modifier,
     actionLabel: String = "Wasilisha",
 ) {
-    val fraction = if (totalSeconds <= 0) 0f else (remainingSeconds.toFloat() / totalSeconds).coerceIn(0f, 1f)
-    val animatedFraction by animateFloatAsState(targetValue = fraction, label = "gameBottomBarFraction")
+    val fraction =
+        if (totalSeconds <= 0) 0f else (remainingSeconds.toFloat() / totalSeconds).coerceIn(0f, 1f)
+    val animatedFraction by animateFloatAsState(
+        targetValue = fraction,
+        label = "gameBottomBarFraction"
+    )
     val urgent = !paused && remainingSeconds in 1..5
 
     val timerColor = when {
@@ -85,24 +93,52 @@ fun GameBottomBar(
                 .windowInsetsPadding(WindowInsets.navigationBars)
                 .padding(horizontal = 20.dp, vertical = 12.dp),
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            LinearProgressIndicator(
+                progress = { animatedFraction },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(2.dp)),
+                color = timerColor,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
+
+            Spacer(Modifier.height(5.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 StatusChip(
                     containerColor = timerColor.copy(alpha = 0.15f),
                     contentColor = timerColor,
                     modifier = Modifier.scale(if (urgent) pulse else 1f),
                 ) {
-                    Icon(Icons.Default.Timer, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Icon(
+                        Icons.Default.Timer,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
                     Spacer(Modifier.size(4.dp))
-                    Text(formatMmSs(remainingSeconds), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold))
+                    Text(
+                        formatMmSs(remainingSeconds),
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                    )
                 }
 
                 StatusChip(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                     contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
                 ) {
-                    Icon(Icons.Default.Stars, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Icon(
+                        Icons.Default.Stars,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
                     Spacer(Modifier.size(4.dp))
-                    Text("${previousPoints + livePoints}", style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold))
+                    Text(
+                        "${previousPoints + livePoints}",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                    )
                     if (livePoints > 0) {
                         Text(
                             " (+$livePoints)",
@@ -112,7 +148,13 @@ fun GameBottomBar(
                     }
                 }
 
-                Spacer(Modifier.weight(1f))
+                Box(Modifier) {
+                    GameActionFab(
+                        text = actionLabel,
+                        onClick = onAction,
+                        enabled = actionEnabled,
+                    )
+                }
 
                 StatusChip(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -127,26 +169,6 @@ fun GameBottomBar(
                         )
                     }
                 }
-            }
-
-            Spacer(Modifier.height(8.dp))
-            LinearProgressIndicator(
-                progress = { animatedFraction },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4.dp)
-                    .clip(RoundedCornerShape(2.dp)),
-                color = timerColor,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant,
-            )
-
-            Spacer(Modifier.height(12.dp))
-            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                GameActionFab(
-                    text = actionLabel,
-                    onClick = onAction,
-                    enabled = actionEnabled,
-                )
             }
         }
     }
@@ -168,7 +190,9 @@ private fun StatusChip(
         contentAlignment = Alignment.Center,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            CompositionLocalProvider(LocalContentColor provides contentColor, content = { content() })
+            CompositionLocalProvider(
+                LocalContentColor provides contentColor,
+                content = { content() })
         }
     }
 }
