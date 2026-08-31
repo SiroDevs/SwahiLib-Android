@@ -7,11 +7,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -26,27 +25,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.utils.Instructions
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.game.GameBottomBar
 import com.swahilib.core.ui.components.game.GameExitDialog
-import com.swahilib.core.ui.components.game.GameLevelUiModel
+import com.swahilib.core.ui.components.game.GameFinished
 import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
+import com.swahilib.core.ui.components.game.GameReviewRow
+import com.swahilib.core.ui.components.game.GameSoundFab
 import com.swahilib.core.ui.components.game.GameTopBar
-import com.swahilib.core.ui.components.game.LevelCarousel
+import com.swahilib.core.ui.components.game.LevelSelectContent
 import com.swahilib.feature.word_builder.utils.WordBuilderUiState
-import com.swahilib.feature.word_builder.view.components.PlayingContent
-import com.swahilib.feature.word_builder.view.components.FinishedContent
+import com.swahilib.feature.word_builder.view.components.PlayingWordBuilder
 import com.swahilib.feature.word_builder.viewmodel.WordBuilderViewModel
-
-private val WORD_BUILDER_INSTRUCTIONS = listOf(
-    "Gusa vipande vya herufi kwa mpangilio sahihi kuunda neno la Kiswahili.",
-    "Tumia 'Kidokezo' ukikwama - lakini kila kidokezo hupunguza sign za mzunguko huo.",
-    "Kila kiwango depth muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,7 +94,6 @@ fun WordBuilderScreen(
                     level = s.level,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
-                    soundPlayer = viewModel.soundPlayer,
                 )
 
                 else -> AppTopBar(
@@ -107,6 +101,24 @@ fun WordBuilderScreen(
                     showGoBack = true,
                     onNavIconClick = { navController.popBackStack() })
             }
+        },
+        bottomBar = {
+            val s = state
+            if (s is WordBuilderUiState.Playing) {
+                GameBottomBar(
+                    remainingSeconds = s.secondsRemaining,
+                    totalSeconds = s.secondsTotal,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
+                    paused = s.paused,
+                    onTogglePause = viewModel::togglePause,
+                    onAction = { viewModel.submit(); viewModel.continueToNext() },
+                    actionEnabled = !s.locked && !s.paused && s.assembled.length == s.word.answer.length,
+                )
+            }
+        },
+        floatingActionButton = {
+            if (isPlaying) GameSoundFab(viewModel.soundPlayer)
         },
     ) { padding ->
         Box(
@@ -135,7 +147,7 @@ fun WordBuilderScreen(
                 is WordBuilderUiState.Overview -> GameOverviewScreen(
                     title = "Jenga Maneno",
                     tagline = "Panga vipande vya herufi kuunda neno sahihi.",
-                    instructions = WORD_BUILDER_INSTRUCTIONS,
+                    instructions = Instructions.WORD_BUILDER,
                     onStart = viewModel::proceedToLevelSelect,
                     onPractice = viewModel::startPractice,
                 )
@@ -152,51 +164,38 @@ fun WordBuilderScreen(
                     transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(160)) },
                     label = "wordBuilderRound",
                 ) { playingState ->
-                    PlayingContent(
+                    PlayingWordBuilder(
                         state = playingState,
                         onPick = viewModel::pickLetter,
                         onClear = viewModel::clearPicks,
                         onHint = viewModel::useHint,
-                        onSubmit = viewModel::submit,
                         onTogglePause = viewModel::togglePause,
-                        onContinue = viewModel::continueToNext,
                     )
                 }
 
-                is WordBuilderUiState.Finished -> FinishedContent(
-                    state = s,
+                is WordBuilderUiState.Finished -> GameFinished(
+                    practice = s.practice,
+                    headline = if (s.result.isPerfect) "\ud83c\udf89 Kamili Bila Kidokezo!" else "Umemaliza!",
+                    statLines = listOf("${s.result.correctWords}/${s.result.totalWords} maneno sahihi"),
+                    xpEarned = s.result.xpEarned,
+                    level = s.level,
+                    pointsEarned = s.pointsEarned,
+                    unlockedAchievements = s.unlockedAchievements,
                     soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
+                    reviewItems = {
+                        items(s.rounds) { (word, result) ->
+                            GameReviewRow(
+                                correct = result.correct,
+                                primaryText = word.answer.uppercase(),
+                                secondaryText = word.hint.takeIf { it.isNotBlank() },
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    },
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun LevelSelectContent(
-    previousPoints: Int,
-    levels: List<GameLevelUiModel>,
-    onLevelTap: (GameLevelUiModel) -> Unit
-) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(vertical = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            "Chagua Kiwango",
-            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
-        )
-        Spacer(Modifier.height(4.dp))
-        Text(
-            "Jumla ya sign: $previousPoints",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(Modifier.height(24.dp))
-        LevelCarousel(levels = levels, onLevelTap = onLevelTap)
     }
 }

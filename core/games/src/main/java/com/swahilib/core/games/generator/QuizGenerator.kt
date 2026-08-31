@@ -1,5 +1,6 @@
 package com.swahilib.core.games.generator
 
+import com.swahilib.core.common.utils.cleanMeaning
 import com.swahilib.core.database.daos.content.WordDao
 import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.core.engagement.model.Difficulty
@@ -95,7 +96,7 @@ class QuizGenerator @Inject constructor(
         val prompt = if (askForMeaning) {
             "Neno \"${word.title}\" lina maana gani?"
         } else {
-            "Neno gani lina maana: \"$correctText\"?"
+            "Neno gani lina maana ya: \n \"$correctText\"?"
         }
 
         return QuizQuestion(
@@ -141,7 +142,7 @@ class QuizGenerator @Inject constructor(
         return QuizQuestion(
             id = "fib_${word.rid}_$index",
             format = QuizFormat.FILL_IN_BLANK,
-            prompt = "Andika neno la Kiswahili lenye maana: \"$meaning\"",
+            prompt = "Andika neno la Kiswahili lenye maana ya: \n\"$meaning\"",
             expectedText = word.title.orEmpty(),
             explanation = "Jibu sahihi ni \"${word.title}\".",
             sourceWordRid = word.rid,
@@ -163,7 +164,10 @@ class QuizGenerator @Inject constructor(
         )
     }
 
-    /** Prefer the Swahili `meaning` field; fall back to `english` translation. */
-    private fun WordEntity.definitionText(): String? =
-        meaning?.takeIf { it.isNotBlank() } ?: english?.takeIf { it.isNotBlank() }
+    private fun WordEntity.definitionText(): String? {
+        val meanings = cleanMeaning(meaning).split("|")
+        val parts = meanings.firstOrNull()?.split(":")
+        val maana = parts?.firstOrNull()?.trim() ?: return english?.takeIf { it.isNotBlank() }
+        return maana.takeIf { it.isNotBlank() } ?: english?.takeIf { it.isNotBlank() }
+    }
 }

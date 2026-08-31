@@ -13,7 +13,6 @@ sealed interface QuizUiState {
     data object Loading : QuizUiState
     data object Empty : QuizUiState
 
-    /** Pre-play overview: pick difficulty + question count (3-50), or jump into a practice run. */
     data class Setup(
         val previousPoints: Int,
         val difficulty: Difficulty,
@@ -30,7 +29,6 @@ sealed interface QuizUiState {
         val secondsTotal: Int,
         val practice: Boolean = false,
         val paused: Boolean = false,
-        /** True once the current question has been submitted - "Endelea" unlocks, inputs lock. */
         val answered: Boolean = false,
     ) : QuizUiState {
         val question: QuizQuestion get() = quizSet.questions[index]

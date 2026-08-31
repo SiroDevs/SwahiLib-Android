@@ -1,9 +1,5 @@
 package com.swahilib.feature.sentence_builder.view.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,29 +12,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.swahilib.core.ui.components.game.GameStatusBar
-import com.swahilib.core.ui.components.game.GameSubmitContinueBar
+import com.swahilib.core.ui.components.game.AndroidPauseOverlay
 import com.swahilib.feature.sentence_builder.utils.SentenceUiState
 
 @Composable
-fun PlayingContent(
+fun PlayingSentenceBuilder(
     state: SentenceUiState.Playing,
     onPick: (Int) -> Unit,
     onClear: () -> Unit,
-    onSubmit: () -> Unit,
     onTogglePause: () -> Unit,
-    onContinue: () -> Unit,
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(
@@ -47,15 +38,6 @@ fun PlayingContent(
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp),
         ) {
-            GameStatusBar(
-                remainingSeconds = state.secondsRemaining,
-                totalSeconds = state.secondsTotal,
-                previousPoints = state.previousPoints,
-                livePoints = state.livePoints,
-                paused = state.paused,
-                onTogglePause = onTogglePause,
-            )
-            Spacer(Modifier.height(16.dp))
             if (state.practice) {
                 Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
                 Spacer(Modifier.height(4.dp))
@@ -104,32 +86,8 @@ fun PlayingContent(
             Spacer(Modifier.height(24.dp))
 
             OutlinedButton(onClick = onClear, enabled = inputEnabled, modifier = Modifier.fillMaxWidth()) { Text("Futa") }
-            Spacer(Modifier.weight(1f))
-            GameSubmitContinueBar(
-                onSubmit = onSubmit,
-                submitEnabled = inputEnabled && state.pickedIndices.size == state.question.shuffledWords.size,
-                onContinue = onContinue,
-                continueEnabled = state.locked && !state.paused,
-            )
         }
 
-        AnimatedVisibility(visible = state.paused, enter = fadeIn(), exit = fadeOut()) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f)),
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        "Mchezo Umesimamishwa",
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    Button(onClick = onTogglePause) { Text("Endelea na Mchezo") }
-                }
-            }
-        }
+        AndroidPauseOverlay(visible = state.paused, onResume = onTogglePause)
     }
 }

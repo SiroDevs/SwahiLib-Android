@@ -6,14 +6,18 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
-        android:label="@string/app_name"
         android:name=".SwahiLibApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SwahiLib.Splash"
@@ -74,13 +78,27 @@
                 android:resource="@xml/file_provider_paths" />
         </provider>
 
-        <meta-data android:name="io.sentry.dsn" android:value="https://5d37028f997b42e29ffd7286854acf72@o1365314.ingest.us.sentry.io/4504651527356416" />
-        <meta-data android:name="io.sentry.send-default-pii" android:value="true" />
-        <meta-data android:name="io.sentry.traces.user-interaction.enable" android:value="true" />
-        <meta-data android:name="io.sentry.attach-screenshot" android:value="true" />
-        <meta-data android:name="io.sentry.attach-view-hierarchy" android:value="true" />
-        <meta-data android:name="io.sentry.traces.sample-rate" android:value="1.0" />
-        <meta-data android:name="io.sentry.logs.enabled" android:value="true" />
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://5d37028f997b42e29ffd7286854acf72@o1365314.ingest.us.sentry.io/4504651527356416" />
+        <meta-data
+            android:name="io.sentry.send-default-pii"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.traces.user-interaction.enable"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.attach-screenshot"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.attach-view-hierarchy"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.traces.sample-rate"
+            android:value="1.0" />
+        <meta-data
+            android:name="io.sentry.logs.enabled"
+            android:value="true" />
     </application>
 
 </manifest>

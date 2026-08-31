@@ -26,9 +26,21 @@ import androidx.compose.ui.unit.dp
 import com.swahilib.core.common.entity.LibraryDisplayItem
 
 @Composable
-fun LibraryGrid(items: List<LibraryDisplayItem>, isGrouped: Boolean) {
+fun LibraryGroupHeader(title: String, modifier: Modifier = Modifier) {
+    Text(
+        title,
+        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+        color = MaterialTheme.colorScheme.primary,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+    )
+}
+
+@Composable
+fun LibraryGrid(items: List<LibraryDisplayItem>, isGrouped: Boolean, numberOfGrids: Int) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Fixed(numberOfGrids),
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -52,9 +64,13 @@ private fun LibraryGridItem(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(
+                alpha = 0.5f
+            )
+        ),
     ) {
         Box(
             modifier = Modifier
@@ -67,7 +83,6 @@ private fun LibraryGridItem(
                     item.primaryText,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -76,9 +91,6 @@ private fun LibraryGridItem(
                         it,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(top = 2.dp),
                     )
                 }

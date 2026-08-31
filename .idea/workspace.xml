@@ -73,6 +73,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b54f69e8-ea22-4a38-a928-881496a292fe" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/QuizGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/games/src/main/java/com/swahilib/core/games/generator/QuizGenerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/game/GameSubmitContinueBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/game/GameSubmitContinueBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/game/GameTopBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/swahilib/core/ui/components/game/GameTopBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/viewmodel/WordViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word/src/main/java/com/swahilib/feature/word/viewmodel/WordViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/word_builder/src/main/java/com/swahilib/feature/word_builder/view/components/PlayingContent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/word_builder/src/main/java/com/swahilib/feature/word_builder/view/components/PlayingContent.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +90,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Default::serial=GUIF6PMR4LPZ4D5H;connection=5aa5e2f0]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

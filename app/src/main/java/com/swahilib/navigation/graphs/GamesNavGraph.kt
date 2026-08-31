@@ -22,7 +22,7 @@ import com.swahilib.feature.spelling.view.screen.SpellingScreen
 import com.swahilib.feature.spelling.viewmodel.SpellingViewModel
 import com.swahilib.feature.word_builder.view.screen.WordBuilderScreen
 import com.swahilib.feature.word_builder.viewmodel.WordBuilderViewModel
-import com.swahilib.sudoku.view.SudokuScreen
+import com.swahilib.feature.sudoku.view.screen.SudokuScreen
 import com.swahilib.sudoku.viewmodel.SudokuViewModel
 
 fun NavGraphBuilder.gamesGraph(navController: NavHostController) {

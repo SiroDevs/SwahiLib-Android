@@ -49,19 +49,19 @@ class WordViewModel @Inject constructor(
         _meanings.value = cleanMeaning(word.meaning).split("|")
         _english.value = word.english?.takeIf { it.isNotBlank() }
 
-        // De-duplicate synonym titles (case-insensitive), then exclude the word itself
         val synonymTitles = word.synonyms
             ?.takeIf { it.isNotEmpty() }
             ?.split(",")
             ?.map { it.trim() }
             ?.filter { it.isNotEmpty() }
             ?.map { it.lowercase() }
-            ?.distinct()                              // remove duplicate titles
-            ?.filter { it != word.title?.lowercase() } // exclude the word itself
-            ?.map { s -> word.synonyms!!              // restore original casing from first occurrence
-                .split(",")
-                .map { it.trim() }
-                .first { it.lowercase() == s }
+            ?.distinct()
+            ?.filter { it != word.title?.lowercase() }
+            ?.map { s ->
+                word.synonyms!!
+                    .split(",")
+                    .map { it.trim() }
+                    .first { it.lowercase() == s }
             }
             ?: emptyList()
 

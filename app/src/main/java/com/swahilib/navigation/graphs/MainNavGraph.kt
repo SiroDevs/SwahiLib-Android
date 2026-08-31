@@ -14,9 +14,9 @@ import com.swahilib.core.database.entities.content.SayingEntity
 import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.feature.advanced_search.view.screen.AdvancedSearchScreen
 import com.swahilib.feature.advanced_search.viewmodel.AdvancedSearchViewModel
-import com.swahilib.feature.daily_content.view.DailyContentHistory
-import com.swahilib.feature.daily_content.view.DailyProverbScreen
-import com.swahilib.feature.daily_content.view.DailyWordScreen
+import com.swahilib.feature.daily_content.view.screens.DailyContentHistory
+import com.swahilib.feature.daily_content.view.screens.DailyProverbScreen
+import com.swahilib.feature.daily_content.view.screens.DailyWordScreen
 import com.swahilib.feature.history.view.HistoryScreen
 import com.swahilib.feature.home.view.screen.HomeScreen
 import com.swahilib.feature.home.viewmodel.HomeViewModel

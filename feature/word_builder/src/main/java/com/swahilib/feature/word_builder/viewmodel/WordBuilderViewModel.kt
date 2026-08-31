@@ -37,7 +37,6 @@ class WordBuilderViewModel @Inject constructor(
     private val gameProgressRepo: GameProgressRepo,
     val soundPlayer: GameSoundPlayer,
 ) : ViewModel() {
-
     private val gameType = StatisticsEngine.EventType.WORD_BUILDER.name
 
     private val _uiState = MutableStateFlow<WordBuilderUiState>(WordBuilderUiState.Loading)
