@@ -27,6 +27,7 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+.wakatime-project
 
 # Windows thumbnail db
 .DS_Store

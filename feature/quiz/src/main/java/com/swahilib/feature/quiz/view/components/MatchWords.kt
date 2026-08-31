@@ -31,7 +31,7 @@ fun MatchWords(
     var selectedLeft by remember(question.id) { mutableStateOf<String?>(null) }
 
     Text(
-        "Gusa neno, kisha gusa maana yake.",
+        "Gusa neno, kisha gusa maana lake.",
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )

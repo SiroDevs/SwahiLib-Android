@@ -55,7 +55,8 @@ class QuizViewModel @Inject constructor(
     private var contentSeed: Long = 0L
     private var questionCount: Int = 5
 
-    private val stepTimer = GameStepTimer(scope = viewModelScope, onTick = ::onTick, onExpire = ::onStepExpired)
+    private val stepTimer =
+        GameStepTimer(scope = viewModelScope, onTick = ::onTick, onExpire = ::onStepExpired)
 
     private val gameType: String
         get() = (if (source == QuizContentSource.PROVERBS) StatisticsEngine.EventType.PROVERB else StatisticsEngine.EventType.QUIZ).name
@@ -80,7 +81,8 @@ class QuizViewModel @Inject constructor(
                 beginSession(resume = false, practice = false)
                 return@launch
             }
-            val eventType = if (source == QuizContentSource.PROVERBS) StatisticsEngine.EventType.PROVERB else StatisticsEngine.EventType.QUIZ
+            val eventType =
+                if (source == QuizContentSource.PROVERBS) StatisticsEngine.EventType.PROVERB else StatisticsEngine.EventType.QUIZ
             val recommended = engageRepo.recommendedDifficulty(eventType)
             val progress = gameProgressRepo.getProgress(gameType)
             _uiState.value = QuizUiState.Setup(
@@ -102,11 +104,11 @@ class QuizViewModel @Inject constructor(
         _uiState.value = state.copy(questionCount = newCount)
     }
 
-    /** Confirms the Setup screen and begins play. [practice] runs a short trial that banks nothing. */
     fun confirmSetup(practice: Boolean) {
         val state = _uiState.value as? QuizUiState.Setup ?: return
         this.difficulty = state.difficulty
-        this.questionCount = if (practice) 3.coerceAtMost(state.questionCount) else state.questionCount
+        this.questionCount =
+            if (practice) 3.coerceAtMost(state.questionCount) else state.questionCount
         startedAtMs = System.currentTimeMillis()
         _uiState.value = QuizUiState.Loading
         viewModelScope.launch {
@@ -120,8 +122,17 @@ class QuizViewModel @Inject constructor(
 
         contentSeed = saved?.contentSeed ?: Random.nextLong()
         val set = when (source) {
-            QuizContentSource.WORDS -> quizGenerator.generate(difficulty = difficulty, questionCount = questionCount, seed = contentSeed)
-            QuizContentSource.PROVERBS -> proverbQuizGenerator.generate(difficulty = difficulty, questionCount = questionCount, seed = contentSeed)
+            QuizContentSource.WORDS -> quizGenerator.generate(
+                difficulty = difficulty,
+                questionCount = questionCount,
+                seed = contentSeed
+            )
+
+            QuizContentSource.PROVERBS -> proverbQuizGenerator.generate(
+                difficulty = difficulty,
+                questionCount = questionCount,
+                seed = contentSeed
+            )
         }
         if (set.questions.isEmpty()) {
             _uiState.value = QuizUiState.Empty
@@ -132,7 +143,8 @@ class QuizViewModel @Inject constructor(
         var answers = emptyList<QuizAnswer>()
         var livePoints = 0
         if (saved != null) {
-            val snapshot = runCatching { Json.decodeFromString<QuizSnapshot>(saved.snapshotJson) }.getOrNull()
+            val snapshot =
+                runCatching { Json.decodeFromString<QuizSnapshot>(saved.snapshotJson) }.getOrNull()
             if (snapshot != null) {
                 answers = snapshot.answers
                 index = saved.stepIndex.coerceIn(0, set.questions.lastIndex)
@@ -168,14 +180,15 @@ class QuizViewModel @Inject constructor(
         val updated = state.copy(answers = state.answers + answer)
         _uiState.value = updated
         if (!state.practice) persistSnapshot(updated)
-        // Timing out already forced the player's hand - move on immediately rather than
-        // also waiting on a Continue tap.
         advanceStep()
     }
 
-    fun submitChoice(optionId: String) = submit { question -> QuizScorer.checkChoice(question, optionId) }
+    fun submitChoice(optionId: String) =
+        submit { question -> QuizScorer.checkChoice(question, optionId) }
+
     fun submitTyped(text: String) = submit { question -> QuizScorer.checkTyped(question, text) }
-    fun submitMatches(connectedPairs: Map<String, String>) = submit { question -> QuizScorer.checkMatches(question, connectedPairs) }
+    fun submitMatches(connectedPairs: Map<String, String>) =
+        submit { question -> QuizScorer.checkMatches(question, connectedPairs) }
 
     private inline fun submit(judge: (QuizQuestion) -> QuizAnswer) {
         val state = _uiState.value as? QuizUiState.Playing ?: return
@@ -183,20 +196,23 @@ class QuizViewModel @Inject constructor(
         soundPlayer.play(GameSound.SUBMIT)
         stepTimer.stop()
         val answer = judge(state.question)
-        val newLivePoints = if (answer.correct) state.livePoints + QUIZ_POINTS_PER_CORRECT else state.livePoints
-        val updated = state.copy(answers = state.answers + answer, livePoints = newLivePoints, answered = true)
+        val newLivePoints =
+            if (answer.correct) state.livePoints + QUIZ_POINTS_PER_CORRECT else state.livePoints
+        val updated = state.copy(
+            answers = state.answers + answer,
+            livePoints = newLivePoints,
+            answered = true
+        )
         _uiState.value = updated
         if (!state.practice) persistSnapshot(updated)
     }
 
-    /** "Endelea" - only enabled once the current question has been submitted. */
     fun continueToNext() {
         val state = _uiState.value as? QuizUiState.Playing ?: return
         if (!state.answered || state.paused) return
         advanceStep()
     }
 
-    /** Pause/resume toggle from the status bar. */
     fun togglePause() {
         val state = _uiState.value as? QuizUiState.Playing ?: return
         if (state.paused) {
@@ -214,7 +230,11 @@ class QuizViewModel @Inject constructor(
         if (nextIndex >= state.quizSet.questions.size) {
             finish(state)
         } else {
-            _uiState.value = state.copy(index = nextIndex, secondsRemaining = QUIZ_STEP_SECONDS, answered = false)
+            _uiState.value = state.copy(
+                index = nextIndex,
+                secondsRemaining = QUIZ_STEP_SECONDS,
+                answered = false
+            )
             stepTimer.start(QUIZ_STEP_SECONDS)
         }
     }
@@ -227,12 +247,14 @@ class QuizViewModel @Inject constructor(
                 contentSeed = contentSeed,
                 stepIndex = state.index,
                 livePoints = state.livePoints,
-                snapshotJson = Json.encodeToString(QuizSnapshot.serializer(), QuizSnapshot(state.answers)),
+                snapshotJson = Json.encodeToString(
+                    QuizSnapshot.serializer(),
+                    QuizSnapshot(state.answers)
+                ),
             )
         }
     }
 
-    /** Refresh action, after "Ndio": brand-new question set, same source/difficulty/practice-ness. */
     fun restart() {
         val practice = (_uiState.value as? QuizUiState.Playing)?.practice ?: false
         stepTimer.stop()
@@ -267,7 +289,10 @@ class QuizViewModel @Inject constructor(
                 contentSeed = contentSeed,
                 stepIndex = state.index,
                 livePoints = state.livePoints,
-                snapshotJson = Json.encodeToString(QuizSnapshot.serializer(), QuizSnapshot(state.answers)),
+                snapshotJson = Json.encodeToString(
+                    QuizSnapshot.serializer(),
+                    QuizSnapshot(state.answers)
+                ),
             )
             onDone()
         }
@@ -277,14 +302,17 @@ class QuizViewModel @Inject constructor(
         stepTimer.stop()
         soundPlayer.stopMusic()
         val answers = state.answers
-        val secondsSpent = ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(1)
+        val secondsSpent =
+            ((System.currentTimeMillis() - startedAtMs) / 1000).toInt().coerceAtLeast(1)
         val result = QuizScorer.tally(answers, difficulty, secondsSpent)
-        val activityType = if (source == QuizContentSource.PROVERBS) ActivityType.PROVERB_CHALLENGE else ActivityType.VOCABULARY_QUIZ
-        val eventType = if (source == QuizContentSource.PROVERBS) StatisticsEngine.EventType.PROVERB else StatisticsEngine.EventType.QUIZ
-        val title = if (source == QuizContentSource.PROVERBS) "Changamoto ya Methali" else "Jaribio la Msamiati"
+        val activityType =
+            if (source == QuizContentSource.PROVERBS) ActivityType.PROVERB_CHALLENGE else ActivityType.VOCABULARY_QUIZ
+        val eventType =
+            if (source == QuizContentSource.PROVERBS) StatisticsEngine.EventType.PROVERB else StatisticsEngine.EventType.QUIZ
+        val title =
+            if (source == QuizContentSource.PROVERBS) "Changamoto ya Methali" else "Jaribio la Msamiati"
 
         if (state.practice) {
-            // Practice runs never touch points, XP, streaks, or autosave.
             _uiState.value = QuizUiState.Finished(
                 result = result,
                 quizSet = state.quizSet,

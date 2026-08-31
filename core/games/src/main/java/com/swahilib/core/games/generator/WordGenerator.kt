@@ -13,7 +13,6 @@ import kotlin.random.Random
 class WordGenerator @Inject constructor(
     private val wordDao: WordDao,
 ) {
-
     suspend fun session(
         difficulty: Difficulty = Difficulty.BEGINNER,
         count: Int = 5,
