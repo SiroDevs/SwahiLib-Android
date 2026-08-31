@@ -6,6 +6,8 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -13,22 +15,42 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import com.swahilib.core.data.notifications.MediaAccessPermission
+
+/** Tracks whether we've already asked for media read access this app session, so we
+ *  don't re-prompt every time a new screen with [ScreenshotReminderDialog] is opened. */
+private object MediaPermissionSessionState {
+    var askedThisSession = false
+}
 
 @Composable
 fun ScreenshotReminderDialog(onShareClick: () -> Unit) {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
 
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* Granted or denied - either way, the observer below picks it up on the next change. */ }
+
+    LaunchedEffect(Unit) {
+        if (!MediaPermissionSessionState.askedThisSession && !MediaAccessPermission.isGranted(context)) {
+            MediaPermissionSessionState.askedThisSession = true
+            permissionLauncher.launch(MediaAccessPermission.permissionString())
+        }
+    }
+
     DisposableEffect(Unit) {
         val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
             override fun onChange(selfChange: Boolean, uri: Uri?) {
                 uri ?: return
+                if (!MediaAccessPermission.isGranted(context)) return
                 val isScreenshot = try {
                     context.contentResolver.query(
                         uri,
