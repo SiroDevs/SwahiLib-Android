@@ -1,6 +1,5 @@
 package com.swahilib.core.games.generator
 
-import com.swahilib.core.common.utils.cleanMeaning
 import com.swahilib.core.database.daos.content.WordDao
 import com.swahilib.core.database.entities.content.WordEntity
 import com.swahilib.core.engagement.model.Difficulty
@@ -17,7 +16,6 @@ import kotlin.random.Random
 class QuizGenerator @Inject constructor(
     private val wordDao: WordDao,
 ) {
-
     suspend fun generate(
         difficulty: Difficulty = Difficulty.BEGINNER,
         questionCount: Int = 5,
@@ -162,12 +160,5 @@ class QuizGenerator @Inject constructor(
             matchRight = right,
             explanation = words.joinToString("; ") { "${it.title} = ${it.definitionText()}" },
         )
-    }
-
-    private fun WordEntity.definitionText(): String? {
-        val meanings = cleanMeaning(meaning).split("|")
-        val parts = meanings.firstOrNull()?.split(":")
-        val maana = parts?.firstOrNull()?.trim() ?: return english?.takeIf { it.isNotBlank() }
-        return maana.takeIf { it.isNotBlank() } ?: english?.takeIf { it.isNotBlank() }
     }
 }

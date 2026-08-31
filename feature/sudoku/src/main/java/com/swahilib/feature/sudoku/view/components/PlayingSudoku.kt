@@ -61,17 +61,13 @@ fun PlayingSudoku(
                 onTogglePause = onTogglePause,
             )
             Spacer(Modifier.height(8.dp))
-            if (state.practice) {
-                Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                Spacer(Modifier.height(4.dp))
-            }
             Text(
                 "Gusa herufi ya kwanza, kisha herufi ya mwisho, ya kila neno.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             if (state.lastMissed) {
-                Text("Hakuna neno hapo - jaribu tena.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                Text("Hamna neno hapo - jaribu tena.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
             }
             Spacer(Modifier.height(8.dp))
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
@@ -103,7 +99,7 @@ fun PlayingSudoku(
                 }
                 Spacer(Modifier.height(6.dp))
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    GameActionFab(text = "Maliza / Toka Mchezoni", onClick = onGiveUp, enabled = !state.paused)
+                    GameActionFab(text = "Maliza ama Utoke Mchezoni", onClick = onGiveUp, enabled = !state.paused)
                 }
             }
         }

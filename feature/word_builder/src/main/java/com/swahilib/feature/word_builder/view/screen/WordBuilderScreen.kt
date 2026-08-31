@@ -94,6 +94,7 @@ fun WordBuilderScreen(
                     level = s.level,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
+                    isPractice = s.practice,
                 )
 
                 else -> AppTopBar(

@@ -33,7 +33,7 @@ class CrosswordGenerator @Inject constructor(
 
         val words = wordDao.getAll().first().mapNotNull { word ->
             val answer = word.title?.trim()?.uppercase().orEmpty()
-            val clue = word.meaning?.takeIf { it.isNotBlank() } ?: word.english?.takeIf { it.isNotBlank() }
+            val clue = word.definitionText()
             if (answer.isNotBlank() && answer.all { it.isLetter() } && answer.length in lengthRange && clue != null) {
                 Candidate(answer, clue)
             } else null

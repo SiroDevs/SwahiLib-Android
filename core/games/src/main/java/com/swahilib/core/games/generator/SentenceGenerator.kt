@@ -12,7 +12,6 @@ import kotlin.random.Random
 class SentenceGenerator @Inject constructor(
     private val proverbDao: ProverbDao,
 ) {
-
     suspend fun generate(
         difficulty: Difficulty = Difficulty.BEGINNER,
         count: Int = 5,
@@ -27,12 +26,12 @@ class SentenceGenerator @Inject constructor(
 
         val pool = proverbDao.getAll().first().filter { proverb ->
             val words = proverb.title?.trim()?.split(Regex("\\s+")).orEmpty()
-            words.size in wordRange && !proverb.meaning.isNullOrBlank()
+            words.size in wordRange && !proverb.definitionText().isNullOrBlank()
         }
 
         val effectivePool = pool.ifEmpty {
             proverbDao.getAll().first().filter {
-                (it.title?.trim()?.split(Regex("\\s+"))?.size ?: 0) >= 2 && !it.meaning.isNullOrBlank()
+                (it.title?.trim()?.split(Regex("\\s+"))?.size ?: 0) >= 2 && !it.definitionText().isNullOrBlank()
             }
         }
 
@@ -48,7 +47,7 @@ class SentenceGenerator @Inject constructor(
                     id = "sb_${proverb.rid}_$index",
                     shuffledWords = shuffled,
                     correctOrder = words,
-                    explanation = proverb.meaning.orEmpty(),
+                    explanation = proverb.definitionText().orEmpty(),
                     sourceRid = proverb.rid,
                 )
             }
