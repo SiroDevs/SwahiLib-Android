@@ -16,7 +16,6 @@ import kotlin.random.Random
 class ProverbQuizGenerator @Inject constructor(
     private val proverbDao: ProverbDao,
 ) {
-
     suspend fun generate(
         difficulty: Difficulty = Difficulty.BEGINNER,
         questionCount: Int = 5,

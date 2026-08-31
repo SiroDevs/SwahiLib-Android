@@ -56,7 +56,7 @@ class WordGenerator @Inject constructor(
             id = "wb_${word.rid}_$index",
             answer = answer,
             scrambledLetters = letters,
-            hint = word.meaning?.takeIf { it.isNotBlank() } ?: word.english?.takeIf { it.isNotBlank() } ?: "",
+            hint = word.definitionText() ?: "",
             sourceWordRid = word.rid,
         )
     }

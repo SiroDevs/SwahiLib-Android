@@ -26,14 +26,14 @@ class SpellingGenerator @Inject constructor(
 
         val all = wordDao.getAll().first().filter { word ->
             val title = word.title?.trim().orEmpty()
-            title.isNotBlank() && (!word.meaning.isNullOrBlank() || !word.english.isNullOrBlank())
+            title.isNotBlank() && !word.definitionText().isNullOrBlank()
         }
         val pool = all.filter { it.title!!.trim().length in lengthRange }.ifEmpty { all }
 
         return pool.shuffled(random).take(count.coerceAtMost(pool.size)).mapIndexed { index, word ->
             SpellingQuestion(
                 id = "sp_${word.rid}_$index",
-                clue = word.meaning?.takeIf { it.isNotBlank() } ?: word.english.orEmpty(),
+                clue = word.definitionText().orEmpty(),
                 answer = word.title!!.trim(),
                 sourceRid = word.rid,
             )

@@ -15,7 +15,6 @@ import kotlin.random.Random
 class SudokuGenerator @Inject constructor(
     private val wordDao: WordDao,
 ) {
-    // Weighted toward common Swahili letters so filler cells don't look out of place.
     private val fillerLetters = "AAAEEEIIOOUUNNMMKKWWLLTTSSBBRRDDGGHHYYFFPPVVJJCCZZ"
 
     suspend fun generate(
@@ -23,7 +22,6 @@ class SudokuGenerator @Inject constructor(
         theme: SudokuTheme = SudokuTheme.RANDOM,
         wordCount: Int = 8,
         seed: Long = System.currentTimeMillis(),
-        /** Easy levels draw filler letters only from the pool of letters the target words actually need, cutting visual noise. */
         easyFillerPool: Boolean = false,
     ): SudokuPuzzle {
         val random = Random(seed)
@@ -52,8 +50,6 @@ class SudokuGenerator @Inject constructor(
             }
         }
 
-        // Fill remaining blanks. Easy levels restrict fillers to letters the puzzle
-        // actually needs, so every visible letter is "relevant" and less overwhelming.
         val fillerPool = if (easyFillerPool) {
             placed.flatMap { it.word.toList() }.distinct().joinToString("").ifEmpty { fillerLetters }
         } else {
@@ -75,7 +71,7 @@ class SudokuGenerator @Inject constructor(
         }
         return wordDao.getAll().first().mapNotNull { entity ->
             val answer = entity.title?.trim()?.uppercase().orEmpty()
-            val clue = entity.meaning?.takeIf { it.isNotBlank() } ?: entity.english?.takeIf { it.isNotBlank() }
+            val clue = entity.definitionText()
             if (answer.isNotBlank() && answer.all { it.isLetter() } && answer.length in 3..gridSize && clue != null) {
                 answer to clue
             } else null
@@ -92,8 +88,6 @@ class SudokuGenerator @Inject constructor(
     ): Triple<Int, Int, SudokuDirection>? {
         val len = word.length
 
-        // Generalized bounds for a start index stepping by `d` over (len-1) steps,
-        // keeping every cell in [0, gridSize-1] - handles negative d (e.g. DIAGONAL_UP) too.
         fun startRange(d: Int): IntRange {
             val lo = maxOf(0, -d * (len - 1))
             val hi = minOf(gridSize - 1, gridSize - 1 - d * (len - 1))
