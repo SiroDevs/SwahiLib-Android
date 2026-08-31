@@ -1,19 +1,7 @@
 package com.swahilib.feature.word.view
 
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -21,21 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import com.swahilib.core.common.entity.ViewerState
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.utils.PrefsRepo
 import com.swahilib.core.database.entities.content.WordEntity
-import com.swahilib.core.ui.components.action.AppTopBar
-import com.swahilib.core.ui.components.indicators.EmptyState
-import com.swahilib.core.ui.components.indicators.ErrorState
-import com.swahilib.core.ui.components.share.MeaningPickerDialog
-import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
+import com.swahilib.core.ui.components.content.ContentDetailScaffold
 import com.swahilib.core.ui.components.share.ShareData
-import com.swahilib.core.ui.components.share.ShareFab
-import com.swahilib.core.ui.components.share.ShareSheet
 import com.swahilib.feature.word.viewmodel.WordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,10 +36,7 @@ fun WordScreen(
     val english by viewModel.english.collectAsState()
     val showDonation = remember { prefsRepo.shouldShowDonation() }
 
-    var showShareSheet by remember { mutableStateOf(false) }
-    var showMeaningPicker by remember { mutableStateOf(false) }
     var selectedMeaning by remember(title) { mutableStateOf<String?>(null) }
-    val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(word) { word?.let { viewModel.loadWord(it) } }
 
@@ -67,7 +44,7 @@ fun WordScreen(
         val meaning = selectedMeaning ?: meanings.singleOrNull()?.trim()
         if (title.isNotBlank() && meaning != null) {
             ShareData(
-                emoji = "📖",
+                emoji = "\ud83d\udcd6",
                 headerLabel = "Neno la Kiswahili",
                 title = title,
                 meaning = meaning,
@@ -77,93 +54,32 @@ fun WordScreen(
         } else null
     }
 
-    // Word has more than one meaning: ask which one to share, otherwise there's
-    // only one option so go straight to the share sheet.
-    val requestShare = {
-        if (meanings.size > 1) showMeaningPicker = true else showShareSheet = true
-    }
-
-    if (viewerState == ViewerState.Loaded) {
-        ScreenshotReminderDialog(onShareClick = requestShare)
-    }
-
-    Scaffold(
-        topBar = {
-            AppTopBar(
-                title = "Neno la Kiswahili",
-                tagline = "SwahiLib · Kamusi ya Kiswahili",
-                showGoBack = true,
-                onNavIconClick = { navController.popBackStack() },
-                actions = {
-                    IconButton(onClick = {
-                        word?.let {
-                            viewModel.likeWord(it)
-                            val msg = if (!isLiked) "Neno limeongezwa kwa vipendwa"
-                            else "Neno limeondolewa kutoka kwa vipendwa"
-                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                        }
-                    }) {
-                        Icon(
-                            imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Penda",
-                            tint = if (isLiked) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                },
-            )
-        },
-        floatingActionButton = {
-            if (viewerState == ViewerState.Loaded) {
-                ShareFab(onClick = requestShare)
+    ContentDetailScaffold(
+        title = "Neno la Kiswahili",
+        viewerState = viewerState,
+        onBack = { navController.popBackStack() },
+        isLiked = isLiked,
+        onToggleLike = {
+            word?.let {
+                viewModel.likeWord(it)
+                val msg = if (!isLiked) "Neno limeongezwa kwa vipendwa"
+                else "Neno limeondolewa kutoka kwa vipendwa"
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
             }
         },
-    ) { padding ->
-        Box(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-        ) {
-            when (viewerState) {
-                is ViewerState.Error -> ErrorState(
-                    message = (viewerState as ViewerState.Error).message,
-                    onRetry = {},
-                )
-
-                ViewerState.Loaded -> WordView(
-                    viewModel = viewModel,
-                    title = title,
-                    conjugation = conjugation,
-                    meanings = meanings,
-                    synonyms = synonyms,
-                    english = english,
-                    showDonation = showDonation,
-                    onShowDonation = { navController.navigate(Routes.DONATION) },
-                )
-
-                ViewerState.Loading -> {}
-                else -> EmptyState()
-            }
-        }
-
-        if (showMeaningPicker) {
-            MeaningPickerDialog(
-                meanings = meanings,
-                onSelect = {
-                    selectedMeaning = it
-                    showMeaningPicker = false
-                    showShareSheet = true
-                },
-                onDismiss = { showMeaningPicker = false },
-            )
-        }
-
-        if (showShareSheet && shareData != null) {
-            ShareSheet(
-                shareData = shareData,
-                sheetState = shareSheetState,
-                onDismiss = { showShareSheet = false })
-        }
+        meanings = meanings,
+        shareData = shareData,
+        onSelectMeaning = { selectedMeaning = it },
+    ) {
+        WordView(
+            viewModel = viewModel,
+            title = title,
+            conjugation = conjugation,
+            meanings = meanings,
+            synonyms = synonyms,
+            english = english,
+            showDonation = showDonation,
+            onShowDonation = { navController.navigate(Routes.DONATION) },
+        )
     }
 }

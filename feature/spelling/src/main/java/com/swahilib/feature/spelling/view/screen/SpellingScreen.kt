@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,25 +26,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.utils.Instructions
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameBottomBar
 import com.swahilib.core.ui.components.game.GameExitDialog
+import com.swahilib.core.ui.components.game.GameFinished
 import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
+import com.swahilib.core.ui.components.game.GameReviewRow
 import com.swahilib.core.ui.components.game.GameSoundFab
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelSelectContent
 import com.swahilib.feature.spelling.utils.SpellingUiState
-import com.swahilib.feature.spelling.view.components.PlayingContent
-import com.swahilib.feature.spelling.view.components.FinishedContent
+import com.swahilib.feature.spelling.view.components.PlayingSpelling
 import com.swahilib.feature.spelling.viewmodel.SpellingViewModel
-
-private val SPELLING_INSTRUCTIONS = listOf(
-    "Soma meaning, kisha andika neno sahihi la Kiswahili.",
-    "Tumia 'Kidokezo' kuonyesha herufi moja - hupunguza sign za mzunguko huo.",
-    "Kila kiwango depth muda maalum kwa kila neno; ukiisha muda, mchezo utaendelea kiotomatiki.",
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,9 +116,11 @@ fun SpellingScreen(
             if (isPlaying) GameSoundFab(viewModel.soundPlayer)
         },
     ) { padding ->
-        Box(Modifier
-            .fillMaxSize()
-            .padding(padding)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
             when (val s = state) {
                 is SpellingUiState.Loading -> Box(
                     Modifier.fillMaxSize(),
@@ -145,7 +144,7 @@ fun SpellingScreen(
                 is SpellingUiState.Overview -> GameOverviewScreen(
                     title = "Tahajia (Spellcheck)",
                     tagline = "Andika tahajia sahihi ya maneno ya Kiswahili.",
-                    instructions = SPELLING_INSTRUCTIONS,
+                    instructions = Instructions.SPELLING,
                     onStart = viewModel::proceedToLevelSelect,
                     onPractice = viewModel::startPractice,
                 )
@@ -162,7 +161,7 @@ fun SpellingScreen(
                     transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(160)) },
                     label = "spellingRound",
                 ) { playingState ->
-                    PlayingContent(
+                    PlayingSpelling(
                         state = playingState,
                         typed = typed,
                         onTypedChange = { typed = it },
@@ -171,11 +170,34 @@ fun SpellingScreen(
                     )
                 }
 
-                is SpellingUiState.Finished -> FinishedContent(
-                    state = s,
+                is SpellingUiState.Finished -> GameFinished(
+                    practice = s.practice,
+                    headline = if (s.result.isPerfect) "\ud83c\udf89 Tahajia Kamili!" else "Umemaliza!",
+                    statLines = listOf(
+                        "${s.result.fullyCorrectCount}/${s.result.totalQuestions} sahihi kabisa",
+                        "Wastani wa usahihi: ${(s.result.averageCredit * 100).toInt()}%",
+                    ),
+                    xpEarned = s.result.xpEarned,
+                    level = s.level,
+                    pointsEarned = s.pointsEarned,
+                    unlockedAchievements = s.unlockedAchievements,
                     soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
+                    reviewItems = {
+                        items(s.questions.size) { i ->
+                            val question = s.questions[i]
+                            val result = s.rounds.getOrNull(i)
+                            val correct = result?.fullyCorrect == true
+                            GameReviewRow(
+                                correct = correct,
+                                primaryText = question.answer,
+                                secondaryText = question.clue,
+                                tertiaryText = if (!correct && result != null) "Umeandika: \"${result.typed}\"" else null,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    },
                 )
             }
         }

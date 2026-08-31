@@ -19,7 +19,7 @@ import com.swahilib.core.ui.components.game.AndroidPauseOverlay
 import com.swahilib.feature.spelling.utils.SpellingUiState
 
 @Composable
-fun PlayingContent(
+fun PlayingSpelling(
     state: SpellingUiState.Playing,
     typed: String,
     onTypedChange: (String) -> Unit,

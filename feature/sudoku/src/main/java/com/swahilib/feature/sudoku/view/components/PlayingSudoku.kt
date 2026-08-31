@@ -45,7 +45,7 @@ import com.swahilib.core.ui.components.game.GameActionFab
 import com.swahilib.feature.sudoku.utils.SudokuUiState
 
 @Composable
-fun PlayingContent(
+fun PlayingSudoku(
     state: SudokuUiState.Playing,
     onTapCell: (Int, Int) -> Unit,
     onGiveUp: () -> Unit,

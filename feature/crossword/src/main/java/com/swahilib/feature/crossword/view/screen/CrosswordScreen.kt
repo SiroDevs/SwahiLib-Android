@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.utils.Instructions
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameExitDialog
@@ -33,16 +34,10 @@ import com.swahilib.core.ui.components.game.GameSoundFab
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelSelectContent
 import com.swahilib.feature.crossword.utils.CrosswordUiState
-import com.swahilib.feature.crossword.view.components.CrosswordPlaying
-import com.swahilib.feature.crossword.view.components.LetterPoolBar
+import com.swahilib.feature.crossword.view.components.CrosswordLetterPoolBar
+import com.swahilib.feature.crossword.view.components.PlayingCrossword
 import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
 import kotlin.text.orEmpty
-
-private val CROSSWORD_INSTRUCTIONS = listOf(
-    "Jaza majibu ya maswali ya Mlalo, Wima, na Mshazari kwenye gridi.",
-    "Gusa swali kulichagua, kisha andika jibu lako - majibu hayaonyeshwi hadi umalize.",
-    "Kiwango depth saa moja kwa mchezo mzima wa gridi, si kwa kila swali peke yake.",
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,7 +96,7 @@ fun CrosswordScreen(
         bottomBar = {
             val s = state
             if (s is CrosswordUiState.Playing && s.easyMode) {
-                LetterPoolBar(
+                CrosswordLetterPoolBar(
                     letters = s.letterPool,
                     onLetter = viewModel::tapPoolLetter,
                     onBackspace = viewModel::poolBackspace
@@ -135,7 +130,7 @@ fun CrosswordScreen(
                 is CrosswordUiState.Overview -> GameOverviewScreen(
                     title = "CrossWord",
                     tagline = "Jaza gridi ya maneno mtambuka ya Kiswahili.",
-                    instructions = CROSSWORD_INSTRUCTIONS,
+                    instructions = Instructions.CROSSWORD,
                     onStart = viewModel::proceedToLevelSelect,
                     onPractice = viewModel::startPractice,
                 )
@@ -146,7 +141,7 @@ fun CrosswordScreen(
                     onLevelTap = { model -> viewModel.chooseLevel(model.level) },
                 )
 
-                is CrosswordUiState.Playing -> CrosswordPlaying(
+                is CrosswordUiState.Playing -> PlayingCrossword(
                     state = s,
                     onAnswerChange = viewModel::updateAnswer,
                     onFocus = viewModel::focusEntry,

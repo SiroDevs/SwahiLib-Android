@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LetterPoolBar(letters: List<Char>, highlighted: Char?, onLetter: (Char) -> Unit) {
+fun SudokuLetterPoolBar(letters: List<Char>, highlighted: Char?, onLetter: (Char) -> Unit) {
     Surface(tonalElevation = 6.dp) {
         Column {
             Text(

@@ -1,9 +1,14 @@
 package com.swahilib.feature.sudoku.view.screen
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -20,26 +25,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.swahilib.core.common.utils.Instructions
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.games.model.SudokuTheme
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameExitDialog
+import com.swahilib.core.ui.components.game.GameFinished
 import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
+import com.swahilib.core.ui.components.game.GameReviewRow
 import com.swahilib.core.ui.components.game.GameSoundFab
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelSelectContent
 import com.swahilib.feature.sudoku.utils.SudokuUiState
-import com.swahilib.feature.sudoku.view.components.FinishedContent
-import com.swahilib.feature.sudoku.view.components.LetterPoolBar
-import com.swahilib.feature.sudoku.view.components.PlayingContent
+import com.swahilib.feature.sudoku.view.components.PlayingSudoku
+import com.swahilib.feature.sudoku.view.components.SudokuLetterPoolBar
 import com.swahilib.sudoku.viewmodel.SudokuViewModel
-
-private val SUDOKU_INSTRUCTIONS = listOf(
-    "Tafuta maneno yaliyofichwa kwenye gridi ya herufi - mlalo, wima, na mshazari.",
-    "Gusa herufi ya kwanza kisha ya mwisho ya neno kulichagua.",
-    "Maneno uliyopata yatabaki na rangi kwenye gridi na kuvuka kwenye orodha.",
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,7 +105,7 @@ fun SudokuScreen(
         bottomBar = {
             val s = state
             if (s is SudokuUiState.Playing && s.easyMode) {
-                LetterPoolBar(
+                SudokuLetterPoolBar(
                     letters = s.letterPool,
                     highlighted = s.highlightedLetter,
                     onLetter = viewModel::tapPoolLetter
@@ -138,7 +139,7 @@ fun SudokuScreen(
                 is SudokuUiState.Overview -> GameOverviewScreen(
                     title = "Sudoku",
                     tagline = "Tafuta maneno ya Kiswahili yaliyofichwa kwenye gridi.",
-                    instructions = SUDOKU_INSTRUCTIONS,
+                    instructions = Instructions.SUDOKU,
                     onStart = viewModel::proceedToLevelSelect,
                     onPractice = viewModel::startPractice,
                 )
@@ -149,18 +150,44 @@ fun SudokuScreen(
                     onLevelTap = { model -> viewModel.chooseLevel(model.level) },
                 )
 
-                is SudokuUiState.Playing -> PlayingContent(
+                is SudokuUiState.Playing -> PlayingSudoku(
                     state = s,
                     onTapCell = viewModel::tapCell,
                     onGiveUp = viewModel::giveUp,
                     onTogglePause = viewModel::togglePause,
                 )
 
-                is SudokuUiState.Finished -> FinishedContent(
-                    state = s,
+                is SudokuUiState.Finished -> GameFinished(
+                    practice = s.practice,
+                    headline = if (s.result.isPerfect) "\ud83c\udf89 Umeshinda Yote!" else "Umemaliza!",
+                    statLines = listOf("${s.result.foundWords}/${s.result.totalWords} umeshinda"),
+                    xpEarned = s.result.xpEarned,
+                    level = s.level,
+                    pointsEarned = s.pointsEarned,
+                    unlockedAchievements = s.unlockedAchievements,
                     soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
+                    extraContent = {
+                        AnimatedVisibility(visible = s.leveledUp) {
+                            Card(
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
+                                modifier = Modifier.padding(top = 12.dp),
+                            ) {
+                                Text("Kiwango kipya kimefunguliwa!", modifier = Modifier.padding(12.dp), style = MaterialTheme.typography.bodyMedium)
+                            }
+                        }
+                    },
+                    reviewItems = {
+                        items(s.words, key = { it.word }) { word ->
+                            GameReviewRow(
+                                correct = word.found,
+                                primaryText = word.word,
+                                secondaryText = word.clue,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    },
                 )
             }
         }

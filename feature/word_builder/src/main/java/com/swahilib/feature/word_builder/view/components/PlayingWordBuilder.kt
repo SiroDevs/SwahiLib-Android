@@ -25,7 +25,7 @@ import com.swahilib.core.ui.components.game.AndroidPauseOverlay
 import com.swahilib.feature.word_builder.utils.WordBuilderUiState
 
 @Composable
-fun PlayingContent(
+fun PlayingWordBuilder(
     state: WordBuilderUiState.Playing,
     onPick: (Int) -> Unit,
     onClear: () -> Unit,
