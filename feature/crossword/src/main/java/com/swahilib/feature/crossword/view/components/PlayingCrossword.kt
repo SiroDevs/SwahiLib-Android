@@ -44,10 +44,6 @@ fun PlayingCrossword(
                 paused = state.paused,
                 onTogglePause = onTogglePause,
             )
-            if (state.practice) {
-                Spacer(Modifier.height(4.dp))
-                Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.align(Alignment.CenterHorizontally))
-            }
             Spacer(Modifier.height(12.dp))
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                 CrosswordGrid(state.puzzle, state.answers, state.focusedEntryId)

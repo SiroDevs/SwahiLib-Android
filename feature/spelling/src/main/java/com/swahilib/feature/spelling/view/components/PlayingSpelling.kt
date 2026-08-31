@@ -30,10 +30,6 @@ fun PlayingSpelling(
 
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(20.dp)) {
-            if (state.practice) {
-                Text("MAZOEZI", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                Spacer(Modifier.height(4.dp))
-            }
             Text(
                 "Neno ${state.index + 1}/${state.questions.size}",
                 style = MaterialTheme.typography.labelLarge,
