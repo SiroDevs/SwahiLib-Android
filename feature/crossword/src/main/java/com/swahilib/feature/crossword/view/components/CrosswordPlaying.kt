@@ -29,7 +29,7 @@ import kotlin.collections.sortedBy
 import kotlin.text.orEmpty
 
 @Composable
-fun PlayingContent(
+fun CrosswordPlaying(
     state: CrosswordUiState.Playing,
     onAnswerChange: (String, String) -> Unit,
     onFocus: (String) -> Unit,

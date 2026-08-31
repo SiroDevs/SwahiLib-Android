@@ -1,4 +1,4 @@
-package com.swahilib.feature.daily_content.view
+package com.swahilib.feature.daily_content.view.screens
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items

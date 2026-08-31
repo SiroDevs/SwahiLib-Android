@@ -1,4 +1,20 @@
-package com.swahilib.feature.daily_content.view
+/*
+ * Copyright 2026 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.swahilib.feature.daily_content.view.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +32,6 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,22 +42,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.utils.PrefsRepo
-import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.general.StreakBadge
@@ -50,75 +58,57 @@ import com.swahilib.core.ui.components.share.ScreenshotReminderDialog
 import com.swahilib.core.ui.components.share.ShareData
 import com.swahilib.core.ui.components.share.ShareFab
 import com.swahilib.core.ui.components.share.ShareSheet
-import com.swahilib.feature.daily_content.viewmodel.DailyContentViewModel
-import com.swahilib.feature.proverb.view.screen.ProverbScreen
-import com.swahilib.feature.proverb.viewmodel.ProverbViewModel
 
+/**
+ * The scaffold shared by every "daily content" screen (Daily Word, Daily
+ * Proverb): top bar with a history icon, loading/empty/loaded states,
+ * notification banner, streak badge, hero card slot, the standard "MAANA"
+ * card, an optional extra card (e.g. Daily Word's conjugation card), the
+ * "Tazama Maelezo Zaidi" bottom sheet, and the share flow.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DailyProverbScreen(
-    navController: NavHostController,
+fun DailyContentScaffold(
+    title: String,
+    onBack: () -> Unit,
+    onHistoryClick: () -> Unit,
+    loading: Boolean,
+    itemPresent: Boolean,
+    emptyMessage: String,
     prefsRepo: PrefsRepo,
-    viewModel: DailyContentViewModel = hiltViewModel(),
-    proverbViewModel: ProverbViewModel = hiltViewModel(),
+    onGoToNotificationSettings: () -> Unit,
+    streak: Int,
+    singleMeaning: String,
+    shareData: ShareData?,
+    heroCard: @Composable () -> Unit,
+    fullInfoContent: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    extraCard: (@Composable () -> Unit)? = null,
 ) {
-    var proverb by remember { mutableStateOf<ProverbEntity?>(null) }
-    var dailyMeaning by remember { mutableStateOf("") }
-    var loading by remember { mutableStateOf(true) }
     var showFullInfo by remember { mutableStateOf(false) }
     var showShareSheet by remember { mutableStateOf(false) }
-    var streak by remember { mutableStateOf(0) }
-
     val fullInfoSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    LaunchedEffect(Unit) {
-        val (dailyProverb, meaning) = viewModel.getDailyProverb()
-        proverb = dailyProverb
-        dailyMeaning = meaning
-        loading = false
-        // Viewing the daily proverb also counts toward the same daily streak as
-        // the daily word - either one is the "showed up today" signal.
-        if (dailyProverb != null) streak = prefsRepo.recordDailyVisit()
-    }
-
-    val singleMeaning = dailyMeaning
-
-    val shareData = remember(proverb, singleMeaning) {
-        proverb?.let {
-            ShareData(
-                emoji = "🌿",
-                headerLabel = "Methali ya Kiswahili",
-                title = it.title ?: "",
-                meaning = singleMeaning,
-            )
-        }
-    }
-
-    if (proverb != null) ScreenshotReminderDialog(onShareClick = { showShareSheet = true })
+    if (itemPresent) ScreenshotReminderDialog(onShareClick = { showShareSheet = true })
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             AppTopBar(
-                title = "Methali ya Siku",
-                tagline = "SwahiLib · Kamusi ya Kiswahili",
+                title = title,
+                tagline = "SwahiLib \u00b7 Kamusi ya Kiswahili",
                 showGoBack = true,
-                onNavIconClick = { navController.popBackStack() },
+                onNavIconClick = onBack,
                 actions = {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(
-                                Routes.dailyContentHistory(Routes.DAILY_CONTENT_TYPE_PROVERB)
-                            )
-                        }
-                    ) {
-                        Icon(Icons.Default.History, contentDescription = "Historia ya Methali za Siku")
+                    IconButton(onClick = onHistoryClick) {
+                        Icon(Icons.Default.History, contentDescription = "Historia")
                     }
                 },
             )
         },
         floatingActionButton = {
-            if (proverb != null) ShareFab(onClick = { showShareSheet = true })
+            if (itemPresent) ShareFab(onClick = { showShareSheet = true })
         },
     ) { padding ->
         Box(
@@ -127,7 +117,7 @@ fun DailyProverbScreen(
         ) {
             when {
                 loading -> CircularProgressIndicator()
-                proverb == null -> Text("Hakuna methali iliyopatikana.", style = MaterialTheme.typography.bodyLarge)
+                !itemPresent -> Text(emptyMessage, style = MaterialTheme.typography.bodyLarge)
                 else -> Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -135,44 +125,14 @@ fun DailyProverbScreen(
                         .padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    // ── Notification reminder banner ──
                     NotificationReminderBanner(
                         prefsRepo = prefsRepo,
-                        onGoToSettings = { navController.navigate(Routes.SETTINGS) },
+                        onGoToSettings = onGoToNotificationSettings,
                         modifier = Modifier.padding(horizontal = 0.dp),
                     )
+                    StreakBadge(streakCount = streak, modifier = Modifier.align(Alignment.CenterHorizontally))
+                    heroCard()
 
-                    // ── Streak badge ──
-                    StreakBadge(
-                        streakCount = streak,
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                    )
-
-                    // ── Proverb hero card ──
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                        elevation = CardDefaults.cardElevation(4.dp),
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Text("🌿", fontSize = 40.sp)
-                            Spacer(Modifier.height(12.dp))
-                            Text(
-                                text = "\"${proverb!!.title}\"",
-                                style = MaterialTheme.typography.headlineSmall.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Italic,
-                                ),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            )
-                        }
-                    }
-
-                    // ── One random meaning ──
                     if (singleMeaning.isNotEmpty()) {
                         Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
                             Column(modifier = Modifier.padding(16.dp)) {
@@ -188,7 +148,8 @@ fun DailyProverbScreen(
                         }
                     }
 
-                    // ── More info button ──
+                    extraCard?.invoke()
+
                     Button(
                         onClick = { showFullInfo = true },
                         modifier = Modifier.fillMaxWidth(),
@@ -205,12 +166,7 @@ fun DailyProverbScreen(
                 shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
                 dragHandle = { BottomSheetDefaults.DragHandle() },
             ) {
-                ProverbScreen(
-                    navController = navController,
-                    viewModel = proverbViewModel,
-                    proverb = proverb,
-                    prefsRepo = prefsRepo,
-                )
+                fullInfoContent()
             }
         }
 

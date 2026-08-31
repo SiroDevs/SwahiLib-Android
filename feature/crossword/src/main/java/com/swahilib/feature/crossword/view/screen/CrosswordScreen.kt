@@ -3,7 +3,9 @@ package com.swahilib.feature.crossword.view.screen
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -23,16 +25,18 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
 import com.swahilib.core.ui.components.game.GameExitDialog
+import com.swahilib.core.ui.components.game.GameFinished
 import com.swahilib.core.ui.components.game.GameOverviewScreen
 import com.swahilib.core.ui.components.game.GameRestartDialog
+import com.swahilib.core.ui.components.game.GameReviewRow
 import com.swahilib.core.ui.components.game.GameSoundFab
 import com.swahilib.core.ui.components.game.GameTopBar
 import com.swahilib.core.ui.components.game.LevelSelectContent
 import com.swahilib.feature.crossword.utils.CrosswordUiState
-import com.swahilib.feature.crossword.view.components.FinishedContent
+import com.swahilib.feature.crossword.view.components.CrosswordPlaying
 import com.swahilib.feature.crossword.view.components.LetterPoolBar
-import com.swahilib.feature.crossword.view.components.PlayingContent
 import com.swahilib.feature.crossword.viewmodel.CrosswordViewModel
+import kotlin.text.orEmpty
 
 private val CROSSWORD_INSTRUCTIONS = listOf(
     "Jaza majibu ya maswali ya Mlalo, Wima, na Mshazari kwenye gridi.",
@@ -142,7 +146,7 @@ fun CrosswordScreen(
                     onLevelTap = { model -> viewModel.chooseLevel(model.level) },
                 )
 
-                is CrosswordUiState.Playing -> PlayingContent(
+                is CrosswordUiState.Playing -> CrosswordPlaying(
                     state = s,
                     onAnswerChange = viewModel::updateAnswer,
                     onFocus = viewModel::focusEntry,
@@ -150,11 +154,30 @@ fun CrosswordScreen(
                     onTogglePause = viewModel::togglePause,
                 )
 
-                is CrosswordUiState.Finished -> FinishedContent(
-                    state = s,
+                is CrosswordUiState.Finished -> GameFinished(
+                    practice = s.practice,
+                    headline = if (s.result.isPerfect) "\ud83c\udf89 Crossword Kamili!" else "Umemaliza!",
+                    statLines = listOf("${s.result.correctEntries}/${s.result.totalEntries} sahihi"),
+                    xpEarned = s.result.xpEarned,
+                    level = s.level,
+                    pointsEarned = s.pointsEarned,
+                    unlockedAchievements = s.unlockedAchievements,
                     soundPlayer = viewModel.soundPlayer,
                     onPlayAgain = { viewModel.backToLevelSelect() },
                     onDone = { navController.popBackStack() },
+                    reviewItems = {
+                        items(s.puzzle.entries.sortedBy { it.number }) { entry ->
+                            val typed = s.answers[entry.id].orEmpty()
+                            val correct = typed.trim().equals(entry.answer, ignoreCase = true)
+                            GameReviewRow(
+                                correct = correct,
+                                primaryText = "${entry.number}. ${entry.answer}",
+                                secondaryText = entry.clue,
+                                tertiaryText = if (!correct && typed.isNotBlank()) "Umeandika: \"$typed\"" else null,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    },
                 )
             }
         }
