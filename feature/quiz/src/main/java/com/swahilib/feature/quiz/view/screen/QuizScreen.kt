@@ -98,6 +98,8 @@ fun QuizScreen(
                 is QuizUiState.Playing -> GameTopBar(
                     title = title,
                     level = null,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                 )
@@ -120,8 +122,6 @@ fun QuizScreen(
                 GameBottomBar(
                     remainingSeconds = s.secondsRemaining,
                     totalSeconds = s.secondsTotal,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     paused = s.paused,
                     onTogglePause = viewModel::togglePause,
                     onAction = {

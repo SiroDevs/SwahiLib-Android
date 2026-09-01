@@ -33,18 +33,11 @@ fun PlayingCrossword(
     state: CrosswordUiState.Playing,
     onAnswerChange: (String, String) -> Unit,
     onFocus: (String) -> Unit,
-    onFinish: () -> Unit,
     onTogglePause: () -> Unit,
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
-            GameStatusRow(
-                remainingSeconds = state.secondsRemaining,
-                previousPoints = state.previousPoints,
-                paused = state.paused,
-                onTogglePause = onTogglePause,
-            )
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(5.dp))
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                 CrosswordGrid(state.puzzle, state.answers, state.focusedEntryId)
             }
@@ -85,9 +78,6 @@ fun PlayingCrossword(
                     }
                 }
                 Spacer(Modifier.height(8.dp))
-                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    GameActionFab(text = "Maliza", onClick = onFinish, enabled = !state.paused)
-                }
             }
         }
 

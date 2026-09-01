@@ -28,6 +28,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
@@ -91,7 +92,28 @@ fun GameTopBar(
         colors = colors,
         actions = {
             if (previousPoints != null) {
-                GamePointsBadge(previousPoints = previousPoints, livePoints = livePoints)
+                StatusChip(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                ) {
+                    Icon(
+                        Icons.Default.Stars,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(Modifier.size(4.dp))
+                    Text(
+                        "${previousPoints?.plus(livePoints)}",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                    )
+                    if (livePoints > 0) {
+                        Text(
+                            " (+$livePoints)",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.8f),
+                        )
+                    }
+                }
             }
             IconButton(onClick = onRefresh) {
                 Icon(imageVector = Icons.Default.Refresh, contentDescription = "Anza Upya")
@@ -101,40 +123,4 @@ fun GameTopBar(
             }
         },
     )
-}
-
-@Composable
-private fun GamePointsBadge(previousPoints: Int, livePoints: Int) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(end = 4.dp),
-    ) {
-        Icon(
-            imageVector = Icons.Default.Stars,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.tertiary,
-            modifier = Modifier.size(18.dp),
-        )
-        Spacer(modifier = Modifier.width(2.dp))
-        Text(
-            text = "${previousPoints + livePoints}",
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        AnimatedVisibility(
-            visible = livePoints > 0,
-            enter = fadeIn() + scaleIn(),
-            exit = fadeOut() + scaleOut(),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Spacer(modifier = Modifier.width(2.dp))
-                Text(
-                    text = "(+$livePoints)",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.tertiary,
-                )
-            }
-        }
-        Spacer(modifier = Modifier.width(2.dp))
-    }
 }
