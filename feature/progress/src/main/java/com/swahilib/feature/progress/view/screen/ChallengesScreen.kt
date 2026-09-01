@@ -84,7 +84,7 @@ fun ChallengesScreen(
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 )
                 Spacer(Modifier.height(8.dp))
-                androidx.compose.foundation.layout.Column(
+                Column(
                     verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp),
                 ) {
                     recommendations.forEach { rec ->

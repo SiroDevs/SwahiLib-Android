@@ -41,26 +41,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.swahilib.core.games.model.PlacedWord
 import com.swahilib.core.ui.components.game.AndroidPauseOverlay
-import com.swahilib.core.ui.components.game.GameActionFab
 import com.swahilib.feature.sudoku.utils.SudokuUiState
 
 @Composable
 fun PlayingSudoku(
     state: SudokuUiState.Playing,
     onTapCell: (Int, Int) -> Unit,
-    onGiveUp: () -> Unit,
     onTogglePause: () -> Unit,
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
-            GameStatusRow(
-                remainingSeconds = state.secondsRemaining,
-                previousPoints = state.previousPoints,
-                livePoints = state.livePoints,
-                paused = state.paused,
-                onTogglePause = onTogglePause,
-            )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(5.dp))
             Text(
                 "Gusa herufi ya kwanza, kisha herufi ya mwisho, ya kila neno.",
                 style = MaterialTheme.typography.bodySmall,
@@ -98,9 +89,6 @@ fun PlayingSudoku(
                     items(state.words, key = { it.word }) { word -> WordListRow(word) }
                 }
                 Spacer(Modifier.height(6.dp))
-                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    GameActionFab(text = "Maliza ama Utoke Mchezoni", onClick = onGiveUp, enabled = !state.paused)
-                }
             }
         }
 

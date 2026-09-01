@@ -2,6 +2,7 @@ package com.swahilib.feature.crossword.view.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Instructions
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.game.GameBottomBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameFinished
 import com.swahilib.core.ui.components.game.GameOverviewScreen
@@ -80,6 +82,8 @@ fun CrosswordScreen(
                 is CrosswordUiState.Playing -> GameTopBar(
                     title = "CrossWord",
                     level = s.level,
+                    previousPoints = s.previousPoints,
+                    livePoints = 0,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     isPractice = s.practice,
@@ -97,17 +101,30 @@ fun CrosswordScreen(
         bottomBar = {
             val s = state
             if (s is CrosswordUiState.Playing && s.easyMode) {
-                CrosswordLetterPoolBar(
-                    letters = s.letterPool,
-                    onLetter = viewModel::tapPoolLetter,
-                    onBackspace = viewModel::poolBackspace
-                )
+                Column {
+                    CrosswordLetterPoolBar(
+                        letters = s.letterPool,
+                        onLetter = viewModel::tapPoolLetter,
+                        onBackspace = viewModel::poolBackspace
+                    )
+                    GameBottomBar(
+                        remainingSeconds = s.secondsRemaining,
+                        totalSeconds = s.secondsTotal,
+                        paused = s.paused,
+                        onTogglePause = viewModel::togglePause,
+                        onAction = viewModel::finishNow,
+                        actionLabel = "MALIZA",
+                        actionEnabled = !s.paused,
+                    )
+                }
             }
         },
     ) { padding ->
-        Box(Modifier
-            .fillMaxSize()
-            .padding(padding)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
             when (val s = state) {
                 is CrosswordUiState.Loading -> Box(
                     Modifier.fillMaxSize(),
@@ -129,7 +146,6 @@ fun CrosswordScreen(
                 }
 
                 is CrosswordUiState.Overview -> GameOverviewScreen(
-                    title = "CrossWord",
                     tagline = "Jaza gridi ya maneno mtambuka ya Kiswahili.",
                     instructions = Instructions.CROSSWORD,
                     onStart = viewModel::proceedToLevelSelect,
@@ -146,7 +162,6 @@ fun CrosswordScreen(
                     state = s,
                     onAnswerChange = viewModel::updateAnswer,
                     onFocus = viewModel::focusEntry,
-                    onFinish = viewModel::finishNow,
                     onTogglePause = viewModel::togglePause,
                 )
 

@@ -3,6 +3,7 @@ package com.swahilib.feature.sudoku.view.screen
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import com.swahilib.core.common.utils.Instructions
 import com.swahilib.core.engagement.model.Difficulty
 import com.swahilib.core.games.model.SudokuTheme
 import com.swahilib.core.ui.components.action.AppTopBar
+import com.swahilib.core.ui.components.game.GameBottomBar
 import com.swahilib.core.ui.components.game.GameExitDialog
 import com.swahilib.core.ui.components.game.GameFinished
 import com.swahilib.core.ui.components.game.GameOverviewScreen
@@ -89,6 +91,8 @@ fun SudokuScreen(
                 is SudokuUiState.Playing -> GameTopBar(
                     title = "Sudoku",
                     level = s.level,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     isPractice = s.practice,
@@ -106,17 +110,30 @@ fun SudokuScreen(
         bottomBar = {
             val s = state
             if (s is SudokuUiState.Playing && s.easyMode) {
-                SudokuLetterPoolBar(
-                    letters = s.letterPool,
-                    highlighted = s.highlightedLetter,
-                    onLetter = viewModel::tapPoolLetter
-                )
+                Column {
+                    SudokuLetterPoolBar(
+                        letters = s.letterPool,
+                        highlighted = s.highlightedLetter,
+                        onLetter = viewModel::tapPoolLetter
+                    )
+                    GameBottomBar(
+                        remainingSeconds = s.secondsRemaining,
+                        totalSeconds = s.secondsTotal,
+                        paused = s.paused,
+                        onTogglePause = viewModel::togglePause,
+                        onAction = viewModel::giveUp,
+                        actionLabel = "MALIZA",
+                        actionEnabled = !s.paused,
+                    )
+                }
             }
         },
     ) { padding ->
-        Box(Modifier
-            .fillMaxSize()
-            .padding(padding)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
             when (val s = state) {
                 is SudokuUiState.Loading -> Box(
                     Modifier.fillMaxSize(),
@@ -138,7 +155,6 @@ fun SudokuScreen(
                 }
 
                 is SudokuUiState.Overview -> GameOverviewScreen(
-                    title = "Sudoku",
                     tagline = "Tafuta maneno ya Kiswahili yaliyofichwa kwenye gridi.",
                     instructions = Instructions.SUDOKU,
                     onStart = viewModel::proceedToLevelSelect,
@@ -154,7 +170,6 @@ fun SudokuScreen(
                 is SudokuUiState.Playing -> PlayingSudoku(
                     state = s,
                     onTapCell = viewModel::tapCell,
-                    onGiveUp = viewModel::giveUp,
                     onTogglePause = viewModel::togglePause,
                 )
 
@@ -175,7 +190,11 @@ fun SudokuScreen(
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
                                 modifier = Modifier.padding(top = 12.dp),
                             ) {
-                                Text("Kiwango kipya kimefunguliwa!", modifier = Modifier.padding(12.dp), style = MaterialTheme.typography.bodyMedium)
+                                Text(
+                                    "Kiwango kipya kimefunguliwa!",
+                                    modifier = Modifier.padding(12.dp),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
                             }
                         }
                     },

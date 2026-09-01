@@ -90,6 +90,8 @@ fun HangmanScreen(
                 is HangmanUiState.Playing -> GameTopBar(
                     title = "Hangman",
                     level = s.level,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     isPractice = s.practice,
@@ -107,8 +109,6 @@ fun HangmanScreen(
                 GameBottomBar(
                     remainingSeconds = s.secondsRemaining,
                     totalSeconds = s.secondsTotal,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     paused = s.paused,
                     onTogglePause = viewModel::togglePause,
                     onAction = viewModel::continueToNext,
@@ -144,7 +144,6 @@ fun HangmanScreen(
                 }
 
                 is HangmanUiState.Overview -> GameOverviewScreen(
-                    title = "Hangman",
                     tagline = "Kisia neno la kiswahili herufi kwa herufi.",
                     instructions = Instructions.HANGMAN,
                     onStart = viewModel::proceedToLevelSelect,

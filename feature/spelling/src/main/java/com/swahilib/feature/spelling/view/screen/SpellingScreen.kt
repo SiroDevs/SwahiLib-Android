@@ -84,15 +84,17 @@ fun SpellingScreen(
         topBar = {
             when (val s = state) {
                 is SpellingUiState.Playing -> GameTopBar(
-                    title = "Tahajia (Spellcheck)",
+                    title = "Tahajia",
                     level = s.level,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     isPractice = s.practice,
                 )
 
                 else -> AppTopBar(
-                    title = "Tahajia (Spellcheck)",
+                    title = "Tahajia",
                     showGoBack = true,
                     onNavIconClick = { navController.popBackStack() })
             }
@@ -104,8 +106,6 @@ fun SpellingScreen(
                 GameBottomBar(
                     remainingSeconds = s.secondsRemaining,
                     totalSeconds = s.secondsTotal,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     paused = s.paused,
                     onTogglePause = viewModel::togglePause,
                     onAction = { viewModel.submit(typed); viewModel.continueToNext() },
@@ -143,7 +143,6 @@ fun SpellingScreen(
                 }
 
                 is SpellingUiState.Overview -> GameOverviewScreen(
-                    title = "Tahajia (Spellcheck)",
                     tagline = "Andika tahajia sahihi ya maneno ya Kiswahili.",
                     instructions = Instructions.SPELLING,
                     onStart = viewModel::proceedToLevelSelect,

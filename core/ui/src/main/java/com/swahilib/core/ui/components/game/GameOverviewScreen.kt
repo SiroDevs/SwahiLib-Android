@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun GameOverviewScreen(
-    title: String,
     tagline: String,
     instructions: List<String>,
     onStart: () -> Unit,
@@ -44,8 +43,6 @@ fun GameOverviewScreen(
             .verticalScroll(rememberScrollState())
             .padding(24.dp),
     ) {
-        Text(title, style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold))
-        Spacer(Modifier.height(6.dp))
         Text(tagline, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(20.dp))
 

@@ -83,6 +83,8 @@ fun SentenceBuilderScreen(
                 is SentenceUiState.Playing -> GameTopBar(
                     title = "Panga Sentensi",
                     level = s.level,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     isPractice = s.practice,
@@ -100,8 +102,6 @@ fun SentenceBuilderScreen(
                 GameBottomBar(
                     remainingSeconds = s.secondsRemaining,
                     totalSeconds = s.secondsTotal,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     paused = s.paused,
                     onTogglePause = viewModel::togglePause,
                     onAction = { viewModel.submit(); viewModel.continueToNext() },
@@ -139,7 +139,6 @@ fun SentenceBuilderScreen(
                 }
 
                 is SentenceUiState.Overview -> GameOverviewScreen(
-                    title = "Panga Sentensi",
                     tagline = "Panga maneno kwa mpangilio sahihi kuunda sentensi.",
                     instructions = Instructions.SENTENCE,
                     onStart = viewModel::proceedToLevelSelect,

@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,8 +27,11 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -34,6 +39,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,6 +51,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -52,14 +59,12 @@ import androidx.compose.ui.unit.dp
 fun GameBottomBar(
     remainingSeconds: Int,
     totalSeconds: Int,
-    previousPoints: Int,
-    livePoints: Int,
     paused: Boolean,
     onTogglePause: () -> Unit,
     onAction: () -> Unit,
     actionEnabled: Boolean,
     modifier: Modifier = Modifier,
-    actionLabel: String = "Wasilisha",
+    actionLabel: String = "WASILISHA",
 ) {
     val fraction =
         if (totalSeconds <= 0) 0f else (remainingSeconds.toFloat() / totalSeconds).coerceIn(0f, 1f)
@@ -104,95 +109,81 @@ fun GameBottomBar(
             )
 
             Spacer(Modifier.height(5.dp))
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                StatusChip(
-                    containerColor = timerColor.copy(alpha = 0.15f),
-                    contentColor = timerColor,
-                    modifier = Modifier.scale(if (urgent) pulse else 1f),
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.CenterStart
                 ) {
-                    Icon(
-                        Icons.Default.Timer,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(Modifier.size(4.dp))
-                    Text(
-                        formatMmSs(remainingSeconds),
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
-
-                StatusChip(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                ) {
-                    Icon(
-                        Icons.Default.Stars,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(Modifier.size(4.dp))
-                    Text(
-                        "${previousPoints + livePoints}",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                    )
-                    if (livePoints > 0) {
+                    StatusChip(
+                        containerColor = timerColor.copy(alpha = 0.15f),
+                        contentColor = timerColor,
+                        modifier = Modifier.scale(if (urgent) pulse else 1f),
+                    ) {
+                        Icon(
+                            Icons.Default.Timer,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(Modifier.size(4.dp))
                         Text(
-                            " (+$livePoints)",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.8f),
+                            formatMmSs(remainingSeconds),
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
                         )
                     }
                 }
 
-                Box(Modifier) {
-                    GameActionFab(
-                        text = actionLabel,
+                Box(
+                    modifier = Modifier
+                        .weight(2f)
+                        .padding(horizontal = 5.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
                         onClick = onAction,
                         enabled = actionEnabled,
-                    )
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(Icons.Default.Check, contentDescription = null)
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                actionLabel,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                softWrap = false
+                            )
+                        }
+                    }
                 }
 
-                StatusChip(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    paddingHorizontal = 6.dp,
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.CenterEnd
                 ) {
-                    IconButton(onClick = onTogglePause, modifier = Modifier.size(28.dp)) {
-                        Icon(
-                            imageVector = if (paused) Icons.Default.PlayArrow else Icons.Default.Pause,
-                            contentDescription = if (paused) "Endelea" else "Simamisha",
-                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                        )
+                    StatusChip(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        paddingHorizontal = 6.dp,
+                    ) {
+                        IconButton(onClick = onTogglePause, modifier = Modifier.size(28.dp)) {
+                            Icon(
+                                imageVector = if (paused) Icons.Default.PlayArrow else Icons.Default.Pause,
+                                contentDescription = if (paused) "Endelea" else "Simamisha",
+                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                            )
+                        }
                     }
                 }
             }
-        }
-    }
-}
 
-@Composable
-private fun StatusChip(
-    containerColor: Color,
-    contentColor: Color,
-    modifier: Modifier = Modifier,
-    paddingHorizontal: Dp = 12.dp,
-    content: @Composable () -> Unit,
-) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(50))
-            .background(containerColor)
-            .padding(horizontal = paddingHorizontal, vertical = 6.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            CompositionLocalProvider(
-                LocalContentColor provides contentColor,
-                content = { content() })
         }
     }
 }

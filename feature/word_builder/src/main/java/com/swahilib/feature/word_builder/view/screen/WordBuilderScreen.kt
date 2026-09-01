@@ -92,6 +92,8 @@ fun WordBuilderScreen(
                 is WordBuilderUiState.Playing -> GameTopBar(
                     title = "Jenga Maneno",
                     level = s.level,
+                    previousPoints = s.previousPoints,
+                    livePoints = s.livePoints,
                     onBack = { showExit = true },
                     onRefresh = { showRestart = true },
                     isPractice = s.practice,
@@ -109,8 +111,6 @@ fun WordBuilderScreen(
                 GameBottomBar(
                     remainingSeconds = s.secondsRemaining,
                     totalSeconds = s.secondsTotal,
-                    previousPoints = s.previousPoints,
-                    livePoints = s.livePoints,
                     paused = s.paused,
                     onTogglePause = viewModel::togglePause,
                     onAction = { viewModel.submit(); viewModel.continueToNext() },
@@ -146,7 +146,6 @@ fun WordBuilderScreen(
                 }
 
                 is WordBuilderUiState.Overview -> GameOverviewScreen(
-                    title = "Jenga Maneno",
                     tagline = "Panga vipande vya herufi kuunda neno sahihi.",
                     instructions = Instructions.WORD_BUILDER,
                     onStart = viewModel::proceedToLevelSelect,

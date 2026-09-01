@@ -41,7 +41,7 @@ fun PlayingHangman(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "Makosa: ${round.wrongGuesses}/${round.maxWrongGuesses}",
+                "Makosa (Wrong Guesses): ${round.wrongGuesses}/${round.maxWrongGuesses}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (round.wrongGuesses >= round.maxWrongGuesses - 1) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
             )
