@@ -71,22 +71,8 @@ class GameSoundPlayer @Inject constructor(
     }
 
     fun startMusic() {
-        var lastTrackIndex = -1
-
-        val musicTracks = listOf(
-            R.raw.game_music_loop_1,
-            R.raw.game_music_loop_2,
-            R.raw.game_music_loop_3
-        )
-
         if (musicPlayer == null) {
-            var index: Int
-            do {
-                index = musicTracks.indices.random()
-            } while (index == lastTrackIndex)
-            lastTrackIndex = index
-
-            musicPlayer = MediaPlayer.create(context, R.raw.game_music_loop_1)?.apply {
+            musicPlayer = MediaPlayer.create(context, R.raw.game_music_loop)?.apply {
                 isLooping = true
                 setVolume(0.4f, 0.4f)
             }
@@ -99,7 +85,6 @@ class GameSoundPlayer @Inject constructor(
         if (musicEnabled && !player.isPlaying) player.start()
     }
 
-    /** Call when leaving a game screen so music doesn't keep playing over the rest of the app. */
     fun stopMusic() {
         musicPlayer?.let {
             if (it.isPlaying) it.pause()
