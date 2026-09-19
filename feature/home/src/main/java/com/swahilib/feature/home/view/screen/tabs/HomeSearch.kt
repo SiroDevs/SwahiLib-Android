@@ -43,9 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.data.repos.utils.PrefsRepo
-import com.swahilib.feature.home.view.components.HomeSearchResults
-import com.swahilib.feature.home.view.components.SearchFieldRow
-import com.swahilib.feature.home.view.components.VerticalLetters
+import com.swahilib.feature.home.view.components.lists.HomeSearchResults
+import com.swahilib.feature.home.view.components.items.SearchFieldRow
+import com.swahilib.feature.home.view.components.actions.VerticalLetters
 import com.swahilib.feature.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 import java.util.Locale

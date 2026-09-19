@@ -44,10 +44,10 @@ import com.swahilib.core.ui.components.general.NotificationReminderBanner
 import com.swahilib.core.ui.components.indicators.EmptyState
 import com.swahilib.core.ui.components.indicators.ErrorState
 import com.swahilib.feature.home.view.components.DailyHighlightsDialog
-import com.swahilib.feature.home.view.components.HomeNavDrawer
-import com.swahilib.feature.home.view.components.HomeSkeleton
-import com.swahilib.feature.home.view.components.HomeTab
-import com.swahilib.feature.home.view.components.homeTabs
+import com.swahilib.feature.home.view.components.actions.HomeNavDrawer
+import com.swahilib.feature.home.view.components.lists.HomeSkeleton
+import com.swahilib.feature.home.view.components.actions.HomeTab
+import com.swahilib.feature.home.view.components.actions.homeTabs
 import com.swahilib.feature.home.view.screen.tabs.HomeEngage
 import com.swahilib.feature.home.view.screen.tabs.HomeSearch
 import com.swahilib.feature.home.viewmodel.HomeViewModel

@@ -103,7 +103,7 @@ fun DonorIdentitySection(
                 value = email,
                 onValueChange = onEmailChange,
                 label = { Text("Email") },
-                placeholder = { Text("e.g. john@example.com") },
+                placeholder = { Text("e.g. john@gmail.com") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),

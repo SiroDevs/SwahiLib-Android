@@ -16,7 +16,7 @@ import com.swahilib.core.database.entities.content.IdiomEntity
 import com.swahilib.core.database.entities.content.ProverbEntity
 import com.swahilib.core.database.entities.content.SayingEntity
 import com.swahilib.core.database.entities.content.WordEntity
-import com.swahilib.feature.home.view.components.HomeTab
+import com.swahilib.feature.home.view.components.actions.HomeTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.StateFlow

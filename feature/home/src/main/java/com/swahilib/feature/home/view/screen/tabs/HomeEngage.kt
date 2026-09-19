@@ -34,7 +34,7 @@ import androidx.navigation.NavHostController
 import com.swahilib.core.common.utils.Routes
 import com.swahilib.core.ui.components.action.TileAction
 import com.swahilib.core.ui.components.action.TileActionCard
-import com.swahilib.feature.home.view.components.FeaturedCard
+import com.swahilib.feature.home.view.components.actions.FeaturedCard
 
 private val gameTiles = listOf(
     TileAction("Jenga Maneno", Icons.Default.Extension, Routes.wordBuilderFreeplay()),

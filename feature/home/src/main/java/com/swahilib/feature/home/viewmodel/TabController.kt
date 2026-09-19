@@ -1,6 +1,6 @@
 package com.swahilib.feature.home.viewmodel
 
-import com.swahilib.feature.home.view.components.HomeTab
+import com.swahilib.feature.home.view.components.actions.HomeTab
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

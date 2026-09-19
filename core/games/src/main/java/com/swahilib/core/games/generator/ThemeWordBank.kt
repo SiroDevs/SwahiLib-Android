@@ -58,7 +58,7 @@ internal object ThemeWordBank {
             "KUSOMA" to "Kitendo cha kuelewa yaliyoandikwa kwa kutamka au kupitisha macho",
             "KUANDIKA" to "Kitendo cha kuchora herufi kwa kutumia kalamu",
             "KUCHEZA" to "Kitendo cha kufanya jambo la kuchangamsha mwili kwa reason la kujifurahisha",
-            "KULALA" to "Kitendo cha kujinyosha mahali kwa example kitandani ili kupata usingizi",
+            "KULALA" to "Kitendo cha kujinyosha mahali kwa mfano kitandani ili kupata usingizi",
             "KUKIMBIA" to "Kitendo cha kwenda mbio, enda kwa kasi",
             "KUOGELEA" to "Kitendo cha kuelea/kutembea majini",
             "KUIMBA" to "Kitendo cha kutamka maneno kwa kufuata mahadhi fulani kwa sauti",

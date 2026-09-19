@@ -41,7 +41,7 @@ import com.swahilib.feature.advanced_search.view.components.SearchModeMenu
 import com.swahilib.feature.advanced_search.view.components.SortDropdown
 import com.swahilib.feature.advanced_search.view.components.TypeFilterRow
 import com.swahilib.feature.advanced_search.view.components.wordsSection
-import com.swahilib.feature.home.view.components.SearchFieldRow
+import com.swahilib.feature.home.view.components.items.SearchFieldRow
 import java.util.Locale
 
 private val TYPES = listOf("YOTE", "MANENO", "NAHAU", "METHALI", "MISEMO")
